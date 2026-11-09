@@ -1,0 +1,7 @@
+<Image
+  src="/Whatsapp-3d.svg"
+  alt="WhatsApp"
+  width={28}
+  height={28}
+  className="object-contain"
+/>
