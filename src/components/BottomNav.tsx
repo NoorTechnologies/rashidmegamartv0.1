@@ -6,19 +6,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   House,
-  ShoppingBag,
+  LayoutGrid,
   Package,
-  ShoppingCart,
+  ShoppingBasket,
 } from "lucide-react";
+
 import { useCart } from "@/context/CartContext";
 
 const WHATSAPP_NUMBER = "918962531603";
 
 const navigationItems = [
   { label: "Home", href: "/", icon: House },
-  { label: "Shop", href: "/shop", icon: ShoppingBag },
+  { label: "Categories", href: "/shop", icon: LayoutGrid },
   { label: "Kits", href: "/kits", icon: Package },
-  { label: "Cart", href: "/cart", icon: ShoppingCart },
+  { label: "Basket", href: "/cart", icon: ShoppingBasket },
 ];
 
 export default function BottomNav() {
@@ -28,9 +29,9 @@ export default function BottomNav() {
   return (
     <nav
       aria-label="Main navigation"
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-white/15 bg-gradient-to-r from-[#087F5B] via-[#168447] to-[#087F5B] shadow-[0_-5px_22px_rgba(7,92,43,0.20)] lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[680px] px-2 pb-[calc(8px+env(safe-area-inset-bottom))] lg:hidden"
     >
-      <div className="mx-auto grid h-16 w-full max-w-xl grid-cols-5 items-stretch px-1 sm:h-[68px]">
+      <div className="grid h-[72px] grid-cols-5 items-center rounded-full border border-[#E8E8E8] bg-white p-1.5 shadow-[0_4px_24px_rgba(0,0,0,0.12)]">
         {navigationItems.map((item) => {
           const Icon = item.icon;
 
@@ -47,38 +48,40 @@ export default function BottomNav() {
               aria-current={isActive ? "page" : undefined}
               aria-label={
                 item.href === "/cart"
-                  ? `Cart, ${totalItems} items`
+                  ? `Basket, ${totalItems} items`
                   : item.label
               }
-              className="relative flex min-w-0 flex-col items-center justify-center gap-1 text-white transition-colors duration-200 focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-[#FFD52A]"
+              className={`relative flex h-full min-w-0 flex-col items-center justify-center gap-1 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#168447] ${
+                isActive
+                  ? "bg-[#F0F0F2] text-[#168447]"
+                  : "text-[#555555] hover:bg-[#F7F7F7]"
+              }`}
             >
               <span className="relative">
                 <Icon
                   size={23}
-                  strokeWidth={isActive ? 2.7 : 2}
-                  className="text-white sm:size-[25px]"
+                  strokeWidth={isActive ? 2.8 : 2}
+                  fill={
+                    isActive && item.href === "/"
+                      ? "currentColor"
+                      : "none"
+                  }
                 />
 
                 {item.href === "/cart" && totalItems > 0 && (
-                  <span className="absolute -right-2 -top-2 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white shadow">
+                  <span className="absolute -right-2 -top-2 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#168447] px-1 text-[9px] font-bold text-white shadow-sm">
                     {totalItems > 99 ? "99+" : totalItems}
                   </span>
                 )}
               </span>
 
               <span
-                className={`max-w-full truncate text-[10px] leading-none sm:text-[11px] ${
-                  isActive
-                    ? "font-extrabold text-[#FFD52A]"
-                    : "font-semibold text-white"
+                className={`max-w-full truncate px-0.5 text-[9px] leading-none sm:text-[10px] ${
+                  isActive ? "font-extrabold" : "font-medium"
                 }`}
               >
                 {item.label}
               </span>
-
-              {isActive && (
-                <span className="absolute bottom-0 h-[3px] w-3/4 rounded-t-full bg-[#FFD52A]" />
-              )}
             </Link>
           );
         })}
@@ -88,7 +91,7 @@ export default function BottomNav() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Contact Rashid Mega Mart on WhatsApp"
-          className="flex min-w-0 flex-col items-center justify-center gap-1 text-white transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-[#FFD52A]"
+          className="flex h-full min-w-0 flex-col items-center justify-center gap-1 rounded-full text-[#555555] transition hover:bg-[#F7F7F7] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#168447]"
         >
           <Image
             src="/Whatsapp-3d.svg"
@@ -96,16 +99,14 @@ export default function BottomNav() {
             width={25}
             height={25}
             unoptimized
-            className="size-[25px] shrink-0 object-contain sm:size-7"
+            className="size-[25px] shrink-0 object-contain"
           />
 
-          <span className="max-w-full truncate text-[10px] font-semibold leading-none text-white sm:text-[11px]">
-            Contact
+          <span className="max-w-full truncate px-0.5 text-[9px] font-medium leading-none sm:text-[10px]">
+            WhatsApp
           </span>
         </a>
       </div>
-
-      <div className="h-[env(safe-area-inset-bottom)] bg-[#087F5B]" />
     </nav>
   );
 }

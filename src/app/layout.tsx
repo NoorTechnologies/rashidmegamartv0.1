@@ -2,7 +2,6 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
-import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
@@ -61,13 +60,11 @@ export default function RootLayout({
     <html lang="en-IN" className={plusJakartaSans.variable}>
       <body className="flex min-h-dvh flex-col antialiased">
         <CartProvider>
-          <Navbar />
-
-          <main className="min-w-0 w-full flex-1 pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
+          <main className="min-w-0 w-full flex-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0">
             {children}
           </main>
 
-          <div className="pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
+          <div className="pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0">
             <Footer />
           </div>
 

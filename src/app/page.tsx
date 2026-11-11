@@ -23,96 +23,104 @@ export default function HomePage() {
   const featuredKits = getFeaturedKits();
 
   return (
-    <main className="min-h-screen w-full overflow-x-clip bg-[#F5FAF5]">
+    <main className="min-h-screen w-full overflow-x-clip bg-[#F8F9FA]">
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#E8F5E9] via-[#D5F0DF] to-[#B7E4C7]">
-        <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full border-[30px] border-white/30 sm:h-80 sm:w-80" />
-        <div className="pointer-events-none absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-white/20 blur-2xl" />
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#EAF5ED] via-white to-[#F8F9FA] px-3 pb-10 pt-8 text-[#202B24] sm:px-5 sm:pb-14 sm:pt-12">
+        <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#168447]/10 blur-[90px]" />
+        <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#F5D9A8]/30 blur-[90px]" />
 
-        <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-8 px-3 py-9 min-[480px]:px-5 sm:py-12 md:grid-cols-2 md:gap-10 md:px-6 md:py-16 lg:px-8">
-          <div className="min-w-0 text-[#202B24]">
-            <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-[#168447]/15 bg-white/70 px-3 py-2 text-[10px] font-bold text-[#168447] shadow-sm sm:px-4 sm:text-xs">
-              <ShoppingBag size={15} className="shrink-0" />
-              <span>Welcome to Rashid Mega Mart</span>
-            </span>
+        <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#DDECE0] bg-white/90 px-4 py-2 text-[10px] font-bold tracking-wide text-[#168447] shadow-sm sm:text-xs">
+            <ShoppingBag size={15} />
+            YOUR NEIGHBOURHOOD GROCERY STORE
+          </span>
 
-            <h1 className="mt-5 max-w-xl text-[32px] font-extrabold leading-[1.15] tracking-tight min-[480px]:text-4xl sm:text-5xl lg:text-[54px]">
-              Everyday Essentials,
+          <div className="mt-6 flex flex-col items-center">
+            <Image
+              src="/images/logo.png"
+              alt="Rashid Mega Mart Logo"
+              width={110}
+              height={110}
+              priority
+              className="h-20 w-20 object-contain sm:h-24 sm:w-24"
+            />
+
+            <h1 className="mt-4 max-w-2xl text-2xl font-black leading-tight tracking-tight sm:text-4xl md:text-5xl">
+              Welcome to
               <span className="mt-1 block text-[#168447]">
-                Better Prices.
+                Rashid Mega Mart
               </span>
             </h1>
 
-            <p className="mt-4 max-w-md text-[13px] leading-6 text-[#53665A] sm:text-sm sm:leading-7">
-              Shop your daily grocery essentials and convenient family kits
-              at Rashid Mega Mart.
+            <p className="mt-3 max-w-md text-xs leading-6 text-[#647067] sm:text-sm">
+              Your daily groceries, household essentials and family kits —
+              everything you need in one place.
             </p>
+          </div>
 
-            <div className="mt-6 grid grid-cols-1 gap-3 min-[390px]:grid-cols-2 sm:flex sm:flex-wrap">
-              <Link
-                href="/shop"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-3 text-sm font-extrabold text-white shadow-[0_5px_16px_rgba(22,132,71,0.20)] transition hover:bg-[#075C2B] active:scale-[0.98]"
-              >
-                Shop Now
-                <ArrowRight size={17} />
-              </Link>
+          <div className="relative mt-7 w-full max-w-[560px]">
+            <div className="pointer-events-none absolute inset-x-8 bottom-2 h-10 rounded-full bg-[#AEB5B9]/30 blur-2xl" />
 
-              <Link
-                href="/kits"
-                className="inline-flex min-h-12 items-center justify-center rounded-xl border border-[#168447]/30 bg-white/60 px-5 py-3 text-sm font-bold text-[#075C2B] transition hover:bg-white active:scale-[0.98]"
-              >
-                Explore Kits
-              </Link>
-            </div>
-
-            <div className="mt-7 flex flex-wrap gap-x-5 gap-y-3 text-[11px] font-semibold text-[#42634E] sm:mt-8 sm:gap-6 sm:text-xs">
-              <span className="flex items-center gap-2">
-                <ShieldCheck size={17} className="shrink-0 text-[#168447]" />
-                Quality Products
-              </span>
-
-              <span className="flex items-center gap-2">
-                <Truck size={17} className="shrink-0 text-[#168447]" />
-                Home Delivery
-              </span>
+            <div className="relative mx-auto h-[230px] w-full overflow-hidden rounded-2xl sm:h-[340px] sm:rounded-3xl">
+              <Image
+                src="/hero.png"
+                alt="Rashid Mega Mart grocery store"
+                fill
+                priority
+                sizes="(max-width: 640px) 100vw, 560px"
+                className="object-contain drop-shadow-[0_12px_22px_rgba(0,0,0,0.12)]"
+              />
             </div>
           </div>
 
-          {/* Hero Image */}
-          <div className="relative mx-auto w-full min-w-0 max-w-lg md:max-w-none">
-            <div className="relative aspect-[5/4] w-full overflow-hidden rounded-2xl border-4 border-white/70 bg-white/50 shadow-[0_20px_50px_rgba(7,92,43,0.14)] sm:aspect-[4/3] sm:rounded-3xl">
-              <Image
-                src="/images/hero/grocery-hero.png"
-                alt="Rashid Mega Mart grocery collection"
-                fill
-                priority
-                sizes="(max-width: 767px) 100vw, 50vw"
-                className="object-cover"
+          <div className="mt-6 flex w-full max-w-md flex-col gap-3 min-[390px]:flex-row">
+            <Link
+              href="/shop"
+              className="group inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-3 text-sm font-extrabold text-white shadow-[0_6px_20px_rgba(22,132,71,0.16)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#075C2B] active:scale-95"
+            >
+              Shop Now
+              <ArrowRight
+                size={18}
+                className="transition-transform group-hover:translate-x-1"
               />
-            </div>
+            </Link>
 
-            <div className="absolute -bottom-3 left-3 rounded-xl border border-[#E1F0E5] bg-white px-3 py-2.5 shadow-xl sm:-bottom-4 sm:left-5 sm:rounded-2xl sm:px-5 sm:py-3">
-              <p className="text-[10px] font-bold text-[#849489] sm:text-xs">
-                Your Daily Needs
-              </p>
-              <p className="text-xs font-extrabold text-[#075C2B] sm:text-sm">
-                All in One Place
-              </p>
-            </div>
+            <Link
+              href="/kits"
+              className="group inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-[#168447]/30 bg-white px-5 py-3 text-sm font-extrabold text-[#168447] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[#F5FAF6] active:scale-95"
+            >
+              Explore Kits
+              <ShoppingBag
+                size={18}
+                className="transition-transform group-hover:scale-110"
+              />
+            </Link>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] font-semibold text-[#647067] sm:text-xs">
+            <span className="flex items-center gap-2">
+              <ShieldCheck size={16} className="text-[#168447]" />
+              Quality Products
+            </span>
+
+            <span className="flex items-center gap-2">
+              <Truck size={16} className="text-[#168447]" />
+              Home Delivery
+            </span>
           </div>
         </div>
       </section>
 
-      {/* CATEGORIES */}
-      <section className="mx-auto w-full max-w-7xl px-3 py-8 min-[480px]:px-5 sm:py-12 md:px-6 lg:px-8">
-        <div className="mb-5 flex items-end justify-between gap-3 sm:mb-6">
-          <div className="min-w-0">
+      {/* GROCERY CATEGORIES */}
+      <section className="mx-auto w-full max-w-7xl px-3 pb-7 pt-5 min-[480px]:px-5 sm:pb-10 sm:pt-7 md:px-6 lg:px-8">
+        <div className="mb-4 flex items-end justify-between gap-3 sm:mb-6">
+          <div>
             <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#168447] sm:text-xs">
-              Explore Products
+              Fresh picks for your home
             </p>
 
             <h2 className="mt-1 text-xl font-extrabold text-[#202B24] sm:text-2xl">
-              Shop by Category
+              Grocery
             </h2>
           </div>
 
@@ -124,47 +132,55 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 min-[480px]:grid-cols-4 sm:gap-4 lg:grid-cols-8">
+        <div className="grid grid-cols-3 gap-2.5 min-[480px]:grid-cols-4 sm:gap-4 md:grid-cols-5 lg:grid-cols-8">
           {categories.map((category) => (
             <CategoryCard key={category.id} category={category} />
           ))}
         </div>
       </section>
 
-      {/* GROCERY KITS BANNER */}
-      <section className="mx-auto w-full max-w-7xl px-3 min-[480px]:px-5 md:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-2xl border border-[#B7E4C7] bg-gradient-to-r from-[#B7E4C7] via-[#D5F0DF] to-[#E8F5E9] px-4 py-6 min-[480px]:rounded-3xl min-[480px]:px-6 min-[480px]:py-8 sm:px-10 sm:py-10">
-          <div className="pointer-events-none absolute -right-14 -top-16 h-48 w-48 rounded-full border-[25px] border-white/40" />
+      {/* GROCERY KITS */}
+      <section className="mx-auto w-full max-w-7xl px-3 pb-8 pt-3 min-[480px]:px-5 sm:pb-12 md:px-6 lg:px-8">
+        <div className="mb-4 flex items-end justify-between gap-3 sm:mb-6">
+          <div>
+            <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#168447] sm:text-xs">
+              Smart shopping combos
+            </p>
 
-          <div className="relative flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
-            <div className="min-w-0">
-              <span className="inline-block rounded-full bg-[#168447] px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-wider text-white sm:text-[10px]">
-                Smart Shopping
-              </span>
-
-              <h2 className="mt-3 max-w-lg text-[22px] font-extrabold leading-tight text-[#075C2B] sm:mt-4 sm:text-3xl">
-                Everything You Need in One Grocery Kit
-              </h2>
-
-              <p className="mt-2 text-xs leading-5 text-[#53665A] sm:text-sm">
-                Convenient combos for everyday family needs.
-              </p>
-            </div>
-
-            <Link
-              href="/kits"
-              className="inline-flex min-h-12 w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-3 text-sm font-extrabold text-white shadow-md transition hover:bg-[#075C2B] active:scale-[0.98] sm:w-auto sm:px-6"
-            >
-              Explore Kits <ArrowRight size={17} />
-            </Link>
+            <h2 className="mt-1 text-xl font-extrabold text-[#202B24] sm:text-2xl">
+              Grocery Kits
+            </h2>
           </div>
+
+          <Link
+            href="/kits"
+            className="inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#168447] transition hover:text-[#075C2B] sm:text-xs"
+          >
+            View All <ArrowRight size={15} />
+          </Link>
         </div>
+
+        {featuredKits.length > 0 ? (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
+            {featuredKits.slice(0, 4).map((kit) => (
+              <KitCard key={kit.id} kit={kit} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-[#E5E7E9] bg-white p-6 text-center sm:p-8">
+            <ShoppingBag className="mx-auto text-[#168447]" size={30} />
+
+            <p className="mt-2 text-sm font-semibold text-[#68756B]">
+              Grocery kits will be available soon.
+            </p>
+          </div>
+        )}
       </section>
 
       {/* BEST SELLERS */}
       <section className="mx-auto w-full max-w-7xl px-3 py-8 min-[480px]:px-5 sm:py-12 md:px-6 lg:px-8">
         <div className="mb-5 flex items-end justify-between gap-3 sm:mb-6">
-          <div className="min-w-0">
+          <div>
             <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#168447] sm:text-xs">
               Customer Favorites
             </p>
@@ -183,68 +199,44 @@ export default function HomePage() {
         </div>
 
         {bestSellingProducts.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4 min-[390px]:grid-cols-2 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 min-[560px]:grid-cols-3 sm:gap-5 lg:grid-cols-4">
             {bestSellingProducts.slice(0, 8).map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         ) : (
-          <p className="rounded-2xl border border-[#DFEEE3] bg-white p-6 text-center text-sm text-[#68756B] sm:p-8">
+          <p className="rounded-2xl border border-[#E5E7E9] bg-white p-6 text-center text-sm text-[#68756B] sm:p-8">
             Products will be available soon.
           </p>
         )}
       </section>
 
-      {/* FEATURED KITS */}
-      <section className="bg-gradient-to-b from-[#E8F5E9] to-[#F5FAF5] py-8 sm:py-12">
-        <div className="mx-auto w-full max-w-7xl px-3 min-[480px]:px-5 md:px-6 lg:px-8">
-          <div className="mb-5 flex items-end justify-between gap-3 sm:mb-6">
-            <div className="min-w-0">
-              <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#168447] sm:text-xs">
-                Special Combos
-              </p>
-
-              <h2 className="mt-1 text-xl font-extrabold text-[#202B24] sm:text-2xl">
-                Grocery Kits for You
-              </h2>
-            </div>
-
-            <Link
-              href="/kits"
-              className="inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#168447] transition hover:text-[#075C2B] sm:text-xs"
-            >
-              View All <ArrowRight size={15} />
-            </Link>
-          </div>
-
-          {featuredKits.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 min-[560px]:grid-cols-2 sm:gap-5 lg:grid-cols-4">
-              {featuredKits.slice(0, 4).map((kit) => (
-                <KitCard key={kit.id} kit={kit} />
-              ))}
-            </div>
-          ) : (
-            <p className="rounded-2xl border border-[#DFEEE3] bg-white p-6 text-center text-sm text-[#68756B] sm:p-8">
-              Grocery kits will be available soon.
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* OFFERS */}
+      {/* PREMIUM GROCERY OFFERS BANNER */}
       <section className="mx-auto w-full max-w-7xl px-3 py-8 min-[480px]:px-5 sm:py-12 md:px-6 lg:px-8">
-        <div className="rounded-2xl border border-[#B7E4C7] bg-gradient-to-br from-[#F1FAF3] via-[#E8F5E9] to-[#D5F0DF] p-4 min-[480px]:rounded-3xl min-[480px]:p-6 sm:p-9">
-          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#168447] text-white shadow-sm sm:h-14 sm:w-14 sm:rounded-2xl">
-              <Tag size={25} />
-            </div>
+        <div className="relative isolate min-h-[390px] overflow-hidden rounded-[28px] border border-[#B9F49B] bg-[#E9F9DF] shadow-[0_15px_35px_rgba(22,132,71,0.14)] sm:min-h-[440px] sm:rounded-[36px] lg:min-h-[480px]">
+          <Image
+            src="/hero.png"
+            alt="Fresh vegetables and grocery basket"
+            fill
+            sizes="(max-width: 768px) 100vw, 1200px"
+            className="absolute inset-0 -z-20 object-cover object-right"
+          />
 
-            <div className="min-w-0 flex-1">
-              <h2 className="text-lg font-extrabold leading-tight text-[#075C2B] sm:text-xl">
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#F4FFE9]/95 via-[#F1FFE8]/85 to-transparent" />
+
+          <div className="pointer-events-none absolute -left-20 top-10 -z-10 h-64 w-64 rounded-full bg-[#8BEA55]/25 blur-[90px]" />
+
+          <div className="flex min-h-[390px] flex-col justify-between p-5 sm:min-h-[440px] sm:p-8 lg:min-h-[480px] lg:p-12">
+            <div className="max-w-[650px]">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#079447] to-[#006B36] text-white shadow-lg sm:h-16 sm:w-16 sm:rounded-3xl">
+                <Tag size={29} strokeWidth={2.2} />
+              </div>
+
+              <h2 className="mt-6 max-w-xl text-3xl font-black leading-[1.12] tracking-tight text-[#073F27] sm:mt-8 sm:text-4xl lg:text-5xl">
                 Great Value for Everyday Shopping
               </h2>
 
-              <p className="mt-2 text-xs leading-5 text-[#53665A] sm:text-sm sm:leading-6">
+              <p className="mt-4 max-w-lg text-sm leading-6 text-[#263B2D] sm:text-base sm:leading-7 lg:text-lg">
                 Explore our products and grocery combo kits to find the right
                 essentials for your home.
               </p>
@@ -252,9 +244,15 @@ export default function HomePage() {
 
             <Link
               href="/shop"
-              className="inline-flex min-h-11 w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-3 text-xs font-bold text-white transition hover:bg-[#075C2B] sm:w-auto sm:text-sm"
+              className="group mt-8 inline-flex min-h-[58px] w-full items-center justify-center gap-3 rounded-2xl border border-[#56D98B] bg-gradient-to-r from-[#078B43] to-[#006B35] px-5 py-4 text-base font-extrabold text-white shadow-[0_8px_22px_rgba(0,107,53,0.25)] transition duration-300 hover:-translate-y-1 hover:from-[#087B3D] hover:to-[#00552B] hover:shadow-[0_12px_28px_rgba(0,107,53,0.32)] active:scale-[0.98] sm:min-h-[68px] sm:text-xl"
             >
-              Explore Offers <ArrowRight size={16} />
+              Explore Offers
+
+              <ArrowRight
+                size={24}
+                strokeWidth={2.5}
+                className="transition-transform duration-300 group-hover:translate-x-2"
+              />
             </Link>
           </div>
         </div>
@@ -263,10 +261,10 @@ export default function HomePage() {
       {/* SERVICE BENEFITS */}
       <section className="mx-auto w-full max-w-7xl px-3 pb-10 min-[480px]:px-5 sm:pb-14 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:grid-cols-3 sm:gap-4">
-          <div className="flex min-w-0 items-center gap-4 rounded-2xl border border-[#E1F0E5] bg-white p-4 shadow-[0_3px_14px_rgba(22,132,71,0.05)] sm:p-5">
+          <div className="flex min-w-0 items-center gap-4 rounded-2xl border border-[#E5E7E9] bg-white p-4 shadow-sm sm:p-5">
             <Truck size={26} className="shrink-0 text-[#168447]" />
 
-            <div className="min-w-0">
+            <div>
               <h3 className="text-sm font-extrabold text-[#202B24]">
                 Home Delivery
               </h3>
@@ -277,10 +275,10 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="flex min-w-0 items-center gap-4 rounded-2xl border border-[#E1F0E5] bg-white p-4 shadow-[0_3px_14px_rgba(22,132,71,0.05)] sm:p-5">
+          <div className="flex min-w-0 items-center gap-4 rounded-2xl border border-[#E5E7E9] bg-white p-4 shadow-sm sm:p-5">
             <ShieldCheck size={26} className="shrink-0 text-[#168447]" />
 
-            <div className="min-w-0">
+            <div>
               <h3 className="text-sm font-extrabold text-[#202B24]">
                 Quality Essentials
               </h3>
@@ -291,10 +289,10 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="flex min-w-0 items-center gap-4 rounded-2xl border border-[#E1F0E5] bg-white p-4 shadow-[0_3px_14px_rgba(22,132,71,0.05)] min-[480px]:col-span-2 sm:col-span-1 sm:p-5">
+          <div className="flex min-w-0 items-center gap-4 rounded-2xl border border-[#E5E7E9] bg-white p-4 shadow-sm min-[480px]:col-span-2 sm:col-span-1 sm:p-5">
             <Headset size={26} className="shrink-0 text-[#168447]" />
 
-            <div className="min-w-0">
+            <div>
               <h3 className="text-sm font-extrabold text-[#202B24]">
                 Customer Support
               </h3>
