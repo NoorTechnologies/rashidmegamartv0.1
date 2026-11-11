@@ -2,17 +2,32 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
-import { Check, ShoppingCart, Package } from "lucide-react";
-import type { GroceryKit } from "@/data/kits";
+import {
+  Check,
+  Plus,
+  ShoppingCart,
+  Package,
+} from "lucide-react";
+
 import { useCart } from "@/context/CartContext";
+import type { GroceryKit } from "@/data/kits";
 
 interface KitCardProps {
   kit: GroceryKit;
 }
 
+const formatPrice = (price: number) =>
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(price);
+
 export default function KitCard({ kit }: KitCardProps) {
   const { addToCart, items } = useCart();
+
   const [imageError, setImageError] = useState(false);
 
   const cartItem = items.find((item) => item.id === kit.id);
@@ -33,106 +48,135 @@ export default function KitCard({ kit }: KitCardProps) {
       price: kit.price,
       image: kit.image,
       brand: "Rashid Mega Mart",
-      packSize: "Grocery Combo Kit",
+      packSize: `Grocery Kit - ${kit.items.length} Products`,
     });
   };
 
   return (
-    <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#DFEEE3] bg-white shadow-[0_3px_14px_rgba(7,92,43,0.04)] transition duration-300 hover:-translate-y-1 hover:border-[#B7E4C7] hover:shadow-[0_12px_28px_rgba(7,92,43,0.10)]">
-      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-gradient-to-br from-[#F1FAF3] to-[#E8F5E9]">
-        {discount > 0 && (
-          <span className="absolute left-3 top-3 z-10 rounded-full border border-red-600 bg-red-600 px-3 py-1.5 text-[10px] font-extrabold text-white shadow-md sm:text-xs">
-            {discount}% OFF
-          </span>
-        )}
-
-        {!kit.isAvailable && (
-          <span className="absolute right-3 top-3 z-10 rounded-full bg-[#68756B] px-3 py-1.5 text-[10px] font-bold text-white">
-            Out of Stock
-          </span>
-        )}
-
-        {!imageError && kit.image ? (
-          <Image
-            src={kit.image}
-            alt={kit.name}
-            fill
-            sizes="(max-width: 559px) 100vw, (max-width: 1023px) 50vw, 25vw"
-            onError={() => setImageError(true)}
-            className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div className="flex h-full flex-col items-center justify-center gap-2 text-[#168447]">
-            <Package size={42} strokeWidth={1.4} />
-            <span className="max-w-[85%] text-center text-xs font-semibold text-[#68756B]">
-              {kit.name}
+    <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-[#E5EDE5] bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg sm:rounded-2xl">
+      {/* Kit Image */}
+      <Link
+        href={`/kits/${kit.id}`}
+        aria-label={`View ${kit.name} details`}
+        className="block"
+      >
+        <div className="relative aspect-square w-full overflow-hidden bg-[#F7F9F5]">
+          {discount > 0 && (
+            <span className="absolute left-1.5 top-1.5 z-10 rounded-md bg-[#F7C928] px-2 py-1 text-[9px] font-extrabold text-[#202B24] sm:left-2 sm:top-2 sm:text-[10px]">
+              {discount}% OFF
             </span>
-          </div>
-        )}
-      </div>
+          )}
 
-      <div className="flex flex-1 flex-col p-3 sm:p-4">
-        <div className="mb-2 flex items-center gap-1.5 text-[#168447]">
-          <Package size={14} />
-          <span className="truncate text-[10px] font-extrabold uppercase tracking-wider">
-            {kit.category || "Grocery Combo"}
+          <span className="absolute right-1.5 top-1.5 z-10 flex items-center gap-1 rounded-md bg-white/95 px-2 py-1 text-[9px] font-bold text-[#168447] shadow-sm sm:right-2 sm:top-2 sm:text-[10px]">
+            <Package size={11} />
+            {kit.items.length} Items
           </span>
+
+          {!imageError && kit.image ? (
+            <Image
+              src={kit.image}
+              alt={kit.name}
+              fill
+              sizes="(max-width: 374px) 46vw, (max-width: 639px) 45vw, (max-width: 1023px) 30vw, 220px"
+              onError={() => setImageError(true)}
+              className="object-contain p-2 transition duration-500 group-hover:scale-105 sm:p-3"
+            />
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-[#9AA79C]">
+              <Package size={34} strokeWidth={1.5} />
+              <span className="text-[10px] font-medium">
+                Image unavailable
+              </span>
+            </div>
+          )}
+
+          {!kit.isAvailable && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white/75">
+              <span className="rounded-full bg-gray-800 px-3 py-1.5 text-[10px] font-bold text-white sm:text-xs">
+                Out of Stock
+              </span>
+            </div>
+          )}
         </div>
+      </Link>
 
-        <h3 className="line-clamp-2 min-h-10 text-sm font-extrabold leading-5 text-[#202B24] sm:text-base">
-          {kit.name}
-        </h3>
+      {/* Kit Details */}
+      <div className="flex min-w-0 flex-1 flex-col p-2.5 sm:p-4">
+        <p className="mb-1 truncate text-[9px] font-semibold uppercase tracking-wide text-gray-400 sm:text-[10px]">
+          {kit.category}
+        </p>
 
-        <p className="mt-1 line-clamp-2 min-h-9 text-[11px] leading-[18px] text-[#68756B] sm:text-xs">
+        <Link href={`/kits/${kit.id}`}>
+          <h3 className="line-clamp-2 min-h-9 text-xs font-bold leading-[18px] text-[#202B24] sm:min-h-10 sm:text-sm sm:leading-5">
+            {kit.name}
+          </h3>
+        </Link>
+
+        <p className="mt-1 line-clamp-1 text-[10px] text-gray-400 sm:text-xs">
           {kit.subtitle}
         </p>
 
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <span className="text-lg font-extrabold text-[#075C2B] sm:text-xl">
-            ₹{kit.price.toLocaleString("en-IN")}
+        <div className="mt-2 flex items-center gap-1 text-[10px] font-semibold text-[#168447] sm:text-xs">
+          <Package size={12} />
+          <span>{kit.items.length} Products Included</span>
+        </div>
+
+        <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1 sm:mt-3 sm:gap-2">
+          <span className="text-sm font-extrabold text-[#168447] sm:text-base">
+            {formatPrice(kit.price)}
           </span>
 
           {kit.oldPrice && kit.oldPrice > kit.price && (
-            <span className="text-xs text-[#98A69C] line-through">
-              ₹{kit.oldPrice.toLocaleString("en-IN")}
+            <span className="text-[10px] text-gray-400 line-through sm:text-xs">
+              {formatPrice(kit.oldPrice)}
             </span>
           )}
         </div>
 
-        {kit.items.length > 0 && (
-          <p className="mt-2 line-clamp-2 min-h-8 text-[10px] leading-4 text-[#68756B] sm:text-[11px]">
-            <span className="font-semibold text-[#53665A]">
-              Includes:
-            </span>{" "}
-            {kit.items.join(", ")}
-          </p>
-        )}
+        {/* Actions */}
+        <div className="mt-auto flex gap-1.5 pt-3">
+          <Link
+            href={`/kits/${kit.id}`}
+            className="flex min-h-10 flex-1 items-center justify-center rounded-lg border border-[#168447] px-1.5 py-2 text-[10px] font-bold text-[#168447] transition hover:bg-[#EAF7EE] sm:rounded-xl sm:text-xs"
+          >
+            View Details
+          </Link>
 
-        <button
-          type="button"
-          onClick={handleAddToCart}
-          disabled={!kit.isAvailable}
-          aria-label={
-            !kit.isAvailable
-              ? `${kit.name} currently unavailable`
-              : `Add ${kit.name} to cart`
-          }
-          className="mt-auto flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#168447] px-2 py-3 text-xs font-extrabold text-white shadow-sm transition hover:bg-[#075C2B] active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-[#AAB8AD] sm:mt-4 sm:min-h-12 sm:text-sm"
-        >
-          {!kit.isAvailable ? (
-            "Currently Unavailable"
-          ) : cartItem ? (
-            <>
-              <Check size={16} />
-              Added ({cartItem.quantity})
-            </>
-          ) : (
-            <>
-              <ShoppingCart size={16} />
-              Add Kit to Cart
-            </>
-          )}
-        </button>
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            disabled={!kit.isAvailable}
+            aria-label={
+              !kit.isAvailable
+                ? `${kit.name} unavailable`
+                : cartItem
+                  ? `${kit.name}, ${cartItem.quantity} in cart`
+                  : `Add ${kit.name} to cart`
+            }
+            className={`flex min-h-10 flex-1 items-center justify-center gap-1 rounded-lg px-1.5 py-2 text-[10px] font-bold transition active:scale-[0.97] sm:rounded-xl sm:text-xs ${
+              !kit.isAvailable
+                ? "cursor-not-allowed bg-gray-100 text-gray-400"
+                : cartItem
+                  ? "border border-green-200 bg-green-50 text-[#168447] hover:bg-green-100"
+                  : "bg-[#168447] text-white hover:bg-[#075C2B]"
+            }`}
+          >
+            {!kit.isAvailable ? (
+              "Unavailable"
+            ) : cartItem ? (
+              <>
+                <Check size={13} />
+                <span>Added ({cartItem.quantity})</span>
+              </>
+            ) : (
+              <>
+                <Plus size={14} />
+                <ShoppingCart size={13} />
+                <span>Add Kit</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </article>
   );

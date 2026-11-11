@@ -24,6 +24,7 @@ const categoryColors: Record<string, string> = {
 
 export default function CategoryCard({ category }: CategoryCardProps) {
   const [imageError, setImageError] = useState(false);
+
   const cardColor = categoryColors[category.id] ?? "bg-[#F1F5F9]";
 
   return (
@@ -32,10 +33,11 @@ export default function CategoryCard({ category }: CategoryCardProps) {
       aria-label={`Explore ${category.name}`}
       className="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-black/[0.04] bg-white p-2 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] sm:rounded-2xl sm:p-3"
     >
+      {/* Category Image */}
       <div
         className={`relative aspect-square w-full overflow-hidden rounded-lg ${cardColor} sm:rounded-xl`}
       >
-        {!imageError ? (
+        {!imageError && category.image ? (
           <Image
             src={category.image}
             alt={category.name}
@@ -45,12 +47,16 @@ export default function CategoryCard({ category }: CategoryCardProps) {
             className="object-contain p-1.5 transition duration-500 group-hover:scale-110 sm:p-3"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-[#168447]">
+          <div className="flex h-full w-full flex-col items-center justify-center gap-1 text-[#168447]">
             <ShoppingBag size={30} strokeWidth={1.5} />
+            <span className="text-[9px] font-medium text-gray-500">
+              Image unavailable
+            </span>
           </div>
         )}
       </div>
 
+      {/* Category Details */}
       <div className="mt-2 flex min-w-0 items-center justify-between gap-1">
         <h3 className="line-clamp-2 min-w-0 text-left text-[10px] font-extrabold leading-[14px] text-[#26332B] sm:text-sm sm:leading-5">
           {category.name}

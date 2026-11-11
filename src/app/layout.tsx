@@ -64,9 +64,7 @@ export default function RootLayout({
             {children}
           </main>
 
-          <div className="pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0">
-            <Footer />
-          </div>
+          
 
           <BottomNav />
         </CartProvider>

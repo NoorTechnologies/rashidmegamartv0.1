@@ -9,7 +9,7 @@ import {
   Tag,
   ShoppingBag,
 } from "lucide-react";
-
+import Footer from "@/components/Footer";
 import CategoryCard from "@/components/CategoryCard";
 import ProductCard from "@/components/ProductCard";
 import KitCard from "@/components/KitCard";
@@ -304,6 +304,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <Footer />
     </main>
   );
 }
