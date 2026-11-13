@@ -7,6 +7,9 @@ import { CartProvider } from "@/context/CartContext";
 
 import "./globals.css";
 
+const SITE_URL = "https://rashidmegamartv0-1.vercel.app";
+const SITE_NAME = "Rashid Mega Mart";
+
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-plus-jakarta-sans",
@@ -14,7 +17,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rashid-mega-mart.vercel.app"),
+  metadataBase: new URL(SITE_URL),
 
   title: {
     default: "Rashid Mega Mart | Online Grocery Shopping",
@@ -22,22 +25,57 @@ export const metadata: Metadata = {
   },
 
   description:
-    "Shop groceries, daily essentials and affordable grocery kits at Rashid Mega Mart. Easy WhatsApp ordering with free home delivery up to 5 KM.",
+    "Shop groceries, daily essentials and affordable grocery kits at Rashid Mega Mart. Order conveniently through WhatsApp with home delivery up to 5 KM.",
 
-  applicationName: "Rashid Mega Mart",
+  applicationName: SITE_NAME,
+  category: "shopping",
+
+  alternates: {
+    canonical: "/",
+  },
 
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 
   openGraph: {
-    title: "Rashid Mega Mart",
-    description:
-      "Your trusted destination for everyday groceries and essentials.",
-    siteName: "Rashid Mega Mart",
     type: "website",
     locale: "en_IN",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: "Rashid Mega Mart | Online Grocery Shopping",
+    description:
+      "Your trusted destination for everyday groceries, daily essentials and affordable grocery kits.",
+    images: [
+      {
+        url: "/images/logo.png",
+        width: 512,
+        height: 512,
+        alt: "Rashid Mega Mart Logo",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Rashid Mega Mart | Online Grocery Shopping",
+    description:
+      "Shop groceries, daily essentials and affordable grocery kits at Rashid Mega Mart.",
+    images: ["/images/logo.png"],
+  },
+
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
   },
 };
 
@@ -46,6 +84,21 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: "#A83250",
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/images/logo.png`,
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+918962531603",
+    contactType: "customer service",
+    areaServed: "IN",
+    availableLanguage: ["English", "Hindi"],
+  },
 };
 
 interface RootLayoutProps {
@@ -58,6 +111,13 @@ export default function RootLayout({
   return (
     <html lang="en-IN" className={plusJakartaSans.variable}>
       <body className="flex min-h-dvh flex-col antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+          }}
+        />
+
         <CartProvider>
           <main className="min-w-0 w-full flex-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0">
             {children}
