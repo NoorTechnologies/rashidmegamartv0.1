@@ -19,9 +19,12 @@ export default function ProductModal({
   onClose,
 }: ProductModalProps) {
   const { addToCart, items } = useCart();
-  const [imageError, setImageError] = useState(false);
+  const [failedImage, setFailedImage] = useState<string | null>(null);
 
   const cartItem = items.find((item) => item.id === product?.id);
+  const imageError = Boolean(
+    product?.image && failedImage === product.image
+  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -31,6 +34,7 @@ export default function ProductModal({
     };
 
     const previousOverflow = document.body.style.overflow;
+
     document.addEventListener("keydown", handleEscape);
     document.body.style.overflow = "hidden";
 
@@ -39,10 +43,6 @@ export default function ProductModal({
       document.body.style.overflow = previousOverflow;
     };
   }, [isOpen, onClose]);
-
-  useEffect(() => {
-    setImageError(false);
-  }, [product?.id]);
 
   if (!isOpen || !product) return null;
 
@@ -108,7 +108,7 @@ export default function ProductModal({
                 alt={product.name}
                 fill
                 sizes="(max-width: 640px) 100vw, 512px"
-                onError={() => setImageError(true)}
+                onError={() => setFailedImage(product.image)}
                 className="object-contain p-6 sm:p-8"
               />
             ) : (

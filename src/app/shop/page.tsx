@@ -1,6 +1,7 @@
 
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import {
   Search,
@@ -8,6 +9,7 @@ import {
   X,
   ShoppingBag,
 } from "lucide-react";
+
 import ProductCard from "@/components/ProductCard";
 import ProductModal from "@/components/ProductModal";
 import { products, type Product } from "@/data/products";
@@ -59,26 +61,44 @@ export default function ShopPage() {
   };
 
   return (
-    <div className="min-h-screen min-w-0 overflow-x-clip bg-[#F5FAF5]">
-      {/* SHOP HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#E8F5E9] via-[#D5F0DF] to-[#B7E4C7] px-3 py-8 sm:px-6 sm:py-14">
-        <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full border-[28px] border-white/30" />
+    <main className="min-h-screen min-w-0 overflow-x-clip bg-[#FFF9D8]/30">
 
-        <div className="relative mx-auto max-w-7xl">
-          <p className="mb-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#168447] sm:text-xs">
-            Rashid Mega Mart
-          </p>
+      {/* COMPACT SHOP HERO */}
+      <section className="relative overflow-hidden border-b border-[#D4A84F]/20 bg-gradient-to-br from-[#FEF9C3] via-white to-[#F8F0E8]">
+        <div className="pointer-events-none absolute -right-12 -top-12 size-40 rounded-full border-[18px] border-[#D4A84F]/10" />
 
-          <h1 className="text-2xl font-extrabold leading-tight text-[#075C2B] min-[375px]:text-3xl sm:text-4xl">
-            Freshness Starts Here
-          </h1>
+        <div className="relative mx-auto flex max-w-7xl flex-col items-center px-3 pb-4 pt-3 sm:px-6 sm:pb-6 sm:pt-5">
 
-          <p className="mt-2 max-w-lg text-xs leading-5 text-[#53665A] sm:text-sm sm:leading-6">
-            Explore everyday grocery essentials at great prices.
-          </p>
+          {/* Hero image */}
+          <div className="relative h-[112px] w-full max-w-[330px] sm:h-[165px] sm:max-w-[470px]">
+            <Image
+              src="/hero.png"
+              alt="Rashid Mega Mart groceries"
+              fill
+              priority
+              sizes="(max-width: 640px) 330px, 470px"
+              className="object-contain"
+            />
+          </div>
 
-          <div className="mt-5 flex min-h-12 w-full max-w-xl items-center gap-2.5 rounded-xl border border-white/80 bg-white px-3 py-2.5 text-[#202B24] shadow-[0_8px_24px_rgba(7,92,43,0.10)] sm:mt-6 sm:gap-3 sm:rounded-2xl sm:px-4 sm:py-3">
-            <Search size={19} className="shrink-0 text-[#168447]" />
+          {/* Heading */}
+          <div className="mt-1 text-center">
+            <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#A47A2C] sm:text-[10px]">
+              RASHID MEGA MART
+            </p>
+
+            <h1 className="mt-1 text-xl font-black tracking-tight text-[#800020] sm:text-3xl">
+              Shop Groceries
+            </h1>
+
+            <p className="mt-1 text-[10px] font-medium text-[#6A7282] sm:text-xs">
+              Everyday essentials at great prices
+            </p>
+          </div>
+
+          {/* Search */}
+          <div className="mt-3 flex min-h-10 w-full max-w-xl items-center gap-2 rounded-xl border border-[#E5E7EB] bg-white px-3 shadow-[0_4px_14px_rgba(128,0,32,0.06)] transition focus-within:border-[#D4A84F] sm:mt-4 sm:min-h-12 sm:rounded-2xl">
+            <Search size={17} className="shrink-0 text-[#800020]" />
 
             <input
               type="search"
@@ -86,7 +106,7 @@ export default function ShopPage() {
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search groceries..."
               aria-label="Search groceries"
-              className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[#98A69C]"
+              className="min-w-0 flex-1 bg-transparent py-2 text-xs text-[#171717] outline-none placeholder:text-[#99A1AF] sm:text-sm"
             />
 
             {search && (
@@ -94,9 +114,9 @@ export default function ShopPage() {
                 type="button"
                 onClick={() => setSearch("")}
                 aria-label="Clear search"
-                className="flex size-8 shrink-0 items-center justify-center rounded-full transition hover:bg-[#E8F5E9]"
+                className="flex size-7 shrink-0 items-center justify-center rounded-full hover:bg-[#FFF9D8]"
               >
-                <X size={18} className="text-[#68756B]" />
+                <X size={16} className="text-[#6A7282]" />
               </button>
             )}
           </div>
@@ -104,19 +124,22 @@ export default function ShopPage() {
       </section>
 
       {/* SHOP CONTENT */}
-      <section className="mx-auto w-full max-w-7xl px-3 py-6 sm:px-6 sm:py-10 lg:px-8">
-        <div className="mb-4 sm:mb-5">
-          <h2 className="text-lg font-extrabold text-[#202B24] sm:text-xl">
+      <section className="mx-auto w-full max-w-7xl px-3 pb-6 pt-4 sm:px-6 sm:pb-10 sm:pt-6 lg:px-8">
+
+        {/* CATEGORY TITLE */}
+        <div className="mb-2 flex items-center justify-between">
+          <h2 className="text-sm font-extrabold text-[#171717] sm:text-base">
             Shop by Category
           </h2>
-          <p className="mt-1 text-[11px] text-[#68756B] sm:text-xs">
-            Find your everyday essentials easily.
-          </p>
+
+          <span className="text-[10px] font-semibold text-[#A47A2C]">
+            Explore
+          </span>
         </div>
 
         {/* CATEGORY FILTERS */}
         <div
-          className="-mx-3 flex gap-2 overflow-x-auto px-3 pb-3 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0"
+          className="-mx-3 flex gap-1.5 overflow-x-auto px-3 pb-2 sm:-mx-6 sm:gap-2 sm:px-6 lg:mx-0 lg:px-0"
           aria-label="Filter products by category"
         >
           {["All", ...categories.map((category) => category.name)].map(
@@ -126,10 +149,10 @@ export default function ShopPage() {
                 type="button"
                 onClick={() => setSelectedCategory(category)}
                 aria-pressed={selectedCategory === category}
-                className={`min-h-9 shrink-0 rounded-full px-3.5 py-2 text-[11px] font-bold transition active:scale-95 sm:px-4 sm:text-xs ${
+                className={`min-h-8 shrink-0 rounded-full border px-3 py-1.5 text-[10px] font-bold transition active:scale-95 sm:px-4 sm:text-xs ${
                   selectedCategory === category
-                    ? "border border-[#168447] bg-[#168447] text-white shadow-[0_3px_10px_rgba(22,132,71,0.18)]"
-                    : "border border-[#DFEEE3] bg-white text-[#53665A] hover:border-[#95D5B2] hover:bg-[#E8F5E9] hover:text-[#075C2B]"
+                    ? "border-[#800020] bg-[#800020] text-white shadow-sm"
+                    : "border-[#E5E7EB] bg-white text-[#4A5565] hover:border-[#D4A84F] hover:text-[#800020]"
                 }`}
               >
                 {category}
@@ -139,26 +162,30 @@ export default function ShopPage() {
         </div>
 
         {/* PRODUCTS HEADER */}
-        <div className="mt-5 flex min-w-0 flex-col gap-3 min-[480px]:flex-row min-[480px]:items-center min-[480px]:justify-between sm:mt-6">
+        <div className="mt-3 flex min-w-0 items-center justify-between gap-2 border-b border-[#E5E7EB] pb-2.5 sm:mt-5">
+
           <div className="min-w-0">
-            <h2 className="text-lg font-extrabold text-[#202B24] sm:text-xl">
+            <h2 className="text-sm font-extrabold text-[#171717] sm:text-lg">
               All Groceries
             </h2>
-            <p className="mt-1 text-[11px] text-[#68756B] sm:text-xs">
+
+            <p className="mt-0.5 text-[10px] text-[#6A7282] sm:text-xs">
               {filteredProducts.length} products found
             </p>
           </div>
 
-          <label className="flex min-h-10 w-full min-w-0 items-center gap-2 rounded-xl border border-[#DFEEE3] bg-white px-3 py-2 text-xs font-semibold text-[#53665A] transition focus-within:border-[#168447] min-[480px]:w-auto">
-            <SlidersHorizontal size={15} className="shrink-0 text-[#168447]" />
-            <span className="shrink-0">Sort:</span>
+          <label className="flex min-h-8 min-w-0 items-center gap-1.5 rounded-lg border border-[#E5E7EB] bg-white px-2 sm:min-h-9 sm:gap-2 sm:px-3">
+            <SlidersHorizontal
+              size={13}
+              className="shrink-0 text-[#800020]"
+            />
 
             <select
               value={sortBy}
               onChange={(event) =>
                 setSortBy(event.target.value as SortOption)
               }
-              className="min-w-0 flex-1 bg-transparent text-xs outline-none min-[480px]:max-w-40"
+              className="min-w-0 max-w-[118px] bg-transparent text-[10px] font-semibold text-[#364153] outline-none sm:max-w-none sm:text-xs"
               aria-label="Sort products"
             >
               <option value="featured">Featured</option>
@@ -171,7 +198,7 @@ export default function ShopPage() {
 
         {/* PRODUCT GRID */}
         {filteredProducts.length > 0 ? (
-          <div className="mt-4 grid min-w-0 grid-cols-2 items-stretch gap-2.5 min-[480px]:gap-3 sm:mt-5 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
+          <div className="mt-3 grid min-w-0 grid-cols-2 items-stretch gap-2 sm:mt-4 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
             {filteredProducts.map((product) => (
               <div key={product.id} className="flex min-w-0 flex-col">
                 <ProductCard product={product} />
@@ -179,7 +206,7 @@ export default function ShopPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedProduct(product)}
-                  className="mt-2 min-h-9 w-full rounded-lg border border-[#B7E4C7] bg-[#E8F5E9] px-2 py-2 text-[10px] font-bold text-[#075C2B] transition hover:border-[#168447] hover:bg-[#168447] hover:text-white active:scale-[0.98] sm:text-xs"
+                  className="mt-1.5 min-h-8 w-full rounded-lg border border-[#D4A84F]/50 bg-white px-2 py-1.5 text-[10px] font-bold text-[#800020] transition hover:border-[#800020] hover:bg-[#800020] hover:text-white active:scale-[0.98] sm:mt-2 sm:min-h-9 sm:text-xs"
                 >
                   View Details
                 </button>
@@ -187,24 +214,24 @@ export default function ShopPage() {
             ))}
           </div>
         ) : (
-          <div className="mt-7 rounded-2xl border border-[#DFEEE3] bg-white px-4 py-10 text-center shadow-sm sm:px-5 sm:py-12">
+          <div className="mt-5 rounded-xl border border-[#E5E7EB] bg-white px-4 py-8 text-center shadow-sm sm:py-10">
             <ShoppingBag
-              size={36}
-              className="mx-auto text-[#95D5B2]"
+              size={30}
+              className="mx-auto text-[#D4A84F]"
             />
 
-            <h3 className="mt-4 text-base font-extrabold text-[#202B24] sm:text-lg">
+            <h3 className="mt-3 text-sm font-extrabold text-[#171717] sm:text-base">
               No products found
             </h3>
 
-            <p className="mt-2 text-xs text-[#68756B] sm:text-sm">
+            <p className="mt-1 text-[11px] text-[#6A7282] sm:text-xs">
               Try another search or category.
             </p>
 
             <button
               type="button"
               onClick={clearFilters}
-              className="mt-5 min-h-10 rounded-xl bg-[#168447] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#075C2B] active:scale-95"
+              className="mt-4 min-h-9 rounded-lg bg-[#800020] px-5 py-2 text-xs font-bold text-white transition hover:bg-[#35120D] active:scale-95"
             >
               Clear Filters
             </button>
@@ -217,6 +244,6 @@ export default function ShopPage() {
         isOpen={selectedProduct !== null}
         onClose={() => setSelectedProduct(null)}
       />
-    </div>
+    </main>
   );
 }

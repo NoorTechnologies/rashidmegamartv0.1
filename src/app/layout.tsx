@@ -3,7 +3,6 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
 import BottomNav from "@/components/BottomNav";
-import Footer from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
 
 import "./globals.css";
@@ -46,7 +45,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#075C2B",
+  themeColor: "#A83250",
 };
 
 interface RootLayoutProps {
@@ -63,8 +62,6 @@ export default function RootLayout({
           <main className="min-w-0 w-full flex-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0">
             {children}
           </main>
-
-          
 
           <BottomNav />
         </CartProvider>

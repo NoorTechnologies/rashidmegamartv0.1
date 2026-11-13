@@ -5,9 +5,8 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 
@@ -34,8 +33,15 @@ interface CartContextType {
 }
 
 const STORAGE_KEY = "rashid-mega-mart-cart";
+const CART_CHANGE_EVENT = "rashid-mega-mart-cart-change";
+
+const EMPTY_CART: CartItem[] = [];
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
+
+let cachedRaw: string | null | undefined;
+let cachedItems: CartItem[] = EMPTY_CART;
+let storageFailed = false;
 
 function isValidCartItem(item: unknown): item is CartItem {
   if (!item || typeof item !== "object") return false;
@@ -58,44 +64,108 @@ function isValidCartItem(item: unknown): item is CartItem {
   );
 }
 
-function readCart(): CartItem[] {
+function parseCart(raw: string | null): CartItem[] {
+  if (!raw) return EMPTY_CART;
+
   try {
-    const savedCart = window.localStorage.getItem(STORAGE_KEY);
+    const parsed: unknown = JSON.parse(raw);
 
-    if (!savedCart) return [];
-
-    const parsed: unknown = JSON.parse(savedCart);
-
-    if (!Array.isArray(parsed)) return [];
+    if (!Array.isArray(parsed)) return EMPTY_CART;
 
     return parsed.filter(isValidCartItem);
   } catch {
-    return [];
+    return EMPTY_CART;
+  }
+}
+
+function getCartSnapshot(): CartItem[] {
+  if (typeof window === "undefined") return EMPTY_CART;
+  if (storageFailed) return cachedItems;
+
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+
+    if (raw !== cachedRaw) {
+      cachedRaw = raw;
+      cachedItems = parseCart(raw);
+    }
+
+    return cachedItems;
+  } catch {
+    storageFailed = true;
+    return cachedItems;
+  }
+}
+
+function notifyCartChange() {
+  window.dispatchEvent(new Event(CART_CHANGE_EVENT));
+}
+
+function saveCart(items: CartItem[]) {
+  cachedItems = items;
+
+  try {
+    const raw = JSON.stringify(items);
+
+    window.localStorage.setItem(STORAGE_KEY, raw);
+    cachedRaw = raw;
+  } catch {
+    storageFailed = true;
+    console.error(
+      "Unable to save cart. Browser storage may be unavailable."
+    );
+  }
+
+  notifyCartChange();
+}
+
+function subscribeCart(callback: () => void) {
+  const handleStorageChange = (event: StorageEvent) => {
+    if (event.key !== STORAGE_KEY && event.key !== null) return;
+
+    cachedRaw = undefined;
+    storageFailed = false;
+    callback();
+  };
+
+  window.addEventListener("storage", handleStorageChange);
+  window.addEventListener(CART_CHANGE_EVENT, callback);
+
+  return () => {
+    window.removeEventListener("storage", handleStorageChange);
+    window.removeEventListener(CART_CHANGE_EVENT, callback);
+  };
+}
+
+function getLoadedSnapshot() {
+  return typeof window !== "undefined";
+}
+
+function getServerLoadedSnapshot() {
+  return false;
+}
+
+function updateCart(updater: (currentItems: CartItem[]) => CartItem[]) {
+  const currentItems = getCartSnapshot();
+  const nextItems = updater(currentItems);
+
+  if (nextItems !== currentItems) {
+    saveCart(nextItems);
   }
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const items = useSyncExternalStore(
+    subscribeCart,
+    getCartSnapshot,
+    () => EMPTY_CART
+  );
 
-  // Load saved cart once the component mounts.
-  useEffect(() => {
-    const savedItems = readCart();
-
-    setItems(savedItems);
-    setIsLoaded(true);
-  }, []);
-
-  // Save only after the initial cart has loaded.
-  useEffect(() => {
-    if (!isLoaded) return;
-
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    } catch {
-      console.error("Unable to save cart. Browser storage may be unavailable.");
-    }
-  }, [items, isLoaded]);
+  const isLoaded = useSyncExternalStore(
+    subscribeCart,
+    getLoadedSnapshot,
+    getServerLoadedSnapshot
+  );
 
   const addToCart = useCallback(
     (product: Omit<CartItem, "quantity">) => {
@@ -108,7 +178,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      setItems((currentItems) => {
+      updateCart((currentItems) => {
         const existing = currentItems.find(
           (item) => item.id === product.id
         );
@@ -134,7 +204,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   );
 
   const increaseQuantity = useCallback((id: string) => {
-    setItems((currentItems) =>
+    updateCart((currentItems) =>
       currentItems.map((item) =>
         item.id === id
           ? {
@@ -150,7 +220,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const decreaseQuantity = useCallback((id: string) => {
-    setItems((currentItems) =>
+    updateCart((currentItems) =>
       currentItems
         .map((item) =>
           item.id === id
@@ -162,13 +232,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const removeFromCart = useCallback((id: string) => {
-    setItems((currentItems) =>
+    updateCart((currentItems) =>
       currentItems.filter((item) => item.id !== id)
     );
   }, []);
 
   const clearCart = useCallback(() => {
-    setItems([]);
+    updateCart(() => EMPTY_CART);
   }, []);
 
   const totalItems = useMemo(
