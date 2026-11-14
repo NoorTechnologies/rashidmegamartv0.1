@@ -8,7 +8,6 @@ import {
   LayoutGrid,
   Package,
   ShoppingCart,
-  MessageCircle,
 } from "lucide-react";
 
 import { useCart } from "@/context/CartContext";
@@ -16,15 +15,15 @@ import { useCart } from "@/context/CartContext";
 const WHATSAPP_NUMBER = "918962531603";
 
 const navigationItems = [
-  { label: "Home", href: "/", icon: House },
-  { label: "Shop", href: "/shop", icon: LayoutGrid },
-  { label: "Kits", href: "/kits", icon: Package },
+  { label: "Home", href: "/", icon: House, external: false },
+  { label: "Shop", href: "/shop", icon: LayoutGrid, external: false },
+  { label: "Kits", href: "/kits", icon: Package, external: false },
 ];
 
 const mobileNavigationItems = [
   ...navigationItems,
-  { label: "Cart", href: "/cart", icon: ShoppingCart },
-  { label: "WhatsApp", href: `https://wa.me/${WHATSAPP_NUMBER}`, icon: MessageCircle, external: true },
+  { label: "Cart", href: "/cart", icon: ShoppingCart, external: false },
+  { label: "WhatsApp", href: `https://wa.me/${WHATSAPP_NUMBER}`, icon: Package, external: true },
 ];
 
 export default function BottomNav() {
