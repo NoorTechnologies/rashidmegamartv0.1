@@ -19,6 +19,7 @@ import { products } from "@/data/products";
 
 interface KitCardProps {
   kit: GroceryKit;
+  eagerImage?: boolean;
 }
 
 const formatPrice = (price: number) =>
@@ -52,7 +53,7 @@ const getProductImage = (item: string) => {
   );
 };
 
-export default function KitCard({ kit }: KitCardProps) {
+export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
   const { addToCart, items, isLoaded } = useCart();
   const [imageError, setImageError] = useState(false);
 
@@ -110,6 +111,7 @@ export default function KitCard({ kit }: KitCardProps) {
               src={kit.image}
               alt={kit.name}
               fill
+              loading={eagerImage ? "eager" : "lazy"}
               sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 240px"
               onError={() => setImageError(true)}
               className="object-contain p-3 transition-transform duration-500 ease-out group-hover:scale-105 sm:p-5"
