@@ -23,7 +23,9 @@ function ShopPageContent() {
   const categorySlug = searchParams.get("category");
   const initialCategory = categories.find((category) => category.id === categorySlug)?.name ?? "All";
 
-  const [products, setProducts] = useState<Product[]>([]);\n  useEffect(() => { let active = true; fetch("/api/catalog/products").then((r) => r.json()).then((j) => { if (active && Array.isArray(j.data)) setProducts(j.data as Product[]); }).catch(() => undefined); return () => { active = false; }; }, []);\n  const [search, setSearch] = useState("");
+  const [products, setProducts] = useState<Product[]>([]);
+  useEffect(() => { let active = true; fetch("/api/catalog/products").then((r) => r.json()).then((j) => { if (active && Array.isArray(j.data)) setProducts(j.data as Product[]); }).catch(() => undefined); return () => { active = false; }; }, []);
+  const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [sortBy, setSortBy] = useState<SortOption>("featured");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
