@@ -51,7 +51,7 @@ export const metadata: Metadata = {
       "Your trusted destination for everyday groceries, daily essentials and affordable grocery kits.",
     images: [
       {
-        url: "/images/logo.png",
+        url: "/images/logo2.png",
         width: 512,
         height: 512,
         alt: "Rashid Mega Mart Logo",
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     title: "Rashid Mega Mart | Online Grocery Shopping",
     description:
       "Shop groceries, daily essentials and affordable grocery kits at Rashid Mega Mart.",
-    images: ["/images/logo.png"],
+    images: ["/images/logo2.png"],
   },
 
   formatDetection: {
@@ -86,7 +86,7 @@ const structuredData = {
   "@type": "Organization",
   name: SITE_NAME,
   url: SITE_URL,
-  logo: `${SITE_URL}/images/logo.png`,
+  logo: `${SITE_URL}/images/logo2.png`,
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+918962531603",
