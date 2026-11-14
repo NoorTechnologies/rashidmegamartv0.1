@@ -1,13 +1,35 @@
 import Link from "next/link";
-import { Layers3, Pencil, Plus } from "lucide-react";
+import { Layers3, Plus } from "lucide-react";
 import { kits } from "@/data/kits";
 
 export default function AdminKitsPage() {
   return (
     <div className="space-y-5">
-      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#A47A2C]">Catalogue</p><h1 className="mt-1 text-2xl font-black text-[#800020] sm:text-3xl">Grocery Kits</h1><p className="mt-1 text-sm text-[#766D72]">Review the current grocery combo kits.</p></div><button type="button" disabled className="inline-flex min-h-10 cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-[#800020] px-4 text-xs font-bold text-white opacity-60"><Plus size={15} /> Add kit <span className="text-[9px]">(backend later)</span></button></div>
-      <div className="overflow-hidden rounded-2xl border border-[#F0E4E5] bg-white"><div className="flex items-center justify-between border-b border-[#F5ECEE] px-4 py-4"><h2 className="text-sm font-extrabold text-[#33232A]">Current kits</h2><span className="rounded-full bg-[#FFF1F3] px-2.5 py-1 text-[10px] font-bold text-[#800020]">{kits.length} sample kits</span></div><div className="divide-y divide-[#F5ECEE]">{kits.map((kit) => <div key={kit.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 sm:grid-cols-[minmax(0,1fr)_100px_100px_90px]"><div className="flex min-w-0 items-center gap-3"><span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#FFF7E8] text-[#A47A2C]"><Layers3 size={18} /></span><div className="min-w-0"><p className="truncate text-xs font-bold text-[#33232A]">{kit.name}</p><p className="mt-1 truncate text-[10px] text-[#9A858B]">{kit.category} · {kit.items.length} items</p></div></div><span className="hidden text-xs font-bold text-[#33232A] sm:block">₹{kit.price}</span><span className="hidden text-[10px] font-semibold text-[#766D72] sm:block">{kit.isAvailable ? "Available" : "Unavailable"}</span><button type="button" disabled aria-label={`Edit ${kit.name}`} className="inline-flex cursor-not-allowed items-center justify-center gap-1 rounded-lg border border-[#F0E4E5] px-3 py-2 text-[10px] font-bold text-[#9A858B] opacity-60"><Pencil size={12} /> Edit</button></div>)}</div></div>
-      <p className="text-[11px] leading-5 text-[#9A858B]">Preview only: kit edits are disabled until database integration. Existing storefront kit data is not modified.</p><Link href="/kits" className="inline-block text-xs font-bold text-[#800020] underline underline-offset-4">Open customer kits</Link>
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#A47A2C]">Catalogue</p>
+          <h1 className="mt-1 text-2xl font-black text-[#800020] sm:text-3xl">Grocery Kits</h1>
+          <p className="mt-1 text-sm text-[#766D72]">Manage your store's grocery combo kits.</p>
+        </div>
+        <button type="button" disabled className="inline-flex min-h-10 cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-[#800020] px-4 text-xs font-bold text-white opacity-60">
+          <Plus size={15} /> Add kit <span className="text-[9px]">(database required)</span>
+        </button>
+      </div>
+      <div className="overflow-hidden rounded-2xl border border-[#F0E4E5] bg-white">
+        <div className="flex items-center justify-between border-b border-[#F5ECEE] px-4 py-4">
+          <h2 className="text-sm font-extrabold text-[#33232A]">Grocery kits</h2>
+          <span className="rounded-full bg-[#FFF1F3] px-2.5 py-1 text-[10px] font-bold text-[#800020]">{kits.length} kits</span>
+        </div>
+        {kits.length === 0 ? (
+          <div className="flex flex-col items-center gap-2 px-4 py-12 text-center">
+            <Layers3 size={28} className="text-[#A47A2C]" />
+            <p className="text-sm font-bold text-[#33232A]">No grocery kits yet</p>
+            <p className="max-w-sm text-xs leading-5 text-[#9A858B]">Real kits will appear here after the database is connected. No sample kits are being shown.</p>
+          </div>
+        ) : null}
+      </div>
+      <p className="text-[11px] leading-5 text-[#9A858B]">Kit creation and editing will be enabled after database integration.</p>
+      <Link href="/kits" className="inline-block text-xs font-bold text-[#800020] underline underline-offset-4">Open customer kits</Link>
     </div>
   );
 }
