@@ -1,4 +1,3 @@
-
 import type { NextConfig } from "next";
 
 const securityHeaders = [
@@ -28,6 +27,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
 
   turbopack: {
+    root: process.cwd(),
     rules: {
       "*.css": {
         loaders: ["@tailwindcss/turbopack"],

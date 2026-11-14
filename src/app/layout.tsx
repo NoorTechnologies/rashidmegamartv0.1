@@ -104,7 +104,7 @@ export default function RootLayout({
   children,
 }: Readonly<RootLayoutProps>) {
   return (
-    <html lang="en-IN" className={plusJakartaSans.variable}>
+    <html lang="en-IN" className={plusJakartaSans.variable} data-scroll-behavior="smooth">
       <body className="flex min-h-dvh flex-col antialiased">
         <script
           type="application/ld+json"
