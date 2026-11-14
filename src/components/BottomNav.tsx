@@ -3,11 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
+  ChevronRight,
   House,
   LayoutGrid,
+  MoreHorizontal,
   Package,
-  ShoppingBasket,
+  ShoppingCart,
+  X,
 } from "lucide-react";
 
 import { useCart } from "@/context/CartContext";
@@ -17,102 +21,122 @@ const WHATSAPP_NUMBER = "918962531603";
 const navigationItems = [
   { label: "Home", href: "/", icon: House },
   { label: "Shop", href: "/shop", icon: LayoutGrid },
-  { label: "Kits", href: "/kits", icon: Package, featured: true },
-  { label: "Cart", href: "/cart", icon: ShoppingBasket },
+  { label: "Kits", href: "/kits", icon: Package },
 ];
 
 export default function BottomNav() {
   const pathname = usePathname();
   const { totalItems } = useCart();
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
 
   return (
-    <nav
-      aria-label="Main navigation"
-      className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-3 pb-[calc(9px+env(safe-area-inset-bottom))] lg:hidden"
-    >
-      <div className="grid h-[72px] grid-cols-5 items-center rounded-[26px] border border-white/80 bg-white/90 px-1.5 shadow-[0_10px_35px_rgba(56,24,32,0.16),0_2px_8px_rgba(56,24,32,0.06)] backdrop-blur-2xl">
-        {navigationItems.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            item.href === "/"
-              ? pathname === "/"
-              : pathname === item.href || pathname.startsWith(`${item.href}/`);
+    <>
+      {/* One dedicated floating Cart shortcut */}
+      <Link
+        href="/cart"
+        aria-label={`Open cart, ${totalItems} items`}
+        className="fixed bottom-[calc(100px+env(safe-area-inset-bottom))] right-4 z-50 flex size-[58px] items-center justify-center rounded-full border border-white/75 bg-white/65 text-[#87263F] shadow-[0_8px_28px_rgba(48,30,36,0.14),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl backdrop-saturate-150 transition duration-300 hover:-translate-y-1 hover:bg-white/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250] lg:hidden"
+      >
+        <ShoppingCart size={23} strokeWidth={1.9} />
+        {totalItems > 0 && (
+          <span className="absolute -right-0.5 -top-0.5 flex h-[19px] min-w-[19px] items-center justify-center rounded-full border-2 border-white bg-[#A83250] px-1 text-[9px] font-bold leading-none text-white shadow-sm">
+            {totalItems > 99 ? "99+" : totalItems}
+          </span>
+        )}
+      </Link>
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={isActive ? "page" : undefined}
-              aria-label={
-                item.href === "/cart"
-                  ? `Cart, ${totalItems} items`
-                  : item.label
-              }
-              className={`group relative flex h-full min-w-0 flex-col items-center justify-center gap-1 rounded-[20px] transition-all duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#A83250] ${
-                item.featured ? "-translate-y-2" : ""
-              }`}
-            >
-              <span
-                className={`relative flex size-10 items-center justify-center rounded-2xl transition-all duration-300 ${
-                  item.featured
-                    ? "size-[50px] rounded-[19px] bg-gradient-to-br from-[#B94360] to-[#87263F] text-white shadow-[0_7px_16px_rgba(168,50,80,0.32)] ring-[5px] ring-white"
-                    : isActive
-                      ? "bg-[#F8E8ED] text-[#A83250] shadow-[inset_0_0_0_1px_rgba(168,50,80,0.06)]"
-                      : "text-[#777078] group-hover:-translate-y-0.5 group-hover:bg-[#FAF3F5] group-hover:text-[#A83250]"
-                }`}
-              >
-                <Icon
-                  size={item.featured ? 23 : 21}
-                  strokeWidth={isActive || item.featured ? 2.5 : 1.9}
-                />
-
-                {item.href === "/cart" && totalItems > 0 && (
-                  <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-white bg-[#A83250] px-1 text-[9px] font-extrabold leading-none text-white shadow-sm">
-                    {totalItems > 99 ? "99+" : totalItems}
-                  </span>
-                )}
-              </span>
-
-              <span
-                className={`max-w-full truncate px-0.5 text-[10px] leading-none transition-colors duration-200 ${
-                  isActive
-                    ? "font-extrabold text-[#A83250]"
-                    : item.featured
-                      ? "font-extrabold text-[#87263F]"
-                      : "font-semibold text-[#777078] group-hover:text-[#A83250]"
-                }`}
-              >
-                {item.label}
-              </span>
-              {isActive && !item.featured && (
-                <span className="absolute bottom-1 h-1 w-1 rounded-full bg-[#A83250]" />
-              )}
-            </Link>
-          );
-        })}
-
-        <a
-          href={`https://wa.me/${WHATSAPP_NUMBER}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Contact Rashid Mega Mart on WhatsApp"
-          className="group flex h-full min-w-0 flex-col items-center justify-center gap-1 rounded-[20px] text-[#777078] transition-all duration-300 hover:bg-[#EAF8EF] hover:text-[#138047] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-[#138047]"
-        >
-          <span className="flex size-10 items-center justify-center transition-transform duration-300 group-hover:-translate-y-0.5">
-            <Image
-              src="/Whatsapp-3d.svg"
-              alt=""
-              width={27}
-              height={27}
-              unoptimized
-              className="size-[27px] shrink-0 object-contain"
+      <nav
+        aria-label="Main navigation"
+        className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-4 pb-[calc(10px+env(safe-area-inset-bottom))] lg:hidden"
+      >
+        {isMoreOpen && (
+          <>
+            <button
+              type="button"
+              aria-label="Close More menu"
+              onClick={() => setIsMoreOpen(false)}
+              className="fixed inset-0 z-[-1] cursor-default"
             />
-          </span>
-          <span className="max-w-full truncate px-0.5 text-[10px] font-semibold leading-none">
-            WhatsApp
-          </span>
-        </a>
-      </div>
-    </nav>
+            <div className="absolute bottom-[calc(100%+14px)] right-4 w-[min(280px,calc(100vw-32px))] overflow-hidden rounded-[26px] border border-white/75 bg-white/75 p-2 shadow-[0_16px_48px_rgba(35,24,28,0.18),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-2xl backdrop-saturate-150">
+              <a
+                href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMoreOpen(false)}
+                className="flex items-center gap-3 rounded-[19px] p-3 transition-colors hover:bg-white/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#138047]"
+              >
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-white/80 bg-white/70 shadow-sm">
+                  <Image
+                    src="/Whatsapp-3d.svg"
+                    alt=""
+                    width={28}
+                    height={28}
+                    unoptimized
+                    className="size-7 object-contain"
+                  />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-semibold text-[#30272B]">
+                    Contact us
+                  </span>
+                  <span className="mt-0.5 block text-xs text-[#82777C]">
+                    Chat on WhatsApp
+                  </span>
+                </span>
+                <ChevronRight size={18} className="shrink-0 text-[#138047]" />
+              </a>
+            </div>
+          </>
+        )}
+
+        <div className="relative grid h-[68px] grid-cols-4 items-center rounded-full border border-white/75 bg-white/60 px-2 shadow-[0_10px_36px_rgba(40,28,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(255,255,255,0.28)] backdrop-blur-2xl backdrop-saturate-150">
+          <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
+
+          {navigationItems.map((item) => {
+            const Icon = item.icon;
+            const isActive =
+              item.href === "/"
+                ? pathname === "/"
+                : pathname === item.href || pathname.startsWith(`${item.href}/`);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? "page" : undefined}
+                className={`relative mx-auto flex h-[54px] w-[min(100%,76px)] flex-col items-center justify-center gap-1 rounded-full transition-all duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#A83250] ${
+                  isActive
+                    ? "bg-white/75 text-[#A83250] shadow-[0_2px_10px_rgba(62,36,44,0.08),inset_0_1px_0_rgba(255,255,255,0.95)]"
+                    : "text-[#766D72] hover:bg-white/45 hover:text-[#87263F]"
+                }`}
+              >
+                <Icon size={21} strokeWidth={isActive ? 2.25 : 1.8} />
+                <span className={`text-[10px] leading-none ${isActive ? "font-bold" : "font-medium"}`}>
+                  {item.label}
+                </span>
+                {isActive && (
+                  <span className="absolute bottom-[5px] h-1 w-1 rounded-full bg-[#A83250]" />
+                )}
+              </Link>
+            );
+          })}
+
+          <button
+            type="button"
+            aria-label={isMoreOpen ? "Close More menu" : "Open More menu"}
+            aria-expanded={isMoreOpen}
+            onClick={() => setIsMoreOpen((open) => !open)}
+            className={`mx-auto flex h-[54px] w-[min(100%,76px)] flex-col items-center justify-center gap-1 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#A83250] ${
+              isMoreOpen
+                ? "bg-white/75 text-[#A83250] shadow-[0_2px_10px_rgba(62,36,44,0.08)]"
+                : "text-[#766D72] hover:bg-white/45 hover:text-[#87263F]"
+            }`}
+          >
+            {isMoreOpen ? <X size={21} /> : <MoreHorizontal size={23} />}
+            <span className="text-[10px] font-medium leading-none">More</span>
+          </button>
+        </div>
+      </nav>
+    </>
   );
 }
