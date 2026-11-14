@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Package,
@@ -30,6 +30,7 @@ function getPageTitle(pathname: string) {
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const pageTitle = getPageTitle(pathname);
 
   if (pathname === "/admin/login") {
@@ -44,7 +45,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         body: JSON.stringify({ action: "logout" }),
       });
     } finally {
-      window.location.assign("/admin/login");
+      router.replace("/admin/login");
     }
   }
 
