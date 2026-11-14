@@ -149,10 +149,10 @@ Address: ${cleanAddress}
 ${orderItems}
 
 *Order Summary*
-Total Items: ${totalItems}
-Product Subtotal: ${formatPrice(subtotal)}
+Total Items: ${safeTotalItems}
+Product Subtotal: ${formatPrice(orderSubtotal)}
 Delivery Charge: To be confirmed by store
-Estimated Amount: ${formatPrice(subtotal)} + delivery (if applicable)
+Estimated Amount: ${formatPrice(orderSubtotal)} + delivery (if applicable)
 
 Payment Preference: ${paymentMethod === "COD" ? "Cash on Delivery" : "UPI"}
 
