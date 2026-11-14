@@ -1,0 +1,39 @@
+import "server-only";
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_SECRET = process.env.SUPABASE_SECRET_KEY;
+
+export function catalogConfig() {
+  if (!SUPABASE_URL || !SUPABASE_SECRET) {
+    throw new Error("Supabase server configuration is missing.");
+  }
+  return { url: SUPABASE_URL.replace(/\/$/, ""), key: SUPABASE_SECRET };
+}
+
+export async function catalogRequest<T>(
+  path: string,
+  init: RequestInit = {},
+): Promise<T> {
+  const { url, key } = catalogConfig();
+  const response = await fetch(`${url}/rest/v1/${path}`, {
+    ...init,
+    headers: {
+      apikey: key,
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+      ...(init.headers ?? {}),
+    },
+    cache: "no-store",
+  });
+  if (!response.ok) {
+    const detail = await response.text().catch(() => "");
+    throw new Error(`Catalog database request failed (${response.status}): ${detail.slice(0, 300)}`);
+  }
+  if (response.status === 204) return undefined as T;
+  return response.json() as Promise<T>;
+}
+
+export function publicImageUrl(path: string) {
+  const { url } = catalogConfig();
+  return `${url}/storage/v1/object/public/catalog-media/${path.split("/").map(encodeURIComponent).join("/")}`;
+}
