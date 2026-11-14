@@ -19,7 +19,6 @@ export async function catalogRequest<T>(
     ...init,
     headers: {
       apikey: key,
-      Authorization: `Bearer ${key}`,
       "Content-Type": "application/json",
       ...(init.headers ?? {}),
     },
@@ -49,7 +48,6 @@ export async function catalogPublicRequest<T>(
     ...init,
     headers: {
       apikey: key,
-      Authorization: `Bearer ${key}`,
       "Content-Type": "application/json",
       ...(init.headers ?? {}),
     },
