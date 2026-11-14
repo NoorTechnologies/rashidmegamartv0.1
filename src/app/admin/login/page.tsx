@@ -1,13 +1,13 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
+import type { FormEvent } from "react";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { LockKeyhole, LoaderCircle, ShieldCheck } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -31,11 +31,7 @@ export default function AdminLoginPage() {
         return;
       }
 
-      const requestedPath = searchParams.get("next") ?? "/admin";
-      const safePath = requestedPath.startsWith("/admin/") || requestedPath === "/admin"
-        ? requestedPath
-        : "/admin";
-      router.replace(safePath);
+      router.replace("/admin");
       router.refresh();
     } catch {
       setError("Server se connection nahi ho paya. Dobara try karein.");
