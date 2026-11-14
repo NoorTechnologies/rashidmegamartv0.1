@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
     const { url, key } = catalogConfig();
     const response = await fetch(`${url}/storage/v1/object/catalog-media/${path.split("/").map(encodeURIComponent).join("/")}`, {
       method: "POST",
+      headers: { apikey: key, "Content-Type": detected.mime, "x-upsert": "false" },
       body: Buffer.from(bytes),
       cache: "no-store",
       signal: AbortSignal.timeout(15000),
