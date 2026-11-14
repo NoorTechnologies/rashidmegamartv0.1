@@ -170,8 +170,8 @@ export default function HomePage() {
 
         {featuredKits.length > 0 ? (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
-            {featuredKits.slice(0, 4).map((kit) => (
-              <KitCard key={kit.id} kit={kit} />
+            {featuredKits.slice(0, 4).map((kit, index) => (
+              <KitCard key={kit.id} kit={kit} eagerImage={index === 0} />
             ))}
           </div>
         ) : (
