@@ -19,7 +19,12 @@ type SortOption = "featured" | "price-low" | "price-high" | "name";
 
 export default function ShopPage() {
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    if (typeof window === "undefined") return "All";
+
+    const categorySlug = new URLSearchParams(window.location.search).get("category");
+    return categories.find((category) => category.id === categorySlug)?.name ?? "All";
+  });
   const [sortBy, setSortBy] = useState<SortOption>("featured");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
