@@ -122,7 +122,7 @@ export default function CartPage() {
     const cleanName = customerName.trim().replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ");
     const cleanPhone = phone.trim();
     const cleanAddress = address.trim().replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ");
-    const cleanOrderNote = orderNote.trim().replace(/[\\x00-\\x1F\\x7F]/g, " ").replace(/\\s+/g, " ");
+    const cleanOrderNote = orderNote.trim().replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ");
 
     if (cleanName.length < 2) {
       setFormError("Please enter your valid full name.");
@@ -162,7 +162,7 @@ export default function CartPage() {
 Name: ${cleanName}
 Phone: ${cleanPhone}
 Address: ${cleanAddress}
-${cleanOrderNote ? `Order Note: ${cleanOrderNote}\\n` : ""}
+${cleanOrderNote ? `Order Note: ${cleanOrderNote}\n` : ""}
 
 *Order Items*
 ${orderItems}
