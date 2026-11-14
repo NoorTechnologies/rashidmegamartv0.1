@@ -53,6 +53,10 @@ export async function PATCH(request: NextRequest) {
   const input = validateKit(body);
   if (!input) return NextResponse.json({ message: "Kit details ya included items invalid hain." }, { status: 422 });
   try {
+    if (input.categoryId) {
+      const category = await catalogRequest<{id:string}[]>(`categories?id=eq.${encodeURIComponent(input.categoryId)}&is_active=eq.true&select=id`);
+      if (!category.length) return NextResponse.json({ message: "Selected category active nahi hai." }, { status: 422 });
+    }
     const rows = await catalogRequest<unknown[]>(`kits?id=eq.${encodeURIComponent(id)}&select=id`, {
       method: "PATCH", headers: { Prefer: "return=representation" },
       body: JSON.stringify({ name: input.name, subtitle: input.subtitle, category_id: input.categoryId, image: input.image, price: input.price, old_price: input.oldPrice, discount: input.discount, description: input.description, is_featured: input.isFeatured, is_available: input.isAvailable, updated_at: new Date().toISOString() }),
