@@ -1,5 +1,3 @@
-import "server-only";
-
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_SECRET = process.env.SUPABASE_SECRET_KEY;
 
