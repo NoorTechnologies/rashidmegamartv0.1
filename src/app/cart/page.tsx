@@ -18,8 +18,15 @@ import {
 } from "lucide-react";
 
 import { useCart } from "@/context/CartContext";
+import { products } from "@/data/products";
+import { kits } from "@/data/kits";
 
 const STORE_WHATSAPP_NUMBER = "918962531603";
+const MAX_ORDER_QUANTITY = 99;
+
+const catalogById = new Map(
+  [...products, ...kits].map((item) => [item.id, item])
+);
 
 const formatPrice = (amount: number) =>
   new Intl.NumberFormat("en-IN", {
@@ -55,9 +62,49 @@ export default function CartPage() {
       return;
     }
 
-    const cleanName = customerName.trim();
+    const seenIds = new Set<string>();
+    const invalidCartItem = items.find((item) => {
+      const catalogItem = catalogById.get(item.id);
+      const isDuplicate = seenIds.has(item.id);
+      seenIds.add(item.id);
+
+      return (
+        !catalogItem ||
+        !catalogItem.isAvailable ||
+        isDuplicate ||
+        item.name !== catalogItem.name ||
+        item.price !== catalogItem.price ||
+        !Number.isSafeInteger(item.quantity) ||
+        item.quantity < 1 ||
+        item.quantity > MAX_ORDER_QUANTITY
+      );
+    });
+
+    if (invalidCartItem) {
+      setFormError(
+        "Your cart has an unavailable item or outdated details. Remove it and add it again before checkout."
+      );
+      return;
+    }
+
+    const safeTotalItems = items.reduce((total, item) => total + item.quantity, 0);
+    const orderSubtotal = items.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+
+    if (
+      !Number.isSafeInteger(safeTotalItems) ||
+      !Number.isSafeInteger(orderSubtotal) ||
+      orderSubtotal < 0
+    ) {
+      setFormError("The order total is invalid. Please review your cart.");
+      return;
+    }
+
+    const cleanName = customerName.trim().replace(/[\\u0000-\\u001F\\u007F]/g, " ").replace(/\\s+/g, " ");
     const cleanPhone = phone.trim();
-    const cleanAddress = address.trim();
+    const cleanAddress = address.trim().replace(/[\\u0000-\\u001F\\u007F]/g, " ").replace(/\\s+/g, " ");
 
     if (cleanName.length < 2) {
       setFormError("Please enter your valid full name.");
