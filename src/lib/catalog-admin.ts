@@ -31,8 +31,9 @@ export async function catalogRequest<T>(
 }
 
 export function publicImageUrl(path: string) {
-  const { url } = catalogConfig();
-  return `${url}/storage/v1/object/public/catalog-media/${path.split("/").map(encodeURIComponent).join("/")}`;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!url) throw new Error("Supabase public URL is missing.");
+  return `${url.replace(/\\/$/, "")}/storage/v1/object/public/catalog-media/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
 
 export async function catalogPublicRequest<T>(
