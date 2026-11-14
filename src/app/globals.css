@@ -369,3 +369,10 @@ video {
   .rmm-button-quiet,
   .rmm-quantity-button { transition: none; }
 }
+
+
+@media (max-width: 639px) {
+  .rmm-button-primary { min-height: 2.4rem; gap: 0.35rem; padding: 0.55rem 0.8rem; border-radius: 0.7rem; box-shadow: 0 3px 9px rgba(128, 0, 32, 0.14); }
+  .rmm-button-secondary { min-height: 2.3rem; gap: 0.3rem; padding: 0.5rem 0.7rem; border-radius: 0.7rem; box-shadow: 0 1px 5px rgba(53, 18, 13, 0.04); }
+  .rmm-button-quiet { min-height: 2rem; gap: 0.3rem; padding: 0.35rem 0.5rem; }
+}
