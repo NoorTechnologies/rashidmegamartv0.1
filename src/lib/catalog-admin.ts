@@ -37,3 +37,28 @@ export function publicImageUrl(path: string) {
   const { url } = catalogConfig();
   return `${url}/storage/v1/object/public/catalog-media/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
+
+export async function catalogPublicRequest<T>(
+  path: string,
+  init: RequestInit = {},
+): Promise<T> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !key) throw new Error("Supabase public configuration is missing.");
+  const response = await fetch(`${url.replace(/\\/$/, "")}/rest/v1/${path}`, {
+    ...init,
+    headers: {
+      apikey: key,
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+      ...(init.headers ?? {}),
+    },
+    cache: "no-store",
+  });
+  if (!response.ok) {
+    const detail = await response.text().catch(() => "");
+    throw new Error(`Public catalog request failed (${response.status}): ${detail.slice(0, 300)}`);
+  }
+  if (response.status === 204) return undefined as T;
+  return response.json() as Promise<T>;
+}
