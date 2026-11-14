@@ -18,12 +18,34 @@ import ProductCard from "@/components/ProductCard";
 import KitCard from "@/components/KitCard";
 
 import { categories } from "@/data/categories";
-import { getBestSellingProducts } from "@/data/products";
-import { getFeaturedKits } from "@/data/kits";
+import { catalogRequest, publicImageUrl } from "@/lib/catalog-admin";
 
-export default function HomePage() {
-  const bestSellingProducts = getBestSellingProducts();
-  const featuredKits = getFeaturedKits();
+export default async function HomePage() {
+  const [productRows, kitRows] = await Promise.all([
+    catalogRequest<Record<string, unknown>[]>("products?select=id,name,brand,category_id,pack_size,price,old_price,image,description,is_featured,is_best_seller,is_available,stock&is_available=eq.true&is_best_seller=eq.true&order=created_at.desc&limit=8").catch(() => []),
+    catalogRequest<Record<string, unknown>[]>("kits?select=id,name,subtitle,category_id,image,price,old_price,discount,description,is_featured,is_available,category:categories(name),items:kit_items(item_name,quantity,sort_order)&is_available=eq.true&is_featured=eq.true&order=created_at.desc&limit=4").catch(() => []),
+  ]);
+  const bestSellingProducts = productRows.map((row) => ({
+    id: String(row.id), name: String(row.name), brand: String(row.brand), category: "",
+    packSize: String(row.pack_size), price: Number(row.price),
+    oldPrice: row.old_price === null ? undefined : Number(row.old_price),
+    image: typeof row.image === "string" ? publicImageUrl(row.image) : "",
+    description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),
+    isBestSeller: Boolean(row.is_best_seller), isAvailable: Boolean(row.is_available),
+    stock: typeof row.stock === "number" ? row.stock : 0,
+  }));
+  const featuredKits = kitRows.map((row) => ({
+    id: String(row.id), name: String(row.name), subtitle: String(row.subtitle ?? ""),
+    category: (row.category as {name?:string}|null)?.name ?? "",
+    image: typeof row.image === "string" ? publicImageUrl(row.image) : "",
+    price: Number(row.price), oldPrice: row.old_price === null ? undefined : Number(row.old_price),
+    discount: typeof row.discount === "string" ? row.discount : undefined,
+    description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),
+    isAvailable: Boolean(row.is_available),
+    items: ((row.items as {item_name:string;quantity:string|null;sort_order:number}[]) ?? [])
+      .sort((a,b)=>a.sort_order-b.sort_order)
+      .map((item)=>item.quantity ? item.item_name + " - " + item.quantity : item.item_name),
+  }));
 
   return (
     <main className="min-h-screen w-full overflow-x-clip bg-[#FFF9D8]/30">
