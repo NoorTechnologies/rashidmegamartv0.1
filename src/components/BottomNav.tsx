@@ -35,7 +35,7 @@ export default function BottomNav() {
       <Link
         href="/cart"
         aria-label={`Open cart, ${totalItems} items`}
-        className="fixed bottom-[calc(100px+env(safe-area-inset-bottom))] right-4 z-50 flex size-[58px] items-center justify-center rounded-full border border-white/75 bg-white/65 text-[#87263F] shadow-[0_8px_28px_rgba(48,30,36,0.14),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl backdrop-saturate-150 transition duration-300 hover:-translate-y-1 hover:bg-white/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250] lg:hidden"
+        className="fixed bottom-[calc(78px+env(safe-area-inset-bottom))] right-3 z-50 flex size-12 items-center justify-center rounded-full border border-white/75 bg-white/65 text-[#87263F] shadow-[0_8px_28px_rgba(48,30,36,0.14),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl backdrop-saturate-150 transition duration-300 hover:-translate-y-1 hover:bg-white/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250] lg:hidden"
       >
         <ShoppingCart size={23} strokeWidth={1.9} />
         {totalItems > 0 && (
@@ -47,7 +47,7 @@ export default function BottomNav() {
 
       <nav
         aria-label="Main navigation"
-        className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-4 pb-[calc(10px+env(safe-area-inset-bottom))] lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-3 pb-[calc(7px+env(safe-area-inset-bottom))] lg:hidden"
       >
         {isMoreOpen && (
           <>
@@ -89,7 +89,7 @@ export default function BottomNav() {
           </>
         )}
 
-        <div className="relative grid h-[68px] grid-cols-4 items-center rounded-full border border-white/75 bg-white/60 px-2 shadow-[0_10px_36px_rgba(40,28,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(255,255,255,0.28)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[58px] grid-cols-4 items-center rounded-full border border-white/75 bg-white/60 px-2 shadow-[0_10px_36px_rgba(40,28,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(255,255,255,0.28)] backdrop-blur-2xl backdrop-saturate-150">
           <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
 
           {navigationItems.map((item) => {
@@ -104,13 +104,13 @@ export default function BottomNav() {
                 key={item.href}
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                className={`relative mx-auto flex h-[54px] w-[min(100%,76px)] flex-col items-center justify-center gap-1 rounded-full transition-all duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#A83250] ${
+                className={`relative mx-auto flex h-12 w-[min(100%,76px)] flex-col items-center justify-center gap-1 rounded-full transition-all duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#A83250] ${
                   isActive
                     ? "bg-white/75 text-[#A83250] shadow-[0_2px_10px_rgba(62,36,44,0.08),inset_0_1px_0_rgba(255,255,255,0.95)]"
                     : "text-[#766D72] hover:bg-white/45 hover:text-[#87263F]"
                 }`}
               >
-                <Icon size={21} strokeWidth={isActive ? 2.25 : 1.8} />
+                <Icon size={19} strokeWidth={isActive ? 2.25 : 1.8} />
                 <span className={`text-[10px] leading-none ${isActive ? "font-bold" : "font-medium"}`}>
                   {item.label}
                 </span>
@@ -126,13 +126,13 @@ export default function BottomNav() {
             aria-label={isMoreOpen ? "Close More menu" : "Open More menu"}
             aria-expanded={isMoreOpen}
             onClick={() => setIsMoreOpen((open) => !open)}
-            className={`mx-auto flex h-[54px] w-[min(100%,76px)] flex-col items-center justify-center gap-1 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#A83250] ${
+            className={`mx-auto flex h-12 w-[min(100%,76px)] flex-col items-center justify-center gap-1 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#A83250] ${
               isMoreOpen
                 ? "bg-white/75 text-[#A83250] shadow-[0_2px_10px_rgba(62,36,44,0.08)]"
                 : "text-[#766D72] hover:bg-white/45 hover:text-[#87263F]"
             }`}
           >
-            {isMoreOpen ? <X size={21} /> : <MoreHorizontal size={23} />}
+            {isMoreOpen ? <X size={21} /> : <MoreHorizontal size={21} />}
             <span className="text-[10px] font-medium leading-none">More</span>
           </button>
         </div>
