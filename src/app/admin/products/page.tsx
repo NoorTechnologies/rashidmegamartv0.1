@@ -26,6 +26,7 @@ type ProductForm = {
   description: string;
   image: string;
   isAvailable: boolean;
+  stock: string;
 };
 
 const emptyForm: ProductForm = {
@@ -38,6 +39,7 @@ const emptyForm: ProductForm = {
   description: "",
   image: "",
   isAvailable: true,
+  stock: "0",
 };
 
 const inputClass =
@@ -103,6 +105,7 @@ export default function AdminProductsPage() {
       description: product.description,
       image: product.image,
       isAvailable: product.isAvailable,
+      stock: String(product.stock ?? 0),
     });
     setError("");
     setIsModalOpen(true);
@@ -125,6 +128,15 @@ export default function AdminProductsPage() {
       setError("MRP selling price se zyada hona chahiye.");
       return;
     }
+    const stock = Number(form.stock);
+    if (!Number.isInteger(stock) || stock < 0) {
+      setError("Stock quantity 0 ya usse zyada whole number honi chahiye.");
+      return;
+    }
+    if (!form.image.trim()) {
+      setError("Product image ka existing public path enter karein.");
+      return;
+    }
 
     const product: Product = {
       id: editingId ?? `product-${Date.now()}`,
@@ -134,8 +146,9 @@ export default function AdminProductsPage() {
       packSize: form.packSize.trim(),
       price,
       ...(oldPrice === undefined ? {} : { oldPrice }),
-      image: form.image.trim() || "/images/products/product-placeholder.png",
+      image: form.image.trim(),
       description: form.description.trim(),
+      stock,
       isAvailable: form.isAvailable,
       ...(editingId
         ? {
@@ -219,7 +232,7 @@ export default function AdminProductsPage() {
                     </button>
                   </div>
                 </div>
-                <span className="hidden text-xs font-bold text-[#33232A] sm:block">₹{product.price}</span>
+                <div className="hidden sm:block"><p className="text-xs font-bold text-[#33232A]">₹{product.price}</p><p className="mt-1 text-[10px] text-[#766D72]">Stock: {product.stock ?? 0}</p></div>
                 <button type="button" onClick={() => toggleAvailability(product)} className={`hidden rounded-full px-2.5 py-1.5 text-[10px] font-bold sm:block ${product.isAvailable ? "bg-[#EAF7EF] text-[#167344]" : "bg-[#FFF1F3] text-[#800020]"}`}>
                   {product.isAvailable ? "Available" : "Unavailable"}
                 </button>
@@ -264,8 +277,9 @@ export default function AdminProductsPage() {
                 <label className="text-xs font-bold text-[#59464D]">Pack size *<input required value={form.packSize} onChange={(event) => setForm({ ...form, packSize: event.target.value })} className={inputClass} placeholder="e.g. 1 kg" /></label>
                 <label className="text-xs font-bold text-[#59464D]">Selling price (₹) *<input required min="0.01" step="0.01" type="number" value={form.price} onChange={(event) => setForm({ ...form, price: event.target.value })} className={inputClass} placeholder="0" /></label>
                 <label className="text-xs font-bold text-[#59464D]">MRP / old price (₹)<input min="0.01" step="0.01" type="number" value={form.oldPrice} onChange={(event) => setForm({ ...form, oldPrice: event.target.value })} className={inputClass} placeholder="Optional" /></label>
+                <label className="text-xs font-bold text-[#59464D]">Stock quantity *<input required min="0" step="1" type="number" value={form.stock} onChange={(event) => setForm({ ...form, stock: event.target.value })} className={inputClass} placeholder="0" /></label>
               </div>
-              <label className="block text-xs font-bold text-[#59464D]">Image path / URL<input value={form.image} onChange={(event) => setForm({ ...form, image: event.target.value })} className={inputClass} placeholder="/images/products/your-image.png" /></label>
+              <label className="block text-xs font-bold text-[#59464D]">Image path / URL<input value={form.image} onChange={(event) => setForm({ ...form, image: event.target.value })} className={inputClass} placeholder="Use an existing image path from public/" /></label>
               <label className="block text-xs font-bold text-[#59464D]">Description<textarea rows={3} value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} className={inputClass} placeholder="Short product description" /></label>
               <label className="flex items-center gap-2 text-xs font-semibold text-[#59464D]">
                 <input type="checkbox" checked={form.isAvailable} onChange={(event) => setForm({ ...form, isAvailable: event.target.checked })} className="size-4 accent-[#800020]" />
