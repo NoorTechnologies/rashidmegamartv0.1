@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X, ShoppingCart, Check, Package } from "lucide-react";
 import type { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
@@ -20,40 +20,72 @@ export default function ProductModal({
 }: ProductModalProps) {
   const { addToCart, items } = useCart();
   const [failedImage, setFailedImage] = useState<string | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const cartItem = items.find((item) => item.id === product?.id);
-  const imageError = Boolean(
-    product?.image && failedImage === product.image
-  );
+  const imageError = Boolean(product?.image && failedImage === product.image);
 
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-
+    const previouslyFocused = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
     const previousOverflow = document.body.style.overflow;
 
-    document.addEventListener("keydown", handleEscape);
     document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      const focusable = Array.from(
+        dialogRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((element) => element.getAttribute("aria-hidden") !== "true");
+
+      if (focusable.length === 0) {
+        event.preventDefault();
+        dialogRef.current.focus();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = previousOverflow;
+      previouslyFocused?.focus();
     };
   }, [isOpen, onClose]);
 
   if (!isOpen || !product) return null;
 
-  const formatPrice = (price: number) =>
-    `₹${price.toLocaleString("en-IN")}`;
+  const formatPrice = (price: number) => `₹${price.toLocaleString("en-IN")}`;
 
   const discount =
     product.oldPrice && product.oldPrice > product.price
-      ? Math.round(
-          ((product.oldPrice - product.price) / product.oldPrice) * 100
-        )
+      ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
       : 0;
 
   const handleAddToCart = () => {
@@ -72,24 +104,29 @@ export default function ProductModal({
   return (
     <div
       className="fixed inset-0 z-[100] flex items-end justify-center bg-black/55 p-0 backdrop-blur-sm sm:items-center sm:p-4"
-      onClick={onClose}
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="product-modal-title"
-        className="relative flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:max-h-[88dvh] sm:rounded-3xl"
-        onClick={(event) => event.stopPropagation()}
+        aria-describedby="product-modal-description"
+        tabIndex={-1}
+        className="relative flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl outline-none sm:max-h-[88dvh] sm:rounded-3xl"
       >
-        <div className="flex shrink-0 justify-center pt-2 sm:hidden">
+        <div className="flex shrink-0 justify-center pt-2 sm:hidden" aria-hidden="true">
           <span className="h-1 w-10 rounded-full bg-gray-300" />
         </div>
 
         <button
+          ref={closeButtonRef}
           type="button"
           onClick={onClose}
           aria-label="Close product details"
-          className="absolute right-3 top-4 z-20 flex size-9 items-center justify-center rounded-full bg-white/95 text-[#202B24] shadow-md transition hover:bg-gray-100 active:scale-95 sm:right-4 sm:top-4 sm:size-10"
+          className="absolute right-3 top-4 z-20 flex size-9 items-center justify-center rounded-full bg-white/95 text-[#202B24] shadow-md transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A83250] active:scale-95 sm:right-4 sm:top-4 sm:size-10"
         >
           <X size={19} />
         </button>
@@ -114,9 +151,7 @@ export default function ProductModal({
             ) : (
               <div className="flex flex-col items-center gap-2 text-[#168447]">
                 <Package size={42} strokeWidth={1.4} />
-                <span className="text-xs text-gray-400">
-                  Image unavailable
-                </span>
+                <span className="text-xs text-gray-400">Image unavailable</span>
               </div>
             )}
           </div>
@@ -150,11 +185,11 @@ export default function ProductModal({
             </div>
 
             <div className="mt-4 border-t border-gray-100 pt-3 sm:mt-5 sm:pt-4">
-              <h3 className="text-sm font-bold text-[#202B24]">
-                Product Details
-              </h3>
-
-              <p className="mt-2 whitespace-pre-line break-words text-xs leading-6 text-gray-500 sm:text-sm">
+              <h3 className="text-sm font-bold text-[#202B24]">Product Details</h3>
+              <p
+                id="product-modal-description"
+                className="mt-2 whitespace-pre-line break-words text-xs leading-6 text-gray-500 sm:text-sm"
+              >
                 {product.description}
               </p>
             </div>
@@ -166,7 +201,7 @@ export default function ProductModal({
             <button
               type="button"
               onClick={handleAddToCart}
-              className="rmm-button-primary min-h-12 w-full rounded-xl px-5 py-3 text-sm"
+              className="rmm-button-primary min-h-12 w-full rounded-xl px-5 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A83250]"
             >
               {cartItem ? <Check size={19} /> : <ShoppingCart size={19} />}
               {cartItem ? `Added (${cartItem.quantity})` : "Add to Cart"}
