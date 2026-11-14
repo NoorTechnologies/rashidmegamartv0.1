@@ -223,7 +223,7 @@ export default async function KitDetailPage({ params }: PageProps) {
               )}
             </div>
 
-            <h1 className="mt-3 text-2xl font-black leading-tight tracking-tight sm:mt-5 sm:text-4xl text-[#30251F] sm:text-4xl lg:text-[42px]">
+            <h1 className="mt-3 text-2xl font-black leading-tight tracking-tight text-[#30251F] sm:mt-5 sm:text-4xl lg:text-[42px]">
               {kit.name}
             </h1>
 
@@ -238,7 +238,7 @@ export default async function KitDetailPage({ params }: PageProps) {
             </p>
 
             {/* Price Card */}
-            <div className="mt-5 rounded-2xl border border-[#EFE3D9] bg-white p-4 sm:mt-7 sm:p-5 shadow-[0_8px_28px_rgba(70,40,30,0.04)] sm:p-6">
+            <div className="mt-5 rounded-2xl border border-[#EFE3D9] bg-white p-4 shadow-[0_8px_28px_rgba(70,40,30,0.04)] sm:mt-7 sm:p-6">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#94847A]">
                 Special Kit Price
               </p>
