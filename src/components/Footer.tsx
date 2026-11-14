@@ -26,7 +26,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 justify-items-center gap-7 sm:grid-cols-2 sm:gap-9 lg:grid-cols-4 lg:gap-10">
           <div className="flex w-full max-w-sm flex-col items-center">
             <Link href="/" aria-label="Rashid Mega Mart Home">
-              <Image src="/images/logo.png" alt="Rashid Mega Mart" width={240} height={90} className="mx-auto h-auto w-[145px] object-contain sm:w-[170px]" />
+              <Image src="/images/logo2.png" alt="Rashid Mega Mart" width={240} height={90} className="mx-auto h-auto w-[145px] object-contain sm:w-[170px]" />
             </Link>
             <h2 className="mt-3 text-lg font-black leading-tight tracking-tight text-[#A83250] sm:text-xl">
               Groceries Made
