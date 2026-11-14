@@ -23,7 +23,14 @@ const securityHeaders = [
   },
 ];
 
-const supabaseStorageHost = process.env.NEXT_PUBLIC_SUPABASE_URL\n  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname\n  : undefined;\n\nconst nextConfig: NextConfig = {\n  images: {\n    remotePatterns: supabaseStorageHost ? [{ protocol: "https", hostname: supabaseStorageHost, pathname: "/storage/v1/object/public/catalog-media/**" }] : [],\n  },
+const supabaseStorageHost = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+  : undefined;
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: supabaseStorageHost ? [{ protocol: "https", hostname: supabaseStorageHost, pathname: "/storage/v1/object/public/catalog-media/**" }] : [],
+  },
   poweredByHeader: false,
 
   turbopack: {
