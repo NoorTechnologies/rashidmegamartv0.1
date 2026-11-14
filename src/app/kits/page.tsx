@@ -18,7 +18,9 @@ type AvailabilityFilter = "all" | "available" | "unavailable";
 type SortOption = "featured" | "price-low" | "price-high" | "name";
 
 export default function KitsPage() {
-  const [kits, setKits] = useState<GroceryKit[]>([]);\n  useEffect(() => { let active = true; fetch("/api/catalog/kits").then((r) => r.json()).then((j) => { if (active && Array.isArray(j.data)) setKits(j.data as GroceryKit[]); }).catch(() => undefined); return () => { active = false; }; }, []);\n  const [search, setSearch] = useState("");
+  const [kits, setKits] = useState<GroceryKit[]>([]);
+  useEffect(() => { let active = true; fetch("/api/catalog/kits").then((r) => r.json()).then((j) => { if (active && Array.isArray(j.data)) setKits(j.data as GroceryKit[]); }).catch(() => undefined); return () => { active = false; }; }, []);
+  const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<AvailabilityFilter>("all");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState<SortOption>("featured");
