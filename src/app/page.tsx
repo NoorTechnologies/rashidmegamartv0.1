@@ -84,7 +84,7 @@ export default function HomePage() {
           <div className="mt-5 flex w-full max-w-md flex-col gap-3 min-[390px]:flex-row">
             <Link
               href="/shop"
-              className="group inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-[#A83250] px-5 py-3 text-sm font-extrabold text-white shadow-[0_6px_20px_rgba(168,50,80,0.20)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#87263F] active:scale-95"
+              className="rmm-btn-primary group inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-extrabold"
             >
               Shop Now
               <ArrowRight
@@ -95,7 +95,7 @@ export default function HomePage() {
 
             <Link
               href="/kits"
-              className="group inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-[#D4A84F]/60 bg-white px-5 py-3 text-sm font-extrabold text-[#A83250] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-[#F8E8ED] active:scale-95"
+              className="rmm-btn-secondary group inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-extrabold"
             >
               Explore Kits
               <ShoppingBag
@@ -256,7 +256,7 @@ export default function HomePage() {
 
             <Link
               href="/shop"
-              className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#A83250] px-5 py-3 text-sm font-extrabold text-white shadow-[0_6px_18px_rgba(168,50,80,0.20)] transition hover:bg-[#87263F] active:scale-[0.98] sm:mt-6 sm:w-auto sm:min-w-[190px]"
+              className="rmm-btn-primary mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-extrabold sm:mt-6 sm:w-auto sm:min-w-[190px]"
             >
               Explore Collection
               <ArrowRight size={18} />

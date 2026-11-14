@@ -10,26 +10,27 @@
 }
 
 :root {
-  /* Primary Green Palette */
-  --primary: #168447;
-  --primary-dark: #075C2B;
-  --primary-light: #E8F5E9;
-  --primary-mint: #B7E4C7;
-  --primary-fresh: #95D5B2;
+  /* Rashid Mega Mart premium wine + grocery green palette */
+  --primary: #800020;
+  --primary-dark: #5C0018;
+  --primary-light: #F8E8ED;
+  --primary-mint: #F1D5DE;
+  --primary-fresh: #E7B8C7;
+  --accent-gold: #D4A84F;
 
   /* Gradient */
   --gradient-green: linear-gradient(
     115deg,
-    #B7E4C7 0%,
-    #E8F5E9 50%,
-    #95D5B2 100%
+    #F1D5DE 0%,
+    #F8E8ED 50%,
+    #E7B8C7 100%
   );
 
   --gradient-green-soft: linear-gradient(
     135deg,
-    #F1FAF3 0%,
-    #E3F3E8 50%,
-    #D5EEDC 100%
+    #FFFBF0 0%,
+    #FFF6F0 50%,
+    #F8E8ED 100%
   );
 
   /* Secondary */
@@ -164,6 +165,104 @@ img {
 }
 
 /* ========================================
+   SHARED PREMIUM BUTTON SYSTEM
+======================================== */
+
+.rmm-btn-primary,
+.rmm-btn-secondary,
+.rmm-btn-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 12px;
+  font-weight: 800;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rmm-btn-primary {
+  border: 1px solid #800020;
+  background: linear-gradient(135deg, #8F1238 0%, #800020 58%, #6F001C 100%);
+  color: #FFFFFF;
+  box-shadow: 0 5px 14px rgba(128, 0, 32, 0.19);
+}
+
+.rmm-btn-primary:hover:not(:disabled) {
+  border-color: #5C0018;
+  background: linear-gradient(135deg, #72001D 0%, #5C0018 100%);
+  box-shadow: 0 8px 20px rgba(92, 0, 24, 0.24);
+  transform: translateY(-1px);
+}
+
+.rmm-btn-secondary {
+  border: 1px solid rgba(212, 168, 79, 0.58);
+  background: #FFFFFF;
+  color: #800020;
+  box-shadow: 0 2px 8px rgba(53, 18, 13, 0.045);
+}
+
+.rmm-btn-secondary:hover:not(:disabled) {
+  border-color: #800020;
+  background: #FFF8F3;
+  box-shadow: 0 5px 14px rgba(128, 0, 32, 0.09);
+  transform: translateY(-1px);
+}
+
+.rmm-btn-filter {
+  border: 1px solid #E9DCE0;
+  background: #FFFFFF;
+  color: #66545A;
+}
+
+.rmm-btn-filter:hover:not(:disabled) {
+  border-color: #C98A9E;
+  background: #FFF8FA;
+  color: #800020;
+}
+
+.rmm-btn-filter[aria-pressed="true"],
+.rmm-btn-filter[data-active="true"] {
+  border-color: #800020;
+  background: #800020;
+  color: #FFFFFF;
+  box-shadow: 0 3px 10px rgba(128, 0, 32, 0.15);
+}
+
+.rmm-btn-primary:focus-visible,
+.rmm-btn-secondary:focus-visible,
+.rmm-btn-filter:focus-visible {
+  outline: 3px solid rgba(212, 168, 79, 0.72);
+  outline-offset: 3px;
+}
+
+.rmm-btn-primary:active:not(:disabled),
+.rmm-btn-secondary:active:not(:disabled),
+.rmm-btn-filter:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.rmm-btn-primary:disabled,
+.rmm-btn-secondary:disabled,
+.rmm-btn-filter:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rmm-btn-primary,
+  .rmm-btn-secondary,
+  .rmm-btn-filter {
+    transition: none;
+  }
+}
+
+/* ========================================
    FORM ELEMENTS
 ======================================== */
 
@@ -201,7 +300,7 @@ video {
 ======================================== */
 
 :focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--accent-gold);
   outline-offset: 3px;
 }
 

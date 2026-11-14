@@ -206,7 +206,7 @@ export default function ShopPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedProduct(product)}
-                  className="mt-1.5 min-h-8 w-full rounded-lg border border-[#D4A84F]/50 bg-white px-2 py-1.5 text-[10px] font-bold text-[#800020] transition hover:border-[#800020] hover:bg-[#800020] hover:text-white active:scale-[0.98] sm:mt-2 sm:min-h-9 sm:text-xs"
+                  className="rmm-btn-secondary mt-1.5 min-h-8 w-full rounded-lg px-2 py-1.5 text-[10px] font-bold sm:mt-2 sm:min-h-9 sm:text-xs"
                 >
                   View Details
                 </button>
@@ -231,7 +231,7 @@ export default function ShopPage() {
             <button
               type="button"
               onClick={clearFilters}
-              className="mt-4 min-h-9 rounded-lg bg-[#800020] px-5 py-2 text-xs font-bold text-white transition hover:bg-[#35120D] active:scale-95"
+              className="rmm-btn-primary mt-4 min-h-9 rounded-lg px-5 py-2 text-xs font-bold"
             >
               Clear Filters
             </button>
