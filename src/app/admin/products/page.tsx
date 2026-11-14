@@ -19,7 +19,19 @@ export default function AdminProductsPage(){
  const [query,setQuery]=useState(""); const [open,setOpen]=useState(false); const [editingId,setEditingId]=useState<string|null>(null);
  const [form,setForm]=useState<FormState>(blank); const [file,setFile]=useState<File|null>(null); const [busy,setBusy]=useState(true); const [error,setError]=useState(""); const [notice,setNotice]=useState("");
  const load=useCallback(async()=>{try{const r=await fetch("/api/admin/products",{cache:"no-store"});const j=await r.json();if(!r.ok)throw new Error(j.message||"Products load nahi hue.");setItems((j.data as DbProduct[]).map(mapProduct));}catch(e){setError(e instanceof Error?e.message:"Products load nahi hue.");}finally{setBusy(false);}},[]);
- useEffect(()=>{void load();},[load]);
+ useEffect(() => {
+  let active = true;
+  fetch("/api/admin/products", { cache: "no-store" })
+   .then(async (response) => {
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message || "Products load nahi hue.");
+    return result.data as DbProduct[];
+   })
+   .then((rows) => { if (active) setItems(rows.map(mapProduct)); })
+   .catch((error: unknown) => { if (active) setError(error instanceof Error ? error.message : "Products load nahi hue."); })
+   .finally(() => { if (active) setBusy(false); });
+  return () => { active = false; };
+ }, []);
  const filtered=useMemo(()=>{const q=query.trim().toLowerCase();return items.filter(p=>[p.name,p.brand,p.category,p.packSize].some(v=>v.toLowerCase().includes(q)));},[items,query]);
  const startAdd=()=>{setEditingId(null);setForm(blank);setFile(null);setError("");setOpen(true);};
  const startEdit=(p:Product & {categoryId:string})=>{setEditingId(p.id);setForm({name:p.name,brand:p.brand,categoryId:p.categoryId,packSize:p.packSize,price:String(p.price),oldPrice:p.oldPrice===undefined?"":String(p.oldPrice),description:p.description,image:p.image,isFeatured:Boolean(p.isFeatured),isBestSeller:Boolean(p.isBestSeller),isAvailable:p.isAvailable,stock:String(p.stock??0)});setFile(null);setError("");setOpen(true);};
