@@ -164,7 +164,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 type="button"
                 onClick={() => decreaseQuantity(product.id)}
                 aria-label={`Remove one ${product.name}`}
-                className="flex h-full w-10 shrink-0 items-center justify-center text-[#138047] transition hover:bg-[#138047]/10 active:scale-90"
+                className="rmm-quantity-button flex h-full w-10 shrink-0 items-center justify-center"
               >
                 <Minus size={15} strokeWidth={2.5} />
               </button>
@@ -180,7 +180,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 type="button"
                 onClick={() => increaseQuantity(product.id)}
                 aria-label={`Add one more ${product.name}`}
-                className="flex h-full w-10 shrink-0 items-center justify-center bg-[#138047] text-white transition hover:bg-[#0F6B3B] active:scale-90"
+                className="rmm-quantity-button flex h-full w-10 shrink-0 items-center justify-center bg-[#F8E8ED]"
               >
                 <Plus size={16} strokeWidth={2.5} />
               </button>
@@ -190,7 +190,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               type="button"
               onClick={handleAddToCart}
               aria-label={`Add ${product.name} to cart`}
-              className="flex min-h-9 w-full items-center justify-center gap-1.5 rounded-xl bg-[#138047] px-2 text-[10px] font-extrabold text-white shadow-[0_3px_10px_rgba(19,128,71,0.16)] transition-all duration-200 hover:bg-[#0F6B3B] hover:shadow-md active:scale-[0.97] sm:min-h-10 sm:text-xs"
+              className="rmm-button-primary min-h-9 w-full rounded-xl px-2 text-[10px] sm:min-h-10 sm:text-xs"
             >
               <ShoppingCart size={14} />
               ADD TO CART
