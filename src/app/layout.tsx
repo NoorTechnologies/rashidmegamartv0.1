@@ -1,4 +1,3 @@
-
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
@@ -25,14 +24,10 @@ export const metadata: Metadata = {
   },
 
   description:
-    "Shop groceries, daily essentials and affordable grocery kits at Rashid Mega Mart. Order conveniently through WhatsApp with home delivery up to 5 KM.",
+    "Shop groceries, daily essentials and affordable grocery kits at Rashid Mega Mart. Order conveniently through WhatsApp and confirm delivery availability with our store.",
 
   applicationName: SITE_NAME,
   category: "shopping",
-
-  alternates: {
-    canonical: "/",
-  },
 
   robots: {
     index: true,
@@ -119,9 +114,9 @@ export default function RootLayout({
         />
 
         <CartProvider>
-          <main className="min-w-0 w-full flex-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0">
+          <div className="min-w-0 w-full flex-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0 lg:pt-[76px]">
             {children}
-          </main>
+          </div>
 
           <BottomNav />
         </CartProvider>

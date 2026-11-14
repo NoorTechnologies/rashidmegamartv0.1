@@ -29,8 +29,87 @@ export default function BottomNav() {
   const { totalItems } = useCart();
   const [isMoreOpen, setIsMoreOpen] = useState(false);
 
+  const isActive = (href: string) =>
+    href === "/"
+      ? pathname === "/"
+      : pathname === href || pathname.startsWith(`${href}/`);
+
   return (
     <>
+      <header className="fixed inset-x-0 top-0 z-50 hidden border-b border-[#EDE4DC]/80 bg-[#FFFDF8]/90 shadow-[0_4px_24px_rgba(48,30,36,0.04)] backdrop-blur-2xl lg:block">
+        <nav
+          aria-label="Main navigation"
+          className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-8 px-6 xl:px-8"
+        >
+          <Link
+            href="/"
+            aria-label="Rashid Mega Mart home"
+            className="flex shrink-0 items-center gap-3 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250]"
+          >
+            <Image
+              src="/images/logo.png"
+              alt=""
+              width={48}
+              height={48}
+              priority
+              className="size-11 object-contain"
+            />
+            <span className="text-base font-black tracking-tight text-[#30251F]">
+              Rashid <span className="text-[#A83250]">Mega Mart</span>
+            </span>
+          </Link>
+
+          <div className="flex h-full items-center gap-2">
+            {navigationItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                className={`inline-flex h-10 items-center rounded-full px-5 text-sm font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A83250] ${
+                  isActive(item.href)
+                    ? "bg-[#F8E8ED] text-[#A83250]"
+                    : "text-[#76665C] hover:bg-[#F8E8ED]/70 hover:text-[#87263F]"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex shrink-0 items-center gap-3">
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-sm font-bold text-[#138047] transition hover:bg-[#EAF6EE] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#138047]"
+            >
+              <Image
+                src="/Whatsapp-3d.svg"
+                alt=""
+                width={21}
+                height={21}
+                unoptimized
+                className="size-5 object-contain"
+              />
+              Contact
+            </a>
+            <Link
+              href="/cart"
+              aria-label={`Open cart, ${totalItems} items`}
+              className="relative inline-flex min-h-11 items-center gap-2 rounded-full bg-[#A83250] px-5 text-sm font-extrabold text-white shadow-[0_5px_16px_rgba(168,50,80,0.18)] transition hover:-translate-y-0.5 hover:bg-[#87263F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A83250]"
+            >
+              <ShoppingCart size={17} />
+              Cart
+              {totalItems > 0 && (
+                <span className="flex min-w-5 items-center justify-center rounded-full bg-white px-1.5 py-0.5 text-[10px] font-black text-[#A83250]">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </span>
+              )}
+            </Link>
+          </div>
+        </nav>
+      </header>
+
       {/* One dedicated floating Cart shortcut */}
       <Link
         href="/cart"
@@ -94,27 +173,24 @@ export default function BottomNav() {
 
           {navigationItems.map((item) => {
             const Icon = item.icon;
-            const isActive =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const active = isActive(item.href);
 
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                aria-current={isActive ? "page" : undefined}
+                aria-current={active ? "page" : undefined}
                 className={`relative mx-auto flex h-12 w-[min(100%,76px)] flex-col items-center justify-center gap-1 rounded-full transition-all duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#A83250] ${
-                  isActive
+                  active
                     ? "bg-white/75 text-[#A83250] shadow-[0_2px_10px_rgba(62,36,44,0.08),inset_0_1px_0_rgba(255,255,255,0.95)]"
                     : "text-[#766D72] hover:bg-white/45 hover:text-[#87263F]"
                 }`}
               >
-                <Icon size={19} strokeWidth={isActive ? 2.25 : 1.8} />
-                <span className={`text-[10px] leading-none ${isActive ? "font-bold" : "font-medium"}`}>
+                <Icon size={19} strokeWidth={active ? 2.25 : 1.8} />
+                <span className={`text-[10px] leading-none ${active ? "font-bold" : "font-medium"}`}>
                   {item.label}
                 </span>
-                {isActive && (
+                {active && (
                   <span className="absolute bottom-[5px] h-1 w-1 rounded-full bg-[#A83250]" />
                 )}
               </Link>

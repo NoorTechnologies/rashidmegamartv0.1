@@ -16,7 +16,6 @@ import Footer from "@/components/Footer";
 import CategoryCard from "@/components/CategoryCard";
 import ProductCard from "@/components/ProductCard";
 import KitCard from "@/components/KitCard";
-import CustomerReviews from "@/components/CustomerReviews";
 
 import { categories } from "@/data/categories";
 import { getBestSellingProducts } from "@/data/products";
@@ -343,9 +342,6 @@ export default function HomePage() {
           })}
         </div>
       </section>
-
-      {/* CUSTOMER REVIEWS */}
-      <CustomerReviews />
 
       {/* FOOTER */}
       <Footer />
