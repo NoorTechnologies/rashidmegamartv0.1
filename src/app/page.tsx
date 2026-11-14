@@ -65,10 +65,10 @@ export default function HomePage() {
           </div>
 
           {/* HERO IMAGE */}
-          <div className="relative mt-5 w-full max-w-[560px]">
+          <div className="relative mt-3 w-full max-w-[560px]">
             <div className="pointer-events-none absolute inset-x-8 bottom-2 h-10 rounded-full bg-[#D4A84F]/20 blur-2xl" />
 
-            <div className="relative mx-auto h-[230px] w-full overflow-hidden rounded-2xl sm:h-[340px] sm:rounded-3xl">
+            <div className="relative mx-auto h-[176px] w-full overflow-hidden rounded-2xl sm:h-[340px] sm:rounded-3xl">
               <Image
                 src="/hero.png"
                 alt="Rashid Mega Mart grocery store"
@@ -81,7 +81,7 @@ export default function HomePage() {
           </div>
 
           {/* HERO BUTTONS */}
-          <div className="mt-5 flex w-full max-w-md flex-col gap-3 min-[390px]:flex-row">
+          <div className="mt-4 flex w-full max-w-md flex-col gap-2.5 min-[390px]:flex-row">
             <Link
               href="/shop"
               className="rmm-button-primary min-h-12 flex-1 rounded-xl px-5 py-3 text-sm"
