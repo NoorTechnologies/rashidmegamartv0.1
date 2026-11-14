@@ -158,7 +158,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           ) : !isLoaded ? (
             <div className="h-9 w-full animate-pulse rounded-xl bg-[#F8E8ED] sm:h-10" />
           ) : cartItem ? (
-            <div className="flex h-9 w-full items-center justify-between overflow-hidden rounded-xl border border-[#138047]/20 bg-[#EDF8F0] sm:h-10">
+            <div className="flex h-9 w-full items-center justify-between overflow-hidden rounded-xl border border-[#800020]/20 bg-[#FDF6F8] sm:h-10">
 
               <button
                 type="button"
@@ -170,7 +170,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               </button>
 
               <span
-                className="text-sm font-extrabold text-[#138047]"
+                className="text-sm font-extrabold text-[#800020]"
                 aria-live="polite"
               >
                 {cartItem.quantity}
