@@ -36,6 +36,8 @@ const STORAGE_KEY = "rashid-mega-mart-cart";
 const CART_CHANGE_EVENT = "rashid-mega-mart-cart-change";
 
 const EMPTY_CART: CartItem[] = [];
+const MAX_ITEM_QUANTITY = 999;
+const MAX_ITEM_PRICE = 10_000_000;
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -56,9 +58,12 @@ function isValidCartItem(item: unknown): item is CartItem {
     typeof value.price === "number" &&
     Number.isFinite(value.price) &&
     value.price >= 0 &&
+    value.price <= MAX_ITEM_PRICE &&
     typeof value.image === "string" &&
     Number.isSafeInteger(value.quantity) &&
     (value.quantity as number) > 0 &&
+    (value.quantity as number) <= MAX_ITEM_QUANTITY &&
+    Number.isSafeInteger(value.price * (value.quantity as number)) &&
     (value.brand === undefined || typeof value.brand === "string") &&
     (value.packSize === undefined || typeof value.packSize === "string")
   );
@@ -173,7 +178,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         !product.id.trim() ||
         !product.name.trim() ||
         !Number.isFinite(product.price) ||
-        product.price < 0
+        product.price < 0 ||
+        product.price > MAX_ITEM_PRICE
       ) {
         return;
       }
@@ -190,7 +196,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                   ...item,
                   quantity: Math.min(
                     item.quantity + 1,
-                    Number.MAX_SAFE_INTEGER
+                    MAX_ITEM_QUANTITY
                   ),
                 }
               : item
@@ -211,7 +217,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
               ...item,
               quantity: Math.min(
                 item.quantity + 1,
-                Number.MAX_SAFE_INTEGER
+                MAX_ITEM_QUANTITY
               ),
             }
           : item
