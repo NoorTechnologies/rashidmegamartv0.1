@@ -174,10 +174,10 @@ Thank you!`;
   }
 
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#FAF8F5] px-3 py-5 pb-28 min-[375px]:px-4 sm:px-6 sm:py-9 sm:pb-14">
+    <main className="min-h-screen overflow-x-clip bg-[#FAF8F5] px-3 py-4 pb-24 min-[375px]:px-4 sm:px-6 sm:py-9 sm:pb-14">
       <div className="mx-auto w-full max-w-6xl">
         {/* Page Header */}
-        <header className="mb-6 flex flex-col gap-4 min-[430px]:flex-row min-[430px]:items-center min-[430px]:justify-between sm:mb-8">
+        <header className="mb-4 flex flex-col gap-3 min-[430px]:flex-row min-[430px]:items-center min-[430px]:justify-between sm:mb-8">
           <div>
             <p className="mb-1.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#A83250] sm:text-xs">
               Rashid Mega Mart
@@ -202,7 +202,7 @@ Thank you!`;
           </Link>
         </header>
 
-        <div className="grid min-w-0 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_370px] lg:gap-7">
+        <div className="grid min-w-0 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_370px] lg:gap-7">
           {/* LEFT: CART ITEMS */}
           <section className="min-w-0">
             <div className="mb-3 flex items-center justify-between gap-3">
@@ -349,7 +349,7 @@ Thank you!`;
           {/* RIGHT: ORDER SUMMARY + CHECKOUT */}
           <aside className="min-w-0 space-y-4 lg:sticky lg:top-5">
             {/* Order Summary */}
-            <section className="rounded-2xl border border-[#EEE8E1] bg-white p-4 shadow-[0_3px_18px_rgba(40,30,20,0.04)] sm:p-5">
+            <section className="rounded-2xl border border-[#EEE8E1] bg-white p-3.5 shadow-[0_3px_18px_rgba(40,30,20,0.04)] sm:p-5">
               <div className="flex items-center justify-between">
                 <h2 className="text-base font-extrabold text-[#29231F] sm:text-lg">
                   Order Summary
