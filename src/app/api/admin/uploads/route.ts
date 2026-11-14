@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
   if (!(file instanceof File) || (kind !== "products" && kind !== "kits")) {
     return NextResponse.json({ message: "Image file aur valid kind required hain." }, { status: 400 });
   }
-  if (file.size < 1 || file.size > MAX_BYTES) return NextResponse.json({ message: "Image maximum 5 MB honi chahiye." }, { status: 413 });
+  if (file.size < 1 || file.size > MAX_BYTES) return NextResponse.json({ message: "Image maximum 4 MB honi chahiye." }, { status: 413 });
   const bytes = new Uint8Array(await file.arrayBuffer());
   const detected = detectImage(bytes);
   if (!detected || file.type !== detected.mime) return NextResponse.json({ message: "Only valid JPEG, PNG, WEBP or AVIF images allowed hain." }, { status: 415 });
@@ -31,7 +31,6 @@ export async function POST(request: NextRequest) {
     const { url, key } = catalogConfig();
     const response = await fetch(`${url}/storage/v1/object/catalog-media/${path.split("/").map(encodeURIComponent).join("/")}`, {
       method: "POST",
-      headers: { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": detected.mime, "x-upsert": "false" },
       body: Buffer.from(bytes),
       cache: "no-store",
       signal: AbortSignal.timeout(15000),
