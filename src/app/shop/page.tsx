@@ -61,16 +61,16 @@ export default function ShopPage() {
   };
 
   return (
-    <main className="min-h-screen min-w-0 overflow-x-clip bg-[#FFF9D8]/30">
+    <main className="rmm-shop-page min-h-screen min-w-0 overflow-x-clip bg-[#FFF9D8]/30">
 
       {/* COMPACT SHOP HERO */}
       <section className="relative overflow-hidden border-b border-[#D4A84F]/20 bg-gradient-to-br from-[#FEF9C3] via-white to-[#F8F0E8]">
         <div className="pointer-events-none absolute -right-12 -top-12 size-40 rounded-full border-[18px] border-[#D4A84F]/10" />
 
-        <div className="relative mx-auto flex max-w-7xl flex-col items-center px-3 pb-4 pt-3 sm:px-6 sm:pb-6 sm:pt-5">
+        <div className="relative mx-auto flex max-w-7xl flex-col items-center px-2 pb-3 pt-2 sm:px-6 sm:pb-6 sm:pt-5">
 
           {/* Hero image */}
-          <div className="relative h-[112px] w-full max-w-[330px] sm:h-[165px] sm:max-w-[470px]">
+          <div className="relative h-[88px] w-full max-w-[280px] sm:h-[165px] sm:max-w-[470px]">
             <Image
               src="/hero.png"
               alt="Rashid Mega Mart groceries"
@@ -97,7 +97,7 @@ export default function ShopPage() {
           </div>
 
           {/* Search */}
-          <div className="mt-3 flex min-h-10 w-full max-w-xl items-center gap-2 rounded-xl border border-[#E5E7EB] bg-white px-3 shadow-[0_4px_14px_rgba(128,0,32,0.06)] transition focus-within:border-[#D4A84F] sm:mt-4 sm:min-h-12 sm:rounded-2xl">
+          <div className="mt-2.5 flex min-h-9 w-full max-w-xl items-center gap-2 rounded-xl border border-[#E5E7EB] bg-white px-3 shadow-[0_4px_14px_rgba(128,0,32,0.06)] transition focus-within:border-[#D4A84F] sm:mt-4 sm:min-h-12 sm:rounded-2xl">
             <Search size={17} className="shrink-0 text-[#800020]" />
 
             <input
@@ -124,7 +124,7 @@ export default function ShopPage() {
       </section>
 
       {/* SHOP CONTENT */}
-      <section className="mx-auto w-full max-w-7xl px-3 pb-6 pt-4 sm:px-6 sm:pb-10 sm:pt-6 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl px-2 pb-5 pt-3 sm:px-6 sm:pb-10 sm:pt-6 lg:px-8">
 
         {/* CATEGORY TITLE */}
         <div className="mb-2 flex items-center justify-between">
@@ -162,7 +162,7 @@ export default function ShopPage() {
         </div>
 
         {/* PRODUCTS HEADER */}
-        <div className="mt-3 flex min-w-0 items-center justify-between gap-2 border-b border-[#E5E7EB] pb-2.5 sm:mt-5">
+        <div className="mt-2.5 flex min-w-0 items-center justify-between gap-2 border-b border-[#E5E7EB] pb-2.5 sm:mt-5">
 
           <div className="min-w-0">
             <h2 className="text-sm font-extrabold text-[#171717] sm:text-lg">
@@ -198,15 +198,15 @@ export default function ShopPage() {
 
         {/* PRODUCT GRID */}
         {filteredProducts.length > 0 ? (
-          <div className="mt-3 grid min-w-0 grid-cols-2 items-stretch gap-2 sm:mt-4 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
+          <div className="mt-2 grid min-w-0 grid-cols-2 items-stretch gap-1.5 sm:mt-4 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
             {filteredProducts.map((product) => (
-              <div key={product.id} className="flex min-w-0 flex-col">
+              <div key={product.id} className="rmm-shop-product flex min-w-0 flex-col">
                 <ProductCard product={product} />
 
                 <button
                   type="button"
                   onClick={() => setSelectedProduct(product)}
-                  className="rmm-button-secondary mt-1.5 min-h-8 w-full rounded-lg px-2 py-1.5 text-[10px] sm:mt-2 sm:min-h-9 sm:text-xs"
+                  className="rmm-button-secondary mt-1 min-h-8 w-full rounded-lg px-2 py-1 text-[10px] sm:mt-2 sm:min-h-9 sm:text-xs"
                 >
                   View Details
                 </button>
