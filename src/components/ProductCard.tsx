@@ -190,7 +190,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               type="button"
               onClick={handleAddToCart}
               aria-label={`Add ${product.name} to cart`}
-              className="flex min-h-9 w-full items-center justify-center gap-1.5 rounded-xl bg-[#138047] px-2 text-[10px] font-extrabold text-white shadow-[0_3px_10px_rgba(19,128,71,0.16)] transition-all duration-200 hover:bg-[#0F6B3B] hover:shadow-md active:scale-[0.97] sm:min-h-10 sm:text-xs"
+              className="rmm-btn-primary flex min-h-9 w-full items-center justify-center gap-1.5 rounded-xl px-2 text-[10px] font-extrabold sm:min-h-10 sm:text-xs"
             >
               <ShoppingCart size={14} />
               ADD TO CART
