@@ -60,8 +60,14 @@ function getRateLimitConfig() {
 }
 
 function getClientIp(request: NextRequest) {
-  // x-real-ip is supplied by Vercel. Do not trust arbitrary forwarded-for values.
-  return request.headers.get("x-real-ip")?.trim() || "unknown";
+  const realIp = request.headers.get("x-real-ip")?.trim();
+  if (realIp) return realIp;
+
+  // Vercel appends the connecting client address; use the final hop, not a
+  // client-supplied first entry in a forwarded-for chain.
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  const finalHop = forwardedFor?.split(",").at(-1)?.trim();
+  return finalHop || "unknown";
 }
 
 export async function checkAdminLoginRateLimit(
