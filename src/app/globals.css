@@ -376,3 +376,133 @@ video {
   .rmm-button-secondary { min-height: 2.3rem; gap: 0.3rem; padding: 0.5rem 0.7rem; border-radius: 0.7rem; box-shadow: 0 1px 5px rgba(53, 18, 13, 0.04); }
   .rmm-button-quiet { min-height: 2rem; gap: 0.3rem; padding: 0.35rem 0.5rem; }
 }
+
+
+/* ========================================
+   MOBILE-FIRST COMPACT LAYOUT REFINEMENT
+   Keeps content readable without browser zoom.
+======================================== */
+@media (max-width: 639px) {
+  :root {
+    --page-gutter: 12px;
+  }
+
+  body {
+    font-size: 13px;
+  }
+
+  /* Prevent oversized page sections and preserve side gutters. */
+  main.min-h-screen > section {
+    min-width: 0;
+  }
+
+  /* Compact floating navigation and cart shortcut. */
+  body main + nav,
+  nav[aria-label="Main navigation"] {
+    padding-right: 12px;
+    padding-left: 12px;
+    padding-bottom: calc(7px + env(safe-area-inset-bottom));
+  }
+
+  nav[aria-label="Main navigation"] > div:last-child {
+    height: 58px;
+    padding-right: 6px;
+    padding-left: 6px;
+  }
+
+  nav[aria-label="Main navigation"] > div:last-child a,
+  nav[aria-label="Main navigation"] > div:last-child button {
+    height: 48px;
+    gap: 3px;
+  }
+
+  nav[aria-label="Main navigation"] > div:last-child svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  nav[aria-label="Main navigation"] > div:last-child span {
+    font-size: 9px;
+  }
+
+  a[aria-label^="Open cart"] {
+    right: 12px;
+    bottom: calc(78px + env(safe-area-inset-bottom));
+    width: 48px;
+    height: 48px;
+  }
+
+  a[aria-label^="Open cart"] svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Smaller, more balanced touch controls. */
+  .rmm-button-primary {
+    min-height: 38px;
+    padding: 8px 11px;
+    font-size: 11px;
+  }
+
+  .rmm-button-secondary {
+    min-height: 36px;
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  /* Keep product cards compact while retaining readable details. */
+  .rmm-product-card-image {
+    aspect-ratio: 1.18 / 1;
+  }
+
+  .rmm-product-card-body {
+    padding: 8px;
+  }
+
+  /* Compact common page headings and section rhythm. */
+  .rmm-mobile-page-title {
+    font-size: clamp(19px, 5.4vw, 24px);
+    line-height: 1.15;
+  }
+
+  .rmm-mobile-section {
+    padding-top: 16px;
+    padding-bottom: 18px;
+  }
+
+  /* Avoid horizontal overflow from long names and prices. */
+  main,
+  main section,
+  main article,
+  main form,
+  main aside {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 374px) {
+  nav[aria-label="Main navigation"] {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  nav[aria-label="Main navigation"] > div:last-child {
+    height: 54px;
+  }
+
+  a[aria-label^="Open cart"] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .rmm-product-card-body {
+    padding: 7px;
+  }
+}
