@@ -104,7 +104,7 @@ export default function CartPage() {
 
     const cleanName = customerName.trim().replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ");
     const cleanPhone = phone.trim();
-    const cleanAddress = address.trim().replace(/[\\u0000-\\u001F\\u007F]/g, " ").replace(/\\s+/g, " ");
+    const cleanAddress = address.trim().replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ");
 
     if (cleanName.length < 2) {
       setFormError("Please enter your valid full name.");
@@ -132,11 +132,11 @@ export default function CartPage() {
         const packSize =
           "packSize" in catalogItem
             ? catalogItem.packSize
-            : \`Grocery Kit - \${catalogItem.items.length} Listed Items\`;
+            : `Grocery Kit - ${catalogItem.items.length} Listed Items`;
 
-        return \`\${index + 1}. \${catalogItem.name}\${packSize ? \` (\${packSize})\` : ""}\\n   Qty: \${item.quantity} x \${formatPrice(catalogItem.price)} = \${formatPrice(catalogItem.price * item.quantity)}\`;
+        return `${index + 1}. ${catalogItem.name}${packSize ? ` (${packSize})` : ""}\n   Qty: ${item.quantity} x ${formatPrice(catalogItem.price)} = ${formatPrice(catalogItem.price * item.quantity)}`;
       })
-      .join("\\n\\n");
+      .join("\n\n");
 
     const message = `🛒 *NEW ORDER - RASHID MEGA MART*
 
