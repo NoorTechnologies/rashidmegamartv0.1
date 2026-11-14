@@ -14,7 +14,19 @@ function mapKit(row:DbKit):GroceryKit{return{id:row.id,name:row.name,subtitle:ro
 export default function AdminKitsPage(){
  const [items,setItems]=useState<GroceryKit[]>([]);const [open,setOpen]=useState(false);const [editingId,setEditingId]=useState<string|null>(null);const [form,setForm]=useState<FormState>(blank);const [file,setFile]=useState<File|null>(null);const [busy,setBusy]=useState(true);const [error,setError]=useState("");const [notice,setNotice]=useState("");
  const load=useCallback(async()=>{try{const r=await fetch("/api/admin/kits",{cache:"no-store"});const j=await r.json();if(!r.ok)throw new Error(j.message);setItems((j.data as DbKit[]).map(mapKit));}catch(e){setError(e instanceof Error?e.message:"Kits load nahi hue.");}finally{setBusy(false);}},[]);
- useEffect(()=>{void load();},[load]);
+ useEffect(() => {
+  let active = true;
+  fetch("/api/admin/kits", { cache: "no-store" })
+   .then(async (response) => {
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message || "Kits load nahi hue.");
+    return result.data as DbKit[];
+   })
+   .then((rows) => { if (active) setItems(rows.map(mapKit)); })
+   .catch((error: unknown) => { if (active) setError(error instanceof Error ? error.message : "Kits load nahi hue."); })
+   .finally(() => { if (active) setBusy(false); });
+  return () => { active = false; };
+ }, []);
  const add=()=>{setEditingId(null);setForm(blank);setFile(null);setError("");setOpen(true);};
  const edit=(kit:GroceryKit)=>{setEditingId(kit.id);setForm({name:kit.name,subtitle:kit.subtitle,categoryId:categories.find(c=>c.name===kit.category)?.id??"",price:String(kit.price),oldPrice:kit.oldPrice===undefined?"":String(kit.oldPrice),description:kit.description,items:kit.items.join("\n"),image:kit.image,isFeatured:Boolean(kit.isFeatured),isAvailable:kit.isAvailable});setFile(null);setError("");setOpen(true);};
  const submit=async(e:FormEvent)=>{e.preventDefault();setBusy(true);setError("");try{let image=form.image;if(file){const fd=new FormData();fd.set("file",file);fd.set("kind","kits");const up=await fetch("/api/admin/uploads",{method:"POST",body:fd});const uj=await up.json();if(!up.ok)throw new Error(uj.message);image=uj.path;}if(!image)throw new Error("Kit image upload karein.");const kitItems=form.items.split("\n").map(s=>s.trim()).filter(Boolean).map(s=>{const match=s.match(/^(.*?)\s+-\s+(.+)$/);return{name:(match?.[1]??s).trim(),quantity:match?.[2]?.trim()??null};});const payload={name:form.name,subtitle:form.subtitle,categoryId:form.categoryId||null,image,price:Number(form.price),oldPrice:form.oldPrice?Number(form.oldPrice):null,discount:null,description:form.description,isFeatured:form.isFeatured,isAvailable:form.isAvailable,items:kitItems};const r=await fetch(editingId?"/api/admin/kits?id="+encodeURIComponent(editingId):"/api/admin/kits",{method:editingId?"PATCH":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});const j=await r.json();if(!r.ok)throw new Error(j.message);setOpen(false);setNotice(editingId?"Kit updated.":"Kit added.");await load();}catch(e){setError(e instanceof Error?e.message:"Kit save nahi hua.");}finally{setBusy(false);}};
