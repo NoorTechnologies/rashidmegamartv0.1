@@ -153,7 +153,7 @@ Thank you!`;
 
           <Link
             href="/shop"
-            className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#A83250] px-7 py-3 text-sm font-bold text-white shadow-lg shadow-[#A83250]/15 transition hover:bg-[#87263F] active:scale-[0.98]"
+            className="rmm-btn-primary mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-7 py-3 text-sm font-bold"
           >
             <ShoppingBag size={18} />
             Start Shopping
@@ -195,7 +195,7 @@ Thank you!`;
 
           <Link
             href="/shop"
-            className="inline-flex min-h-10 w-fit items-center justify-center gap-2 rounded-xl border border-[#E9E3DC] bg-white px-4 py-2 text-xs font-bold text-[#A83250] shadow-sm transition hover:border-[#A83250] hover:bg-[#FDF8FA] sm:min-h-11 sm:text-sm"
+            className="rmm-btn-secondary inline-flex min-h-10 w-fit items-center justify-center gap-2 rounded-xl px-4 py-2 text-xs font-bold sm:min-h-11 sm:text-sm"
           >
             <ArrowLeft size={15} />
             Continue Shopping
