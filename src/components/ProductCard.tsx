@@ -69,7 +69,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#EDE5DC] bg-white shadow-[0_3px_14px_rgba(53,18,13,0.045)] transition-all duration-300 hover:-translate-y-1 hover:border-[#D4A84F]/60 hover:shadow-[0_12px_28px_rgba(53,18,13,0.10)] sm:rounded-3xl">
 
       {/* PRODUCT IMAGE */}
-      <div className="relative aspect-square w-full overflow-hidden bg-[#FFF9F0]">
+      <div className="rmm-product-card-image relative aspect-[1.18/1] w-full overflow-hidden bg-[#FFF9F0] sm:aspect-square">
 
         {discount > 0 && (
           <span className="absolute left-2 top-2 z-10 rounded-lg bg-[#A83250] px-2 py-1 text-[9px] font-extrabold text-white shadow-sm sm:left-3 sm:top-3 sm:text-[10px]">
@@ -111,7 +111,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* PRODUCT DETAILS */}
-      <div className="flex min-w-0 flex-1 flex-col p-2.5 sm:p-4">
+      <div className="rmm-product-card-body flex min-w-0 flex-1 flex-col p-2 sm:p-4">
 
         <p className="truncate text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#A47A2C] sm:text-[10px]">
           {product.brand}
@@ -127,7 +127,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* PRICE */}
         <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-          <span className="text-[15px] font-black tracking-tight text-[#A83250] sm:text-lg">
+          <span className="text-sm font-black tracking-tight text-[#A83250] sm:text-lg">
             {formatPrice(product.price)}
           </span>
 

@@ -139,7 +139,7 @@ export default function KitCard({ kit }: KitCardProps) {
       </Link>
 
       {/* KIT DETAILS */}
-      <div className="flex min-w-0 flex-1 flex-col p-2.5 sm:p-4">
+      <div className="flex min-w-0 flex-1 flex-col p-2 sm:p-4">
         <p className="mb-1.5 truncate text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#A47A2C] sm:text-[10px]">
           {kit.category}
         </p>
@@ -155,7 +155,7 @@ export default function KitCard({ kit }: KitCardProps) {
         </p>
 
         {/* INCLUDED ITEMS */}
-        <div className="mt-3 rounded-xl border border-[#F0E9DF] bg-[#FFFDF8] p-2 sm:mt-4 sm:p-3">
+        <div className="mt-2 rounded-xl border border-[#F0E9DF] bg-[#FFFDF8] p-2 sm:mt-4 sm:p-3">
           <div className="mb-2 flex items-center justify-between gap-1">
             <span className="text-[10px] font-extrabold text-[#30251F] sm:text-xs">
               What&apos;s Inside?
@@ -213,7 +213,7 @@ export default function KitCard({ kit }: KitCardProps) {
         </div>
 
         {/* PRICE AND SAVINGS */}
-        <div className="mt-3 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 sm:mt-4">
+        <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 sm:mt-4">
           <span className="text-[15px] font-black tracking-tight text-[#A83250] sm:text-lg">
             {formatPrice(kit.price)}
           </span>
