@@ -42,7 +42,7 @@ export default function HomePage() {
 
           <div className="mt-5 flex flex-col items-center">
             <Image
-              src="/images/logo.png"
+              src="/images/logo2.png"
               alt="Rashid Mega Mart Logo"
               width={110}
               height={110}

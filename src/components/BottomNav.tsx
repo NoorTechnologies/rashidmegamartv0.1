@@ -52,7 +52,7 @@ export default function BottomNav() {
             className="flex shrink-0 items-center gap-3 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250]"
           >
             <Image
-              src="/images/logo.png"
+              src="/images/logo2.png"
               alt=""
               width={48}
               height={48}
@@ -119,7 +119,7 @@ export default function BottomNav() {
       <Link
         href="/cart"
         aria-label={`Open cart, ${totalItems} items`}
-        className="fixed bottom-[calc(78px+env(safe-area-inset-bottom))] right-3 z-50 inline-flex min-h-12 items-center gap-2 rounded-full border border-white/25 bg-gradient-to-br from-[#B83C5B] via-[#A83250] to-[#87263F] px-4 py-2 text-white shadow-[0_10px_28px_rgba(135,38,63,0.32),inset_0_1px_0_rgba(255,255,255,0.24)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_14px_32px_rgba(135,38,63,0.38)] active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250] lg:hidden"
+        className="fixed bottom-[calc(78px+env(safe-area-inset-bottom))] right-3 z-50 inline-flex min-h-12 items-center gap-2 rounded-full border border-white/25 bg-gradient-to-br from-[#C64A68] via-[#A83250] to-[#87263F] px-4 py-2 text-white shadow-[0_10px_28px_rgba(135,38,63,0.32),inset_0_1px_0_rgba(255,255,255,0.24)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_14px_32px_rgba(135,38,63,0.38)] active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250] lg:hidden"
       >
         <ShoppingCart size={19} strokeWidth={2.2} />
         <span className="text-sm font-extrabold tracking-tight">Cart</span>
@@ -188,13 +188,15 @@ export default function BottomNav() {
                 aria-current={active ? "page" : undefined}
                 className={`relative mx-auto flex h-12 w-[min(100%,76px)] flex-col items-center justify-center gap-1 rounded-full transition-all duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#A83250] ${
                   active
-                    ? "bg-white/75 text-[#A83250] shadow-[0_2px_10px_rgba(62,36,44,0.08),inset_0_1px_0_rgba(255,255,255,0.95)]"
+                    ? "bg-[#F8E8ED] text-[#A83250] shadow-[0_4px_14px_rgba(168,50,80,0.16)] ring-1 ring-[#A83250]/10"
                     : "text-[#766D72] hover:bg-white/45 hover:text-[#87263F]"
                 }`}
               >
-                <Icon size={19} strokeWidth={active ? 2.25 : 1.8} />
+                <span className={`relative flex size-8 items-center justify-center rounded-full transition-all duration-300 ${active ? "bg-[#A83250] text-white shadow-[0_4px_10px_rgba(168,50,80,0.24)]" : ""}`}>
+                  <Icon size={18} strokeWidth={active ? 2.4 : 1.8} className={active ? "scale-105" : ""} />
+                </span>
                 {item.href === "/cart" && totalItems > 0 && (
-                  <span className="absolute right-[13px] top-[5px] flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-[#A83250] px-1 text-[8px] font-black leading-none text-white ring-2 ring-white/90">
+                  <span className="absolute right-[10px] top-[2px] flex h-[17px] min-w-[17px] animate-[pulse_2s_ease-in-out_infinite] items-center justify-center rounded-full bg-[#D4A84F] px-1 text-[8px] font-black leading-none text-[#5C1D30] ring-2 ring-white">
                     {totalItems > 99 ? "99+" : totalItems}
                   </span>
                 )}
