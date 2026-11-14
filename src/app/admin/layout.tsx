@@ -10,6 +10,7 @@ import {
   ShoppingCart,
   Store,
   ChevronRight,
+  LogOut,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -30,6 +31,18 @@ function getPageTitle(pathname: string) {
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const pageTitle = getPageTitle(pathname);
+
+  async function handleLogout() {
+    try {
+      await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "logout" }),
+      });
+    } finally {
+      window.location.assign("/admin/login");
+    }
+  }
 
   return (
     <div className="min-h-dvh bg-[#F7F7F5] text-[#252326] lg:grid lg:grid-cols-[252px_minmax(0,1fr)]">
@@ -90,6 +103,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               </div>
             </div>
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+              <button type="button" onClick={handleLogout} className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-lg border border-[#F0E4E5] px-3 text-[10px] font-extrabold text-[#8A2441] transition hover:bg-[#FFF1F3] sm:text-xs">
+                <LogOut size={14} /> Logout
+              </button>
               <span className="hidden items-center gap-1.5 rounded-full border border-[#F0DDAF] bg-[#FFFAEC] px-3 py-1.5 text-[10px] font-extrabold text-[#86652B] sm:inline-flex">
                 <span className="size-1.5 rounded-full bg-[#D3A64D]" /> Preview mode
               </span>
