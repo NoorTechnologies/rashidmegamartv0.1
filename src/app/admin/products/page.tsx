@@ -12,9 +12,9 @@ import {
   Save,
   ShoppingBag,
 } from "lucide-react";
-import { products as initialProducts, type Product } from "@/data/products";
+import type { Product } from "@/data/products";
 
-const STORAGE_KEY = "rmm-admin-products-v1";
+const STORAGE_KEY = "rmm-admin-products-v2";
 
 type ProductForm = {
   name: string;
@@ -46,7 +46,7 @@ const inputClass =
   "mt-1.5 min-h-11 w-full rounded-xl border border-[#EADDE0] bg-white px-3 text-sm text-[#33232A] outline-none transition placeholder:text-[#B5A5AA] focus:border-[#A47A2C] focus:ring-2 focus:ring-[#A47A2C]/10";
 
 export default function AdminProductsPage() {
-  const [items, setItems] = useState<Product[]>(initialProducts);
+  const [items, setItems] = useState<Product[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [query, setQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -252,7 +252,7 @@ export default function AdminProductsPage() {
 
       <div className="rounded-xl border border-[#F0E4E5] bg-[#FFFBF6] p-3 text-[11px] leading-5 text-[#766D72]">
         <p className="font-bold text-[#800020]">Frontend preview storage</p>
-        Changes are saved in this browser only. They are not synced to the customer shop, another device, or a database. Secure owner login and backend integration are still pending.
+        Changes are saved in this browser only and are not synced to the customer shop or another device. Database integration is required for live catalogue management.
       </div>
 
       <Link href="/shop" className="inline-flex items-center gap-2 text-xs font-bold text-[#800020] underline underline-offset-4">
