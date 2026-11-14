@@ -22,10 +22,25 @@ function imageDimensions(bytes: Uint8Array, ext: string): { width: number; heigh
   if (ext === "png" && bytes.length >= 24) {
     return { width: readUint32BE(bytes, 16), height: readUint32BE(bytes, 20) };
   }
-  if (ext === "webp" && bytes.length >= 30 && String.fromCharCode(...bytes.slice(12, 16)) === "VP8X") {
-    const width = 1 + bytes[24] + (bytes[25] << 8) + (bytes[26] << 16);
-    const height = 1 + bytes[27] + (bytes[28] << 8) + (bytes[29] << 16);
-    return { width, height };
+  if (ext === "webp" && bytes.length >= 25) {
+    const chunk = String.fromCharCode(...bytes.slice(12, 16));
+    if (chunk === "VP8X" && bytes.length >= 30) {
+      const width = 1 + bytes[24] + (bytes[25] << 8) + (bytes[26] << 16);
+      const height = 1 + bytes[27] + (bytes[28] << 8) + (bytes[29] << 16);
+      return { width, height };
+    }
+    if (chunk === "VP8 " && bytes.length >= 30 && bytes[23] === 0x9d && bytes[24] === 0x01 && bytes[25] === 0x2a) {
+      return {
+        width: ((bytes[26] | (bytes[27] << 8)) & 0x3fff),
+        height: ((bytes[28] | (bytes[29] << 8)) & 0x3fff),
+      };
+    }
+    if (chunk === "VP8L" && bytes[20] === 0x2f && bytes.length >= 25) {
+      return {
+        width: 1 + (((bytes[22] & 0x3f) << 8) | bytes[21]),
+        height: 1 + (((bytes[22] & 0xc0) << 2) | (bytes[23] << 2) | ((bytes[24] & 0x0f) << 10)),
+      };
+    }
   }
   if (ext === "jpg") {
     let offset = 2;
