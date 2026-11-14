@@ -4,7 +4,7 @@ import { catalogConfig, publicImageUrl } from "@/lib/catalog-admin";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-const MAX_BYTES = 5 * 1024 * 1024;
+const MAX_BYTES = 4 * 1024 * 1024;
 
 function detectImage(bytes: Uint8Array): { ext: string; mime: string } | null {
   if (bytes.length >= 8 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47 && bytes[4] === 0x0d && bytes[5] === 0x0a && bytes[6] === 0x1a && bytes[7] === 0x0a) return { ext: "png", mime: "image/png" };
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     const response = await fetch(`${url}/storage/v1/object/catalog-media/${path.split("/").map(encodeURIComponent).join("/")}`, {
       method: "POST",
       headers: { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": detected.mime, "x-upsert": "false" },
-      body: bytes,
+      body: Buffer.from(bytes),
       cache: "no-store",
       signal: AbortSignal.timeout(15000),
     });
