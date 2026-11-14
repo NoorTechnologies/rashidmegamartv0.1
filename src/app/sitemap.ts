@@ -1,4 +1,3 @@
-
 import type { MetadataRoute } from "next";
 import { kits } from "@/data/kits";
 
@@ -21,6 +20,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${SITE_URL}/privacy-policy`,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${SITE_URL}/terms-and-conditions`,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
   ];
 
   const kitPages: MetadataRoute.Sitemap = kits
@@ -33,4 +42,3 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [...publicPages, ...kitPages];
 }
-
