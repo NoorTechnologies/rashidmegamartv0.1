@@ -32,6 +32,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const pageTitle = getPageTitle(pathname);
 
+  if (pathname === "/admin/login") {
+    return <>{children}</>;
+  }
+
   async function handleLogout() {
     try {
       await fetch("/api/admin/auth", {
