@@ -23,7 +23,6 @@ async function consumeLimit(
       method: "POST",
       headers: {
         apikey: secret,
-        Authorization: `Bearer ${secret}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
