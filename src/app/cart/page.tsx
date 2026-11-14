@@ -92,6 +92,8 @@ export default function CartPage() {
     const cleanName = cleanCustomerText(customerName);
     const cleanPhone = phone.replace(/\D/g, "");
     const cleanAddress = cleanCustomerText(address);
+    const safeName = escapeWhatsAppText(cleanName);
+    const safeAddress = escapeWhatsAppText(cleanAddress);
 
     if (cleanName.length < 2) {
       setFormError("Please enter your valid full name.");
@@ -128,9 +130,9 @@ export default function CartPage() {
     const message = `🛒 *NEW ORDER - RASHID MEGA MART*
 
 *Customer Details*
-Name: ${cleanName}
+Name: ${safeName}
 Phone: ${cleanPhone}
-Address: ${cleanAddress}
+Address: ${safeAddress}
 
 *Order Items*
 ${orderItems}
