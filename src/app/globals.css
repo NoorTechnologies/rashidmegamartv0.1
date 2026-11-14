@@ -270,3 +270,102 @@ video {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* ========================================
+   RASHID MEGA MART - UNIFIED BUTTON SYSTEM
+======================================== */
+
+.rmm-button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  border: 1px solid #800020;
+  border-radius: 0.875rem;
+  background: linear-gradient(135deg, #8F1235 0%, #70001D 100%);
+  padding: 0.7rem 1.25rem;
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 5px 14px rgba(128, 0, 32, 0.18), inset 0 1px 0 rgba(255,255,255,.12);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+}
+.rmm-button-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #72001D 0%, #520016 100%);
+  border-color: #5C0018;
+  box-shadow: 0 8px 20px rgba(92, 0, 24, 0.24);
+  transform: translateY(-1px);
+}
+.rmm-button-primary:active:not(:disabled) { transform: translateY(0) scale(.98); }
+.rmm-button-primary:disabled {
+  cursor: not-allowed;
+  border-color: #D9D2CE;
+  background: #EEEAE7;
+  color: #9A918B;
+  box-shadow: none;
+}
+
+.rmm-button-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.5rem;
+  border: 1px solid rgba(212, 168, 79, .65);
+  border-radius: 0.8rem;
+  background: linear-gradient(180deg, #FFFDF7 0%, #FFF7E7 100%);
+  padding: 0.55rem 1rem;
+  color: #800020;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(53, 18, 13, .05);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+}
+.rmm-button-secondary:hover:not(:disabled) {
+  border-color: #800020;
+  background: #800020;
+  color: #fff;
+  box-shadow: 0 5px 14px rgba(128, 0, 32, .14);
+}
+.rmm-button-secondary:active:not(:disabled) { transform: scale(.98); }
+
+.rmm-button-quiet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  min-height: 2.25rem;
+  border: 1px solid transparent;
+  border-radius: .7rem;
+  background: transparent;
+  padding: .45rem .7rem;
+  color: #800020;
+  font-weight: 700;
+  transition: background .2s ease, color .2s ease;
+}
+.rmm-button-quiet:hover:not(:disabled) { background: #F8E8ED; color: #5C0018; }
+
+.rmm-quantity-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #800020;
+  transition: background .18s ease, color .18s ease;
+}
+.rmm-quantity-button:hover:not(:disabled) { background: #F8E8ED; color: #5C0018; }
+.rmm-quantity-button:active:not(:disabled) { transform: scale(.94); }
+
+.rmm-button-primary:focus-visible,
+.rmm-button-secondary:focus-visible,
+.rmm-button-quiet:focus-visible,
+.rmm-quantity-button:focus-visible {
+  outline: 3px solid rgba(212, 168, 79, .8);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rmm-button-primary,
+  .rmm-button-secondary,
+  .rmm-button-quiet,
+  .rmm-quantity-button { transition: none; }
+}

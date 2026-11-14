@@ -166,7 +166,7 @@ export default function ProductModal({
             <button
               type="button"
               onClick={handleAddToCart}
-              className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-3 text-sm font-extrabold text-white transition hover:bg-[#075C2B] active:scale-[0.98]"
+              className="rmm-button-primary min-h-12 w-full rounded-xl px-5 py-3 text-sm"
             >
               {cartItem ? <Check size={19} /> : <ShoppingCart size={19} />}
               {cartItem ? `Added (${cartItem.quantity})` : "Add to Cart"}
