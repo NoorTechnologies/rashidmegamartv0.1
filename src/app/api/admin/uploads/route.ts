@@ -38,7 +38,7 @@ function imageDimensions(bytes: Uint8Array, ext: string): { width: number; heigh
     if (chunk === "VP8L" && bytes[20] === 0x2f && bytes.length >= 25) {
       return {
         width: 1 + (((bytes[22] & 0x3f) << 8) | bytes[21]),
-        height: 1 + (((bytes[22] & 0xc0) << 2) | (bytes[23] << 2) | ((bytes[24] & 0x0f) << 10)),
+        height: 1 + (((bytes[22] & 0xc0) >> 6) | (bytes[23] << 2) | ((bytes[24] & 0x0f) << 10)),
       };
     }
   }
