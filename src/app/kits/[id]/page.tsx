@@ -19,7 +19,7 @@ import {
   CookingPot,
 } from "lucide-react";
 
-import { catalogRequest, publicImageUrl } from "@/lib/catalog-admin";
+import { catalogPublicRequest, publicImageUrl } from "@/lib/catalog-admin";
 import KitDetailClient from "@/components/KitDetailClient";
 
 interface PageProps {
@@ -80,7 +80,7 @@ function getGroceryIcon(item: string) {
 
 export default async function KitDetailPage({ params }: PageProps) {
   const { id } = await params;
-  const rows = await catalogRequest<Record<string, unknown>[]>(`kits?select=id,name,subtitle,category_id,image,price,old_price,discount,description,is_featured,is_available,category:categories(name),items:kit_items(item_name,quantity,sort_order)&id=eq.${encodeURIComponent(id)}&is_available=eq.true&limit=1`).catch(() => []);
+  const rows = await catalogPublicRequest<Record<string, unknown>[]>(`kits?select=id,name,subtitle,category_id,image,price,old_price,discount,description,is_featured,is_available,category:categories(name),items:kit_items(item_name,quantity,sort_order)&id=eq.${encodeURIComponent(id)}&is_available=eq.true&limit=1`).catch(() => []);
   const row = rows[0];
   if (!row) notFound();
   const kit = {
