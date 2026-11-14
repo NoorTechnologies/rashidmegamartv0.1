@@ -24,6 +24,11 @@ const navigationItems = [
   { label: "Kits", href: "/kits", icon: Package },
 ];
 
+const mobileNavigationItems = [
+  ...navigationItems,
+  { label: "Cart", href: "/cart", icon: ShoppingCart },
+];
+
 export default function BottomNav() {
   const pathname = usePathname();
   const { totalItems } = useCart();
@@ -114,11 +119,12 @@ export default function BottomNav() {
       <Link
         href="/cart"
         aria-label={`Open cart, ${totalItems} items`}
-        className="fixed bottom-[calc(78px+env(safe-area-inset-bottom))] right-3 z-50 flex size-12 items-center justify-center rounded-full border border-white/75 bg-white/65 text-[#87263F] shadow-[0_8px_28px_rgba(48,30,36,0.14),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl backdrop-saturate-150 transition duration-300 hover:-translate-y-1 hover:bg-white/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250] lg:hidden"
+        className="fixed bottom-[calc(78px+env(safe-area-inset-bottom))] right-3 z-50 inline-flex min-h-12 items-center gap-2 rounded-full border border-white/25 bg-gradient-to-br from-[#B83C5B] via-[#A83250] to-[#87263F] px-4 py-2 text-white shadow-[0_10px_28px_rgba(135,38,63,0.32),inset_0_1px_0_rgba(255,255,255,0.24)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_14px_32px_rgba(135,38,63,0.38)] active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250] lg:hidden"
       >
-        <ShoppingCart size={23} strokeWidth={1.9} />
+        <ShoppingCart size={19} strokeWidth={2.2} />
+        <span className="text-sm font-extrabold tracking-tight">Cart</span>
         {totalItems > 0 && (
-          <span className="absolute -right-0.5 -top-0.5 flex h-[19px] min-w-[19px] items-center justify-center rounded-full border-2 border-white bg-[#A83250] px-1 text-[9px] font-bold leading-none text-white shadow-sm">
+          <span className="absolute -right-1.5 -top-1.5 flex h-[20px] min-w-[20px] items-center justify-center rounded-full border-2 border-[#A83250] bg-[#F7D98B] px-1 text-[9px] font-black leading-none text-[#5C1D30] shadow-sm">
             {totalItems > 99 ? "99+" : totalItems}
           </span>
         )}
@@ -168,10 +174,10 @@ export default function BottomNav() {
           </>
         )}
 
-        <div className="relative grid h-[58px] grid-cols-4 items-center rounded-full border border-white/75 bg-white/60 px-2 shadow-[0_10px_36px_rgba(40,28,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(255,255,255,0.28)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[58px] grid-cols-5 items-center rounded-full border border-white/75 bg-white/60 px-2 shadow-[0_10px_36px_rgba(40,28,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(255,255,255,0.28)] backdrop-blur-2xl backdrop-saturate-150">
           <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
 
-          {navigationItems.map((item) => {
+          {mobileNavigationItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
 
@@ -187,6 +193,11 @@ export default function BottomNav() {
                 }`}
               >
                 <Icon size={19} strokeWidth={active ? 2.25 : 1.8} />
+                {item.href === "/cart" && totalItems > 0 && (
+                  <span className="absolute right-[13px] top-[5px] flex h-[15px] min-w-[15px] items-center justify-center rounded-full bg-[#A83250] px-1 text-[8px] font-black leading-none text-white ring-2 ring-white/90">
+                    {totalItems > 99 ? "99+" : totalItems}
+                  </span>
+                )}
                 <span className={`text-[10px] leading-none ${active ? "font-bold" : "font-medium"}`}>
                   {item.label}
                 </span>
