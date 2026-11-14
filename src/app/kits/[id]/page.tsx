@@ -399,7 +399,7 @@ export default async function KitDetailPage({ params }: PageProps) {
 
           <Link
             href="/kits"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#A83250] px-5 py-3 text-sm font-extrabold text-white shadow-md shadow-[#A83250]/15 transition-all hover:-translate-y-0.5 hover:bg-[#87263F] hover:shadow-lg"
+            className="rmm-button-primary shrink-0 rounded-xl px-5 py-3 text-sm"
           >
             Explore More Kits
             <ArrowRight size={17} />
