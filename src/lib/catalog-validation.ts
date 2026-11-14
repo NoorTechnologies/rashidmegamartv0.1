@@ -28,7 +28,7 @@ export function validateProduct(value: unknown): ProductInput | null {
   if (
     !text(v.name, 120) || !text(v.brand, 80) || !slug(v.categoryId) ||
     !text(v.packSize, 60) || !money(v.price) || !optionalMoney(v.oldPrice) ||
-    !storagePath(v.image) || !text(v.description, 2000, false) ||
+    !storagePath(v.image, "products") || !text(v.description, 2000, false) ||
     !bool(v.isFeatured) || !bool(v.isBestSeller) || !bool(v.isAvailable) ||
     !(v.stock === null || (Number.isInteger(v.stock) && Number(v.stock) >= 0 && Number(v.stock) <= 1_000_000))
   ) return null;
@@ -47,7 +47,7 @@ export function validateKit(value: unknown): KitInput | null {
   if (
     !text(v.name, 120) || !text(v.subtitle, 160) ||
     !(v.categoryId === null || slug(v.categoryId)) ||
-    !storagePath(v.image) || !money(v.price) || !optionalMoney(v.oldPrice) ||
+    !storagePath(v.image, "kits") || !money(v.price) || !optionalMoney(v.oldPrice) ||
     !(v.discount === null || text(v.discount, 40, false)) ||
     !text(v.description, 3000, false) || !bool(v.isFeatured) || !bool(v.isAvailable) ||
     !Array.isArray(v.items) || v.items.length < 1 || v.items.length > 60
