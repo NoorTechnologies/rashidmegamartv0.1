@@ -80,9 +80,20 @@ function getGroceryIcon(item: string) {
 
 export default async function KitDetailPage({ params }: PageProps) {
   const { id } = await params;
-  const kit = getKitById(id);
-
-  if (!kit) notFound();
+  const rows = await catalogRequest<Record<string, unknown>[]>(`kits?select=id,name,subtitle,category_id,image,price,old_price,discount,description,is_featured,is_available,category:categories(name),items:kit_items(item_name,quantity,sort_order)&id=eq.${encodeURIComponent(id)}&is_available=eq.true&limit=1`).catch(() => []);
+  const row = rows[0];
+  if (!row) notFound();
+  const kit = {
+    id: String(row.id), name: String(row.name), subtitle: String(row.subtitle ?? ""),
+    category: (row.category as {name?:string}|null)?.name ?? "",
+    image: typeof row.image === "string" ? publicImageUrl(row.image) : "",
+    price: Number(row.price), oldPrice: row.old_price === null ? undefined : Number(row.old_price),
+    description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),
+    isAvailable: Boolean(row.is_available),
+    items: ((row.items as {item_name:string;quantity:string|null;sort_order:number}[]) ?? [])
+      .sort((left,right)=>left.sort_order-right.sort_order)
+      .map(item=>item.quantity ? `${item.item_name} - ${item.quantity}` : item.item_name),
+  };
 
   const discount =
     kit.oldPrice && kit.oldPrice > kit.price
