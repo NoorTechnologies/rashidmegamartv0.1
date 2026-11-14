@@ -9,7 +9,7 @@ export default function AdminKitsPage() {
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#A47A2C]">Catalogue</p>
           <h1 className="mt-1 text-2xl font-black text-[#800020] sm:text-3xl">Grocery Kits</h1>
-          <p className="mt-1 text-sm text-[#766D72]">Manage your store's grocery combo kits.</p>
+          <p className="mt-1 text-sm text-[#766D72]">Manage your store&apos;s grocery combo kits.</p>
         </div>
         <button type="button" disabled className="inline-flex min-h-10 cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-[#800020] px-4 text-xs font-bold text-white opacity-60">
           <Plus size={15} /> Add kit <span className="text-[9px]">(database required)</span>
