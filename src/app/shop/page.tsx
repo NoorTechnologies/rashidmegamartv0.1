@@ -54,7 +54,7 @@ function ShopPageContent() {
         default: return Number(Boolean(b.isFeatured)) - Number(Boolean(a.isFeatured));
       }
     });
-  }, [search, selectedCategory, sortBy]);
+  }, [products, search, selectedCategory, sortBy]);
 
   const clearFilters = () => {
     setSearch("");
