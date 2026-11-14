@@ -114,7 +114,7 @@ export default function RootLayout({
         />
 
         <CartProvider>
-          <div className="min-w-0 w-full flex-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0">
+          <div className="min-w-0 w-full flex-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0 lg:pt-[76px]">
             {children}
           </div>
 
