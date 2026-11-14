@@ -235,7 +235,7 @@ export default function KitCard({ kit }: KitCardProps) {
         <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
           <Link
             href={`/kits/${kit.id}`}
-            className="inline-flex min-h-9 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg border border-[#D4A84F]/50 bg-white px-1.5 text-[10px] font-extrabold text-[#A83250] transition hover:bg-[#FFF9F0] active:scale-95 sm:min-h-10 sm:rounded-xl sm:text-xs"
+            className="rmm-button-secondary min-h-9 min-w-0 flex-1 rounded-lg px-1.5 text-[10px] sm:min-h-10 sm:rounded-xl sm:text-xs"
           >
             View Kit
             <ArrowUpRight size={12} />
@@ -259,7 +259,7 @@ export default function KitCard({ kit }: KitCardProps) {
                 ? "bg-gray-100 text-gray-400"
                 : cartItem
                   ? "border border-[#138047]/20 bg-[#EDF8F0] text-[#138047]"
-                  : "bg-[#138047] text-white shadow-[0_3px_10px_rgba(19,128,71,0.16)] hover:bg-[#0F6B3B]"
+                  : "rmm-button-primary"
             }`}
           >
             {!kit.isAvailable ? (
