@@ -18,12 +18,12 @@ import ProductCard from "@/components/ProductCard";
 import KitCard from "@/components/KitCard";
 
 import { categories } from "@/data/categories";
-import { catalogRequest, publicImageUrl } from "@/lib/catalog-admin";
+import { catalogPublicRequest, publicImageUrl } from "@/lib/catalog-admin";
 
 export default async function HomePage() {
   const [productRows, kitRows] = await Promise.all([
-    catalogRequest<Record<string, unknown>[]>("products?select=id,name,brand,category_id,pack_size,price,old_price,image,description,is_featured,is_best_seller,is_available,stock&is_available=eq.true&is_best_seller=eq.true&order=created_at.desc&limit=8").catch(() => []),
-    catalogRequest<Record<string, unknown>[]>("kits?select=id,name,subtitle,category_id,image,price,old_price,discount,description,is_featured,is_available,category:categories(name),items:kit_items(item_name,quantity,sort_order)&is_available=eq.true&is_featured=eq.true&order=created_at.desc&limit=4").catch(() => []),
+    catalogPublicRequest<Record<string, unknown>[]>("products?select=id,name,brand,category_id,pack_size,price,old_price,image,description,is_featured,is_best_seller,is_available,stock&is_available=eq.true&is_best_seller=eq.true&order=created_at.desc&limit=8").catch(() => []),
+    catalogPublicRequest<Record<string, unknown>[]>("kits?select=id,name,subtitle,category_id,image,price,old_price,discount,description,is_featured,is_available,category:categories(name),items:kit_items(item_name,quantity,sort_order)&is_available=eq.true&is_featured=eq.true&order=created_at.desc&limit=4").catch(() => []),
   ]);
   const bestSellingProducts = productRows.map((row) => ({
     id: String(row.id), name: String(row.name), brand: String(row.brand), category: "",
