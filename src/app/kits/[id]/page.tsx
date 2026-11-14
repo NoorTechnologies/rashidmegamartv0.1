@@ -19,7 +19,7 @@ import {
   CookingPot,
 } from "lucide-react";
 
-import { getKitById } from "@/data/kits";
+import { catalogRequest, publicImageUrl } from "@/lib/catalog-admin";
 import KitDetailClient from "@/components/KitDetailClient";
 
 interface PageProps {
