@@ -428,8 +428,7 @@ video {
   a[aria-label^="Open cart"] {
     right: 12px;
     bottom: calc(78px + env(safe-area-inset-bottom));
-    width: 48px;
-    height: 48px;
+    min-height: 44px;
   }
 
   a[aria-label^="Open cart"] svg {
@@ -498,8 +497,9 @@ video {
   }
 
   a[aria-label^="Open cart"] {
-    width: 44px;
-    height: 44px;
+    min-height: 42px;
+    padding-right: 12px;
+    padding-left: 12px;
   }
 
   .rmm-product-card-body {
