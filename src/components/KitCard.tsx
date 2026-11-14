@@ -259,7 +259,7 @@ export default function KitCard({ kit }: KitCardProps) {
                 ? "bg-gray-100 text-gray-400"
                 : cartItem
                   ? "border border-[#138047]/20 bg-[#EDF8F0] text-[#138047]"
-                  : "bg-[#138047] text-white shadow-[0_3px_10px_rgba(19,128,71,0.16)] hover:bg-[#0F6B3B]"
+                  : "text-white"
             }`}
           >
             {!kit.isAvailable ? (
