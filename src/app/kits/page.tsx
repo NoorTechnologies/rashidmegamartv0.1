@@ -34,7 +34,7 @@ export default function KitsPage() {
             .filter((category): category is string => Boolean(category))
         )
       ),
-    []
+    [kits]
   );
 
   const filteredKits = useMemo(() => {
@@ -98,7 +98,7 @@ export default function KitsPage() {
         }
       }
     });
-  }, [search, filter, selectedCategory, sortBy]);
+  }, [kits, search, filter, selectedCategory, sortBy]);
 
   const clearFilters = () => {
     setSearch("");
