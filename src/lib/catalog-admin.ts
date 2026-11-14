@@ -36,6 +36,16 @@ export function publicImageUrl(path: string) {
   return `${url.replace(/\/$/, "")}/storage/v1/object/public/catalog-media/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
 
+export function catalogImageUrl(path: string): string {
+  if (!path) return "";
+
+  if (/^\/products\/[a-zA-Z0-9_-]+\.(?:jpg|jpeg|png|webp|avif)$/i.test(path)) {
+    return path;
+  }
+
+  return publicImageUrl(path);
+}
+
 export async function catalogPublicRequest<T>(
   path: string,
   init: RequestInit = {},

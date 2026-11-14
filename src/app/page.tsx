@@ -18,7 +18,7 @@ import ProductCard from "@/components/ProductCard";
 import KitCard from "@/components/KitCard";
 
 import { categories } from "@/data/categories";
-import { catalogPublicRequest, publicImageUrl } from "@/lib/catalog-admin";
+import { catalogPublicRequest, catalogImageUrl, publicImageUrl } from "@/lib/catalog-admin";
 
 export default async function HomePage() {
   const [productRows, kitRows] = await Promise.all([
@@ -29,7 +29,7 @@ export default async function HomePage() {
     id: String(row.id), name: String(row.name), brand: String(row.brand), category: "",
     packSize: String(row.pack_size), price: Number(row.price),
     oldPrice: row.old_price === null ? undefined : Number(row.old_price),
-    image: typeof row.image === "string" ? publicImageUrl(row.image) : "",
+    image: typeof row.image === "string" ? catalogImageUrl(row.image) : "",
     description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),
     isBestSeller: Boolean(row.is_best_seller), isAvailable: Boolean(row.is_available),
     stock: typeof row.stock === "number" ? row.stock : 0,
