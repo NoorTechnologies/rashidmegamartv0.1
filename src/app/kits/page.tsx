@@ -207,7 +207,7 @@ export default function KitsPage() {
             <button
               type="button"
               onClick={clearFilters}
-              className="inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-lg border border-[#B7E4C7] bg-white px-2.5 py-2 text-[10px] font-bold text-[#168447] transition hover:bg-[#E8F5E9] active:scale-95 sm:rounded-full sm:px-3 sm:text-xs"
+              className="rmm-button-secondary min-h-9 shrink-0 rounded-lg px-2.5 py-2 text-[10px] sm:rounded-full sm:px-3 sm:text-xs"
             >
               <RotateCcw size={12} />
               Reset
@@ -329,7 +329,7 @@ export default function KitsPage() {
             <button
               type="button"
               onClick={clearFilters}
-              className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#168447] px-5 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#075C2B] active:scale-95"
+              className="rmm-button-primary mt-5 min-h-10 rounded-xl px-5 py-2.5 text-xs"
             >
               <RotateCcw size={13} />
               Reset Filters
