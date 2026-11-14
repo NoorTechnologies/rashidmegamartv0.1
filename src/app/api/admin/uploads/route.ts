@@ -14,6 +14,49 @@ function detectImage(bytes: Uint8Array): { ext: string; mime: string } | null {
   return null;
 }
 
+function readUint32BE(bytes: Uint8Array, offset: number) {
+  return (((bytes[offset] << 24) | (bytes[offset + 1] << 16) | (bytes[offset + 2] << 8) | bytes[offset + 3]) >>> 0);
+}
+
+function imageDimensions(bytes: Uint8Array, ext: string): { width: number; height: number } | null {
+  if (ext === "png" && bytes.length >= 24) {
+    return { width: readUint32BE(bytes, 16), height: readUint32BE(bytes, 20) };
+  }
+  if (ext === "webp" && bytes.length >= 30 && String.fromCharCode(...bytes.slice(12, 16)) === "VP8X") {
+    const width = 1 + bytes[24] + (bytes[25] << 8) + (bytes[26] << 16);
+    const height = 1 + bytes[27] + (bytes[28] << 8) + (bytes[29] << 16);
+    return { width, height };
+  }
+  if (ext === "jpg") {
+    let offset = 2;
+    while (offset + 9 < bytes.length) {
+      if (bytes[offset] !== 0xff) { offset += 1; continue; }
+      const marker = bytes[offset + 1];
+      offset += 2;
+      if (marker === 0xd8 || marker === 0xd9 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) continue;
+      if (offset + 4 > bytes.length) break;
+      const segmentLength = (bytes[offset] << 8) | bytes[offset + 1];
+      if (segmentLength < 2 || offset + segmentLength > bytes.length) break;
+      const isFrame = [0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf].includes(marker);
+      if (isFrame && segmentLength >= 7) {
+        return {
+          height: (bytes[offset + 3] << 8) | bytes[offset + 4],
+          width: (bytes[offset + 5] << 8) | bytes[offset + 6],
+        };
+      }
+      offset += segmentLength;
+    }
+  }
+  if (ext === "avif") {
+    for (let i = 4; i + 16 <= bytes.length; i += 1) {
+      if (bytes[i] === 0x69 && bytes[i + 1] === 0x73 && bytes[i + 2] === 0x70 && bytes[i + 3] === 0x65) {
+        return { width: readUint32BE(bytes, i + 8), height: readUint32BE(bytes, i + 12) };
+      }
+    }
+  }
+  return null;
+}
+
 export async function POST(request: NextRequest) {
   let form: FormData;
   try { form = await request.formData(); } catch { return NextResponse.json({ message: "Invalid upload form." }, { status: 400 }); }
@@ -26,6 +69,10 @@ export async function POST(request: NextRequest) {
   const bytes = new Uint8Array(await file.arrayBuffer());
   const detected = detectImage(bytes);
   if (!detected || file.type !== detected.mime) return NextResponse.json({ message: "Only valid JPEG, PNG, WEBP or AVIF images allowed hain." }, { status: 415 });
+  const dimensions = imageDimensions(bytes, detected.ext);
+  if (!dimensions || dimensions.width < 1 || dimensions.height < 1 || dimensions.width > 6000 || dimensions.height > 6000 || dimensions.width * dimensions.height > 24_000_000) {
+    return NextResponse.json({ message: "Image dimensions invalid hain. Maximum 6000 × 6000 pixels allowed hain." }, { status: 422 });
+  }
   const path = `${kind}/${randomUUID()}.${detected.ext}`;
   try {
     const { url, key } = catalogConfig();
