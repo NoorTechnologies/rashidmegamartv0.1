@@ -15,6 +15,7 @@ import {
   Trash2,
   Truck,
   PackageCheck,
+  Undo2,
 } from "lucide-react";
 
 import { useCart } from "@/context/CartContext";
@@ -45,13 +46,29 @@ export default function CartPage() {
     decreaseQuantity,
     removeFromCart,
     clearCart,
+    addToCart,
   } = useCart();
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "UPI">("COD");
+  const [orderNote, setOrderNote] = useState("");
+  const [removedItem, setRemovedItem] = useState<(typeof items)[number] | null>(null);
   const [formError, setFormError] = useState("");
+
+  const handleRemoveItem = (item: (typeof items)[number]) => {
+    setRemovedItem(item);
+    removeFromCart(item.id);
+  };
+
+  const handleUndoRemove = () => {
+    if (!removedItem) return;
+    const { quantity, ...product } = removedItem;
+    addToCart(product);
+    for (let count = 1; count < quantity; count += 1) increaseQuantity(removedItem.id);
+    setRemovedItem(null);
+  };
 
   const handleCheckout = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -105,6 +122,7 @@ export default function CartPage() {
     const cleanName = customerName.trim().replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ");
     const cleanPhone = phone.trim();
     const cleanAddress = address.trim().replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ");
+    const cleanOrderNote = orderNote.trim().replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ");
 
     if (cleanName.length < 2) {
       setFormError("Please enter your valid full name.");
@@ -144,6 +162,7 @@ export default function CartPage() {
 Name: ${cleanName}
 Phone: ${cleanPhone}
 Address: ${cleanAddress}
+${cleanOrderNote ? `Order Note: ${cleanOrderNote}\n` : ""}
 
 *Order Items*
 ${orderItems}
@@ -367,7 +386,7 @@ Thank you!`;
                         <button
                           type="button"
                           aria-label={`Remove ${item.name}`}
-                          onClick={() => removeFromCart(item.id)}
+                          onClick={() => handleRemoveItem(item)}
                           className="flex size-9 shrink-0 items-center justify-center rounded-lg text-[#B5AAA3] transition hover:bg-red-50 hover:text-red-600 active:bg-red-100"
                         >
                           <Trash2 size={16} />
@@ -378,6 +397,13 @@ Thank you!`;
                 </article>
               ))}
             </div>
+
+            {removedItem && (
+              <div role="status" className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[#E8D7DC] bg-[#FFF8FA] px-3 py-2.5 text-xs">
+                <span className="min-w-0 truncate text-[#6F3545]">Removed {removedItem.name}</span>
+                <button type="button" onClick={handleUndoRemove} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 font-extrabold text-[#A83250] hover:bg-[#F8E8ED]"><Undo2 size={14} /> Undo</button>
+              </div>
+            )}
 
             {/* Delivery Information */}
             <div className="mt-4 flex gap-3 rounded-2xl border border-[#E9E0D6] bg-[#FFFDF8] p-3.5 sm:p-4">
@@ -452,7 +478,7 @@ Thank you!`;
             </section>
 
             {/* Checkout Form */}
-            <form
+            <form id="checkout-form"
               onSubmit={handleCheckout}
               className="min-w-0 space-y-4 rounded-2xl border border-[#EEE8E1] bg-white p-4 shadow-[0_3px_18px_rgba(40,30,20,0.04)] sm:space-y-5 sm:p-5"
             >
@@ -556,6 +582,13 @@ Thank you!`;
                 </div>
               </div>
 
+              {/* Optional delivery note */}
+              <div>
+                <label htmlFor="orderNote" className="mb-1.5 block text-xs font-bold text-[#554D47]">Order Note (Optional)</label>
+                <textarea id="orderNote" value={orderNote} onChange={(event) => setOrderNote(event.target.value.slice(0, 240))} maxLength={240} rows={2} placeholder="Any delivery instructions? (e.g. call before arrival)" className="min-h-20 w-full resize-y rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm" />
+                <p className="mt-1 text-right text-[10px] text-[#A09890]">{orderNote.length}/240</p>
+              </div>
+
               {/* Payment Preference */}
               <div>
                 <p className="mb-2.5 text-xs font-bold text-[#554D47]">
@@ -656,6 +689,13 @@ Thank you!`;
               </p>
             </form>
           </aside>
+        </div>
+
+        <div className="fixed inset-x-0 bottom-[calc(66px+env(safe-area-inset-bottom))] z-30 border-t border-[#E9E0D6] bg-white/95 px-4 py-2.5 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
+          <button type="submit" form="checkout-form" className="flex min-h-11 w-full items-center justify-between rounded-xl bg-[#138047] px-4 text-sm font-extrabold text-white shadow-md shadow-green-900/10 transition hover:bg-[#0E6B3A] active:scale-[0.99]">
+            <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Order on WhatsApp</span>
+            <span>{formatPrice(subtotal)}</span>
+          </button>
         </div>
 
         {/* Bottom Information */}
