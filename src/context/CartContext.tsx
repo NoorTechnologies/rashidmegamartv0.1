@@ -33,6 +33,7 @@ interface CartContextType {
 }
 
 const STORAGE_KEY = "rashid-mega-mart-cart";
+const MAX_CART_QUANTITY = 99;
 const CART_CHANGE_EVENT = "rashid-mega-mart-cart-change";
 
 const EMPTY_CART: CartItem[] = [];
@@ -59,6 +60,7 @@ function isValidCartItem(item: unknown): item is CartItem {
     typeof value.image === "string" &&
     Number.isSafeInteger(value.quantity) &&
     (value.quantity as number) > 0 &&
+    (value.quantity as number) <= MAX_CART_QUANTITY &&
     (value.brand === undefined || typeof value.brand === "string") &&
     (value.packSize === undefined || typeof value.packSize === "string")
   );
@@ -190,7 +192,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                   ...item,
                   quantity: Math.min(
                     item.quantity + 1,
-                    Number.MAX_SAFE_INTEGER
+                    MAX_CART_QUANTITY
                   ),
                 }
               : item
@@ -211,7 +213,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
               ...item,
               quantity: Math.min(
                 item.quantity + 1,
-                Number.MAX_SAFE_INTEGER
+                MAX_CART_QUANTITY
               ),
             }
           : item
