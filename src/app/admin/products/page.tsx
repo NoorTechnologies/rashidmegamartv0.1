@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { Plus, Search, Pencil, Package, Trash2, Save, ShoppingBag, UploadCloud } from "lucide-react";
+import { Plus, Search, Pencil, Package, Trash2, ShoppingBag, UploadCloud } from "lucide-react";
 import type { Product } from "@/data/products";
 import { categories } from "@/data/categories";
 
