@@ -235,7 +235,7 @@ export default function KitCard({ kit }: KitCardProps) {
         <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
           <Link
             href={`/kits/${kit.id}`}
-            className="inline-flex min-h-9 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg border border-[#D4A84F]/50 bg-white px-1.5 text-[10px] font-extrabold text-[#A83250] transition hover:bg-[#FFF9F0] active:scale-95 sm:min-h-10 sm:rounded-xl sm:text-xs"
+            className="rmm-btn-secondary inline-flex min-h-9 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg px-1.5 text-[10px] font-extrabold sm:min-h-10 sm:rounded-xl sm:text-xs"
           >
             View Kit
             <ArrowUpRight size={12} />
@@ -254,7 +254,7 @@ export default function KitCard({ kit }: KitCardProps) {
                     ? `${kit.name}, ${cartItem.quantity} in cart`
                     : `Add ${kit.name} to cart`
             }
-            className={`inline-flex min-h-9 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg px-1.5 text-[10px] font-extrabold transition active:scale-95 disabled:cursor-not-allowed sm:min-h-10 sm:rounded-xl sm:text-xs ${
+            className={`rmm-btn-primary inline-flex min-h-9 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg px-1.5 text-[10px] font-extrabold disabled:cursor-not-allowed sm:min-h-10 sm:rounded-xl sm:text-xs ${
               !kit.isAvailable || !isLoaded
                 ? "bg-gray-100 text-gray-400"
                 : cartItem
