@@ -1,0 +1,15 @@
+import Link from "next/link";
+import { Plus, Search, Pencil, Package } from "lucide-react";
+import { products } from "@/data/products";
+
+export default function AdminProductsPage() {
+  return (
+    <div className="space-y-5">
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#A47A2C]">Catalogue</p><h1 className="mt-1 text-2xl font-black text-[#800020] sm:text-3xl">Products</h1><p className="mt-1 text-sm text-[#766D72]">Review the current sample product catalogue.</p></div><button type="button" disabled className="inline-flex min-h-10 cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-[#800020] px-4 text-xs font-bold text-white opacity-60"><Plus size={15} /> Add product <span className="text-[9px]">(backend later)</span></button></div>
+      <div className="flex items-center gap-2 rounded-xl border border-[#F0E4E5] bg-white px-3 py-3 text-xs text-[#9A858B]"><Search size={15} /> Product search UI will be connected in the next frontend pass.</div>
+      <div className="overflow-hidden rounded-2xl border border-[#F0E4E5] bg-white"><div className="flex items-center justify-between border-b border-[#F5ECEE] px-4 py-4"><h2 className="text-sm font-extrabold text-[#33232A]">Current catalogue</h2><span className="rounded-full bg-[#FFF1F3] px-2.5 py-1 text-[10px] font-bold text-[#800020]">{products.length} sample products</span></div><div className="divide-y divide-[#F5ECEE]">{products.map((product) => <div key={product.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 sm:grid-cols-[minmax(0,1fr)_100px_100px_90px]"><div className="flex min-w-0 items-center gap-3"><span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#FFF7E8] text-[#A47A2C]"><Package size={18} /></span><div className="min-w-0"><p className="truncate text-xs font-bold text-[#33232A]">{product.name}</p><p className="mt-1 truncate text-[10px] text-[#9A858B]">{product.brand} · {product.category} · {product.packSize}</p></div></div><span className="hidden text-xs font-bold text-[#33232A] sm:block">₹{product.price}</span><span className="hidden text-[10px] font-semibold text-[#766D72] sm:block">{product.isAvailable ? "Available" : "Unavailable"}</span><button type="button" disabled aria-label={`Edit ${product.name}`} className="inline-flex cursor-not-allowed items-center justify-center gap-1 rounded-lg border border-[#F0E4E5] px-3 py-2 text-[10px] font-bold text-[#9A858B] opacity-60"><Pencil size={12} /> Edit</button></div>)}</div></div>
+      <p className="text-[11px] leading-5 text-[#9A858B]">Preview only: product edits are disabled until the owner’s database and secure admin access are connected. Existing storefront data remains unchanged.</p>
+      <Link href="/shop" className="inline-block text-xs font-bold text-[#800020] underline underline-offset-4">Open customer shop</Link>
+    </div>
+  );
+}
