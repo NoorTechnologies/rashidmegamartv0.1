@@ -28,6 +28,12 @@ const formatPrice = (amount: number) =>
     maximumFractionDigits: 0,
   }).format(amount);
 
+const cleanCustomerText = (value: string) =>
+  value.replace(/[\u0000-\u001F\u007F]/g, " ").replace(/\s+/g, " ").trim();
+
+const escapeWhatsAppText = (value: string) =>
+  value.replace(/([_*~`\\])/g, "\\$1");
+
 export default function CartPage() {
   const {
     items,
@@ -45,19 +51,47 @@ export default function CartPage() {
   const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "UPI">("COD");
   const [formError, setFormError] = useState("");
+  const [checkoutStatus, setCheckoutStatus] = useState("");
+
+  const orderSubtotal = items.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+  const hasValidOrder =
+    items.length > 0 &&
+    Number.isSafeInteger(totalItems) &&
+    Number.isFinite(orderSubtotal) &&
+    Number.isSafeInteger(orderSubtotal) &&
+    orderSubtotal >= 0 &&
+    items.every(
+      (item) =>
+        item.id.trim().length > 0 &&
+        item.name.trim().length > 0 &&
+        Number.isFinite(item.price) &&
+        item.price >= 0 &&
+        Number.isSafeInteger(item.quantity) &&
+        item.quantity > 0 &&
+        Number.isSafeInteger(item.price * item.quantity)
+    );
 
   const handleCheckout = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError("");
+    setCheckoutStatus("");
 
     if (items.length === 0) {
       setFormError("Your cart is empty. Please add products first.");
       return;
     }
 
-    const cleanName = customerName.trim();
-    const cleanPhone = phone.trim();
-    const cleanAddress = address.trim();
+    if (!hasValidOrder) {
+      setFormError("Your cart contains invalid product or quantity data. Please update your cart and try again.");
+      return;
+    }
+
+    const cleanName = cleanCustomerText(customerName);
+    const cleanPhone = phone.replace(/\D/g, "");
+    const cleanAddress = cleanCustomerText(address);
 
     if (cleanName.length < 2) {
       setFormError("Please enter your valid full name.");
@@ -80,10 +114,15 @@ export default function CartPage() {
     }
 
     const orderItems = items
-      .map(
-        (item, index) =>
-          `${index + 1}. ${item.name}${item.packSize ? ` (${item.packSize})` : ""}\n   Qty: ${item.quantity} x ${formatPrice(item.price)} = ${formatPrice(item.price * item.quantity)}`
-      )
+      .map((item, index) => {
+        const productName = escapeWhatsAppText(cleanCustomerText(item.name));
+        const packSize = item.packSize
+          ? ` (${escapeWhatsAppText(cleanCustomerText(item.packSize))})`
+          : "";
+
+        return `${index + 1}. ${productName}${packSize}
+   Qty: ${item.quantity} x ${formatPrice(item.price)} = ${formatPrice(item.price * item.quantity)}`;
+      })
       .join("\n\n");
 
     const message = `🛒 *NEW ORDER - RASHID MEGA MART*
@@ -98,9 +137,9 @@ ${orderItems}
 
 *Order Summary*
 Total Items: ${totalItems}
-Product Subtotal: ${formatPrice(subtotal)}
+Product Subtotal: ${formatPrice(orderSubtotal)}
 Delivery Charge: To be confirmed by store
-Estimated Amount: ${formatPrice(subtotal)} + delivery (if applicable)
+Estimated Amount: ${formatPrice(orderSubtotal)} + delivery (if applicable)
 
 Payment Preference: ${paymentMethod === "COD" ? "Cash on Delivery" : "UPI"}
 
@@ -110,7 +149,15 @@ Thank you!`;
 
     const whatsappUrl = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    const whatsappWindow = window.open(whatsappUrl, "_blank");
+
+    if (!whatsappWindow) {
+      setFormError("Your browser blocked the WhatsApp window. Please allow pop-ups for this site and try again.");
+      return;
+    }
+
+    whatsappWindow.opener = null;
+    setCheckoutStatus("WhatsApp opened with your order details. Review the message and press Send to place your enquiry.");
   };
 
   if (!isLoaded) {
@@ -442,6 +489,7 @@ Thank you!`;
                     onChange={(event) => {
                       setCustomerName(event.target.value);
                       setFormError("");
+                      setCheckoutStatus("");
                     }}
                     placeholder="Enter your full name"
                     className="min-h-12 w-full rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm"
@@ -471,6 +519,7 @@ Thank you!`;
                         event.target.value.replace(/\D/g, "").slice(0, 10)
                       );
                       setFormError("");
+                      setCheckoutStatus("");
                     }}
                     placeholder="10-digit mobile number"
                     className="min-h-12 w-full rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm"
@@ -497,6 +546,7 @@ Thank you!`;
                     onChange={(event) => {
                       setAddress(event.target.value);
                       setFormError("");
+                      setCheckoutStatus("");
                     }}
                     placeholder="House no., street, area and landmark"
                     className="min-h-24 w-full resize-y rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm"
@@ -572,7 +622,16 @@ Thank you!`;
                 )}
               </div>
 
-              {/* Validation Message */}
+              {/* Checkout feedback */}
+              {checkoutStatus && (
+                <p
+                  role="status"
+                  className="rounded-xl border border-green-100 bg-green-50 px-3 py-2.5 text-xs font-medium leading-5 text-green-700"
+                >
+                  {checkoutStatus}
+                </p>
+              )}
+
               {formError && (
                 <p
                   role="alert"
