@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Search,
   Package,
@@ -12,12 +12,14 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import KitCard from "@/components/KitCard";
-import { kits } from "@/data/kits";
+import { type GroceryKit } from "@/data/kits";
 
 type AvailabilityFilter = "all" | "available" | "unavailable";
 type SortOption = "featured" | "price-low" | "price-high" | "name";
 
 export default function KitsPage() {
+  const [kits, setKits] = useState<GroceryKit[]>([]);
+  useEffect(() => { let active = true; fetch("/api/catalog/kits").then((r) => r.json()).then((j) => { if (active && Array.isArray(j.data)) setKits(j.data as GroceryKit[]); }).catch(() => undefined); return () => { active = false; }; }, []);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<AvailabilityFilter>("all");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -32,7 +34,7 @@ export default function KitsPage() {
             .filter((category): category is string => Boolean(category))
         )
       ),
-    []
+    [kits]
   );
 
   const filteredKits = useMemo(() => {
@@ -96,7 +98,7 @@ export default function KitsPage() {
         }
       }
     });
-  }, [search, filter, selectedCategory, sortBy]);
+  }, [kits, search, filter, selectedCategory, sortBy]);
 
   const clearFilters = () => {
     setSearch("");
@@ -308,8 +310,8 @@ export default function KitsPage() {
         {/* KITS GRID */}
         {filteredKits.length > 0 ? (
           <div className="mt-4 grid grid-cols-2 gap-2.5 min-[480px]:gap-3 sm:mt-6 sm:grid-cols-3 sm:gap-5 lg:grid-cols-3 2xl:grid-cols-4">
-            {filteredKits.map((kit) => (
-              <KitCard key={kit.id} kit={kit} />
+            {filteredKits.map((kit, index) => (
+              <KitCard key={kit.id} kit={kit} eagerImage={index === 0} />
             ))}
           </div>
         ) : (

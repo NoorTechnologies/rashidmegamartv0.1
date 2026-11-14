@@ -30,6 +30,9 @@ export default function BottomNav() {
   const pathname = usePathname();
   const { totalItems } = useCart();
 
+  // The storefront navigation must never appear inside the admin area.
+  if (pathname.startsWith("/admin")) return null;
+
   const isActive = (href: string) =>
     href === "/"
       ? pathname === "/"
