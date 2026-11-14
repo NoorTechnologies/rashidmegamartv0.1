@@ -53,6 +53,14 @@ function isStoragePath(value: unknown, folder: "products" | "kits"): value is st
   return /^[a-zA-Z0-9_-]+\.(?:jpg|jpeg|png|webp|avif)$/.test(value.slice(folder.length + 1));
 }
 
+function isProductImagePath(value: unknown): value is string {
+  return (
+    isStoragePath(value, "products") ||
+    (typeof value === "string" &&
+      /^\/products\/[a-zA-Z0-9_-]+\.(?:jpg|jpeg|png|webp|avif)$/i.test(value))
+  );
+}
+
 export function validateProduct(value: unknown): ProductInput | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const input = value as Record<string, unknown>;
@@ -67,7 +75,7 @@ export function validateProduct(value: unknown): ProductInput | null {
     !isText(packSize, 60) ||
     !isMoney(price) ||
     !isOptionalMoney(oldPrice) ||
-    !isStoragePath(image, "products") ||
+    !isProductImagePath(image) ||
     !isText(description, 2000, false) ||
     !isBoolean(isFeatured) ||
     !isBoolean(isBestSeller) ||
