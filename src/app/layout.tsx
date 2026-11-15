@@ -8,6 +8,7 @@ import "./globals.css";
 
 const SITE_URL = "https://rashidmegamartv0-1.vercel.app";
 const SITE_NAME = "Rashid Mega Mart";
+const SOCIAL_SHARE_IMAGE = "/images/logo2.png";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -51,9 +52,9 @@ export const metadata: Metadata = {
       "Your trusted destination for everyday groceries, daily essentials and affordable grocery kits.",
     images: [
       {
-        url: "/images/logo2.png",
-        width: 512,
-        height: 512,
+        url: SOCIAL_SHARE_IMAGE,
+        width: 1254,
+        height: 1254,
         alt: "Rashid Mega Mart Logo",
       },
     ],
@@ -64,7 +65,12 @@ export const metadata: Metadata = {
     title: "Rashid Mega Mart | Online Grocery Shopping",
     description:
       "Shop groceries, daily essentials and affordable grocery kits at Rashid Mega Mart.",
-    images: ["/images/logo2.png"],
+    images: [
+      {
+        url: SOCIAL_SHARE_IMAGE,
+        alt: "Rashid Mega Mart Logo",
+      },
+    ],
   },
 
   formatDetection: {
@@ -86,7 +92,7 @@ const structuredData = {
   "@type": "Organization",
   name: SITE_NAME,
   url: SITE_URL,
-  logo: `${SITE_URL}/images/logo2.png`,
+  logo: `${SITE_URL}${SOCIAL_SHARE_IMAGE}`,
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+918962531603",
