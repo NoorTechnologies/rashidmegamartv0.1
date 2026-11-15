@@ -139,7 +139,7 @@ export default function ProductModal({
               </span>
             )}
 
-            {!imageError ? (
+            {product.image && !imageError ? (
               <Image
                 src={product.image}
                 alt={product.name}
@@ -151,7 +151,7 @@ export default function ProductModal({
             ) : (
               <div className="flex flex-col items-center gap-2 text-[#168447]">
                 <Package size={42} strokeWidth={1.4} />
-                <span className="text-xs text-gray-400">Image unavailable</span>
+                <span className="text-xs text-gray-400">Product photo coming soon</span>
               </div>
             )}
           </div>
