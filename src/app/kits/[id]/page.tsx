@@ -86,7 +86,7 @@ export default async function KitDetailPage({ params }: PageProps) {
   const kit = {
     id: String(row.id), name: String(row.name), subtitle: String(row.subtitle ?? ""),
     category: (row.category as {name?:string}|null)?.name ?? "",
-    image: typeof row.image === "string" ? publicImageUrl(row.image) : "",
+    image: typeof row.image === "string" && row.image.trim() ? publicImageUrl(row.image) : "",
     price: Number(row.price), oldPrice: row.old_price === null ? undefined : Number(row.old_price),
     description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),
     isAvailable: Boolean(row.is_available),
