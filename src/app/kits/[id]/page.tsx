@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 
 import { catalogPublicRequest, publicImageUrl } from "@/lib/catalog-admin";
+import { KIT_IMAGE_FALLBACK } from "@/lib/catalog-images";
 import KitDetailClient from "@/components/KitDetailClient";
 
 interface PageProps {
@@ -86,7 +87,7 @@ export default async function KitDetailPage({ params }: PageProps) {
   const kit = {
     id: String(row.id), name: String(row.name), subtitle: String(row.subtitle ?? ""),
     category: (row.category as {name?:string}|null)?.name ?? "",
-    image: typeof row.image === "string" && row.image.trim() ? publicImageUrl(row.image) : "",
+    image: typeof row.image === "string" && row.image.trim() ? publicImageUrl(row.image) : KIT_IMAGE_FALLBACK,
     price: Number(row.price), oldPrice: row.old_price === null ? undefined : Number(row.old_price),
     description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),
     isAvailable: Boolean(row.is_available),
