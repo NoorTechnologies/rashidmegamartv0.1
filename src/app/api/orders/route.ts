@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     if (!order) throw new Error("Order could not be saved.");
     try {
       await catalogRequest("order_items", {
-        method: "POST", headers: { Prefer: "return=minimal" },
+        method: "POST", headers: { Prefer: "return=representation" },
         body: JSON.stringify(lines.map((line) => ({ ...line, order_id: order.id }))),
       });
     } catch (cause) {
