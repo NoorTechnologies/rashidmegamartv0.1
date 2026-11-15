@@ -83,7 +83,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </span>
         )}
 
-        {!imageError ? (
+        {product.image && !imageError ? (
           <Image
             src={product.image}
             alt={product.name}
@@ -96,7 +96,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="flex h-full flex-col items-center justify-center gap-2 text-[#A83250]">
             <Package size={34} strokeWidth={1.4} />
             <span className="text-[9px] font-medium text-[#76665C]">
-              Image unavailable
+              Product photo coming soon
             </span>
           </div>
         )}
