@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 
 import { catalogPublicRequest, publicImageUrl } from "@/lib/catalog-admin";
+import { getGroceryItemImageFallback, KIT_IMAGE_FALLBACK } from "@/lib/catalog-images";
 import KitDetailClient from "@/components/KitDetailClient";
 
 interface PageProps {
@@ -86,7 +87,7 @@ export default async function KitDetailPage({ params }: PageProps) {
   const kit = {
     id: String(row.id), name: String(row.name), subtitle: String(row.subtitle ?? ""),
     category: (row.category as {name?:string}|null)?.name ?? "",
-    image: typeof row.image === "string" && row.image.trim() ? publicImageUrl(row.image) : "",
+    image: typeof row.image === "string" && row.image.trim() ? publicImageUrl(row.image) : KIT_IMAGE_FALLBACK,
     price: Number(row.price), oldPrice: row.old_price === null ? undefined : Number(row.old_price),
     description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),
     isAvailable: Boolean(row.is_available),
@@ -327,7 +328,6 @@ export default async function KitDetailPage({ params }: PageProps) {
           <div className="p-4 sm:p-7">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
               {kit.items.map((item, index) => {
-                const Icon = getGroceryIcon(item);
                 const parts = item.match(/^(.+?)\s*[-–]\s*(.+)$/);
 
                 const productName = parts ? parts[1].trim() : item;
@@ -341,8 +341,14 @@ export default async function KitDetailPage({ params }: PageProps) {
                     <div className="absolute -right-7 -top-7 size-20 rounded-full bg-[#F8E8ED]/60 transition-transform duration-300 group-hover:scale-150" />
 
                     <div className="relative">
-                      <div className="flex size-12 items-center justify-center rounded-2xl border border-[#F0DDE2] bg-[#F8E8ED] text-[#A83250] transition-all duration-300 group-hover:bg-[#A83250] group-hover:text-white sm:size-14">
-                        <Icon size={25} strokeWidth={1.8} />
+                      <div className="relative size-16 overflow-hidden rounded-2xl border border-[#F0DDE2] bg-white sm:size-20">
+                        <Image
+                          src={getGroceryItemImageFallback(productName)}
+                          alt={productName}
+                          fill
+                          sizes="80px"
+                          className="object-contain p-1.5"
+                        />
                       </div>
 
                       <h3 className="mt-4 break-words text-sm font-extrabold leading-5 text-[#30251F] sm:text-base">

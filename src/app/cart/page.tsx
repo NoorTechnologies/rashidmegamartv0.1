@@ -308,9 +308,9 @@ Thank you!`;
                 >
                   {/* Product Image */}
                   <div className="relative size-[78px] shrink-0 overflow-hidden rounded-xl bg-[#F8F6F2] min-[375px]:size-[88px] sm:size-24">
-                    {item.image ? (
+                    {item.image || "/categories/cerels.webp" ? (
                       <Image
-                        src={item.image}
+                        src={item.image || "/categories/cerels.webp"}
                         alt={item.name}
                         fill
                         unoptimized

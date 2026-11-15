@@ -35,6 +35,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   } = useCart();
 
   const [imageError, setImageError] = useState(false);
+  const imageSrc = product.image || "/categories/cerels.webp";
 
   const cartItem = items.find((item) => item.id === product.id);
 
@@ -83,9 +84,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           </span>
         )}
 
-        {product.image && !imageError ? (
+        {!imageError ? (
           <Image
-            src={product.image}
+            src={imageSrc}
             alt={product.name}
             fill
             sizes="(max-width: 639px) 46vw, (max-width: 1023px) 30vw, 220px"

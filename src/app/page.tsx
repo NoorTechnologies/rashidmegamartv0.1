@@ -19,6 +19,7 @@ import KitCard from "@/components/KitCard";
 
 import { categories } from "@/data/categories";
 import { catalogPublicRequest, catalogImageUrl, publicImageUrl } from "@/lib/catalog-admin";
+import { getCategoryImageFallback, KIT_IMAGE_FALLBACK } from "@/lib/catalog-images";
 
 export default async function HomePage() {
   const [productRows, kitRows] = await Promise.all([
@@ -29,7 +30,7 @@ export default async function HomePage() {
     id: String(row.id), name: String(row.name), brand: String(row.brand), category: "",
     packSize: String(row.pack_size), price: Number(row.price),
     oldPrice: row.old_price === null ? undefined : Number(row.old_price),
-    image: typeof row.image === "string" ? catalogImageUrl(row.image) : "",
+    image: typeof row.image === "string" && row.image.trim() ? catalogImageUrl(row.image) : getCategoryImageFallback(String(row.category_id)),
     description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),
     isBestSeller: Boolean(row.is_best_seller), isAvailable: Boolean(row.is_available),
     stock: typeof row.stock === "number" ? row.stock : 0,
@@ -37,7 +38,7 @@ export default async function HomePage() {
   const featuredKits = kitRows.map((row) => ({
     id: String(row.id), name: String(row.name), subtitle: String(row.subtitle ?? ""),
     category: (row.category as {name?:string}|null)?.name ?? "",
-    image: typeof row.image === "string" && row.image.trim() ? publicImageUrl(row.image) : "",
+    image: typeof row.image === "string" && row.image.trim() ? publicImageUrl(row.image) : KIT_IMAGE_FALLBACK,
     price: Number(row.price), oldPrice: row.old_price === null ? undefined : Number(row.old_price),
     discount: typeof row.discount === "string" ? row.discount : undefined,
     description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),

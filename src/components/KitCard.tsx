@@ -15,7 +15,7 @@ import {
 
 import { useCart } from "@/context/CartContext";
 import type { GroceryKit } from "@/data/kits";
-import { products } from "@/data/products";
+import { getGroceryItemImageFallback, KIT_IMAGE_FALLBACK } from "@/lib/catalog-images";
 
 interface KitCardProps {
   kit: GroceryKit;
@@ -29,35 +29,14 @@ const formatPrice = (price: number) =>
     maximumFractionDigits: 0,
   }).format(price);
 
-const getProductImage = (item: string) => {
-  const value = item.toLowerCase();
-
-  const matches: { keywords: string[]; productId: string }[] = [
-    { keywords: ["rice"], productId: "rice-001" },
-    { keywords: ["atta"], productId: "atta-001" },
-    { keywords: ["cooking oil", "oil"], productId: "oil-001" },
-    { keywords: ["sugar"], productId: "sugar-001" },
-    { keywords: ["toor dal"], productId: "dal-001" },
-    { keywords: ["tea"], productId: "tea-001" },
-    { keywords: ["salt"], productId: "salt-001" },
-  ];
-
-  const match = matches.find(({ keywords }) =>
-    keywords.some((keyword) => value.startsWith(keyword))
-  );
-
-  if (!match) return null;
-
-  return (
-    products.find((product) => product.id === match.productId)?.image ?? null
-  );
-};
+const getProductImage = (item: string) => getGroceryItemImageFallback(item);
 
 export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
   const { addToCart, items, isLoaded } = useCart();
   const [imageError, setImageError] = useState(false);
 
   const cartItem = items.find((item) => item.id === kit.id);
+  const kitImage = kit.image || KIT_IMAGE_FALLBACK;
 
   const discount =
     kit.oldPrice && kit.oldPrice > kit.price
@@ -106,9 +85,9 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
             {kit.items.length} Items
           </span>
 
-          {!imageError && kit.image ? (
+          {!imageError ? (
             <Image
-              src={kit.image}
+              src={kitImage}
               alt={kit.name}
               fill
               loading={eagerImage ? "eager" : "lazy"}

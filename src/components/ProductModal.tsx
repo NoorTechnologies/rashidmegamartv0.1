@@ -24,7 +24,8 @@ export default function ProductModal({
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const cartItem = items.find((item) => item.id === product?.id);
-  const imageError = Boolean(product?.image && failedImage === product.image);
+  const imageSrc = product?.image || "/categories/cerels.webp";
+  const imageError = failedImage === imageSrc;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -139,13 +140,13 @@ export default function ProductModal({
               </span>
             )}
 
-            {product.image && !imageError ? (
+            {!imageError ? (
               <Image
-                src={product.image}
+                src={imageSrc}
                 alt={product.name}
                 fill
                 sizes="(max-width: 640px) 100vw, 512px"
-                onError={() => setFailedImage(product.image)}
+                onError={() => setFailedImage(imageSrc)}
                 className="object-contain p-6 sm:p-8"
               />
             ) : (
