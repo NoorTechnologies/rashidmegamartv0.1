@@ -1,18 +1,8 @@
 import { NextResponse } from "next/server";
 import { catalogPublicRequest, catalogImageUrl } from "@/lib/catalog-admin";
+import { getCategoryImageFallback } from "@/lib/catalog-images";
 
 export const runtime = "nodejs";
-
-const CATEGORY_IMAGE_FALLBACKS: Record<string, string> = {
-  "rice-grains": "/categories/cerels.webp",
-  "atta-flour": "/categories/atta.webp",
-  "pulses-dal": "/categories/cerels.webp",
-  "oil-ghee": "/categories/oil.webp",
-  "spices-masala": "/categories/practcle.webp",
-  dairy: "/categories/dairy.webp",
-  "tea-coffee": "/categories/practcle.webp",
-  "personal-care": "/categories/chips.webp",
-};
 
 export async function GET() {
   try {
@@ -28,7 +18,7 @@ export async function GET() {
 
       const image =
         storedImage ||
-        CATEGORY_IMAGE_FALLBACKS[String(row.category_id)] ||
+        getCategoryImageFallback(String(row.category_id)) ||
         "/categories/cerels.webp";
 
       return {
