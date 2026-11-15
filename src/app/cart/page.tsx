@@ -19,15 +19,7 @@ import {
 } from "lucide-react";
 
 import { useCart } from "@/context/CartContext";
-import { products } from "@/data/products";
 import { kits } from "@/data/kits";
-
-const STORE_WHATSAPP_NUMBER = "918962531603";
-const MAX_ORDER_QUANTITY = 99;
-
-const catalogById = new Map(
-  [...products, ...kits].map((item) => [item.id, item])
-);
 
 const formatPrice = (amount: number) =>
   new Intl.NumberFormat("en-IN", {
@@ -70,118 +62,55 @@ export default function CartPage() {
     setRemovedItem(null);
   };
 
-  const handleCheckout = (event: FormEvent<HTMLFormElement>) => {
+  const handleCheckout = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError("");
 
-    if (items.length === 0) {
+    if (!items.length) {
       setFormError("Your cart is empty. Please add products first.");
       return;
     }
 
-    const seenIds = new Set<string>();
-    const invalidCartItem = items.find((item) => {
-      const catalogItem = catalogById.get(item.id);
-      const isDuplicate = seenIds.has(item.id);
-      seenIds.add(item.id);
-
-      return (
-        !catalogItem ||
-        !catalogItem.isAvailable ||
-        isDuplicate ||
-        item.name !== catalogItem.name ||
-        item.price !== catalogItem.price ||
-        !Number.isSafeInteger(item.quantity) ||
-        item.quantity < 1 ||
-        item.quantity > MAX_ORDER_QUANTITY
-      );
-    });
-
-    if (invalidCartItem) {
-      setFormError(
-        "Your cart has an unavailable item or outdated details. Remove it and add it again before checkout."
-      );
-      return;
-    }
-
-    const safeTotalItems = items.reduce((total, item) => total + item.quantity, 0);
-    const orderSubtotal = items.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
-
-    if (
-      !Number.isSafeInteger(safeTotalItems) ||
-      !Number.isSafeInteger(orderSubtotal) ||
-      orderSubtotal < 0
-    ) {
-      setFormError("The order total is invalid. Please review your cart.");
-      return;
-    }
-
-    const cleanName = customerName.trim().replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ");
+    const cleanName = customerName.trim();
     const cleanPhone = phone.trim();
-    const cleanAddress = address.trim().replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ");
-    const cleanOrderNote = orderNote.trim().replace(/[\x00-\x1F\x7F]/g, " ").replace(/\s+/g, " ");
+    const cleanAddress = address.trim();
+    if (cleanName.length < 2) return setFormError("Please enter your valid full name.");
+    if (!/^[6-9]\d{9}$/.test(cleanPhone)) return setFormError("Please enter a valid 10-digit mobile number.");
+    if (cleanAddress.length < 10) return setFormError("Please enter a complete delivery address.");
 
-    if (cleanName.length < 2) {
-      setFormError("Please enter your valid full name.");
-      return;
+    const checkoutWindow = window.open("about:blank", "_blank");
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerName: cleanName,
+          phone: cleanPhone,
+          address: cleanAddress,
+          paymentMethod,
+          note: orderNote.trim(),
+          items: items.map((item) => ({
+            id: item.id,
+            type: kits.some((kit) => kit.id === item.id) ? "kit" : "product",
+            quantity: item.quantity,
+          })),
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success || typeof result.whatsappUrl !== "string") {
+        throw new Error(result.message || "Unable to place your order. Please try again.");
+      }
+
+      clearCart();
+      if (checkoutWindow) {
+        checkoutWindow.location.href = result.whatsappUrl;
+      } else {
+        window.location.href = result.whatsappUrl;
+      }
+    } catch (cause) {
+      checkoutWindow?.close();
+      setFormError(cause instanceof Error ? cause.message : "Unable to place your order. Please try again.");
     }
-
-    if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
-      setFormError("Please enter a valid 10-digit mobile number.");
-      return;
-    }
-
-    if (cleanAddress.length < 10) {
-      setFormError("Please enter a complete delivery address.");
-      return;
-    }
-
-    if (!/^\d{10,15}$/.test(STORE_WHATSAPP_NUMBER)) {
-      setFormError("Store WhatsApp number is not configured correctly.");
-      return;
-    }
-
-    const orderItems = items
-      .map((item, index) => {
-        const catalogItem = catalogById.get(item.id)!;
-        const packSize =
-          "packSize" in catalogItem
-            ? catalogItem.packSize
-            : `Grocery Kit - ${catalogItem.items.length} Listed Items`;
-
-        return `${index + 1}. ${catalogItem.name}${packSize ? ` (${packSize})` : ""}\n   Qty: ${item.quantity} x ${formatPrice(catalogItem.price)} = ${formatPrice(catalogItem.price * item.quantity)}`;
-      })
-      .join("\n\n");
-
-    const message = `🛒 *NEW ORDER - RASHID MEGA MART*
-
-*Customer Details*
-Name: ${cleanName}
-Phone: ${cleanPhone}
-Address: ${cleanAddress}
-${cleanOrderNote ? `Order Note: ${cleanOrderNote}\n` : ""}
-
-*Order Items*
-${orderItems}
-
-*Order Summary*
-Total Items: ${safeTotalItems}
-Product Subtotal: ${formatPrice(orderSubtotal)}
-Delivery Charge: To be confirmed by store
-Estimated Amount: ${formatPrice(orderSubtotal)} + delivery (if applicable)
-
-Payment Preference: ${paymentMethod === "COD" ? "Cash on Delivery" : "UPI"}
-
-Please confirm product availability, delivery charges and final payable amount.
-
-Thank you!`;
-
-    const whatsappUrl = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-
-    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
   if (!isLoaded) {
