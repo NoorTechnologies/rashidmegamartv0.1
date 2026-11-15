@@ -19,7 +19,27 @@ type SortOption = "featured" | "price-low" | "price-high" | "name";
 
 export default function KitsPage() {
   const [kits, setKits] = useState<GroceryKit[]>([]);
-  useEffect(() => { let active = true; fetch("/api/catalog/kits").then((r) => r.json()).then((j) => { if (active && Array.isArray(j.data)) setKits(j.data as GroceryKit[]); }).catch(() => undefined); return () => { active = false; }; }, []);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/catalog/kits")
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Unable to load kits");
+        return response.json();
+      })
+      .then((json) => {
+        if (active && Array.isArray(json.data)) setKits(json.data as GroceryKit[]);
+      })
+      .catch(() => {
+        if (active) setLoadError(true);
+      })
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
+    return () => { active = false; };
+  }, []);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<AvailabilityFilter>("all");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -321,11 +341,11 @@ export default function KitsPage() {
             </div>
 
             <h3 className="mt-4 text-base font-extrabold text-[#202B24] sm:text-lg">
-              No kits found
+              {isLoading ? "Loading grocery kits..." : loadError ? "Kits could not be loaded" : "No kits found"}
             </h3>
 
             <p className="mt-2 text-xs text-[#68756B] sm:text-sm">
-              Try another search or change the filters.
+              {isLoading ? "Fetching the latest kits and prices." : loadError ? "Please refresh the page and try again." : "Try another search or change the filters."}
             </p>
 
             <button
