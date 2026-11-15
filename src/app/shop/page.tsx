@@ -24,7 +24,27 @@ function ShopPageContent() {
   const initialCategory = categories.find((category) => category.id === categorySlug)?.name ?? "All";
 
   const [products, setProducts] = useState<Product[]>([]);
-  useEffect(() => { let active = true; fetch("/api/catalog/products").then((r) => r.json()).then((j) => { if (active && Array.isArray(j.data)) setProducts(j.data as Product[]); }).catch(() => undefined); return () => { active = false; }; }, []);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/catalog/products")
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Unable to load products");
+        return response.json();
+      })
+      .then((json) => {
+        if (active && Array.isArray(json.data)) setProducts(json.data as Product[]);
+      })
+      .catch(() => {
+        if (active) setLoadError(true);
+      })
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
+    return () => { active = false; };
+  }, []);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [sortBy, setSortBy] = useState<SortOption>("featured");
@@ -119,8 +139,8 @@ function ShopPageContent() {
         ) : (
           <div className="mt-5 rounded-xl border border-[#E5E7EB] bg-white px-4 py-8 text-center shadow-sm sm:py-10">
             <ShoppingBag size={30} className="mx-auto text-[#D4A84F]" />
-            <h3 className="mt-3 text-sm font-extrabold text-[#171717] sm:text-base">No products found</h3>
-            <p className="mt-1 text-[11px] text-[#6A7282] sm:text-xs">Try another search or category.</p>
+            <h3 className="mt-3 text-sm font-extrabold text-[#171717] sm:text-base">{isLoading ? "Loading groceries..." : loadError ? "Products could not be loaded" : "No products found"}</h3>
+            <p className="mt-1 text-[11px] text-[#6A7282] sm:text-xs">{isLoading ? "Fetching the latest products and prices." : loadError ? "Please refresh the page and try again." : "Try another search or category."}</p>
             <button type="button" onClick={clearFilters} className="rmm-button-primary mt-4 min-h-9 rounded-lg px-5 py-2 text-xs">Clear Filters</button>
           </div>
         )}
