@@ -37,7 +37,7 @@ export default async function HomePage() {
   const featuredKits = kitRows.map((row) => ({
     id: String(row.id), name: String(row.name), subtitle: String(row.subtitle ?? ""),
     category: (row.category as {name?:string}|null)?.name ?? "",
-    image: typeof row.image === "string" ? publicImageUrl(row.image) : "",
+    image: typeof row.image === "string" && row.image.trim() ? publicImageUrl(row.image) : "",
     price: Number(row.price), oldPrice: row.old_price === null ? undefined : Number(row.old_price),
     discount: typeof row.discount === "string" ? row.discount : undefined,
     description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),
