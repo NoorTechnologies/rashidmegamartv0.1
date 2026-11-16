@@ -65,4 +65,3 @@ export const categories: Category[] = [
     href: "/shop?category=personal-care",
   },
 ];
- 
