@@ -26,18 +26,6 @@ export default async function HomePage() {
   const bestSellingProducts = products
     .filter((product) => product.isAvailable && product.isBestSeller)
     .slice(0, 8);
-  const featuredKits = kitRows.map((row) => ({
-    id: String(row.id), name: String(row.name), subtitle: String(row.subtitle ?? ""),
-    category: (row.category as {name?:string}|null)?.name ?? "",
-    image: typeof row.image === "string" && row.image.trim() ? publicImageUrl(row.image) : KIT_IMAGE_FALLBACK,
-    price: Number(row.price), oldPrice: row.old_price === null ? undefined : Number(row.old_price),
-    discount: typeof row.discount === "string" ? row.discount : undefined,
-    description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),
-    isAvailable: Boolean(row.is_available),
-    items: ((row.items as {item_name:string;quantity:string|null;sort_order:number}[]) ?? [])
-      .sort((a,b)=>a.sort_order-b.sort_order)
-      .map((item)=>item.quantity ? item.item_name + " - " + item.quantity : item.item_name),
-  }));
 
   return (
     <main className="min-h-screen w-full overflow-x-clip bg-[#FFF9D8]/30">
