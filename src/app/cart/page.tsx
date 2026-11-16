@@ -81,7 +81,7 @@ export default function CartPage() {
       setFormError("Please enter your valid full name.");
       return;
     }
-    if (!/^[6-9]\\d{9}$/.test(cleanPhone)) {
+    if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
       setFormError("Please enter a valid 10-digit mobile number.");
       return;
     }
@@ -163,12 +163,12 @@ export default function CartPage() {
         .map((line) =>
           line.index +
           ". " + line.name + " [" + line.type + "]" +
-          (line.detail ? "\\n   " + line.detail : "") +
-          "\\n   Qty: " + line.quantity +
+          (line.detail ? "\n   " + line.detail : "") +
+          "\n   Qty: " + line.quantity +
           " × " + formatPrice(line.unitPrice) +
           " = *" + formatPrice(line.lineTotal) + "*"
         )
-        .join("\\n\\n");
+        .join("\n\n");
 
       const message = [
         "🛒 *Rashid Mega Mart — New Order*",
@@ -187,7 +187,7 @@ export default function CartPage() {
         cleanNote ? "Order note: " + cleanNote : "",
         "",
         "Please confirm item availability, delivery charges and final payable amount.",
-      ].filter(Boolean).join("\\n");
+      ].filter(Boolean).join("\n");
 
       const whatsappUrl =
         "https://wa.me/918962531603?text=" + encodeURIComponent(message);
