@@ -18,23 +18,15 @@ import ProductCard from "@/components/ProductCard";
 import KitCard from "@/components/KitCard";
 
 import { categories } from "@/data/categories";
-import { catalogPublicRequest, catalogImageUrl, publicImageUrl } from "@/lib/catalog-admin";
-import { getCategoryImageFallback, KIT_IMAGE_FALLBACK } from "@/lib/catalog-images";
+import { catalogPublicRequest, publicImageUrl } from "@/lib/catalog-admin";
+import { KIT_IMAGE_FALLBACK } from "@/lib/catalog-images";
+import { products } from "@/data/products";
 
 export default async function HomePage() {
-  const [productRows, kitRows] = await Promise.all([
-    catalogPublicRequest<Record<string, unknown>[]>("products?select=id,name,brand,category_id,pack_size,price,old_price,image,description,is_featured,is_best_seller,is_available,stock&is_available=eq.true&is_best_seller=eq.true&order=created_at.desc&limit=8").catch(() => []),
-    catalogPublicRequest<Record<string, unknown>[]>("kits?select=id,name,subtitle,category_id,image,price,old_price,discount,description,is_featured,is_available,category:categories(name),items:kit_items(item_name,quantity,sort_order)&is_available=eq.true&is_featured=eq.true&order=created_at.desc&limit=4").catch(() => []),
-  ]);
-  const bestSellingProducts = productRows.map((row) => ({
-    id: String(row.id), name: String(row.name), brand: String(row.brand), category: "",
-    packSize: String(row.pack_size), price: Number(row.price),
-    oldPrice: row.old_price === null ? undefined : Number(row.old_price),
-    image: typeof row.image === "string" && row.image.trim() ? catalogImageUrl(row.image) : getCategoryImageFallback(String(row.category_id)),
-    description: String(row.description ?? ""), isFeatured: Boolean(row.is_featured),
-    isBestSeller: Boolean(row.is_best_seller), isAvailable: Boolean(row.is_available),
-    stock: typeof row.stock === "number" ? row.stock : 0,
-  }));
+  const kitRows = await catalogPublicRequest<Record<string, unknown>[]>("kits?select=id,name,subtitle,category_id,image,price,old_price,discount,description,is_featured,is_available,category:categories(name),items:kit_items(item_name,quantity,sort_order)&is_available=eq.true&is_featured=eq.true&order=created_at.desc&limit=4").catch(() => []);
+  const bestSellingProducts = products
+    .filter((product) => product.isAvailable && product.isBestSeller)
+    .slice(0, 8);
   const featuredKits = kitRows.map((row) => ({
     id: String(row.id), name: String(row.name), subtitle: String(row.subtitle ?? ""),
     category: (row.category as {name?:string}|null)?.name ?? "",
