@@ -65,6 +65,4 @@ export const categories: Category[] = [
     href: "/shop?category=personal-care",
   },
 ];
-
-export const getCategoryById = (id: string) =>
-  categories.find((category) => category.id === id);
+ 
