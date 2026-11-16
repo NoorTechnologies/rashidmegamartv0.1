@@ -10,10 +10,6 @@ const CATEGORY_IMAGE_FALLBACKS: Record<string, string> = {
   "personal-care": "/categories/chips.webp",
 };
 
-export function getCategoryImageFallback(categoryId?: string | null): string {
-  return (categoryId && CATEGORY_IMAGE_FALLBACKS[categoryId]) || "/categories/cerels.webp";
-}
-
 export function getGroceryItemImageFallback(itemName: string): string {
   const value = itemName.toLowerCase();
   if (/atta|flour|wheat|maida|besan|suji/.test(value)) return "/categories/atta.webp";
