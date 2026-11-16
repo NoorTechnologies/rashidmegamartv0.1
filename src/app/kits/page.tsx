@@ -12,14 +12,13 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import KitCard from "@/components/KitCard";
-import { type GroceryKit } from "@/data/kits";
+import { kits as allKits, type GroceryKit } from "@/data/kits";
 
 type AvailabilityFilter = "all" | "available" | "unavailable";
 type SortOption = "featured" | "price-low" | "price-high" | "name";
 
 export default function KitsPage() {
-  const [kits, setKits] = useState<GroceryKit[]>([]);
-  useEffect(() => { let active = true; fetch("/api/catalog/kits").then((r) => r.json()).then((j) => { if (active && Array.isArray(j.data)) setKits(j.data as GroceryKit[]); }).catch(() => undefined); return () => { active = false; }; }, []);
+  const kits = allKits;
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<AvailabilityFilter>("all");
   const [selectedCategory, setSelectedCategory] = useState("All");
