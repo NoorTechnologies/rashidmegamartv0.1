@@ -268,5 +268,4 @@ export const kits: GroceryKit[] = [
   }
 ];
 
-export const getFeaturedKits = () => kits.filter((kit) => kit.isFeatured && kit.isAvailable);
 export const getKitById = (id: string) => kits.find((kit) => kit.id === id);

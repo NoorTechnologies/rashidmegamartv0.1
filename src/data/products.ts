@@ -2528,11 +2528,3 @@ export const products: Product[] = [
   }
 ];
 
-export const getProductById = (id: string) =>
-  products.find((product) => product.id === id);
-
-export const getFeaturedProducts = () =>
-  products.filter((product) => product.isFeatured && product.isAvailable);
-
-export const getBestSellingProducts = () =>
-  products.filter((product) => product.isBestSeller && product.isAvailable);
