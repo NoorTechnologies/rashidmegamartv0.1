@@ -18,12 +18,11 @@ import ProductCard from "@/components/ProductCard";
 import KitCard from "@/components/KitCard";
 
 import { categories } from "@/data/categories";
-import { catalogPublicRequest, publicImageUrl } from "@/lib/catalog-admin";
-import { KIT_IMAGE_FALLBACK } from "@/lib/catalog-images";
+import { kits } from "@/data/kits";
 import { products } from "@/data/products";
 
 export default async function HomePage() {
-  const kitRows = await catalogPublicRequest<Record<string, unknown>[]>("kits?select=id,name,subtitle,category_id,image,price,old_price,discount,description,is_featured,is_available,category:categories(name),items:kit_items(item_name,quantity,sort_order)&is_available=eq.true&is_featured=eq.true&order=created_at.desc&limit=4").catch(() => []);
+  const featuredKits = kits.filter((kit) => kit.isAvailable && kit.isFeatured).slice(0, 4);
   const bestSellingProducts = products
     .filter((product) => product.isAvailable && product.isBestSeller)
     .slice(0, 8);
