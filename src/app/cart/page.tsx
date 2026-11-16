@@ -20,6 +20,7 @@ import {
 
 import { useCart } from "@/context/CartContext";
 import { kits } from "@/data/kits";
+import { products } from "@/data/products";
 
 const formatPrice = (amount: number) =>
   new Intl.NumberFormat("en-IN", {
@@ -62,7 +63,7 @@ export default function CartPage() {
     setRemovedItem(null);
   };
 
-  const handleCheckout = async (event: FormEvent<HTMLFormElement>) => {
+  const handleCheckout = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError("");
 
@@ -74,42 +75,131 @@ export default function CartPage() {
     const cleanName = customerName.trim();
     const cleanPhone = phone.trim();
     const cleanAddress = address.trim();
-    if (cleanName.length < 2) return setFormError("Please enter your valid full name.");
-    if (!/^[6-9]\d{9}$/.test(cleanPhone)) return setFormError("Please enter a valid 10-digit mobile number.");
-    if (cleanAddress.length < 10) return setFormError("Please enter a complete delivery address.");
+    const cleanNote = orderNote.trim();
 
-    const checkoutWindow = window.open("about:blank", "_blank");
+    if (cleanName.length < 2) {
+      setFormError("Please enter your valid full name.");
+      return;
+    }
+    if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+      setFormError("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+    if (cleanAddress.length < 10) {
+      setFormError("Please enter a complete delivery address.");
+      return;
+    }
+    if (items.length > 30) {
+      setFormError("Please keep your order to 30 different items or fewer.");
+      return;
+    }
+
     try {
-      const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          customerName: cleanName,
-          phone: cleanPhone,
-          address: cleanAddress,
-          paymentMethod,
-          note: orderNote.trim(),
-          items: items.map((item) => ({
-            id: item.id,
-            type: kits.some((kit) => kit.id === item.id) ? "kit" : "product",
-            quantity: item.quantity,
-          })),
-        }),
+      const orderLines = items.map((cartItem, index) => {
+        if (
+          !Number.isSafeInteger(cartItem.quantity) ||
+          cartItem.quantity < 1 ||
+          cartItem.quantity > 99
+        ) {
+          throw new Error("One of the cart quantities is invalid. Please update your cart.");
+        }
+
+        const product = products.find((entry) => entry.id === cartItem.id);
+        const kit = kits.find((entry) => entry.id === cartItem.id);
+
+        if (product && kit) {
+          throw new Error("A catalogue item has a duplicate ID. Please contact the store.");
+        }
+
+        if (product) {
+          if (!product.isAvailable) {
+            throw new Error(product.name + " is currently unavailable.");
+          }
+          if (
+            typeof product.stock === "number" &&
+            product.stock < cartItem.quantity
+          ) {
+            throw new Error("Only " + product.stock + " unit(s) of " + product.name + " are listed in stock.");
+          }
+          return {
+            index: index + 1,
+            type: "Product",
+            name: product.name,
+            detail: [product.brand, product.packSize].filter(Boolean).join(" · "),
+            quantity: cartItem.quantity,
+            unitPrice: product.price,
+            lineTotal: product.price * cartItem.quantity,
+          };
+        }
+
+        if (kit) {
+          if (!kit.isAvailable) {
+            throw new Error(kit.name + " is currently unavailable.");
+          }
+          return {
+            index: index + 1,
+            type: "Grocery Kit",
+            name: kit.name,
+            detail: kit.subtitle,
+            quantity: cartItem.quantity,
+            unitPrice: kit.price,
+            lineTotal: kit.price * cartItem.quantity,
+          };
+        }
+
+        throw new Error("An item in your cart is no longer in the catalogue. Please remove it and try again.");
       });
-      const result = await response.json();
-      if (!response.ok || !result.success || typeof result.whatsappUrl !== "string") {
-        throw new Error(result.message || "Unable to place your order. Please try again.");
+
+      const orderSubtotal = orderLines.reduce(
+        (total, line) => total + line.lineTotal,
+        0
+      );
+
+      if (!Number.isFinite(orderSubtotal) || orderSubtotal < 0 || orderSubtotal > 10000000) {
+        throw new Error("The order total is outside the allowed range.");
       }
 
-      clearCart();
-      if (checkoutWindow) {
-        checkoutWindow.location.href = result.whatsappUrl;
-      } else {
-        window.location.href = result.whatsappUrl;
-      }
+      const itemText = orderLines
+        .map((line) =>
+          line.index +
+          ". " + line.name + " [" + line.type + "]" +
+          (line.detail ? "\n   " + line.detail : "") +
+          "\n   Qty: " + line.quantity +
+          " × " + formatPrice(line.unitPrice) +
+          " = *" + formatPrice(line.lineTotal) + "*"
+        )
+        .join("\n\n");
+
+      const message = [
+        "🛒 *Rashid Mega Mart — New Order*",
+        "",
+        "*Customer Details*",
+        "Name: " + cleanName,
+        "Mobile: " + cleanPhone,
+        "Delivery Address: " + cleanAddress,
+        "",
+        "*Order Items*",
+        itemText,
+        "",
+        "*Product Total: " + formatPrice(orderSubtotal) + "*",
+        "Delivery charges: Please confirm",
+        "Payment preference: " + (paymentMethod === "COD" ? "Cash on Delivery" : "UPI (share verified details after confirmation)"),
+        cleanNote ? "Order note: " + cleanNote : "",
+        "",
+        "Please confirm item availability, delivery charges and final payable amount.",
+      ].filter(Boolean).join("\n");
+
+      const whatsappUrl =
+        "https://wa.me/918962531603?text=" + encodeURIComponent(message);
+
+      // Navigate in the same tab from the user's submit action; no popup or API call.
+      window.location.assign(whatsappUrl);
     } catch (cause) {
-      checkoutWindow?.close();
-      setFormError(cause instanceof Error ? cause.message : "Unable to place your order. Please try again.");
+      setFormError(
+        cause instanceof Error
+          ? cause.message
+          : "Unable to prepare your WhatsApp order. Please try again."
+      );
     }
   };
 
