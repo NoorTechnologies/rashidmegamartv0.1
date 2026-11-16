@@ -1,15 +1,4 @@
 /** Shared image fallbacks for catalogue items without uploaded product photos. */
-const CATEGORY_IMAGE_FALLBACKS: Record<string, string> = {
-  "rice-grains": "/categories/cerels.webp",
-  "atta-flour": "/categories/atta.webp",
-  "pulses-dal": "/categories/cerels.webp",
-  "oil-ghee": "/categories/oil.webp",
-  "spices-masala": "/categories/practcle.webp",
-  dairy: "/categories/dairy.webp",
-  "tea-coffee": "/categories/practcle.webp",
-  "personal-care": "/categories/chips.webp",
-};
-
 export function getGroceryItemImageFallback(itemName: string): string {
   const value = itemName.toLowerCase();
   if (/atta|flour|wheat|maida|besan|suji/.test(value)) return "/categories/atta.webp";
