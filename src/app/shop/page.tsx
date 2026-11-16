@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
@@ -13,7 +13,7 @@ import {
 
 import ProductCard from "@/components/ProductCard";
 import ProductModal from "@/components/ProductModal";
-import type { Product } from "@/data/products";
+import { products, type Product } from "@/data/products";
 import { categories } from "@/data/categories";
 
 type SortOption = "featured" | "price-low" | "price-high" | "name";
@@ -23,8 +23,6 @@ function ShopPageContent() {
   const categorySlug = searchParams.get("category");
   const initialCategory = categories.find((category) => category.id === categorySlug)?.name ?? "All";
 
-  const [products, setProducts] = useState<Product[]>([]);
-  useEffect(() => { let active = true; fetch("/api/catalog/products").then((r) => r.json()).then((j) => { if (active && Array.isArray(j.data)) setProducts(j.data as Product[]); }).catch(() => undefined); return () => { active = false; }; }, []);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [sortBy, setSortBy] = useState<SortOption>("featured");
