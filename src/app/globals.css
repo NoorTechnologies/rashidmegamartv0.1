@@ -341,7 +341,6 @@ video {
 
 .rmm-button-primary:focus-visible,
 .rmm-button-secondary:focus-visible,
-.rmm-button-quiet:focus-visible,
 .rmm-quantity-button:focus-visible {
   outline: 3px solid rgba(212, 168, 79, .8);
   outline-offset: 3px;
