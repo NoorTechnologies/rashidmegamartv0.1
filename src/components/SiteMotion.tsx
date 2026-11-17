@@ -16,6 +16,8 @@ export default function SiteMotion() {
       if (cancelled) return;
 
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduceMotion) return;
+
       const lenis = new Lenis({
         autoRaf: false,
         smoothWheel: !reduceMotion,
