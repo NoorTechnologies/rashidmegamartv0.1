@@ -335,6 +335,22 @@ Object.assign(translations, {
   "Open cart,": "कार्ट खोलें,"
 });
 
+Object.assign(translations, {
+  "Grocery Quantity Calculator": "किराना मात्रा कैलकुलेटर",
+  "Item rates will be added after owner confirmation.": "मालिक की पुष्टि के बाद सामान की दरें जोड़ी जाएंगी।",
+  "rates pending": "दरें बाकी",
+  "Rate pending": "दर की पुष्टि बाकी",
+  "Customized item total": "कस्टम सामान की कुल राशि",
+  "Final calculation appears when all item rates are set.": "सभी सामान की दरें जुड़ने के बाद पूरी गणना दिखेगी।",
+  "Calculated from confirmed store rates.": "दुकान की पुष्टि की गई दरों से गणना।",
+  "Customized grocery estimate": "कस्टम किराना अनुमान",
+  "Rates pending": "दरें बाकी",
+  "Included in estimate when rates are set": "दरें जुड़ने पर गणना में शामिल",
+  "Customized item breakdown": "कस्टम सामान का हिसाब",
+  "item rates need owner confirmation": "सामान की दरों की मालिक से पुष्टि बाकी",
+  "When every grocery rate is confirmed, the calculator uses (requested quantity ÷ rate quantity) × rate price, then multiplies by kit quantity. Until then, the listed bundle total remains visible separately.": "हर किराना सामान की दर की पुष्टि होने पर कैलकुलेटर (मांगी गई मात्रा ÷ दर वाली मात्रा) × दर की कीमत से हिसाब करेगा, फिर किट की संख्या से गुणा करेगा। तब तक किट की लिस्टेड कीमत अलग दिखाई जाएगी।"
+});
+
 const hindiTranslations = { ...translations };
 
 Object.assign(translations, {
@@ -426,6 +442,19 @@ Object.assign(translations, {
   "Delivery Address (Optional)": "Delivery Address (Optional)",
   "Bas naam aur mobile number bharein. Address baad mein WhatsApp par bhi confirm kar sakte hain.": "Bas naam aur mobile number bharein. Address baad mein WhatsApp par bhi confirm kar sakte hain.",
   "Agar delivery chahiye: house no., area, landmark": "Delivery chahiye to house no., area, landmark likhein",
+  "Grocery Quantity Calculator": "Grocery Quantity Calculator",
+  "Item rates will be added after owner confirmation.": "Owner confirm karne ke baad item rates add honge.",
+  "rates pending": "rates pending",
+  "Rate pending": "Rate pending",
+  "Customized item total": "Customized items ka total",
+  "Final calculation appears when all item rates are set.": "Sabhi item rates set hone par final calculation dikhegi.",
+  "Calculated from confirmed store rates.": "Store ke confirmed rates se calculated.",
+  "Customized grocery estimate": "Customized grocery estimate",
+  "Rates pending": "Rates pending",
+  "Included in estimate when rates are set": "Rates set hone par estimate mein included",
+  "Customized item breakdown": "Customized items ka breakdown",
+  "item rates need owner confirmation": "item rates owner se confirm hone baaki",
+  "When every grocery rate is confirmed, the calculator uses (requested quantity ÷ rate quantity) × rate price, then multiplies by kit quantity. Until then, the listed bundle total remains visible separately.": "Jab sabhi grocery rates confirm ho jayenge, calculator (requested quantity ÷ rate quantity) × rate price karega, phir kit quantity se multiply karega. Tab tak listed bundle total alag dikhega."
 });
 
 function translateText(value: string, dictionary: Record<string, string> = translations) {
