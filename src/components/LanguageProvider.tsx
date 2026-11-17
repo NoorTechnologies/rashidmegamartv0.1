@@ -286,6 +286,55 @@ const translations: Record<string, string> = {
   "Hindi": "हिंदी",
 };
 
+
+Object.assign(translations, {
+  "Build your own combo": "अपना कॉम्बो बनाएं",
+  "Make This Kit Yours!": "इस किट को अपनी पसंद का बनाएं!",
+  "Choose what you need, adjust quantities and add extra groceries.": "ज़रूरत का सामान चुनें, मात्रा बदलें और अतिरिक्त किराना जोड़ें।",
+  "KIT BUNDLE OFFER": "किट बंडल ऑफर",
+  "items selected": "सामान चुने गए",
+  "Your kit items": "आपकी किट का सामान",
+  "Your changes are saved as a custom request for the store.": "आपके बदलाव दुकान के लिए कस्टम अनुरोध के रूप में सेव होंगे।",
+  "included": "शामिल",
+  "Included in this kit": "इस किट में शामिल",
+  "No original items left. Add the groceries you want below.": "पुराना कोई सामान नहीं बचा। नीचे अपनी पसंद का किराना जोड़ें।",
+  "Add more groceries": "और किराना जोड़ें",
+  "Choose from our kits or type any item you need.": "हमारी किट से चुनें या अपनी ज़रूरत का सामान लिखें।",
+  "Try: Aata, Chini, Detergent...": "जैसे: आटा, चीनी, डिटर्जेंट...",
+  "Your extra items · price to be confirmed": "आपका अतिरिक्त सामान · कीमत की पुष्टि बाकी",
+  "Smart Kit Deal": "स्मार्ट किट डील",
+  "STORE PRICE": "दुकान की कीमत",
+  "Compare the full basket before you buy.": "खरीदने से पहले पूरी टोकरी की कीमत की तुलना करें।",
+  "Ready-made kit pricing keeps everyday essentials together. Ask us on WhatsApp for your best customized final quote.": "रेडीमेड किट में रोज़मर्रा का ज़रूरी सामान एक साथ मिलता है। अपनी कस्टम किट की अंतिम कीमत WhatsApp पर पूछें।",
+  "Kit base price": "किट की मूल कीमत",
+  "per kit": "प्रति किट",
+  "Changing quantities inside the kit updates your request. The base kit price stays fixed; extra-item rates and final amount are confirmed by the owner on WhatsApp.": "किट के अंदर मात्रा बदलने से आपका अनुरोध अपडेट होगा। किट की मूल कीमत तय रहेगी; अतिरिक्त सामान की दर और अंतिम राशि मालिक WhatsApp पर बताएंगे।",
+  "Update My Customized Kit": "मेरी कस्टम किट अपडेट करें",
+  "Add Customized Kit to Cart": "कस्टम किट कार्ट में जोड़ें",
+  "Live Kit Calculator": "लाइव किट कैलकुलेटर",
+  "Kit base total": "किट की मूल कुल राशि",
+  "Extra / customized items": "अतिरिक्त / कस्टम सामान",
+  "Owner quote pending": "मालिक की कीमत की पुष्टि बाकी",
+  "Current calculated total": "अभी की गणना की गई राशि",
+  "Kit price × kit quantity": "किट की कीमत × किट की संख्या",
+  "Quantity buttons recalculate this total instantly. Editing quantities inside a kit changes your item request, not the fixed bundle price.": "मात्रा बदलते ही यह कुल राशि अपडेट होती है। किट के अंदर सामान की मात्रा बदलने से अनुरोध बदलेगा, तय बंडल कीमत नहीं।",
+  "Ek kit mein zaroori samaan, ek saath smart deal mein.": "एक किट में ज़रूरी सामान, एक साथ स्मार्ट डील में।",
+  "Alag-alag kharidne se pehle apna total compare karein. Aapke customized order ka best possible final price Rashid Mega Mart ke owner WhatsApp par confirm karenge.": "अलग-अलग खरीदने से पहले कुल कीमत की तुलना करें। आपकी कस्टम खरीदारी की अंतिम कीमत Rashid Mega Mart के मालिक WhatsApp पर बताएंगे।",
+  "Delivery charge": "डिलीवरी शुल्क",
+  "WhatsApp par confirm": "WhatsApp पर पुष्टि करें",
+  "You may also need": "आपको ये सामान भी चाहिए हो सकता है",
+  "Suggestions": "सुझाव",
+  "Suggested items are added as extras. Their prices will be confirmed by the store on WhatsApp.": "सुझाए गए सामान अतिरिक्त रूप में जुड़ेंगे। उनकी कीमत दुकान WhatsApp पर बताएगी।",
+  "Added extras · price confirmation pending": "अतिरिक्त सामान जुड़ा · कीमत की पुष्टि बाकी",
+  "Order confirmation and final charges will be shared by the store.": "ऑर्डर की पुष्टि और अंतिम शुल्क दुकान बताएगी।",
+  "Delivery details are subject to store confirmation.": "डिलीवरी की जानकारी दुकान की पुष्टि पर निर्भर है।",
+  "Order on WhatsApp": "WhatsApp पर ऑर्डर करें",
+  "Delivery Address (Optional)": "डिलीवरी का पता (ज़रूरी नहीं)",
+  "Bas naam aur mobile number bharein. Address baad mein WhatsApp par bhi confirm kar sakte hain.": "बस नाम और मोबाइल नंबर भरें। पता बाद में WhatsApp पर भी बता सकते हैं।",
+  "Agar delivery chahiye: house no., area, landmark": "डिलीवरी चाहिए तो मकान नंबर, इलाका और पहचान की जगह लिखें",
+  "Open cart,": "कार्ट खोलें,"
+});
+
 const hindiTranslations = { ...translations };
 
 Object.assign(translations, {
@@ -334,6 +383,49 @@ Object.assign(translations, {
   "SPECIAL KIT OFFER": "SPECIAL KIT OFFER",
   "items ready for checkout": "items checkout ke liye ready",
   "Grocery kits will be available soon.": "Grocery kits jald available hongi.",
+  "Build your own combo": "Apna combo banayein",
+  "Make This Kit Yours!": "Is kit ko apni pasand ka banayein!",
+  "Choose what you need, adjust quantities and add extra groceries.": "Jo chahiye chunein, quantity badlein aur extra grocery add karein.",
+  "KIT BUNDLE OFFER": "KIT BUNDLE OFFER",
+  "items selected": "items select kiye",
+  "Your kit items": "Aapki kit ke items",
+  "Your changes are saved as a custom request for the store.": "Aapke changes store ke liye custom request mein save honge.",
+  "included": "included",
+  "Included in this kit": "Is kit mein included",
+  "No original items left. Add the groceries you want below.": "Original items nahi bache. Neeche apni pasand ki grocery add karein.",
+  "Add more groceries": "Aur grocery add karein",
+  "Choose from our kits or type any item you need.": "Hamari kits se chunein ya apni zaroorat ka item likhein.",
+  "Try: Aata, Chini, Detergent...": "Jaise: Aata, Chini, Detergent...",
+  "Your extra items · price to be confirmed": "Aapke extra items · price confirm hona baaki",
+  "Smart Kit Deal": "Smart Kit Deal",
+  "STORE PRICE": "STORE PRICE",
+  "Compare the full basket before you buy.": "Buy karne se pehle poori basket ka total compare karein.",
+  "Ready-made kit pricing keeps everyday essentials together. Ask us on WhatsApp for your best customized final quote.": "Ready-made kit mein daily essentials ek saath milte hain. Customized final quote WhatsApp par poochhein.",
+  "Kit base price": "Kit ki base price",
+  "per kit": "per kit",
+  "Changing quantities inside the kit updates your request. The base kit price stays fixed; extra-item rates and final amount are confirmed by the owner on WhatsApp.": "Kit ke andar quantity badalne se request update hogi. Base kit price fixed rahegi; extra items ke rates aur final amount owner WhatsApp par confirm karenge.",
+  "Update My Customized Kit": "Meri Customized Kit Update Karein",
+  "Add Customized Kit to Cart": "Customized Kit Cart Mein Add Karein",
+  "Live Kit Calculator": "Live Kit Calculator",
+  "Kit base total": "Kit ka base total",
+  "Extra / customized items": "Extra / customized items",
+  "Owner quote pending": "Owner quote pending",
+  "Current calculated total": "Abhi ka calculated total",
+  "Kit price × kit quantity": "Kit price × kit quantity",
+  "Quantity buttons recalculate this total instantly. Editing quantities inside a kit changes your item request, not the fixed bundle price.": "Quantity buttons se total turant update hota hai. Kit ke andar quantity edit karne se item request badlegi, fixed bundle price nahi.",
+  "Ek kit mein zaroori samaan, ek saath smart deal mein.": "Ek kit mein zaroori samaan, ek saath smart deal mein.",
+  "Alag-alag kharidne se pehle apna total compare karein. Aapke customized order ka best possible final price Rashid Mega Mart ke owner WhatsApp par confirm karenge.": "Alag-alag kharidne se pehle total compare karein. Customized order ka final price Rashid Mega Mart ke owner WhatsApp par confirm karenge.",
+  "Delivery charge": "Delivery charge",
+  "WhatsApp par confirm": "WhatsApp par confirm",
+  "Suggestions": "Suggestions",
+  "Suggested items are added as extras. Their prices will be confirmed by the store on WhatsApp.": "Suggested items extras mein add honge. Inki price store WhatsApp par confirm karega.",
+  "Added extras · price confirmation pending": "Extra items add hue · price confirmation pending",
+  "Order confirmation and final charges will be shared by the store.": "Order confirmation aur final charges store share karega.",
+  "Delivery details are subject to store confirmation.": "Delivery details store confirmation par depend hain.",
+  "Order on WhatsApp": "WhatsApp par Order Karein",
+  "Delivery Address (Optional)": "Delivery Address (Optional)",
+  "Bas naam aur mobile number bharein. Address baad mein WhatsApp par bhi confirm kar sakte hain.": "Bas naam aur mobile number bharein. Address baad mein WhatsApp par bhi confirm kar sakte hain.",
+  "Agar delivery chahiye: house no., area, landmark": "Delivery chahiye to house no., area, landmark likhein",
 });
 
 function translateText(value: string, dictionary: Record<string, string> = translations) {
@@ -393,7 +485,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         }
         const record = records.get(attribute);
         const original = record && current === record.translated ? record.original : current;
-        const translated = nextLanguage === "hi" ? translateText(original) : original;
+        const translated = nextLanguage === "en" ? original : translateText(original, nextLanguage === "hi" ? hindiTranslations : translations);
         records.set(attribute, { original, translated });
         if (current !== translated) element.setAttribute(attribute, translated);
       }
