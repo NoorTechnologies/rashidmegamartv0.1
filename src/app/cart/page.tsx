@@ -74,7 +74,7 @@ export default function CartPage() {
 
   const groceryCalculations = items.map((item) => {
     const lines = [...(item.kitContents ?? []), ...(item.requestedItems ?? [])];
-    return { item, estimate: estimateGroceryLines(lines) };
+    return { item, estimate: lines.length ? estimateGroceryLines(lines) : { lines: [], total: null, pendingCount: 1 } };
   });
   const hasCustomizedLines = groceryCalculations.some(({ estimate }) => estimate.lines.length > 0);
   const customizedRatesReady = hasCustomizedLines && groceryCalculations.every(({ estimate }) => estimate.total !== null);
