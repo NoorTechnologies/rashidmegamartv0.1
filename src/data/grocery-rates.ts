@@ -14,7 +14,7 @@ const UNIT_ALIASES: Record<string, GroceryUnit> = {
   g: "g", gm: "g", gram: "g", grams: "g", ग्राम: "g",
   l: "l", litre: "l", litres: "l", liter: "l", liters: "l", लीटर: "l",
   ml: "ml", millilitre: "ml", millilitres: "ml", milliliter: "ml", milliliters: "ml", मिलीलीटर: "ml",
-  pc: "pcs", pcs: "pcs", piece: "pcs", pieces: "pcs", नग: "pcs", पीस: "pcs", pack: "pcs", packs: "pcs", packet: "pcs", packets: "pcs", set: "pcs", sets: "pcs", sack: "pcs", बोरी: "pcs", पैकेट: "pcs", सेट: "pcs", पत्ता: "pcs",
+  pc: "pcs", pcs: "pcs", piece: "pcs", pieces: "pcs", नग: "pcs", पीस: "pcs", pack: "pcs", packs: "pcs", packet: "pcs", packets: "pcs", set: "pcs", sets: "pcs", sack: "pcs", बोरी: "pcs", पैकेट: "pcs", पाउच: "pcs", सेट: "pcs", पत्ता: "pcs",
 };
 const UNIT_TO_BASE: Record<GroceryUnit, { family: "mass" | "volume" | "count"; factor: number }> = {
   kg: { family: "mass", factor: 1000 }, g: { family: "mass", factor: 1 },
@@ -23,7 +23,7 @@ const UNIT_TO_BASE: Record<GroceryUnit, { family: "mass" | "volume" | "count"; f
 };
 
 function parseQuantity(value: string) {
-  const match = value.trim().toLowerCase().match(/^(\d+(?:\.\d+)?)\s*([a-zA-Z]+|किलो|ग्राम|लीटर|मिलीलीटर|नग|पीस|बोरी|पैकेट|सेट|पत्ता)?$/);
+  const match = value.trim().toLowerCase().match(/^(\d+(?:\.\d+)?)\s*([a-zA-Z]+|किलो|ग्राम|लीटर|मिलीलीटर|नग|पीस|बोरी|पैकेट|पाउच|सेट|पत्ता)?$/);
   if (!match) return null;
   const amount = Number(match[1]);
   const unit = UNIT_ALIASES[match[2] ?? "pcs"];
