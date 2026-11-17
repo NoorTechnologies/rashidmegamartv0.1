@@ -6,6 +6,7 @@ import SiteMotion from "@/components/SiteMotion";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { CartProvider } from "@/context/CartContext";
 
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const SITE_URL = "https://rashidmegamartv0-1.vercel.app";
@@ -112,7 +113,7 @@ export default function RootLayout({
   children,
 }: Readonly<RootLayoutProps>) {
   return (
-    <html lang="en-IN" className={plusJakartaSans.variable} data-scroll-behavior="smooth">
+    <html lang="en-IN" className={plusJakartaSans.variable}>
       <body className="flex min-h-dvh flex-col antialiased">
         <script
           type="application/ld+json"
