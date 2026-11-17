@@ -24,9 +24,11 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   const { addToCart, updateKitCustomization, items, isLoaded } = useCart();
   const existingCartItem = items.find((item) => item.id === kit.id);
   const [contents, setContents] = useState<KitLine[]>(() => existingCartItem?.kitContents ?? kit.items.map(splitKitLine));
+  const [additions, setAdditions] = useState<KitLine[]>(() => existingCartItem?.requestedItems ?? []);
   useEffect(() => {
     if (existingCartItem?.kitContents) setContents(existingCartItem.kitContents);
-  }, [existingCartItem?.kitContents]);
+    if (existingCartItem?.requestedItems) setAdditions(existingCartItem.requestedItems);
+  }, [existingCartItem?.kitContents, existingCartItem?.requestedItems]);
   const [newItem, setNewItem] = useState("");
   const [newQuantity, setNewQuantity] = useState("1");
   const [error, setError] = useState("");
@@ -35,11 +37,10 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
     () => Array.from(new Set(kits.flatMap((entry) => entry.items.map((line) => splitKitLine(line).name)))).sort((a, b) => a.localeCompare(b)),
     []
   );
-  const requestedItems = existingCartItem?.requestedItems ?? [];
-
-  const saveContents = (next: KitLine[], additions = requestedItems) => {
+  const saveContents = (next: KitLine[], nextAdditions = additions) => {
     setContents(next);
-    updateKitCustomization(kit.id, next, additions);
+    setAdditions(nextAdditions);
+    updateKitCustomization(kit.id, next, nextAdditions);
   };
 
   const handleAdd = () => {
@@ -52,11 +53,11 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
       setError("Item ya quantity bahut lambi hai.");
       return;
     }
-    if (requestedItems.some((item) => item.name.toLowerCase() === name.toLowerCase())) {
+    if (additions.some((item) => item.name.toLowerCase() === name.toLowerCase())) {
       setError("Ye item pehle se add hai.");
       return;
     }
-    saveContents(contents, [...requestedItems, { name, quantity: newQuantity.trim() || "1" }]);
+    saveContents(contents, [...additions, { name, quantity: newQuantity.trim() || "1" }]);
     setNewItem("");
     setNewQuantity("1");
     setError("");
@@ -75,7 +76,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
         packSize: "Customized Grocery Kit",
       });
     }
-    updateKitCustomization(kit.id, contents, requestedItems);
+    updateKitCustomization(kit.id, contents, additions);
   };
 
   return (
@@ -109,17 +110,17 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
       <div className="mt-4 rounded-xl border border-[#E9E1DA] bg-[#FCFAF8] p-3">
         <h3 className="text-xs font-extrabold text-[#30251F]">Aur grocery add karein</h3>
         <p className="mt-1 text-[10px] leading-4 text-[#82766D]">Store ke doosre listed items ya apni zaroorat ka koi item likhein.</p>
-        <input list={`grocery-options-${kit.id}`} value={newItem} onChange={(event) => { setNewItem(event.target.value); setError(""); }} placeholder="Jaise: Aata, chini, detergent..." maxLength={70} className="mt-2 min-h-10 w-full rounded-lg border border-[#E7DED7] bg-white px-3 text-xs text-[#30251F] outline-none focus:border-[#A83250]" />
+        <input list={`grocery-options-${kit.id}`} value={newItem} onChange={(event) => { setNewItem(event.target.value); setError(""); }} placeholder="Jaise: Aata, chini, detergent..." aria-label="Add grocery item" maxLength={70} className="mt-2 min-h-10 w-full rounded-lg border border-[#E7DED7] bg-white px-3 text-xs text-[#30251F] outline-none focus:border-[#A83250]" />
         <datalist id={`grocery-options-${kit.id}`}>{catalog.map((name) => <option key={name} value={name} />)}</datalist>
         <div className="mt-2 flex gap-2">
           <input aria-label="New item quantity" value={newQuantity} onChange={(event) => setNewQuantity(event.target.value.slice(0, 24))} placeholder="Qty" className="min-h-10 w-24 rounded-lg border border-[#E7DED7] bg-white px-3 text-xs outline-none focus:border-[#A83250]" />
           <button type="button" onClick={handleAdd} className="inline-flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#A83250] px-3 text-xs font-bold text-white transition hover:bg-[#87263F]"><PlusCircle size={14} /> Add item</button>
         </div>
         {error && <p role="alert" className="mt-2 text-[10px] text-red-600">{error}</p>}
-        {requestedItems.length > 0 && (
+        {additions.length > 0 && (
           <div className="mt-3 space-y-2 border-t border-[#EAE2DC] pt-3">
             <p className="text-[10px] font-bold text-[#55483F]">Added items — price confirmation pending</p>
-            {requestedItems.map((item, index) => <div key={`${item.name}-${index}`} className="flex items-center justify-between gap-2 text-[11px]"><span className="min-w-0 flex-1 text-[#55483F]">{item.name} · {item.quantity}</span><button type="button" onClick={() => saveContents(contents, requestedItems.filter((_, i) => i !== index))} className="text-[#A83250]">Remove</button></div>)}
+            {additions.map((item, index) => <div key={`${item.name}-${index}`} className="flex items-center justify-between gap-2 text-[11px]"><span className="min-w-0 flex-1 text-[#55483F]">{item.name} · {item.quantity}</span><button type="button" onClick={() => saveContents(contents, additions.filter((_, i) => i !== index))} className="text-[#A83250]">Remove</button></div>)}
           </div>
         )}
       </div>
