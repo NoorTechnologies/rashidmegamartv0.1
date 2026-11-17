@@ -2,11 +2,9 @@ export interface GroceryKit {
   id: string;
   name: string;
   subtitle: string;
-  category: string;
   image: string;
   price: number;
   oldPrice?: number;
-  discount?: string;
   items: string[];
   description: string;
   isFeatured?: boolean;
@@ -19,11 +17,9 @@ export const kits: GroceryKit[] = [
     "id": "2550-wali-kit",
     "name": "2550 WALI KIT",
     "subtitle": "23 ज़रूरी सामान एक ही किट में",
-    "category": "Grocery Kits",
     "image": "/hero.png",
     "price": 2550,
     "oldPrice": 2558,
-    "discount": "₹8 OFF",
     "items": [
       "बोरी किंकी चावल - 26 किलो",
       "सरसों तेल - 3 लीटर",
@@ -57,11 +53,9 @@ export const kits: GroceryKit[] = [
     "id": "3000-wali-kit",
     "name": "3000 WALI KIT",
     "subtitle": "25 ज़रूरी सामान एक ही किट में",
-    "category": "Grocery Kits",
     "image": "/hero.png",
     "price": 3000,
     "oldPrice": 3013,
-    "discount": "₹13 OFF",
     "items": [
       "बोरी किंकी चावल - 26 किलो",
       "सरसों तेल - 3 लीटर",
@@ -97,11 +91,9 @@ export const kits: GroceryKit[] = [
     "id": "3500-wali-kit",
     "name": "3500 WALI KIT",
     "subtitle": "25 ज़रूरी सामान एक ही किट में",
-    "category": "Grocery Kits",
     "image": "/hero.png",
     "price": 3500,
     "oldPrice": 3508,
-    "discount": "₹8 OFF",
     "items": [
       "बोरी किंकी चावल - 26 किलो",
       "सरसों तेल - 3 लीटर",
@@ -137,11 +129,9 @@ export const kits: GroceryKit[] = [
     "id": "6000-wali-kit",
     "name": "6000 WALI KIT",
     "subtitle": "21 ज़रूरी सामान एक ही किट में",
-    "category": "Grocery Kits",
     "image": "/hero.png",
     "price": 6000,
     "oldPrice": 6024,
-    "discount": "₹24 OFF",
     "items": [
       "चावल - 1 बोरी बल्क",
       "सरसों तेल - 2 फुल / 5 लीटर",
@@ -173,11 +163,9 @@ export const kits: GroceryKit[] = [
     "id": "2000-wali-kit",
     "name": "2000 WALI KIT",
     "subtitle": "24 ज़रूरी सामान एक ही किट में",
-    "category": "Grocery Kits",
     "image": "/hero.png",
     "price": 2000,
     "oldPrice": 2020,
-    "discount": "₹20 OFF",
     "items": [
       "चावल - 5 किलो",
       "सरसों तेल - 3 लीटर",
@@ -212,11 +200,9 @@ export const kits: GroceryKit[] = [
     "id": "500-wali-kit",
     "name": "500 WALI KIT",
     "subtitle": "15 रोज़मर्रा के सामान एक किट में",
-    "category": "Grocery Kits",
     "image": "/hero.png",
     "price": 500,
     "oldPrice": 515,
-    "discount": "₹15 OFF",
     "items": [
       "किनकी चावल - 3 किलो",
       "तेल - 500 ग्राम",
@@ -242,11 +228,9 @@ export const kits: GroceryKit[] = [
     "id": "1000-wali-kit",
     "name": "1000 WALI KIT",
     "subtitle": "13 रोज़मर्रा के सामान एक किट में",
-    "category": "Grocery Kits",
     "image": "/hero.png",
     "price": 999,
     "oldPrice": 1020,
-    "discount": "₹21 OFF",
     "items": [
       "किनकी चावल - 5 किलो",
       "शक्कर - 2 किलो",
