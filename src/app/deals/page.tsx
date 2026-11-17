@@ -19,7 +19,7 @@ export default function DealsPage() {
 
   return (
     <main className="min-h-screen overflow-x-clip bg-[#FAF7EF]">
-      <section className="relative isolate overflow-hidden bg-[linear-gradient(125deg,#106B38_0%,#168447_60%,#800020_100%)] px-4 pb-8 pt-8 text-white sm:px-6 sm:pb-12 sm:pt-12">
+      <section data-reveal className="relative isolate overflow-hidden bg-[linear-gradient(125deg,#106B38_0%,#168447_60%,#800020_100%)] px-4 pb-8 pt-8 text-white sm:px-6 sm:pb-12 sm:pt-12">
         <div className="pointer-events-none absolute -right-16 -top-20 size-64 rounded-full bg-[#F7C928]/20 blur-3xl" />
         <div className="relative mx-auto max-w-6xl" data-reveal>
           <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-extrabold tracking-[0.14em]"><Sparkles size={14} className="text-[#F7C928]" /> RASHID MEGA MART · TOP DEALS</span>
