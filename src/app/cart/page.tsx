@@ -117,7 +117,7 @@ export default function CartPage() {
           index: index + 1,
           type: "Grocery Kit",
           name: kit.name,
-          detail: [kit.subtitle, cartItem.kitContents?.length ? "Customized contents: " + cartItem.kitContents.map((entry) => entry.name + " (" + entry.quantity + ")").join(", ") : "", cartItem.requestedItems?.length ? "Extra items (price confirmation pending): " + cartItem.requestedItems.map((entry) => entry.name + " (" + entry.quantity + ")").join(", ") : ""].filter(Boolean).join("\\n"),
+          detail: [kit.subtitle, cartItem.kitContents?.length ? "Customized contents: " + cartItem.kitContents.map((entry) => entry.name + " (" + entry.quantity + ")").join(", ") : "", cartItem.requestedItems?.length ? "Extra items (price confirmation pending): " + cartItem.requestedItems.map((entry) => entry.name + " (" + entry.quantity + ")").join(", ") : ""].filter(Boolean).join("\n"),
           quantity: cartItem.quantity,
           unitPrice: kit.price,
           lineTotal: kit.price * cartItem.quantity,
