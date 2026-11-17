@@ -310,10 +310,6 @@ Object.assign(translations, {
   "Grocery kits will be available soon.": "Grocery kits jald available hongi.",
 });
 
-const phraseReplacements = Object.entries(translations)
-  .filter(([source]) => source.length > 3)
-  .sort(([a], [b]) => b.length - a.length);
-
 function translateText(value: string, dictionary: Record<string, string> = translations) {
   const trimmed = value.trim();
   if (!trimmed) return value;
