@@ -20,7 +20,6 @@ import {
 
 import { useCart } from "@/context/CartContext";
 import { kits } from "@/data/kits";
-import { products } from "@/data/products";
 
 const formatPrice = (amount: number) =>
   new Intl.NumberFormat("en-IN", {
@@ -104,50 +103,25 @@ export default function CartPage() {
           throw new Error("One of the cart quantities is invalid. Please update your cart.");
         }
 
-        const product = products.find((entry) => entry.id === cartItem.id);
         const kit = kits.find((entry) => entry.id === cartItem.id);
 
-        if (product && kit) {
-          throw new Error("A catalogue item has a duplicate ID. Please contact the store.");
+        if (!kit) {
+          throw new Error("An item in your cart is no longer available. Please remove it and try again.");
         }
 
-        if (product) {
-          if (!product.isAvailable) {
-            throw new Error(product.name + " is currently unavailable.");
-          }
-          if (
-            typeof product.stock === "number" &&
-            product.stock < cartItem.quantity
-          ) {
-            throw new Error("Only " + product.stock + " unit(s) of " + product.name + " are listed in stock.");
-          }
-          return {
-            index: index + 1,
-            type: "Product",
-            name: product.name,
-            detail: [product.brand, product.packSize].filter(Boolean).join(" · "),
-            quantity: cartItem.quantity,
-            unitPrice: product.price,
-            lineTotal: product.price * cartItem.quantity,
-          };
+        if (!kit.isAvailable) {
+          throw new Error(kit.name + " is currently unavailable.");
         }
 
-        if (kit) {
-          if (!kit.isAvailable) {
-            throw new Error(kit.name + " is currently unavailable.");
-          }
-          return {
-            index: index + 1,
-            type: "Grocery Kit",
-            name: kit.name,
-            detail: kit.subtitle,
-            quantity: cartItem.quantity,
-            unitPrice: kit.price,
-            lineTotal: kit.price * cartItem.quantity,
-          };
-        }
-
-        throw new Error("An item in your cart is no longer in the catalogue. Please remove it and try again.");
+        return {
+          index: index + 1,
+          type: "Grocery Kit",
+          name: kit.name,
+          detail: kit.subtitle,
+          quantity: cartItem.quantity,
+          unitPrice: kit.price,
+          lineTotal: kit.price * cartItem.quantity,
+        };
       });
 
       const orderSubtotal = orderLines.reduce(
@@ -181,7 +155,7 @@ export default function CartPage() {
         "*Order Items*",
         itemText,
         "",
-        "*Product Total: " + formatPrice(orderSubtotal) + "*",
+        "*Kit Total: " + formatPrice(orderSubtotal) + "*",
         "Delivery charges: Please confirm",
         "Payment preference: " + (paymentMethod === "COD" ? "Cash on Delivery" : "UPI (share verified details after confirmation)"),
         cleanNote ? "Order note: " + cleanNote : "",
@@ -242,11 +216,11 @@ export default function CartPage() {
           </p>
 
           <Link
-            href="/shop"
+            href="/kits"
             className="rmm-button-primary mt-7 min-h-12 rounded-xl px-7 py-3 text-sm"
           >
             <ShoppingBag size={18} />
-            Start Shopping
+            Explore Grocery Kits
           </Link>
 
           <div className="mt-5">
@@ -288,7 +262,7 @@ export default function CartPage() {
             className="rmm-button-secondary min-h-10 w-fit rounded-xl px-4 py-2 text-xs sm:min-h-11 sm:text-sm"
           >
             <ArrowLeft size={15} />
-            Continue Shopping
+            Explore Kits
           </Link>
         </header>
 
@@ -327,7 +301,7 @@ export default function CartPage() {
                 >
                   {/* Product Image */}
                   <div className="relative size-[78px] shrink-0 overflow-hidden rounded-xl bg-[#F8F6F2] min-[375px]:size-[88px] sm:size-24">
-                    {item.image || "/categories/cerels.webp" ? (
+                    {item.image ? (
                       <Image
                         src={item.image || "/categories/cerels.webp"}
                         alt={item.name}
@@ -459,7 +433,7 @@ export default function CartPage() {
 
               <div className="mt-5 space-y-3.5 text-xs sm:text-sm">
                 <div className="flex items-center justify-between gap-3 text-[#817A74]">
-                  <span>Product Subtotal</span>
+                  <span>Kit Subtotal</span>
                   <span className="font-bold text-[#29231F]">
                     {formatPrice(subtotal)}
                   </span>
