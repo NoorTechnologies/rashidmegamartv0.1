@@ -17,15 +17,15 @@ export default function HomePage() {
     <main className="min-h-screen w-full overflow-x-clip bg-[#FFF9F6]">
       <section className="relative overflow-hidden bg-gradient-to-b from-[#FFF0F0] via-white to-[#FFF9F4] px-3 pb-9 pt-6 text-[#171717] sm:px-5 sm:pb-12 sm:pt-10">
         <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#D4A84F]/15 blur-[90px]" />
-        <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#D71920]/[0.07] blur-[90px]" />
+        <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#168447]/[0.07] blur-[90px]" />
         <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#D4A84F]/40 bg-white/90 px-4 py-2 text-[10px] font-bold tracking-wide text-[#D71920] shadow-sm sm:text-xs">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#D4A84F]/40 bg-white/90 px-4 py-2 text-[10px] font-bold tracking-wide text-[#168447] shadow-sm sm:text-xs">
             <Package size={15} /> MERI JAAN SPECIAL • BEST OFFERS
           </span>
           <div className="mt-5 flex flex-col items-center">
             <Image src="/images/logo2.png" alt="Rashid Mega Mart Logo" width={110} height={110} priority className="h-20 w-20 object-contain sm:h-24 sm:w-24" />
             <h1 className="mt-3 max-w-2xl text-2xl font-black leading-tight tracking-tight text-[#171717] sm:text-4xl md:text-5xl">
-              Welcome to <span className="mt-1 block text-[#D71920]">Rashid Mega Mart</span>
+              Welcome to <span className="mt-1 block text-[#168447]">Rashid Mega Mart</span>
             </h1>
             <p className="mt-3 max-w-md text-xs leading-6 text-[#6A7282] sm:text-sm">
               Thoughtfully packed grocery kits for your home, at great value.
@@ -54,15 +54,15 @@ export default function HomePage() {
             className="group flex min-h-12 items-center justify-between gap-3 rounded-xl border border-[#F2C8C9] bg-white px-3.5 py-2.5 shadow-sm transition hover:border-[#D98A99] hover:shadow-md sm:px-4"
           >
             <span className="flex min-w-0 items-center gap-2.5">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#FFF0F2] text-[#D71920]">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#FFF0F2] text-[#168447]">
                 <Package size={16} />
               </span>
               <span className="min-w-0">
-                <span className="block truncate text-[10px] font-black uppercase tracking-wide text-[#B5121B] sm:text-xs">BEST OFFER · KITS STARTING AT</span>
+                <span className="block truncate text-[10px] font-black uppercase tracking-wide text-[#106B38] sm:text-xs">BEST OFFER · KITS STARTING AT</span>
                 <span className="block text-lg font-black leading-tight text-[#D71920] sm:text-2xl">₹{startingPrice.toLocaleString("en-IN")} <span className="text-[10px] font-bold text-[#6B7280] sm:text-xs">· {availableKits.length} kits to explore</span></span>
               </span>
             </span>
-            <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-bold text-[#D71920] sm:text-xs">
+            <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-bold text-[#168447] sm:text-xs">
               View kits <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
             </span>
           </Link>
@@ -73,9 +73,9 @@ export default function HomePage() {
         <div className="mb-5 flex items-end justify-between gap-3 sm:mb-6">
           <div>
             <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#A47A2C] sm:text-xs">Smart shopping combos</p>
-            <h2 className="mt-1 text-xl font-extrabold text-[#D71920] sm:text-2xl">Our Grocery Kits</h2>
+            <h2 className="mt-1 text-xl font-extrabold text-[#168447] sm:text-2xl">Our Grocery Kits</h2>
           </div>
-          <Link href="/kits" className="inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#D71920] transition hover:text-[#B5121B] sm:text-xs">View All <ArrowRight size={15} /></Link>
+          <Link href="/kits" className="inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#168447] transition hover:text-[#106B38] sm:text-xs">View All <ArrowRight size={15} /></Link>
         </div>
         {displayKits.length ? (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
@@ -92,14 +92,14 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-7xl px-3 py-8 min-[480px]:px-5 sm:py-12 md:px-6 lg:px-8">
         <div className="mx-auto mb-6 max-w-2xl text-center sm:mb-8">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#A47A2C] sm:text-xs">Grocery Shopping, Made Easier</p>
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-[#D71920] sm:text-3xl">Why Choose Us?</h2>
+          <h2 className="mt-2 text-2xl font-black tracking-tight text-[#168447] sm:text-3xl">Why Choose Us?</h2>
           <p className="mx-auto mt-2 max-w-lg text-xs leading-5 text-[#6A7282] sm:text-sm">Market ke chakkar aur fixed grocery combos ki tension chhodiye. Apni zaroorat batayein, humse ghar baithe baat karein.</p>
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           {[
             { icon: Truck, problem: "Market Jaane Ka Time Nahi?", solution: "Ghar baithe WhatsApp par apni grocery list bhej dijiye.", tint: "bg-[#FFF4D6]", ink: "text-[#A47A2C]" },
-            { icon: Package, problem: "Ready Kit Ke Baare Mein Jankari Chahiye?", solution: "Available grocery kits ke products aur details WhatsApp par poochhein.", tint: "bg-[#FFF0F0]", ink: "text-[#D71920]" },
+            { icon: Package, problem: "Ready Kit Ke Baare Mein Jankari Chahiye?", solution: "Available grocery kits ke products aur details WhatsApp par poochhein.", tint: "bg-[#FFF0F0]", ink: "text-[#168447]" },
             { icon: Wallet, problem: "Budget Ka Rakhna Hai Dhyan?", solution: "Apne budget ke hisaab se available ready-made kits dekhein.", tint: "bg-[#E8F5EC]", ink: "text-[#138047]" },
             { icon: ClipboardList, problem: "Monthly Grocery Manage Karna Mushkil?", solution: "Monthly needs ke liye available kits dekhein aur order details confirm karein.", tint: "bg-[#EAF1FF]", ink: "text-[#1877F2]" },
           ].map((item) => {
@@ -122,10 +122,10 @@ export default function HomePage() {
           <p className="text-base font-black text-[#30251F] sm:text-lg">Apni Zaroorat Ki Kit Khud Banayein</p>
           <p className="mx-auto mt-1.5 max-w-lg text-xs leading-5 text-[#6A7282] sm:text-sm">Ready-made kit ke items badlein, quantity set karein aur apni pasand ke grocery items add karein.</p>
           <div className="mt-4 flex flex-col justify-center gap-2 min-[420px]:flex-row">
-            <a href="https://wa.me/918962531603?text=Namaste%2C%20mujhe%20apni%20grocery%20kit%20customize%20karni%20hai." target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#D71920] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#B5121B] sm:text-sm">
+            <a href="https://wa.me/918962531603?text=Namaste%2C%20mujhe%20apni%20grocery%20kit%20customize%20karni%20hai." target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#106B38] sm:text-sm">
               <Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} className="h-5 w-5 object-contain" /> WhatsApp Par Poochhein
             </a>
-            <Link href="/kits" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D9C6B2] bg-white px-5 py-3 text-xs font-bold text-[#D71920] transition hover:border-[#D71920] sm:text-sm">
+            <Link href="/kits" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D9C6B2] bg-white px-5 py-3 text-xs font-bold text-[#168447] transition hover:border-[#168447] sm:text-sm">
               Ready Kits Dekhein <ArrowRight size={16} />
             </Link>
           </div>
