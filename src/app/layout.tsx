@@ -20,12 +20,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
   title: {
-    default: "Rashid Mega Mart | Online Grocery Shopping",
+    default: "Rashid Mega Mart | Grocery Kits",
     template: "%s | Rashid Mega Mart",
   },
 
   description:
-    "Shop groceries, daily essentials and affordable grocery kits at Rashid Mega Mart. Order conveniently through WhatsApp and confirm delivery availability with our store.",
+    "Explore value-packed grocery kits at Rashid Mega Mart. Browse kits and place your enquiry conveniently through WhatsApp.",
 
   applicationName: SITE_NAME,
   category: "shopping",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: "Rashid Mega Mart | Online Grocery Shopping",
     description:
-      "Your trusted destination for everyday groceries, daily essentials and affordable grocery kits.",
+      "Your trusted destination for thoughtfully packed grocery kits.",
     images: [
       {
         url: SOCIAL_SHARE_IMAGE,
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Rashid Mega Mart | Online Grocery Shopping",
     description:
-      "Shop groceries, daily essentials and affordable grocery kits at Rashid Mega Mart.",
+      "Explore value-packed grocery kits at Rashid Mega Mart.",
     images: [
       {
         url: SOCIAL_SHARE_IMAGE,
