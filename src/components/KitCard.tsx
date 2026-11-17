@@ -201,7 +201,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
           >
             Customize
             <ArrowUpRight size={12} />
-          </Link> </button>
+          </Link>
         </div>
       </div>
     </article>
