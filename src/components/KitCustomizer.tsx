@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Minus, Plus, ShoppingCart, Trash2, PlusCircle, Sparkles, BadgeCheck, Tag, Package } from "lucide-react";
 import type { GroceryKit } from "@/data/kits";
 import { kits } from "@/data/kits";
-import { useCart } from "@/context/CartContext";
+import { useCart } from "@/context/CartContext";\nimport { useSiteLanguage, toEnglishCatalogue } from "@/components/LanguageProvider";
 
 type KitLine = { name: string; quantity: string };
 
@@ -21,7 +21,7 @@ function adjustQuantity(value: string, delta: number) {
 }
 
 export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
-  const { addToCart, updateKitCustomization, items, isLoaded } = useCart();
+  const { addToCart, updateKitCustomization, items, isLoaded } = useCart();\n  const language = useSiteLanguage();\n  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : value;
   const existingCartItem = items.find((item) => item.id === kit.id);
   const [contents, setContents] = useState<KitLine[]>(() => existingCartItem?.kitContents ?? kit.items.map(splitKitLine));
   const [additions, setAdditions] = useState<KitLine[]>(() => existingCartItem?.requestedItems ?? []);
@@ -103,7 +103,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
 
         <div className="overflow-hidden rounded-2xl border border-[#E9ECEF] bg-white">
           {contents.map((line, index) => (
-            <div key={`${kit.id}-${index}-${line.name}`} className="flex items-center gap-2 border-b border-[#F0F1F2] px-2.5 py-2.5 last:border-b-0 sm:gap-3 sm:px-3">
+            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="flex items-center gap-2 border-b border-[#F0F1F2] px-2.5 py-2.5 last:border-b-0 sm:gap-3 sm:px-3">
               <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#FFF0F0] text-[#D71920]"><Package size={15} /></span>
               <div className="min-w-0 flex-1">
                 <p className="break-words text-[11px] font-extrabold leading-4 text-[#25282B] sm:text-xs">{line.name}</p>
@@ -111,7 +111,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
               </div>
               <div className="flex shrink-0 items-center rounded-xl border border-[#E2E5E8] bg-[#F8F9FA] p-0.5">
                 <button type="button" aria-label={`Decrease ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#D71920] hover:bg-[#FFE6E6]"><Minus size={13} /></button>
-                <input aria-label={`${line.name} quantity`} value={line.quantity} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: event.target.value.slice(0, 24) } : entry))} className="w-[58px] bg-transparent text-center text-[10px] font-extrabold text-[#272B2F] outline-none sm:w-[68px]" />
+                <input aria-label={`${line.name} quantity`} value={displayCatalogue(line.quantity)} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: event.target.value.slice(0, 24) } : entry))} className="w-[58px] bg-transparent text-center text-[10px] font-extrabold text-[#272B2F] outline-none sm:w-[68px]" />
                 <button type="button" aria-label={`Increase ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#D71920] hover:bg-[#FFE6E6]"><Plus size={13} /></button>
               </div>
               <button type="button" aria-label={`Remove ${line.name}`} onClick={() => saveContents(contents.filter((_, i) => i !== index))} className="flex size-8 shrink-0 items-center justify-center rounded-xl text-[#9AA0A6] transition hover:bg-[#FFF0F0] hover:text-[#D71920]"><Trash2 size={14} /></button>
@@ -140,8 +140,8 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
               <p className="text-[10px] font-black uppercase tracking-wide text-[#805500]">Your extra items · price to be confirmed</p>
               <div className="mt-2 space-y-2">
                 {additions.map((item, index) => (
-                  <div key={`${item.name}-${index}`} className="flex items-center justify-between gap-2 text-[11px]">
-                    <span className="min-w-0 flex-1 font-bold text-[#37312A]">{item.name} <span className="font-semibold text-[#806C48]">· {item.quantity}</span></span>
+                  <div key={`${displayCatalogue(item.name)}-${index}`} className="flex items-center justify-between gap-2 text-[11px]">
+                    <span className="min-w-0 flex-1 font-bold text-[#37312A]">{item.name} <span className="font-semibold text-[#806C48]">· {displayCatalogue(item.quantity)}</span></span>
                     <button type="button" onClick={() => saveContents(contents, additions.filter((_, i) => i !== index))} className="rounded-lg px-2 py-1 font-extrabold text-[#C1121F] hover:bg-white">Remove</button>
                   </div>
                 ))}
