@@ -18,6 +18,9 @@ export interface CartItem {
   quantity: number;
   brand?: string;
   packSize?: string;
+  kitContents?: { name: string; quantity: string }[];
+  requestedItems?: { name: string; quantity: string }[];
+  isCustomized?: boolean;
 }
 
 interface CartContextType {
@@ -30,6 +33,7 @@ interface CartContextType {
   decreaseQuantity: (id: string) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
+  updateKitCustomization: (id: string, kitContents: { name: string; quantity: string }[], requestedItems: { name: string; quantity: string }[]) => void;
 }
 
 const STORAGE_KEY = "rashid-mega-mart-cart";
@@ -62,7 +66,9 @@ function isValidCartItem(item: unknown): item is CartItem {
     (value.quantity as number) > 0 &&
     (value.quantity as number) <= MAX_CART_QUANTITY &&
     (value.brand === undefined || typeof value.brand === "string") &&
-    (value.packSize === undefined || typeof value.packSize === "string")
+    (value.packSize === undefined || typeof value.packSize === "string") &&
+    (value.kitContents === undefined || (Array.isArray(value.kitContents) && value.kitContents.every((entry) => entry && typeof entry.name === "string" && typeof entry.quantity === "string"))) &&
+    (value.requestedItems === undefined || (Array.isArray(value.requestedItems) && value.requestedItems.every((entry) => entry && typeof entry.name === "string" && typeof entry.quantity === "string")))
   );
 }
 
@@ -243,6 +249,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     updateCart(() => EMPTY_CART);
   }, []);
 
+  const updateKitCustomization = useCallback((id: string, kitContents: { name: string; quantity: string }[], requestedItems: { name: string; quantity: string }[]) => {
+    updateCart((currentItems) => currentItems.map((item) => item.id === id ? { ...item, kitContents, requestedItems, isCustomized: true } : item));
+  }, []);
+
   const totalItems = useMemo(
     () => items.reduce((total, item) => total + item.quantity, 0),
     [items]
@@ -268,6 +278,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       decreaseQuantity,
       removeFromCart,
       clearCart,
+      updateKitCustomization,
     }),
     [
       items,
@@ -279,6 +290,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       decreaseQuantity,
       removeFromCart,
       clearCart,
+      updateKitCustomization,
     ]
   );
 
