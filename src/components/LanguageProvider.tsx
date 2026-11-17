@@ -73,7 +73,6 @@ const translations: Record<string, string> = {
   "Suggestion WhatsApp par store ko bheji jayegi. Order ya price confirmation nahi hai.": "सुझाव WhatsApp पर दुकान को भेजा जाएगा। यह ऑर्डर या कीमत की पुष्टि नहीं है।",
   "Back to Kits": "किट्स पर वापस जाएं",
   "Grocery Kits": "किराना किट्स",
-  "Home": "होम",
   "Products in this kit": "इस किट में शामिल सामान",
   "Edit quantities, remove items or add your own": "मात्रा बदलें, सामान हटाएं या अपना सामान जोड़ें",
   "Items": "सामान",
