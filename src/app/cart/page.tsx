@@ -19,6 +19,7 @@ import {
 
 import { useCart, type CartItem } from "@/context/CartContext";
 import { kits } from "@/data/kits";
+import { estimateGroceryLines } from "@/data/grocery-rates";
 
 const formatPrice = (amount: number) =>
   new Intl.NumberFormat("en-IN", {
@@ -70,6 +71,17 @@ export default function CartPage() {
     addToCart,
     updateKitCustomization,
   } = useCart();
+
+  const groceryCalculations = items.map((item) => {
+    const lines = [...(item.kitContents ?? []), ...(item.requestedItems ?? [])];
+    return { item, estimate: estimateGroceryLines(lines) };
+  });
+  const hasCustomizedLines = groceryCalculations.some(({ estimate }) => estimate.lines.length > 0);
+  const customizedRatesReady = hasCustomizedLines && groceryCalculations.every(({ estimate }) => estimate.total !== null);
+  const customizedGrandTotal = customizedRatesReady
+    ? groceryCalculations.reduce((sum, { item, estimate }) => sum + (estimate.total ?? 0) * item.quantity, 0)
+    : null;
+  const currentGrandTotal = customizedGrandTotal ?? subtotal;
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
@@ -528,18 +540,34 @@ export default function CartPage() {
                     <span className="font-black tabular-nums text-[#174D2B]">{formatPrice(subtotal)}</span>
                   </div>
                   <div className="mt-2 flex items-center justify-between gap-3 text-[10px]">
-                    <span className="font-semibold text-[#68766B]">Extra / customized items</span>
-                    <span className="font-extrabold text-[#806000]">Owner quote pending</span>
+                    <span className="font-semibold text-[#68766B]">Customized grocery estimate</span>
+                    <span className="font-extrabold text-[#806000]">{customizedRatesReady ? formatPrice(customizedGrandTotal ?? 0) : "Rates pending"}</span>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between gap-3 text-[10px]">
+                    <span className="font-semibold text-[#68766B]">Extra items</span>
+                    <span className="font-extrabold text-[#806000]">Included in estimate when rates are set</span>
                   </div>
                   <div className="mt-2 flex items-center justify-between gap-3 border-t border-[#CDE5D2] pt-2.5">
                     <div>
                       <p className="text-sm font-black text-[#174D2B]">Current calculated total</p>
-                      <p className="mt-0.5 text-[9px] text-[#42664B]">Kit price × kit quantity</p>
+                      <p className="mt-0.5 text-[9px] text-[#42664B]">{customizedRatesReady ? "Item rates × kit quantity" : "Listed kit price × kit quantity · customized quote pending"}</p>
                     </div>
-                    <p className="text-2xl font-black tracking-tight tabular-nums text-[#106B38]">{formatPrice(subtotal)}</p>
+                    <p className="text-2xl font-black tracking-tight tabular-nums text-[#106B38]">{formatPrice(currentGrandTotal)}</p>
                   </div>
                 </div>
-                <p className="text-[10px] leading-4 text-[#68766B]">Quantity buttons recalculate this total instantly. Editing quantities inside a kit changes your item request, not the fixed bundle price.</p>
+                <div className="space-y-2 rounded-xl border border-[#E8DFD1] bg-white p-3">
+                  <p className="text-[10px] font-black text-[#202124]">Customized item breakdown</p>
+                  {groceryCalculations.map(({ item, estimate }) => (
+                    <div key={item.id} className="border-t border-[#F1EBDD] pt-2 first:border-0 first:pt-0">
+                      <div className="flex items-center justify-between gap-2 text-[10px]">
+                        <span className="font-bold text-[#202124]">{item.name} × {item.quantity}</span>
+                        <span className="font-black text-[#106B38]">{estimate.total === null ? "Rate pending" : formatPrice(estimate.total * item.quantity)}</span>
+                      </div>
+                      {estimate.pendingCount > 0 && <p className="mt-1 text-[9px] text-[#806000]">{estimate.pendingCount} item rates need owner confirmation</p>}
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[10px] leading-4 text-[#68766B]">When every grocery rate is confirmed, the calculator uses (requested quantity ÷ rate quantity) × rate price, then multiplies by kit quantity. Until then, the listed bundle total remains visible separately.</p>
                 <div className="rounded-xl border border-[#BBDCC5] bg-[linear-gradient(120deg,#EAF5EC_0%,#F7FBF7_100%)] p-3">
                   <p className="text-xs font-black text-[#106B38]">Ek kit mein zaroori samaan, ek saath smart deal mein.</p>
                   <p className="mt-1 text-[10px] leading-4 text-[#42664B]">Alag-alag kharidne se pehle apna total compare karein. Aapke customized order ka best possible final price Rashid Mega Mart ke owner WhatsApp par confirm karenge.</p>
