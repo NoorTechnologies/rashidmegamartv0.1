@@ -132,7 +132,7 @@ export default async function KitDetailPage({ params }: PageProps) {
                     Products in this kit
                   </p>
                   <p className="text-xs text-[#94847A]">
-                    See the full product list below
+                    Edit quantities, remove items or add your own
                   </p>
                 </div>
               </div>
