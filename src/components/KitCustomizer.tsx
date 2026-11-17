@@ -116,7 +116,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
 
         <div className="overflow-hidden rounded-2xl border border-[#E8DFD1] bg-white">
           {contents.map((line, index) => (
-            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="flex items-center gap-2 border-b border-[#FAF7EF] px-2.5 py-2.5 last:border-b-0 sm:gap-3 sm:px-3">
+            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="rmm-grocery-row flex items-center gap-2 border-b border-[#FAF7EF] px-2.5 py-2.5 last:border-b-0 sm:gap-3 sm:px-3">
               <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E9] text-[#168447]"><Package size={15} /></span>
               <div className="min-w-0 flex-1">
                 <p className="break-words text-[11px] font-extrabold leading-4 text-[#202124] sm:text-xs">{displayCatalogue(line.name)}</p>
