@@ -76,7 +76,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
         <span className="pointer-events-none absolute -right-6 -top-10 size-36 rounded-full bg-white/10 blur-2xl" />
         <div className="relative flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#FFF2B8]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#FAF0C8]">
               <Sparkles size={11} /> Build your own combo
             </span>
             <h2 id="customize-kit-title" className="mt-2 text-lg font-black leading-tight tracking-tight sm:text-2xl">Make This Kit Yours!</h2>
@@ -87,7 +87,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           </div>
         </div>
         <div className="relative mt-4 flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-[#FFF0A8] px-2.5 py-1 text-[9px] font-black text-[#744600]"><Tag size={10} /> KIT SPECIAL</span>
+          <span className="inline-flex items-center gap-1 rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[9px] font-black text-[#806000]"><Tag size={10} /> KIT SPECIAL</span>
           <span className="text-[10px] font-bold text-white/90">{contents.length + additions.length} items selected</span>
         </div>
       </div>
@@ -98,50 +98,50 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
             <h3 className="text-sm font-black text-[#202124] sm:text-base">Your kit items</h3>
             <p className="mt-0.5 text-[10px] font-medium text-[#686868] sm:text-xs">Edit each item before adding the kit to your cart.</p>
           </div>
-          <span className="rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[10px] font-black text-[#805500]">{contents.length} included</span>
+          <span className="rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[10px] font-black text-[#806000]">{contents.length} included</span>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-[#E9ECEF] bg-white">
+        <div className="overflow-hidden rounded-2xl border border-[#E8DFD1] bg-white">
           {contents.map((line, index) => (
-            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="flex items-center gap-2 border-b border-[#F0F1F2] px-2.5 py-2.5 last:border-b-0 sm:gap-3 sm:px-3">
+            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="flex items-center gap-2 border-b border-[#FAF7EF] px-2.5 py-2.5 last:border-b-0 sm:gap-3 sm:px-3">
               <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E9] text-[#168447]"><Package size={15} /></span>
               <div className="min-w-0 flex-1">
                 <p className="break-words text-[11px] font-extrabold leading-4 text-[#202124] sm:text-xs">{displayCatalogue(line.name)}</p>
-                <p className="mt-0.5 text-[9px] font-semibold text-[#899098]">Included in this kit</p>
+                <p className="mt-0.5 text-[9px] font-semibold text-[#686868]">Included in this kit</p>
               </div>
-              <div className="flex shrink-0 items-center rounded-xl border border-[#E2E5E8] bg-[#F8F9FA] p-0.5">
+              <div className="flex shrink-0 items-center rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] p-0.5">
                 <button type="button" aria-label={`Decrease ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD]"><Minus size={13} /></button>
-                <input aria-label={`${line.name} quantity`} value={displayCatalogue(line.quantity)} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: event.target.value.slice(0, 24) } : entry))} className="w-[58px] bg-transparent text-center text-[10px] font-extrabold text-[#272B2F] outline-none sm:w-[68px]" />
+                <input aria-label={`${line.name} quantity`} value={displayCatalogue(line.quantity)} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: event.target.value.slice(0, 24) } : entry))} className="w-[58px] bg-transparent text-center text-[10px] font-extrabold text-[#202124] outline-none sm:w-[68px]" />
                 <button type="button" aria-label={`Increase ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD]"><Plus size={13} /></button>
               </div>
-              <button type="button" aria-label={`Remove ${line.name}`} onClick={() => saveContents(contents.filter((_, i) => i !== index))} className="flex size-8 shrink-0 items-center justify-center rounded-xl text-[#9AA0A6] transition hover:bg-[#F1EBDD] hover:text-[#800020]"><Trash2 size={14} /></button>
+              <button type="button" aria-label={`Remove ${line.name}`} onClick={() => saveContents(contents.filter((_, i) => i !== index))} className="flex size-8 shrink-0 items-center justify-center rounded-xl text-[#686868] transition hover:bg-[#F1EBDD] hover:text-[#800020]"><Trash2 size={14} /></button>
             </div>
           ))}
           {contents.length === 0 && <p className="px-4 py-6 text-center text-xs font-semibold text-[#686868]">No original items left. Add the groceries you want below.</p>}
         </div>
 
-        <div className="mt-4 rounded-2xl border border-dashed border-[#E8A0A4] bg-[linear-gradient(135deg,#FFF8F1_0%,#F1EBDD_100%)] p-3 sm:p-4">
+        <div className="mt-4 rounded-2xl border border-dashed border-[#D8CBB8] bg-[linear-gradient(135deg,#FAF7EF_0%,#F1EBDD_100%)] p-3 sm:p-4">
           <div className="flex items-center gap-2">
             <span className="flex size-9 items-center justify-center rounded-xl bg-[#168447] text-white shadow-sm"><PlusCircle size={18} /></span>
             <div>
-              <h3 className="text-xs font-black text-[#292B2D] sm:text-sm">Add more groceries</h3>
+              <h3 className="text-xs font-black text-[#202124] sm:text-sm">Add more groceries</h3>
               <p className="text-[10px] font-medium text-[#686868]">Choose from our kits or type any item you need.</p>
             </div>
           </div>
-          <input list={`grocery-options-${kit.id}`} value={newItem} onChange={(event) => { setNewItem(event.target.value); setError(""); }} placeholder="Try: Aata, Chini, Detergent..." aria-label="Add grocery item" maxLength={70} className="mt-3 min-h-11 w-full rounded-xl border border-[#E2D4D4] bg-white px-3 text-xs font-semibold text-[#202124] outline-none transition placeholder:font-medium placeholder:text-[#9AA0A6] focus:border-[#800020] focus:ring-3 focus:ring-[#800020]/10" />
+          <input list={`grocery-options-${kit.id}`} value={newItem} onChange={(event) => { setNewItem(event.target.value); setError(""); }} placeholder="Try: Aata, Chini, Detergent..." aria-label="Add grocery item" maxLength={70} className="mt-3 min-h-11 w-full rounded-xl border border-[#D8CBB8] bg-white px-3 text-xs font-semibold text-[#202124] outline-none transition placeholder:font-medium placeholder:text-[#686868] focus:border-[#800020] focus:ring-3 focus:ring-[#800020]/10" />
           <datalist id={`grocery-options-${kit.id}`}>{catalog.map((name) => <option key={name} value={name} />)}</datalist>
           <div className="mt-2 flex gap-2">
-            <input aria-label="New item quantity" value={newQuantity} onChange={(event) => setNewQuantity(event.target.value.slice(0, 24))} placeholder="Qty" className="min-h-11 w-24 rounded-xl border border-[#E2D4D4] bg-white px-3 text-center text-xs font-extrabold outline-none focus:border-[#800020]" />
+            <input aria-label="New item quantity" value={newQuantity} onChange={(event) => setNewQuantity(event.target.value.slice(0, 24))} placeholder="Qty" className="min-h-11 w-24 rounded-xl border border-[#D8CBB8] bg-white px-3 text-center text-xs font-extrabold outline-none focus:border-[#800020]" />
             <button type="button" onClick={handleAdd} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#168447] px-3 text-xs font-black text-white shadow-[0_5px_14px_rgba(22,132,71,0.18)] transition hover:-translate-y-0.5 hover:bg-[#106B38] active:scale-[0.98]"><Plus size={15} /> Add item</button>
           </div>
           {error && <p role="alert" className="mt-2 text-[10px] font-bold text-[#800020]">{error}</p>}
           {additions.length > 0 && (
-            <div className="mt-3 rounded-xl border border-[#F3D98A] bg-[#FFF9E6] p-3">
-              <p className="text-[10px] font-black uppercase tracking-wide text-[#805500]">Your extra items · price to be confirmed</p>
+            <div className="mt-3 rounded-xl border border-[#F7C928] bg-[#FAF0C8] p-3">
+              <p className="text-[10px] font-black uppercase tracking-wide text-[#806000]">Your extra items · price to be confirmed</p>
               <div className="mt-2 space-y-2">
                 {additions.map((item, index) => (
                   <div key={`${displayCatalogue(item.name)}-${index}`} className="flex items-center justify-between gap-2 text-[11px]">
-                    <span className="min-w-0 flex-1 font-bold text-[#37312A]">{displayCatalogue(item.name)} <span className="font-semibold text-[#806C48]">· {displayCatalogue(item.quantity)}</span></span>
+                    <span className="min-w-0 flex-1 font-bold text-[#202124]">{displayCatalogue(item.name)} <span className="font-semibold text-[#686868]">· {displayCatalogue(item.quantity)}</span></span>
                     <button type="button" onClick={() => saveContents(contents, additions.filter((_, i) => i !== index))} className="rounded-lg px-2 py-1 font-extrabold text-[#800020] hover:bg-white">Remove</button>
                   </div>
                 ))}
@@ -150,12 +150,12 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           )}
         </div>
 
-        <div className="mt-4 grid grid-cols-[1fr_auto] items-center gap-3 rounded-2xl border border-[#B9E5C9] bg-[#F0FBF4] p-3">
+        <div className="mt-4 grid grid-cols-[1fr_auto] items-center gap-3 rounded-2xl border border-[#D5E8D6] bg-[#EAF3E9] p-3">
           <div className="flex min-w-0 items-start gap-2">
             <BadgeCheck size={17} className="mt-0.5 shrink-0 text-[#168447]" />
             <div>
-              <p className="text-[11px] font-black text-[#17643A]">Your kit, your choice!</p>
-              <p className="mt-0.5 text-[10px] leading-4 text-[#4D6B58]">Extra item prices and final customized total will be confirmed by our store on WhatsApp.</p>
+              <p className="text-[11px] font-black text-[#168447]">Your kit, your choice!</p>
+              <p className="mt-0.5 text-[10px] leading-4 text-[#686868]">Extra item prices and final customized total will be confirmed by our store on WhatsApp.</p>
             </div>
           </div>
           <div className="text-right">
