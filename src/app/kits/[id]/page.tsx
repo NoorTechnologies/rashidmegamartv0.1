@@ -18,8 +18,6 @@ import {
   Leaf,
   CookingPot,
 } from "lucide-react";
-
-import { getGroceryItemImageFallback } from "@/lib/catalog-images";
 import { getKitById } from "@/data/kits";
 import KitDetailClient from "@/components/KitDetailClient";
 
@@ -311,55 +309,45 @@ export default async function KitDetailPage({ params }: PageProps) {
 
           {/* Grocery Items */}
           <div className="p-4 sm:p-7">
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
-              {kit.items.map((item, index) => {
-                const parts = item.match(/^(.+?)\s*[-–]\s*(.+)$/);
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+              <p className="text-sm font-bold text-[#30251F]">
+                Complete list of products in this kit
+              </p>
+              <span className="text-xs font-semibold text-[#796B61]">
+                {kit.items.length} products included
+              </span>
+            </div>
 
+            <ol className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
+              {kit.items.map((item, index) => {
+                const parts = item.match(/^(.+?)\\s*[-–]\\s*(.+)$/);
                 const productName = parts ? parts[1].trim() : item;
-                const quantity = parts ? parts[2].trim() : null;
+                const quantity = parts ? parts[2].trim() : "Included";
+                const Icon = getGroceryIcon(productName);
 
                 return (
-                  <div
+                  <li
                     key={`${kit.id}-${index}`}
-                    className="group relative flex min-w-0 flex-col justify-between overflow-hidden rounded-2xl border border-[#F0E7DF] bg-[#FFFCF8] p-3.5 transition-all duration-300 hover:-translate-y-1 hover:border-[#DDB3BE] hover:bg-[#FFF8F8] hover:shadow-[0_10px_25px_rgba(168,50,80,0.08)] sm:p-5"
+                    className="flex min-w-0 items-center gap-3 rounded-xl border border-[#EFE3D9] bg-[#FFFCF8] p-3 transition-colors hover:border-[#DDB3BE] hover:bg-[#FFF8F8] sm:p-3.5"
                   >
-                    <div className="absolute -right-7 -top-7 size-20 rounded-full bg-[#F8E8ED]/60 transition-transform duration-300 group-hover:scale-150" />
-
-                    <div className="relative">
-                      <div className="relative size-16 overflow-hidden rounded-2xl border border-[#F0DDE2] bg-white sm:size-20">
-                        <Image
-                          src={getGroceryItemImageFallback(productName)}
-                          alt={productName}
-                          fill
-                          sizes="80px"
-                          className="object-contain p-1.5"
-                        />
-                      </div>
-
-                      <h3 className="mt-4 break-words text-sm font-extrabold leading-5 text-[#30251F] sm:text-base">
-                        {productName}
-                      </h3>
-                    </div>
-
-                    <div className="relative mt-4 flex flex-wrap items-center justify-between gap-2">
-                      {quantity ? (
-                        <span className="rounded-lg border border-[#F0DDB7] bg-[#FFF4DF] px-2.5 py-1.5 text-[11px] font-black text-[#94600E] sm:text-xs">
-                          {quantity}
-                        </span>
-                      ) : (
-                        <span className="text-[10px] font-semibold text-[#A69A90]">
-                          Included
-                        </span>
-                      )}
-
-                      <span className="flex size-7 items-center justify-center rounded-full bg-[#EAF6EE] text-[#138047]">
-                        <Check size={15} strokeWidth={3} />
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#F8E8ED] text-[#A83250]">
+                      <Icon size={17} strokeWidth={1.8} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[10px] font-bold uppercase tracking-wide text-[#A69A90]">
+                        Product {index + 1}
                       </span>
-                    </div>
-                  </div>
+                      <span className="mt-0.5 block break-words text-sm font-bold leading-5 text-[#30251F]">
+                        {productName}
+                      </span>
+                    </span>
+                    <span className="max-w-[42%] shrink-0 rounded-lg border border-[#F0DDB7] bg-[#FFF4DF] px-2.5 py-1.5 text-right text-[11px] font-extrabold leading-4 text-[#94600E]">
+                      {quantity}
+                    </span>
+                  </li>
                 );
               })}
-            </div>
+            </ol>
 
             {/* Brand Footer */}
             <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#EFE3D9] bg-[#FFFDF8] px-4 py-4 sm:px-5">
