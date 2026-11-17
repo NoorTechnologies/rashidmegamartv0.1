@@ -65,7 +65,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
   };
 
   return (
-    <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#EDE5DC] bg-white shadow-[0_3px_14px_rgba(53,18,13,0.045)] transition-all duration-300 hover:-translate-y-1 hover:border-[#D4A84F]/60 hover:shadow-[0_12px_28px_rgba(53,18,13,0.10)] sm:rounded-3xl">
+    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[22px] border border-white/80 bg-white/65 shadow-[0_10px_35px_rgba(74,34,22,0.08)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 hover:border-[#D4A84F]/70 hover:bg-white/80 hover:shadow-[0_24px_55px_rgba(74,34,22,0.16)] sm:rounded-[30px]">
 
       {/* KIT IMAGE */}
       <Link
@@ -73,14 +73,14 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         aria-label={`View ${kit.name} details`}
         className="block"
       >
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#FFF9F0]">
+        <div className="relative aspect-[4/3] w-full overflow-hidden bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
           {discount > 0 && (
-            <span className="absolute left-2.5 top-2.5 z-10 rounded-lg bg-[#A83250] px-2 py-1 text-[9px] font-extrabold text-white shadow-sm sm:left-3 sm:top-3 sm:px-2.5 sm:text-[10px]">
+            <span className="absolute left-2.5 top-2.5 z-10 rounded-full border border-white/40 bg-[#8F1235]/90 px-2.5 py-1 text-[9px] font-extrabold tracking-wide text-white shadow-lg shadow-[#8F1235]/20 backdrop-blur-md sm:left-3 sm:top-3 sm:px-2.5 sm:text-[10px]">
               {discount}% OFF
             </span>
           )}
 
-          <span className="absolute right-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-lg border border-[#D4A84F]/30 bg-white/95 px-2 py-1 text-[9px] font-bold text-[#78350F] shadow-sm sm:right-3 sm:top-3 sm:text-[10px]">
+          <span className="absolute right-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/70 bg-white/65 px-2.5 py-1 text-[9px] font-bold text-[#6F321D] shadow-lg backdrop-blur-xl sm:right-3 sm:top-3 sm:text-[10px]">
             <Package size={12} />
             {kit.items.length} Items
           </span>
@@ -104,7 +104,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
             </div>
           )}
 
-          <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full border border-white/80 bg-white/90 px-2 py-1 text-[9px] font-bold text-[#78350F] shadow-sm backdrop-blur-sm">
+          <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full border border-white/70 bg-white/55 px-2.5 py-1 text-[9px] font-bold text-[#6F321D] shadow-lg backdrop-blur-xl">
             <Sparkles size={11} className="text-[#CA8A04]" />
             Grocery Combo
           </span>
@@ -120,7 +120,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
       </Link>
 
       {/* KIT DETAILS */}
-      <div className="flex min-w-0 flex-1 flex-col p-2 sm:p-4">
+      <div className="relative flex min-w-0 flex-1 flex-col p-2.5 sm:p-4">
         <Link href={`/kits/${kit.id}`}>
           <h3 className="line-clamp-2 min-h-9 text-[12px] font-extrabold leading-[18px] text-[#30251F] transition-colors group-hover:text-[#A83250] sm:min-h-11 sm:text-[15px] sm:leading-5">
             {kit.name}
@@ -132,13 +132,13 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         </p>
 
         {/* INCLUDED ITEMS */}
-        <div className="mt-2 rounded-xl border border-[#F0E9DF] bg-[#FFFDF8] p-2 sm:mt-4 sm:p-3">
+        <div className="mt-2 rounded-2xl border border-white/80 bg-white/45 p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-xl sm:mt-4 sm:p-3">
           <div className="mb-2 flex items-center justify-between gap-1">
             <span className="text-[10px] font-extrabold text-[#30251F] sm:text-xs">
               What&apos;s Inside?
             </span>
 
-            <span className="shrink-0 rounded-full bg-[#F8E8ED] px-2 py-0.5 text-[9px] font-bold text-[#A83250]">
+            <span className="shrink-0 rounded-full border border-[#A83250]/10 bg-[#A83250]/[0.07] px-2 py-0.5 text-[9px] font-bold text-[#8F1235]">
               {kit.items.length} Listed Items
             </span>
           </div>
@@ -152,7 +152,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
                   key={`${kit.id}-${index}`}
                   className="flex min-w-0 items-center gap-1.5"
                 >
-                  <div className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[#EEE8DF] bg-white sm:h-8 sm:w-8">
+                  <div className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/90 bg-white/80 shadow-sm sm:h-8 sm:w-8">
                     {productImage ? (
                       <Image
                         src={productImage}
@@ -191,7 +191,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
 
         {/* PRICE AND SAVINGS */}
         <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 sm:mt-4">
-          <span className="text-[15px] font-black tracking-tight text-[#A83250] sm:text-lg">
+          <span className="text-[17px] font-black tracking-tight text-[#8F1235] sm:text-xl">
             {formatPrice(kit.price)}
           </span>
 
@@ -203,7 +203,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         </div>
 
         {savings > 0 && (
-          <p className="mt-1 text-[9px] font-bold text-[#138047] sm:text-[10px]">
+          <p className="mt-1 text-[9px] font-extrabold text-[#087A43] sm:text-[10px]">
             You save {formatPrice(savings)}
           </p>
         )}
@@ -212,7 +212,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
           <Link
             href={`/kits/${kit.id}`}
-            className="rmm-button-secondary min-h-9 min-w-0 flex-1 rounded-lg px-1.5 text-[10px] sm:min-h-10 sm:rounded-xl sm:text-xs"
+            className="min-h-9 min-w-0 flex-1 rounded-xl border border-[#8F1235]/15 bg-white/55 px-1.5 text-[10px] font-extrabold text-[#8F1235] shadow-sm backdrop-blur-lg transition-all duration-300 hover:border-[#8F1235]/40 hover:bg-white/90 hover:shadow-md active:scale-[0.98] sm:min-h-10 sm:rounded-xl sm:text-xs"
           >
             View Kit
             <ArrowUpRight size={12} />
