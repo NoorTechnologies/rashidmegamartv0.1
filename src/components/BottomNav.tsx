@@ -38,7 +38,7 @@ export default function BottomNav() {
           <div className="flex h-full items-center gap-2">
             {navigationItems.map((item) => (
               <Link key={item.href} href={item.href} aria-current={isActive(item.href) ? "page" : undefined}
-                className={`inline-flex h-11 items-center rounded-full px-6 text-sm font-extrabold transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D71920] ${isActive(item.href) ? "bg-[#D71920] text-white shadow-[0_5px_16px_rgba(215,25,32,0.22)]" : "text-[#3F4541] hover:bg-[#FFF0F0] hover:text-[#C8102E]"}`}>
+                className={`inline-flex h-11 items-center rounded-full px-6 text-sm font-extrabold transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D71920] ${isActive(item.href) ? "bg-[#168447] text-white shadow-[0_5px_16px_rgba(22,132,71,0.22)]" : "text-[#3F4541] hover:bg-[#EAF6EE] hover:text-[#106B38]"}`}>
                 {item.label}
               </Link>
             ))}
@@ -51,7 +51,7 @@ export default function BottomNav() {
               Hello! Chat on WhatsApp
             </a>
             <Link href="/cart" aria-label={`Open cart, ${totalItems} items`}
-              className="relative inline-flex min-h-11 items-center gap-2 rounded-full bg-[#D71920] px-5 text-sm font-extrabold text-white shadow-[0_6px_18px_rgba(215,25,32,0.24)] transition hover:-translate-y-0.5 hover:bg-[#B5121B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D71920]">
+              className="relative inline-flex min-h-11 items-center gap-2 rounded-full bg-[#168447] px-5 text-sm font-extrabold text-white shadow-[0_6px_18px_rgba(22,132,71,0.24)] transition hover:-translate-y-0.5 hover:bg-[#106B38] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D71920]">
               <ShoppingCart size={17} /> Cart
               {totalItems > 0 && <span className="flex min-w-5 items-center justify-center rounded-full bg-[#FFD84D] px-1.5 py-0.5 text-[10px] font-black text-[#282014]">{totalItems > 99 ? "99+" : totalItems}</span>}
             </Link>
@@ -67,15 +67,15 @@ export default function BottomNav() {
             const active = item.external ? false : isActive(item.href);
             const content = (
               <>
-                <span className={`relative flex size-9 items-center justify-center rounded-[13px] transition-all duration-200 ${item.external ? "bg-[#E7F8ED] text-[#087A3D]" : active ? "bg-[#D71920] text-white shadow-[0_4px_12px_rgba(215,25,32,0.26)]" : "text-[#424A45]"}`}>
+                <span className={`relative flex size-9 items-center justify-center rounded-[13px] transition-all duration-200 ${item.external ? "bg-[#E7F8ED] text-[#087A3D]" : active ? "bg-[#168447] text-white shadow-[0_4px_12px_rgba(22,132,71,0.26)]" : "text-[#424A45]"}`}>
                   {item.external ? <Image src="/Whatsapp-3d.svg" alt="" width={23} height={23} unoptimized className="size-[22px] object-contain" /> : <Icon size={19} strokeWidth={active ? 2.7 : 2.2} />}
                   {item.href === "/cart" && totalItems > 0 && <span className="absolute -right-1 -top-1 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#FFD84D] px-1 text-[8px] font-black text-[#292014] ring-2 ring-white">{totalItems > 99 ? "99+" : totalItems}</span>}
                 </span>
-                <span className={`text-[10px] leading-none tracking-[-0.01em] ${item.external ? "font-black text-[#087A3D]" : active ? "font-black text-[#D71920]" : "font-bold text-[#59615C]"}`}>{item.external ? <span className="flex flex-col items-center gap-0.5"><b>Hello!</b><small className="text-[8px] font-extrabold">WhatsApp</small></span> : item.label}</span>
-                {active && <span className="absolute bottom-[3px] h-[3px] w-5 rounded-full bg-[#D71920]" />}
+                <span className={`text-[10px] leading-none tracking-[-0.01em] ${item.external ? "font-black text-[#087A3D]" : active ? "font-black text-[#168447]" : "font-bold text-[#59615C]"}`}>{item.external ? <span className="flex flex-col items-center gap-0.5"><b>Hello!</b><small className="text-[8px] font-extrabold">WhatsApp</small></span> : item.label}</span>
+                {active && <span className="absolute bottom-[3px] h-[3px] w-5 rounded-full bg-[#168447]" />}
               </>
             );
-            const className = `relative mx-auto flex h-[64px] w-full max-w-[100px] flex-col items-center justify-center gap-1 rounded-[18px] transition-all duration-200 active:scale-[0.94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#D71920] ${active ? "bg-[#FFF1F1]" : "hover:bg-black/[0.035]"}`;
+            const className = `relative mx-auto flex h-[64px] w-full max-w-[100px] flex-col items-center justify-center gap-1 rounded-[18px] transition-all duration-200 active:scale-[0.94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#D71920] ${active ? "bg-[#EAF6EE]" : "hover:bg-black/[0.035]"}`;
             return item.external
               ? <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" aria-label="Hello! Chat on WhatsApp" className={className}>{content}</a>
               : <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={className}>{content}</Link>;
