@@ -104,9 +104,9 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
         <div className="overflow-hidden rounded-2xl border border-[#E9ECEF] bg-white">
           {contents.map((line, index) => (
             <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="flex items-center gap-2 border-b border-[#F0F1F2] px-2.5 py-2.5 last:border-b-0 sm:gap-3 sm:px-3">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#FFF0F0] text-[#D71920]"><Package size={15} /></span>
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#EAF6EE] text-[#168447]"><Package size={15} /></span>
               <div className="min-w-0 flex-1">
-                <p className="break-words text-[11px] font-extrabold leading-4 text-[#25282B] sm:text-xs">{line.name}</p>
+                <p className="break-words text-[11px] font-extrabold leading-4 text-[#25282B] sm:text-xs">{displayCatalogue(line.name)}</p>
                 <p className="mt-0.5 text-[9px] font-semibold text-[#899098]">Included in this kit</p>
               </div>
               <div className="flex shrink-0 items-center rounded-xl border border-[#E2E5E8] bg-[#F8F9FA] p-0.5">
@@ -141,7 +141,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
               <div className="mt-2 space-y-2">
                 {additions.map((item, index) => (
                   <div key={`${displayCatalogue(item.name)}-${index}`} className="flex items-center justify-between gap-2 text-[11px]">
-                    <span className="min-w-0 flex-1 font-bold text-[#37312A]">{item.name} <span className="font-semibold text-[#806C48]">· {displayCatalogue(item.quantity)}</span></span>
+                    <span className="min-w-0 flex-1 font-bold text-[#37312A]">{displayCatalogue(item.name)} <span className="font-semibold text-[#806C48]">· {displayCatalogue(item.quantity)}</span></span>
                     <button type="button" onClick={() => saveContents(contents, additions.filter((_, i) => i !== index))} className="rounded-lg px-2 py-1 font-extrabold text-[#C1121F] hover:bg-white">Remove</button>
                   </div>
                 ))}
