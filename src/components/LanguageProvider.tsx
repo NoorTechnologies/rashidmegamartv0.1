@@ -19,6 +19,42 @@ export function toEnglishCatalogue(value: string) {
   return result;
 }
 
+const hinglishCatalogueWords: Record<string, string> = {
+  "बोरी किंकी चावल": "Bori Kinki Chawal", "किनकी चावल": "Kinki Chawal", "चावल": "Chawal",
+  "सरसों तेल": "Sarson Tel", "रिफाइंड तेल": "Refined Tel", "तेल": "Tel", "टाटा नमक": "Tata Namak", "नमक": "Namak",
+  "ताज़ा मिर्च": "Taaza Mirch", "मिर्च": "Mirch", "ताज़ा धनिया": "Taaza Dhaniya", "धनिया": "Dhaniya",
+  "ताज़ा हल्दी": "Taazi Haldi", "हल्दी": "Haldi", "आटा": "Aata", "दाल": "Daal", "मिक्स दाल": "Mix Daal",
+  "जीरा": "Jeera", "कोलगेट मंजन": "Colgate Manjan", "मंजन बड़ा": "Bada Manjan", "सर्फ एक्सेल / निरमा": "Surf Excel / Nirma",
+  "कपड़े वाली साबुन": "Kapde wala sabun", "रिन साबुन": "Rin sabun", "नहाने वाला साबुन लक्स": "Lux nahane wala sabun",
+  "नहाने वाला साबुन": "Nahane wala sabun", "बर्तन वाला लिक्विड": "Bartan wala liquid", "बर्तन वाला विम जेल": "Vim bartan gel",
+  "बर्तन वाला साबुन": "Bartan wala sabun", "डेटॉल लिक्विड": "Dettol liquid", "डेटॉल हैंडवॉश": "Dettol handwash",
+  "पास्ता मसाला": "Pasta masala", "पास्ता": "Pasta", "बेसन": "Besan", "पोहा": "Poha", "काली मिर्च": "Kali mirch",
+  "शैम्पू": "Shampoo", "शक्कर": "Shakkar", "चायपत्ती": "Chai patti", "मैजिक मसाला": "Magic masala",
+  "लौंग": "Laung", "विनेगर": "Vinegar", "मखाना": "Makhana", "काजू": "Kaju", "बादाम": "Badam",
+  "सूजी": "Sooji", "देसी घी": "Desi ghee", "आंवला हेयर ऑयल": "Amla hair oil", "ऑल आउट मशीन सेट": "All Out machine set",
+  "मैगी फैमिली पैक": "Maggi family pack", "मैगी मसाला": "Maggi masala", "मैगी": "Maggi", "सौंफ": "Saunf",
+  "छोटी इलायची": "Chhoti elaichi", "जायफल": "Jaiphal", "मूंगफली": "Moongfali", "अगरबत्ती": "Agarbatti",
+  "दालचीनी": "Dalchini", "पत्ता": "Patta", "वाघ बकरी चाय": "Wagh Bakri chai", "किराना": "Kirana",
+  "रोज़मर्रा के सामान": "Rozmarra ka samaan", "ज़रूरी सामान": "Zaroori samaan", "एक ही किट में": "ek hi kit mein",
+  "रोज़मर्रा के उपयोग के": "rozmarra ke istemal ke"
+};
+
+export function toHinglishCatalogue(value: string) {
+  let result = value;
+  for (const [hindi, roman] of Object.entries(hinglishCatalogueWords).sort(([a], [b]) => b.length - a.length)) {
+    result = result.replaceAll(hindi, roman);
+  }
+  return result
+    .replace(/(\\d+)\\s*किलो/g, "$1 kilo")
+    .replace(/(\\d+)\\s*लीटर/g, "$1 litre")
+    .replace(/(\\d+)\\s*ग्राम/g, "$1 gram")
+    .replace(/(\\d+)\\s*पैकेट/g, "$1 packet")
+    .replace(/(\\d+)\\s*पीस/g, "$1 piece")
+    .replace(/(\\d+)\\s*पाउच/g, "$1 pouch")
+    .replace(/(\\d+)\\s*सेट/g, "$1 set")
+    .replace(/(\\d+)\\s*बोरी/g, "$1 bori");
+}
+
 const STORAGE_KEY = "rmm-language";
 
 let currentLanguage: Language = "en";
