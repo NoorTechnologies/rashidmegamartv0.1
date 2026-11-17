@@ -49,7 +49,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         className="block"
       >
         <div className="relative aspect-[5/3] w-full overflow-hidden sm:aspect-[4/3] bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
-          <span className="absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/30 bg-[#D71920] px-2.5 py-1 text-[9px] font-black tracking-wide text-white shadow-lg shadow-[#B5121B]/25 sm:left-3 sm:top-3 sm:text-[10px]">
+          <span className="absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/30 bg-[#168447] px-2.5 py-1 text-[9px] font-black tracking-wide text-white shadow-lg shadow-[#B5121B]/25 sm:left-3 sm:top-3 sm:text-[10px]">
             <Sparkles size={11} />
             {savings > 0 ? `YOU SAVE ${formatPrice(savings)}` : "KIT DEAL"}
           </span>
@@ -70,7 +70,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
               className="object-contain p-3 transition-transform duration-500 ease-out group-hover:scale-105 sm:p-5"
             />
           ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-2 text-[#D71920]">
+            <div className="flex h-full flex-col items-center justify-center gap-2 text-[#168447]">
               <Package size={38} strokeWidth={1.4} />
               <span className="text-[10px] font-semibold">
                 Grocery Kit
@@ -112,7 +112,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
               Products inside
             </span>
 
-            <span className="shrink-0 rounded-full border border-[#D71920]/10 bg-[#D71920]/[0.07] px-2 py-0.5 text-[9px] font-bold text-[#B5121B]">
+            <span className="shrink-0 rounded-full border border-[#D71920]/10 bg-[#D71920]/[0.07] px-2 py-0.5 text-[9px] font-bold text-[#168447]">
               {kit.items.length} Products
             </span>
           </div>
