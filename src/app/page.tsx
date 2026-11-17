@@ -65,7 +65,7 @@ export default function HomePage() {
                 </p>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
                   <span className="rounded-xl bg-white px-3.5 py-2 text-sm font-black text-[#9B1738] shadow-sm sm:text-base">
-                    Kits {formatPrice(startingPrice)} se shuru
+                    Kits ₹{startingPrice.toLocaleString("en-IN")} se shuru
                   </span>
                   <span className="text-[10px] font-semibold text-white/80 sm:text-xs">
                     {availableKits.length} kits available
