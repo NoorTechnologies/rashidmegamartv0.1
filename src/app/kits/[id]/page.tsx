@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { getKitById } from "@/data/kits";
 import KitCustomizer from "@/components/KitCustomizer";
+import LocalizedKitCopy from "@/components/LocalizedKitCopy";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -165,12 +166,12 @@ export default async function KitDetailPage({ params }: PageProps) {
 
             {kit.subtitle && (
               <p className="mt-3 text-sm font-semibold text-[#168447] sm:text-base">
-                {kit.subtitle}
+                <LocalizedKitCopy value={kit.subtitle} />
               </p>
             )}
 
             <p className="mt-4 max-w-xl text-sm leading-7 text-[#686868] sm:text-base">
-              {kit.description}
+              <LocalizedKitCopy value={kit.description} />
             </p>
 
             {/* Price Card */}
