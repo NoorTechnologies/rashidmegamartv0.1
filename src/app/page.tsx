@@ -118,12 +118,12 @@ export default function HomePage() {
           })}
         </div>
 
-        <div className="mt-6 rounded-2xl border border-[#EED9C0] bg-gradient-to-r from-[#FFF8E7] to-[#FFF1F3] px-4 py-5 text-center sm:mt-7 sm:px-6 sm:py-6">
-          <p className="text-base font-black text-[#30251F] sm:text-lg">Ghar Baithe Grocery Shopping, Aasaan!</p>
-          <p className="mx-auto mt-1.5 max-w-lg text-xs leading-5 text-[#6A7282] sm:text-sm">Available grocery kits ke baare mein poochhein aur WhatsApp par apna order confirm karein.</p>
+        <div className="mt-4 rounded-xl border border-[#E9E1DA] bg-white px-3 py-3 text-center sm:mt-7 sm:rounded-2xl sm:px-6 sm:py-6">
+          <p className="text-base font-black text-[#30251F] sm:text-lg">Apni Zaroorat Ki Kit Khud Banayein</p>
+          <p className="mx-auto mt-1.5 max-w-lg text-xs leading-5 text-[#6A7282] sm:text-sm">Ready-made kit ke items badlein, quantity set karein aur apni pasand ke grocery items add karein.</p>
           <div className="mt-4 flex flex-col justify-center gap-2 min-[420px]:flex-row">
-            <a href="https://wa.me/918962531603?text=Namaste%2C%20mujhe%20grocery%20kits%20ke%20baare%20mein%20jankari%20chahiye." target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#A83250] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#87263F] sm:text-sm">
-              <Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} className="h-5 w-5 object-contain" /> WhatsApp Par Baat Karein
+            <a href="https://wa.me/918962531603?text=Namaste%2C%20mujhe%20apni%20grocery%20kit%20customize%20karni%20hai." target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#A83250] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#87263F] sm:text-sm">
+              <Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} className="h-5 w-5 object-contain" /> Kit Customize Karein
             </a>
             <Link href="/kits" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D9C6B2] bg-white px-5 py-3 text-xs font-bold text-[#A83250] transition hover:border-[#A83250] sm:text-sm">
               Ready Kits Dekhein <ArrowRight size={16} />
