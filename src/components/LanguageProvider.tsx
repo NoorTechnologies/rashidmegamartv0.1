@@ -251,8 +251,8 @@ function translateText(value: string) {
   for (const [source, target] of phraseReplacements) {
     if (result.includes(source)) result = result.replaceAll(source, target);
   }
-  result = result.replace(/(\\d+) WALI KIT/gi, "$1 वाली किट");
-  result = result.replace(/Open cart, (\\d+) items?/gi, "कार्ट खोलें, $1 सामान");
+  result = result.replace(/(\d+) WALI KIT/gi, "$1 वाली किट");
+  result = result.replace(/Open cart, (\d+) items?/gi, "कार्ट खोलें, $1 सामान");
   result = result.replace(/Decrease (.+?) quantity/gi, "$1 की मात्रा घटाएं");
   result = result.replace(/Increase (.+?) quantity/gi, "$1 की मात्रा बढ़ाएं");
   result = result.replace(/(\d+) of (\d+) kits found/gi, "$1 में से $2 किट्स मिलीं");
