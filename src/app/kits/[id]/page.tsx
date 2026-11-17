@@ -189,10 +189,10 @@ export default async function KitDetailPage({ params }: PageProps) {
                 </div>
                 <div>
                   <p className="text-sm font-extrabold text-[#30251F]">
-                    Kit Contents
+                    Products in this kit
                   </p>
                   <p className="text-xs text-[#94847A]">
-                    Everything included in this combo
+                    See the full product list below
                   </p>
                 </div>
               </div>
@@ -311,7 +311,7 @@ export default async function KitDetailPage({ params }: PageProps) {
           <div className="p-4 sm:p-7">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
               <p className="text-sm font-bold text-[#30251F]">
-                Complete list of products in this kit
+                Every product included in your kit
               </p>
               <span className="text-xs font-semibold text-[#796B61]">
                 {kit.items.length} products included
@@ -320,7 +320,7 @@ export default async function KitDetailPage({ params }: PageProps) {
 
             <ol className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
               {kit.items.map((item, index) => {
-                const parts = item.match(/^(.+?)\\s*[-–]\\s*(.+)$/);
+                const parts = item.match(/^(.+?)\s*[-–]\s*(.+)$/);
                 const productName = parts ? parts[1].trim() : item;
                 const quantity = parts ? parts[2].trim() : "Included";
                 const Icon = getGroceryIcon(productName);
