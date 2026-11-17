@@ -26,7 +26,8 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   const [contents, setContents] = useState<KitLine[]>(() => existingCartItem?.kitContents ?? kit.items.map(splitKitLine));
   useEffect(() => {
     if (existingCartItem?.kitContents) setContents(existingCartItem.kitContents);
-  }, [existingCartItem?.kitContents]);\n  const [newItem, setNewItem] = useState("");
+  }, [existingCartItem?.kitContents]);
+  const [newItem, setNewItem] = useState("");
   const [newQuantity, setNewQuantity] = useState("1");
   const [error, setError] = useState("");
 
