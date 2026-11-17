@@ -1,0 +1,57 @@
+name: Non-breaking Dependency Refresh
+
+on:
+  push:
+    branches:
+      - security/nonbreaking-dependency-fixes
+    paths:
+      - .github/workflows/nonbreaking-deps.yml
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout security branch
+        uses: actions/checkout@v6
+        with:
+          ref: security/nonbreaking-dependency-fixes
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Apply non-breaking npm security updates only
+        run: npm audit fix --ignore-scripts
+
+      - name: Report remaining advisories
+        run: |
+          npm audit --json > /tmp/npm-audit.json || true
+          node -e "const a=require('/tmp/npm-audit.json'); console.log(JSON.stringify({metadata:a.metadata?.vulnerabilities, advisories:Object.keys(a.vulnerabilities||{})}, null, 2))"
+
+      - name: Verify lint, types and production build
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run build
+
+      - name: Commit lockfile only when checks pass
+        run: |
+          if git diff --quiet -- package-lock.json; then
+            echo "No non-breaking lockfile updates were available."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add package-lock.json
+            git commit -m "chore(security): apply non-breaking npm audit fixes"
+            git push origin HEAD:security/nonbreaking-dependency-fixes
+          fi
