@@ -77,12 +77,12 @@ export default function CartPage() {
 
   const groceryCalculations = items.map((item) => {
     const lines = [...(item.kitContents ?? []), ...(item.requestedItems ?? [])];
-    return { item, estimate: lines.length ? estimateGroceryLines(lines) : { lines: [], total: null, pendingCount: 1 } };
+    return { item, estimate: lines.length ? estimateGroceryLines(lines) : null };
   });
-  const hasCustomizedLines = groceryCalculations.some(({ estimate }) => estimate.lines.length > 0);
-  const customizedRatesReady = hasCustomizedLines && groceryCalculations.every(({ estimate }) => estimate.total !== null);
+  const hasCustomizedLines = groceryCalculations.some(({ estimate }) => estimate !== null);
+  const customizedRatesReady = hasCustomizedLines && groceryCalculations.every(({ estimate }) => !estimate || estimate.total !== null);
   const customizedGrandTotal = customizedRatesReady
-    ? groceryCalculations.reduce((sum, { item, estimate }) => sum + (estimate.total ?? 0) * item.quantity, 0)
+    ? groceryCalculations.reduce((sum, { item, estimate }) => sum + (estimate?.total ?? item.price) * item.quantity, 0)
     : null;
   const currentGrandTotal = customizedGrandTotal ?? subtotal;
 
@@ -468,7 +468,7 @@ export default function CartPage() {
                       {/* Item Total & Remove */}
                       <div className="flex min-w-0 items-center gap-1.5 min-[375px]:gap-2">
                         <span className="truncate text-xs font-black text-[#202124] min-[375px]:text-sm">
-                          {formatPrice((customizedRatesReady ? groceryCalculations.find(({ item: calculatedItem }) => calculatedItem.id === item.id)?.estimate.total ?? item.price : item.price) * item.quantity)}
+                          {formatPrice((customizedRatesReady ? groceryCalculations.find(({ item: calculatedItem }) => calculatedItem.id === item.id)?.estimate?.total ?? item.price : item.price) * item.quantity)}
                         </span>
 
                         <button
@@ -564,9 +564,9 @@ export default function CartPage() {
                     <div key={item.id} className="border-t border-[#F1EBDD] pt-2 first:border-0 first:pt-0">
                       <div className="flex items-center justify-between gap-2 text-[10px]">
                         <span className="font-bold text-[#202124]">{item.name} × {item.quantity}</span>
-                        <span className="font-black text-[#106B38]">{estimate.total === null ? "Rate pending" : formatPrice(estimate.total * item.quantity)}</span>
+                        <span className="font-black text-[#106B38]">{!estimate ? formatPrice(item.price * item.quantity) : estimate.total === null ? "Rate pending" : formatPrice(estimate.total * item.quantity)}</span>
                       </div>
-                      {estimate.pendingCount > 0 && <p className="mt-1 text-[9px] text-[#806000]">{estimate.pendingCount} item rates need owner confirmation</p>}
+                      {estimate && estimate.pendingCount > 0 && <p className="mt-1 text-[9px] text-[#806000]">{estimate.pendingCount} item rates need owner confirmation</p>}
                     </div>
                   ))}
                 </div>
