@@ -614,7 +614,7 @@ function transliterateHindi(value: string) {
       output += char;
     }
   }
-  return output;
+  return output.replace(/a(?=[\\s.,!?।]|$)/g, "");
 }
 
 for (const [source, target] of Object.entries(translations)) {
@@ -690,7 +690,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         }
         const record = records.get(attribute);
         const original = record && current === record.translated ? record.original : current;
-        const translated = nextLanguage === "en" ? original : translateText(original, nextLanguage === "hi" ? hindiTranslations : translations);
+        const translated = nextLanguage === "en" ? original : translateText(original, nextLanguage === "hi" ? hindiTranslations : hinglishTranslations);
         records.set(attribute, { original, translated });
         if (current !== translated) element.setAttribute(attribute, translated);
       }
