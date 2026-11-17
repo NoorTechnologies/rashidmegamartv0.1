@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { House, Package, ShoppingCart, MessageCircle, Languages } from "lucide-react";
+import { House, Package, ShoppingCart, MessageCircle, Languages, Tag, Ticket, MoreHorizontal, X } from "lucide-react";
+import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, useToggleSiteLanguage } from "@/components/LanguageProvider";
 
@@ -13,6 +14,8 @@ const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent
 const navigationItems = [
   { label: "Home", href: "/", icon: House, external: false },
   { label: "Kits", href: "/kits", icon: Package, external: false },
+  { label: "Deals", href: "/deals", icon: Tag, external: false },
+  { label: "Coupons", href: "/coupons", icon: Ticket, external: false },
 ];
 
 const mobileNavigationItems = [
@@ -26,6 +29,7 @@ export default function BottomNav() {
   const { totalItems } = useCart();
   const language = useSiteLanguage();
   const toggleLanguage = useToggleSiteLanguage();
+  const [moreOpen, setMoreOpen] = useState(false);
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
@@ -67,7 +71,7 @@ export default function BottomNav() {
       </header>
 
       <nav aria-label="Main navigation" className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full px-2 pb-[calc(8px+env(safe-area-inset-bottom))] sm:px-4 lg:hidden">
-        <div className="mx-auto grid h-[62px] w-full max-w-[520px] grid-cols-5 items-center rounded-[22px] border border-white/70 bg-[#FAF7EF]/96 px-1 shadow-[0_8px_28px_rgba(32,20,18,0.16)] backdrop-blur-xl">
+        <div className="mx-auto grid h-[62px] w-full max-w-[460px] grid-cols-5 items-center rounded-[22px] border border-white/70 bg-[#FAF7EF]/96 px-1 shadow-[0_8px_28px_rgba(32,20,18,0.16)] backdrop-blur-xl">
           {mobileNavigationItems.map((item) => {
             const Icon = item.icon;
             const active = item.external ? false : isActive(item.href);
@@ -89,12 +93,19 @@ export default function BottomNav() {
               ? <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" className={className}>{content}</a>
               : <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={className}>{content}</Link>;
           })}
-          <button type="button" data-no-translate onClick={toggleLanguage} aria-label={language === "en" ? "Switch to Hinglish" : "Switch to English"} className="mx-auto flex h-[54px] w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl text-[#800020] transition hover:bg-[#F1EBDD] active:scale-[0.97]">
-            <span className="flex size-7 items-center justify-center rounded-full bg-[#F1EBDD]"><Languages size={17} /></span>
-            <span className="text-[9px] font-extrabold leading-none">{language === "en" ? "Hinglish" : "English"}</span>
+          <button type="button" onClick={() => setMoreOpen((open) => !open)} aria-expanded={moreOpen} aria-label="More navigation options" className="mx-auto flex h-[54px] w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl text-[#800020] transition hover:bg-[#F1EBDD] active:scale-[0.97]">
+            <span className="flex size-7 items-center justify-center rounded-full bg-[#F1EBDD]">{moreOpen ? <X size={17} /> : <MoreHorizontal size={18} />}</span>
+            <span className="text-[9px] font-extrabold leading-none">More</span>
           </button>
         </div>
       </nav>
+      {moreOpen && (
+        <div className="fixed inset-x-3 bottom-[calc(78px+env(safe-area-inset-bottom))] z-[60] mx-auto grid max-w-[460px] grid-cols-3 gap-2 rounded-2xl border border-[#E8DFD1] bg-[#FAF7EF]/98 p-3 shadow-[0_14px_40px_rgba(32,20,18,0.20)] backdrop-blur-xl lg:hidden">
+          <Link href="/deals" onClick={() => setMoreOpen(false)} className={`flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl text-xs font-extrabold ${isActive("/deals") ? "bg-[#800020] text-white" : "bg-white text-[#202124]"}`}><Tag size={19} /> Deals</Link>
+          <Link href="/coupons" onClick={() => setMoreOpen(false)} className={`flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl text-xs font-extrabold ${isActive("/coupons") ? "bg-[#800020] text-white" : "bg-white text-[#202124]"}`}><Ticket size={19} /> Coupons</Link>
+          <button type="button" data-no-translate onClick={toggleLanguage} className="flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl bg-white text-xs font-extrabold text-[#800020]"><Languages size={19} /> {language === "en" ? "Hinglish" : "English"}</button>
+        </div>
+      )}
     </>
   );
 }
