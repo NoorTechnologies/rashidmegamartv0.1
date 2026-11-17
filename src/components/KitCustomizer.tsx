@@ -6,7 +6,7 @@ import type { GroceryKit } from "@/data/kits";
 import { kits } from "@/data/kits";
 import { estimateGroceryLines } from "@/data/grocery-rates";
 import { useCart } from "@/context/CartContext";
-import { useSiteLanguage, toEnglishCatalogue } from "@/components/LanguageProvider";
+import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
 
 type KitLine = { name: string; quantity: string };
 
@@ -25,7 +25,7 @@ function adjustQuantity(value: string, delta: number) {
 export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   const { addToCart, updateKitCustomization, items, isLoaded } = useCart();
   const language = useSiteLanguage();
-  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : value;
+  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : language === "hinglish" ? toHinglishCatalogue(value) : value;
   const existingCartItem = items.find((item) => item.id === kit.id);
   const [contents, setContents] = useState<KitLine[]>(() => existingCartItem?.kitContents ?? kit.items.map(splitKitLine));
   const [additions, setAdditions] = useState<KitLine[]>(() => existingCartItem?.requestedItems ?? []);
