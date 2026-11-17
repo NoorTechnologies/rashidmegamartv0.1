@@ -1,9 +1,23 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import { Languages, ChevronDown } from "lucide-react";
+type Language = "en" | "hi";
 
-type Language = "en" | "hi";\n\nconst LanguageContext = createContext<Language>("en");\nexport const useSiteLanguage = () => useContext(LanguageContext);\n\nconst hindiCatalogueWords: Record<string, string> = {\n  "बोरी किंकी चावल": "Kinki rice sack", "किनकी चावल": "Kinki rice", "चावल": "Rice", "सरसों तेल": "Mustard oil", "रिफाइंड तेल": "Refined oil", "तेल": "Oil", "टाटा नमक": "Tata salt", "नमक": "Salt", "ताज़ा मिर्च": "Fresh chilli", "मिर्च": "Chilli", "ताज़ा धनिया": "Fresh coriander", "धनिया": "Coriander", "ताज़ा हल्दी": "Fresh turmeric", "हल्दी": "Turmeric", "आटा": "Wheat flour", "दाल": "Lentils", "मिक्स दाल": "Mixed lentils", "जीरा": "Cumin", "कोलगेट मंजन": "Colgate toothpaste", "मंजन बड़ा": "Large toothpaste", "सर्फ एक्सेल / निरमा": "Surf Excel / Nirma detergent", "कपड़े वाली साबुन": "Laundry soap", "रिन साबुन": "Rin soap", "नहाने वाला साबुन लक्स": "Lux bathing soap", "नहाने वाला साबुन": "Bathing soap", "बर्तन वाला लिक्विड": "Dishwashing liquid", "बर्तन वाला विम जेल": "Vim dishwashing gel", "बर्तन वाला साबुन": "Dishwashing soap", "डेटॉल लिक्विड": "Dettol liquid", "डेटॉल हैंडवॉश": "Dettol handwash", "पास्ता मसाला": "Pasta masala", "पास्ता": "Pasta", "बेसन": "Gram flour", "पोहा": "Flattened rice", "काली मिर्च": "Black pepper", "शैम्पू": "Shampoo", "शक्कर": "Sugar", "चायपत्ती": "Tea leaves", "मैजिक मसाला": "Magic masala", "लौंग": "Cloves", "विनेगर": "Vinegar", "मखाना": "Fox nuts", "काजू": "Cashews", "बादाम": "Almonds", "सूजी": "Semolina", "देसी घी": "Desi ghee", "आंवला हेयर ऑयल": "Amla hair oil", "ऑल आउट मशीन सेट": "All Out machine set", "मैगी फैमिली पैक": "Maggi family pack", "मैगी मसाला": "Maggi masala", "मैगी": "Maggi", "सौंफ": "Fennel seeds", "छोटी इलायची": "Green cardamom", "जायफल": "Nutmeg", "मूंगफली": "Peanuts", "अगरबत्ती": "Incense sticks", "दालचीनी": "Cinnamon", "पत्ता": "Leaf", "वाघ बकरी चाय": "Wagh Bakri tea", "किराना": "Grocery", "रोज़मर्रा के सामान": "daily essentials", "ज़रूरी सामान": "essential items", "एक ही किट में": "in one kit", "रोज़मर्रा के उपयोग के": "everyday use"\n};\n\nexport function toEnglishCatalogue(value: string) {\n  let result = value;\n  for (const [hindi, english] of Object.entries(hindiCatalogueWords).sort(([a], [b]) => b.length - a.length)) result = result.replaceAll(hindi, english);\n  result = result.replace(/(\\d+)\\s*किलो/g, "$1 kg").replace(/(\\d+)\\s*लीटर/g, "$1 litres").replace(/(\\d+)\\s*ग्राम/g, "$1 g").replace(/(\\d+)\\s*पैकेट/g, "$1 packs").replace(/(\\d+)\\s*पीस/g, "$1 pcs").replace(/(\\d+)\\s*पाउच/g, "$1 pouches").replace(/(\\d+)\\s*सेट/g, "$1 sets").replace(/(\\d+)\\s*बोरी/g, "$1 sack");\n  return result;\n}
+const LanguageContext = createContext<Language>("en");
+const LanguageToggleContext = createContext<() => void>(() => {});
+export const useSiteLanguage = () => useContext(LanguageContext);
+export const useToggleSiteLanguage = () => useContext(LanguageToggleContext);
+
+const hindiCatalogueWords: Record<string, string> = {
+  "बोरी किंकी चावल": "Kinki rice sack", "किनकी चावल": "Kinki rice", "चावल": "Rice", "सरसों तेल": "Mustard oil", "रिफाइंड तेल": "Refined oil", "तेल": "Oil", "टाटा नमक": "Tata salt", "नमक": "Salt", "ताज़ा मिर्च": "Fresh chilli", "मिर्च": "Chilli", "ताज़ा धनिया": "Fresh coriander", "धनिया": "Coriander", "ताज़ा हल्दी": "Fresh turmeric", "हल्दी": "Turmeric", "आटा": "Wheat flour", "दाल": "Lentils", "मिक्स दाल": "Mixed lentils", "जीरा": "Cumin", "कोलगेट मंजन": "Colgate toothpaste", "मंजन बड़ा": "Large toothpaste", "सर्फ एक्सेल / निरमा": "Surf Excel / Nirma detergent", "कपड़े वाली साबुन": "Laundry soap", "रिन साबुन": "Rin soap", "नहाने वाला साबुन लक्स": "Lux bathing soap", "नहाने वाला साबुन": "Bathing soap", "बर्तन वाला लिक्विड": "Dishwashing liquid", "बर्तन वाला विम जेल": "Vim dishwashing gel", "बर्तन वाला साबुन": "Dishwashing soap", "डेटॉल लिक्विड": "Dettol liquid", "डेटॉल हैंडवॉश": "Dettol handwash", "पास्ता मसाला": "Pasta masala", "पास्ता": "Pasta", "बेसन": "Gram flour", "पोहा": "Flattened rice", "काली मिर्च": "Black pepper", "शैम्पू": "Shampoo", "शक्कर": "Sugar", "चायपत्ती": "Tea leaves", "मैजिक मसाला": "Magic masala", "लौंग": "Cloves", "विनेगर": "Vinegar", "मखाना": "Fox nuts", "काजू": "Cashews", "बादाम": "Almonds", "सूजी": "Semolina", "देसी घी": "Desi ghee", "आंवला हेयर ऑयल": "Amla hair oil", "ऑल आउट मशीन सेट": "All Out machine set", "मैगी फैमिली पैक": "Maggi family pack", "मैगी मसाला": "Maggi masala", "मैगी": "Maggi", "सौंफ": "Fennel seeds", "छोटी इलायची": "Green cardamom", "जायफल": "Nutmeg", "मूंगफली": "Peanuts", "अगरबत्ती": "Incense sticks", "दालचीनी": "Cinnamon", "पत्ता": "Leaf", "वाघ बकरी चाय": "Wagh Bakri tea", "किराना": "Grocery", "रोज़मर्रा के सामान": "daily essentials", "ज़रूरी सामान": "essential items", "एक ही किट में": "in one kit", "रोज़मर्रा के उपयोग के": "everyday use"
+};
+
+export function toEnglishCatalogue(value: string) {
+  let result = value;
+  for (const [hindi, english] of Object.entries(hindiCatalogueWords).sort(([a], [b]) => b.length - a.length)) result = result.replaceAll(hindi, english);
+  result = result.replace(/(\\d+)\\s*किलो/g, "$1 kg").replace(/(\\d+)\\s*लीटर/g, "$1 litres").replace(/(\\d+)\\s*ग्राम/g, "$1 g").replace(/(\\d+)\\s*पैकेट/g, "$1 packs").replace(/(\\d+)\\s*पीस/g, "$1 pcs").replace(/(\\d+)\\s*पाउच/g, "$1 pouches").replace(/(\\d+)\\s*सेट/g, "$1 sets").replace(/(\\d+)\\s*बोरी/g, "$1 sack");
+  return result;
+}
 
 const STORAGE_KEY = "rmm-language";
 
@@ -246,6 +260,33 @@ const translations: Record<string, string> = {
   "Hindi": "हिंदी",
 };
 
+Object.assign(translations, {
+  "Home": "Ghar", "Kits": "Kits", "Cart": "Cart", "Contact": "Sampark",
+  "SMART GROCERY KITS": "Smart Grocery Kits",
+  "Explore Grocery Kits": "Grocery Kits Dekhein",
+  "Value-packed combos": "Budget-friendly Combos",
+  "Delivery on confirmation": "Confirm hone par Delivery",
+  "Grocery Shopping, Made Easier": "Grocery Shopping Ab Easy",
+  "Why Choose Us?": "Humein Kyun Choose Karein?",
+  "Market Jaane Ka Time Nahi?": "Market Jaane ka Time Nahi?",
+  "WhatsApp Par Poochhein": "WhatsApp par Poochhein",
+  "Ready Kits Dekhein": "Ready Kits Dekhein",
+  "Our Grocery Kits": "Hamari Grocery Kits",
+  "View All": "Sabhi Dekhein",
+  "Search grocery kits...": "Grocery kits search karein...",
+  "All Kits": "All Kits",
+  "In Stock": "Stock Mein",
+  "Out of Stock": "Out of Stock",
+  "Reset": "Reset",
+  "Customize": "Customize Karein",
+  "Your cart is empty": "Aapka cart abhi khaali hai",
+  "Explore Grocery Kits": "Grocery Kits Dekhein",
+  "Your suggestion matters": "Aapka Suggestion Important Hai",
+  "Your name": "Aapka Naam",
+  "Add item": "Item Add Karein",
+  "You may also need": "Ye Items Bhi Kaam Aa Sakte Hain"
+});
+
 const phraseReplacements = Object.entries(translations)
   .filter(([source]) => source.length > 3)
   .sort(([a], [b]) => b.length - a.length);
@@ -274,10 +315,6 @@ function translateText(value: string) {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("en");
-  const [visible, setVisible] = useState(true);
-  const [expanded, setExpanded] = useState(false);
-  const lastScrollY = useRef(0);
-  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const textOriginals = useRef(new WeakMap<Text, { original: string; translated: string }>());
   const attrOriginals = useRef(new WeakMap<Element, Map<string, { original: string; translated: string }>>());
 
@@ -317,7 +354,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    document.documentElement.lang = nextLanguage === "hi" ? "hi-IN" : "en-IN";
+    document.documentElement.lang = nextLanguage === "hi" ? "hi-Latn" : "en-IN";
   }, []);
 
   useEffect(() => {
@@ -352,37 +389,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  useEffect(() => {
-    const onScroll = () => {
-      const currentY = window.scrollY;
-      const previousY = lastScrollY.current;
-      const movingDown = currentY > previousY;
-      lastScrollY.current = currentY;
-      if (currentY < 40 || (!movingDown && currentY < previousY)) {
-        setVisible(true);
-      } else if (movingDown && currentY > 80 && !expanded) {
-        setVisible(false);
-        setExpanded(false);
-      }
-    };
-    const onActivity = () => {
-      setVisible(true);
-      if (hideTimer.current) clearTimeout(hideTimer.current);
-      hideTimer.current = setTimeout(() => {
-        if (window.scrollY > 80 && !expanded) setVisible(false);
-      }, 2600);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("pointermove", onActivity, { passive: true });
-    window.addEventListener("touchstart", onActivity, { passive: true });
-    onActivity();
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("pointermove", onActivity);
-      window.removeEventListener("touchstart", onActivity);
-      if (hideTimer.current) clearTimeout(hideTimer.current);
-    };
-  }, [expanded]);
+  const toggleLanguage = () => {
+    const next: Language = language === "en" ? "hi" : "en";
+    setLanguage(next);
+    try { window.localStorage.setItem(STORAGE_KEY, next); } catch { /* session-only fallback */ }
+  };
 
   return (
     <>
@@ -394,16 +405,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         {expanded ? (
           <div className="flex items-center gap-1 rounded-full border border-white/80 bg-white/90 p-1.5 shadow-[0_10px_35px_rgba(30,20,25,0.18)] backdrop-blur-2xl">
             <button type="button" onClick={() => chooseLanguage("en")} aria-pressed={language === "en"} className={`rounded-full px-3.5 py-2 text-xs font-extrabold transition ${language === "en" ? "bg-[#800020] text-white shadow-sm" : "text-[#686868] hover:bg-[#F1EBDD]"}`}>EN</button>
-            <button type="button" onClick={() => chooseLanguage("hi")} aria-pressed={language === "hi"} className={`rounded-full px-3.5 py-2 text-xs font-extrabold transition ${language === "hi" ? "bg-[#800020] text-white shadow-sm" : "text-[#686868] hover:bg-[#F1EBDD]"}`}>हिंदी</button>
-            <button type="button" onClick={() => setExpanded(false)} aria-label="Close language selector" className="ml-0.5 flex size-8 items-center justify-center rounded-full text-[#686868] hover:bg-[#FAF7EF]"><ChevronDown size={15} /></button>
-          </div>
-        ) : (
-          <button type="button" onClick={() => { setExpanded(true); setVisible(true); }} aria-label={language === "hi" ? "भाषा बदलें" : "Change language"} className="flex h-11 items-center gap-2 rounded-full border border-white/80 bg-white/85 px-4 text-xs font-extrabold text-[#800020] shadow-[0_8px_28px_rgba(40,25,30,0.16)] backdrop-blur-2xl transition hover:-translate-y-0.5 hover:bg-white active:scale-95">
-            <Languages size={16} />
-            {language === "hi" ? "हिंदी" : "EN / HI"}
-          </button>
-        )}
-      </div>
-    </>
+            <button type="button" onClick={() => chooseLanguage("hi")} aria-pressed={language === "hi"} className={`rounded-full px-3.5 py-2 text-xs font-extrabol  return (
+    <LanguageContext.Provider value={language}>
+      <LanguageToggleContext.Provider value={toggleLanguage}>
+        {children}
+      </LanguageToggleContext.Provider>
+    </LanguageContext.Provider>
   );
 }
