@@ -49,9 +49,9 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         className="block"
       >
         <div className="relative aspect-[5/3] w-full overflow-hidden sm:aspect-[4/3] bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
-          <span className="absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/30 bg-[#B51232] px-2.5 py-1 text-[9px] font-black tracking-wide text-white shadow-lg shadow-[#8F1235]/25 sm:left-3 sm:top-3 sm:text-[10px]">
+          <span className="absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/30 bg-[#D71920] px-2.5 py-1 text-[9px] font-black tracking-wide text-white shadow-lg shadow-[#B5121B]/25 sm:left-3 sm:top-3 sm:text-[10px]">
             <Sparkles size={11} />
-            {savings > 0 ? `SAVE ${formatPrice(savings)}` : "KIT DEAL"}
+            {savings > 0 ? `YOU SAVE ${formatPrice(savings)}` : "KIT DEAL"}
           </span>
 
           <span className="absolute right-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/70 bg-white/65 px-2.5 py-1 text-[9px] font-bold text-[#6F321D] shadow-lg backdrop-blur-xl sm:right-3 sm:top-3 sm:text-[10px]">
@@ -70,7 +70,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
               className="object-contain p-3 transition-transform duration-500 ease-out group-hover:scale-105 sm:p-5"
             />
           ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-2 text-[#A83250]">
+            <div className="flex h-full flex-col items-center justify-center gap-2 text-[#D71920]">
               <Package size={38} strokeWidth={1.4} />
               <span className="text-[10px] font-semibold">
                 Grocery Kit
@@ -79,8 +79,8 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
           )}
 
           <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full border border-white/70 bg-white/55 px-2.5 py-1 text-[9px] font-bold text-[#6F321D] shadow-lg backdrop-blur-xl">
-            <Sparkles size={11} className="text-[#CA8A04]" />
-            Grocery Combo
+            <Sparkles size={11} className="text-[#A66B00]" />
+            BEST VALUE COMBO
           </span>
 
           {!kit.isAvailable && (
@@ -112,7 +112,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
               Products inside
             </span>
 
-            <span className="shrink-0 rounded-full border border-[#A83250]/10 bg-[#A83250]/[0.07] px-2 py-0.5 text-[9px] font-bold text-[#8F1235]">
+            <span className="shrink-0 rounded-full border border-[#A83250]/10 bg-[#D71920]/[0.07] px-2 py-0.5 text-[9px] font-bold text-[#B5121B]">
               {kit.items.length} Products
             </span>
           </div>
@@ -134,7 +134,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
                   <span className="min-w-0 text-[9px] leading-3 text-[#55483C] sm:text-[10px]">
                     <span className="block line-clamp-2 font-semibold">{name}</span>
                     {quantity && (
-                      <span className="mt-0.5 block font-bold text-[#94600E]">
+                      <span className="mt-0.5 block font-bold text-[#936300]">
                         {quantity}
                       </span>
                     )}
@@ -147,7 +147,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
           {remainingItems > 0 && (
             <Link
               href={`/kits/${kit.id}`}
-              className="mt-2 inline-flex items-center gap-1 text-[9px] font-extrabold text-[#A83250] transition hover:text-[#87263F] sm:text-[10px]"
+              className="mt-2 inline-flex items-center gap-1 text-[9px] font-extrabold text-[#A83250] transition hover:text-[#B5121B] sm:text-[10px]"
             >
               + {remainingItems} more items
               <ArrowUpRight size={11} />
@@ -156,19 +156,19 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         </div>
 
         {/* PRICE AND SAVINGS */}
-        <div className="mt-2 overflow-hidden rounded-lg border border-[#EEE7E1] bg-[#FCFAF8] p-2 sm:mt-4 sm:rounded-2xl sm:border-[#F1C7CE] sm:bg-[linear-gradient(135deg,#FFF4F5_0%,#FFF9F6_100%)] sm:p-3">
+        <div className="mt-2 overflow-hidden rounded-xl border border-[#F4C9C9] bg-[linear-gradient(135deg,#FFF1F1_0%,#FFF9E8_100%)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,.9)] sm:mt-4 sm:rounded-2xl sm:p-3">
           <div className="flex min-w-0 flex-wrap items-center justify-between gap-1.5">
             <div className="min-w-0">
-              <p className="text-[8px] font-black uppercase tracking-[0.16em] text-[#A83250] sm:text-[9px]">Special kit price</p>
+              <p className="text-[8px] font-black uppercase tracking-[0.16em] text-[#B5121B] sm:text-[9px]">BEST OFFER PRICE</p>
               <div className="mt-0.5 flex flex-wrap items-baseline gap-x-1.5">
-                <span className="text-base font-black tracking-tight text-[#8F1235] sm:text-2xl">{formatPrice(kit.price)}</span>
+                <span className="text-xl font-black tracking-tight text-[#D71920] sm:text-3xl">{formatPrice(kit.price)}</span>
                 {kit.oldPrice && kit.oldPrice > kit.price && (
-                  <span className="text-[9px] font-semibold text-[#9B8589] line-through sm:text-xs">{formatPrice(kit.oldPrice)}</span>
+                  <span className="text-[10px] font-bold text-[#8D8585] line-through sm:text-xs">{formatPrice(kit.oldPrice)}</span>
                 )}
               </div>
             </div>
             {savings > 0 && (
-              <span className="inline-flex shrink-0 items-center rounded-lg bg-[#B51232] px-2 py-1 text-[8px] font-black text-white shadow-sm sm:text-[10px]">SAVE {formatPrice(savings)}</span>
+              <span className="inline-flex shrink-0 items-center rounded-lg bg-[#D71920] px-2.5 py-1.5 text-[9px] font-black text-white shadow-sm sm:text-[10px]">SAVE {formatPrice(savings)}</span>
             )}
           </div>
         </div>
@@ -179,7 +179,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
             <Link
               href={`/kits/${kit.id}`}
               aria-label={`Customize ${kit.name}`}
-              className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg bg-[#A83250] px-1.5 text-[10px] font-extrabold text-white transition hover:bg-[#87263F] sm:min-h-10 sm:rounded-xl sm:text-xs"
+              className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg bg-[#A83250] px-1.5 text-[10px] font-extrabold text-white transition hover:bg-[#B5121B] sm:min-h-10 sm:rounded-xl sm:text-xs"
             >
               Customize
               <ArrowUpRight size={12} />
