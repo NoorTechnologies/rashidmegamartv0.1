@@ -287,7 +287,6 @@ Object.assign(translations, {
   "Your cart": "Aapka Cart",
   "Items in this kit": "Is Kit Mein Items",
   "Your kit items": "Aapki Kit Ke Items",
-  "You may also need": "Ye Items Bhi Kaam Aa Sakte Hain",
   "Add to cart": "Cart Mein Add Karein",
   "Proceed to checkout": "Order Aage Badhaayein",
   "Order summary": "Order Summary",
