@@ -5,15 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import {
-  Check,
-  Plus,
-  ShoppingCart,
   Package,
   ArrowUpRight,
   Sparkles,
 } from "lucide-react";
 
-import { useCart } from "@/context/CartContext";
 import type { GroceryKit } from "@/data/kits";
 
 interface KitCardProps {
@@ -30,10 +26,7 @@ const formatPrice = (price: number) =>
 
 
 export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
-  const { addToCart, items, isLoaded } = useCart();
   const [imageError, setImageError] = useState(false);
-
-  const cartItem = items.find((item) => item.id === kit.id);
   const kitImage = kit.image;
 
   const savings =
