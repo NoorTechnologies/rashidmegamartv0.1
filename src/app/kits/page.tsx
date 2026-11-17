@@ -10,6 +10,8 @@ import {
   SlidersHorizontal,
   RotateCcw,
   ShoppingBag,
+  Tag,
+  Ticket,
 } from "lucide-react";
 import KitCard from "@/components/KitCard";
 import { kits as allKits } from "@/data/kits";
@@ -165,6 +167,11 @@ export default function KitsPage() {
             )}
           </div>
         </div>
+      </section>
+
+      <section className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-2.5 px-3 pt-4 sm:px-6 lg:px-8" data-reveal-group>
+        <a href="/deals" data-reveal-item className="flex min-h-16 items-center gap-2 rounded-xl border border-[#D8CBB8] bg-white p-3 transition hover:border-[#168447]"><span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#EAF3E9] text-[#168447]"><Tag size={17} /></span><span className="min-w-0"><strong className="block text-[11px] font-black text-[#202124] sm:text-sm">Top Deals</strong><span className="block text-[9px] text-[#686868] sm:text-xs">Browse kit offers</span></span></a>
+        <a href="/coupons" data-reveal-item className="flex min-h-16 items-center gap-2 rounded-xl border border-[#E8D99A] bg-[#FFF9E5] p-3 transition hover:border-[#D1A900]"><span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#F7C928]/25 text-[#806000]"><Ticket size={17} /></span><span className="min-w-0"><strong className="block text-[11px] font-black text-[#202124] sm:text-sm">Coupons</strong><span className="block text-[9px] text-[#686868] sm:text-xs">Check active offers</span></span></a>
       </section>
 
       {/* KITS SECTION */}
