@@ -614,7 +614,7 @@ function transliterateHindi(value: string) {
       output += char;
     }
   }
-  return output.replace(/a(?=[\\s.,!?।]|$)/g, "");
+  return output.replace(/a(?=[\s.,!?।]|$)/g, "");
 }
 
 for (const [source, target] of Object.entries(translations)) {
