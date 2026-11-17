@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
 import BottomNav from "@/components/BottomNav";
+import { LanguageProvider } from "@/components/LanguageProvider";
 import { CartProvider } from "@/context/CartContext";
 
 import "./globals.css";
@@ -120,11 +121,13 @@ export default function RootLayout({
         />
 
         <CartProvider>
-          <div className="min-w-0 w-full flex-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0 lg:pt-[76px]">
-            {children}
-          </div>
+          <LanguageProvider>
+            <div className="min-w-0 w-full flex-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0 lg:pt-[76px]">
+              {children}
+            </div>
 
-          <BottomNav />
+            <BottomNav />
+          </LanguageProvider>
         </CartProvider>
       </body>
     </html>
