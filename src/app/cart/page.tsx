@@ -29,7 +29,7 @@ const formatPrice = (amount: number) =>
   }).format(amount);
 
 function parseKitQuantity(value: string) {
-  const match = value.trim().match(/^(\\d+(?:\\.\\d+)?)(.*)$/);
+  const match = value.trim().match(/^(\d+(?:\.\d+)?)(.*)$/);
   return match
     ? { amount: Number(match[1]), unit: match[2] }
     : { amount: 1, unit: "" };
@@ -44,7 +44,7 @@ function getCartSuggestions(item: CartItem) {
   return kits
     .filter((kit) => kit.id !== item.id && kit.isAvailable)
     .flatMap((kit) => kit.items.map((line) => {
-      const match = line.match(/^(.+?)\\s*[-–]\\s*(.+)$/);
+      const match = line.match(/^(.+?)\s*[-–]\s*(.+)$/);
       return match
         ? { name: match[1].trim(), quantity: match[2].trim() }
         : { name: line.trim(), quantity: "1" };
