@@ -17,7 +17,7 @@ function splitKitLine(value: string): KitLine {
 
 function adjustQuantity(value: string, delta: number) {
   const match = value.match(/^(\d+(?:\.\d+)?)(.*)$/);
-  if (!match) return delta > 0 ? "2" : "1";
+  // Keep descriptive quantities (for example, "छोटी बोतल") intact;\n  // only numeric quantities can be safely incremented or decremented.\n  if (!match) return value;
   const next = Math.max(1, Number(match[1]) + delta);
   return String(next) + match[2];
 }
