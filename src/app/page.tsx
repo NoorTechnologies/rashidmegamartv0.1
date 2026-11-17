@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Truck, MessageCircle, Package, HeartHandshake } from "lucide-react";
+import { ArrowRight, ShieldCheck, Truck, MessageCircle, Package, Wallet, ClipboardList } from "lucide-react";
 import Footer from "@/components/Footer";
 import KitCard from "@/components/KitCard";
 import { kits } from "@/data/kits";
@@ -90,24 +90,45 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-3 py-8 min-[480px]:px-5 sm:py-12 md:px-6 lg:px-8">
-        <div className="mb-5 text-center sm:mb-8">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#A47A2C] sm:text-xs">Shopping Made Simple</p>
+        <div className="mx-auto mb-6 max-w-2xl text-center sm:mb-8">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#A47A2C] sm:text-xs">Grocery Shopping, Made Easier</p>
           <h2 className="mt-2 text-2xl font-black tracking-tight text-[#A83250] sm:text-3xl">Why Choose Us?</h2>
-          <p className="mx-auto mt-2 max-w-md text-xs leading-5 text-[#6A7282] sm:text-sm">Convenient grocery kits and easy ordering, all in one place.</p>
+          <p className="mx-auto mt-2 max-w-lg text-xs leading-5 text-[#6A7282] sm:text-sm">Market ke chakkar aur fixed grocery combos ki tension chhodiye. Apni zaroorat batayein, humse ghar baithe baat karein.</p>
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           {[
-            { icon: Package, title: "Ready-made Kits", description: "Useful grocery combos for everyday needs.", color: "bg-[#FFF4D6]", iconColor: "text-[#A47A2C]" },
-            { icon: MessageCircle, title: "Easy WhatsApp Ordering", description: "Place your kit enquiry directly with our store.", color: "bg-[#E8F5EC]", iconColor: "text-[#138047]" },
-            { icon: HeartHandshake, title: "Customer Support", description: "Our team is here to help with your queries.", color: "bg-[#EAF1FF]", iconColor: "text-[#1877F2]" },
+            { icon: Truck, problem: "Market Jaane Ka Time Nahi?", solution: "Ghar baithe WhatsApp par apni grocery list bhej dijiye.", tint: "bg-[#FFF4D6]", ink: "text-[#A47A2C]" },
+            { icon: Package, problem: "Ready Kit Mein Sab Pasand Nahi?", solution: "Apni pasand ke products aur quantity batayein; custom kit ke liye humse baat karein.", tint: "bg-[#FCECEF]", ink: "text-[#A83250]" },
+            { icon: Wallet, problem: "Budget Ka Rakhna Hai Dhyan?", solution: "Apni list aur budget share karein, phir available options discuss karein.", tint: "bg-[#E8F5EC]", ink: "text-[#138047]" },
+            { icon: ClipboardList, problem: "Monthly Grocery Manage Karna Mushkil?", solution: "Apni poori monthly grocery list ek hi jagah bhejein aur order details confirm karein.", tint: "bg-[#EAF1FF]", ink: "text-[#1877F2]" },
           ].map((item) => {
             const Icon = item.icon;
-            return <div key={item.title} className="rounded-2xl border border-[#E5E7EB] bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-md sm:rounded-3xl sm:p-5">
-              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${item.color} sm:h-12 sm:w-12`}><Icon size={21} className={item.iconColor} /></div>
-              <h3 className="mt-3 text-sm font-extrabold text-[#30251F] sm:mt-4">{item.title}</h3>
-              <p className="mt-1.5 text-xs leading-5 text-[#6A7282]">{item.description}</p>
-            </div>;
+            return (
+              <article key={item.problem} className="flex gap-3 rounded-2xl border border-[#F0E5D8] bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md sm:gap-4 sm:p-5">
+                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.tint} sm:h-12 sm:w-12`}>
+                  <Icon size={21} className={item.ink} />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-sm font-extrabold text-[#30251F] sm:text-base">{item.problem}</h3>
+                  <p className="mt-1.5 text-xs leading-5 text-[#6A7282] sm:text-sm">{item.solution}</p>
+                </div>
+              </article>
+            );
           })}
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-[#EED9C0] bg-gradient-to-r from-[#FFF8E7] to-[#FFF1F3] px-4 py-5 text-center sm:mt-7 sm:px-6 sm:py-6">
+          <p className="text-base font-black text-[#30251F] sm:text-lg">Aapki Grocery. Aapki Pasand. Aapka Budget.</p>
+          <p className="mx-auto mt-1.5 max-w-lg text-xs leading-5 text-[#6A7282] sm:text-sm">Apni list bhejiye aur apni zaroorat ke hisaab se grocery kit ke liye humse baat kijiye.</p>
+          <div className="mt-4 flex flex-col justify-center gap-2 min-[420px]:flex-row">
+            <a href="https://wa.me/918962531603?text=Namaste%2C%20mujhe%20apni%20pasand%20ki%20grocery%20kit%20banwani%20hai.%20Main%20apni%20list%20bhejna%20chahta%2Fchahti%20hoon." target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#138047] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#0F6B3A] sm:text-sm">
+              <MessageCircle size={17} /> Apni Kit Banwayein
+            </a>
+            <Link href="/kits" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D9C6B2] bg-white px-5 py-3 text-xs font-bold text-[#A83250] transition hover:border-[#A83250] sm:text-sm">
+              Ready Kits Dekhein <ArrowRight size={16} />
+            </Link>
+          </div>
         </div>
       </section>
       <Footer />
