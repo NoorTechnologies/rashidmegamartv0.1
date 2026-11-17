@@ -133,27 +133,35 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         <div className="mt-2 rounded-2xl border border-white/80 bg-white/45 p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-xl sm:mt-4 sm:p-3">
           <div className="mb-2 flex items-center justify-between gap-1">
             <span className="text-[10px] font-extrabold text-[#30251F] sm:text-xs">
-              What&apos;s Inside?
+              Products inside
             </span>
 
             <span className="shrink-0 rounded-full border border-[#A83250]/10 bg-[#A83250]/[0.07] px-2 py-0.5 text-[9px] font-bold text-[#8F1235]">
-              {kit.items.length} Listed Items
+              {kit.items.length} Products
             </span>
           </div>
 
           <div className="grid grid-cols-2 gap-x-2 gap-y-2">
             {visibleItems.map((item, index) => {
+              const parts = item.match(/^(.+?)\s*[-–]\s*(.+)$/);
+              const name = parts ? parts[1].trim() : item;
+              const quantity = parts ? parts[2].trim() : null;
+
               return (
                 <div
                   key={`${kit.id}-${index}`}
-                  className="flex min-w-0 items-center gap-1.5"
+                  className="flex min-w-0 items-start gap-1.5"
                 >
-                  <div className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/90 bg-white/80 shadow-sm sm:h-8 sm:w-8">
-                    <Package size={14} strokeWidth={1.5} className="text-[#A83250]" />
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-white/90 bg-white/80 text-[#A83250] shadow-sm sm:h-8 sm:w-8">
+                    <Package size={14} strokeWidth={1.5} />
                   </div>
-
-                  <span className="line-clamp-2 min-w-0 text-[9px] font-medium leading-3 text-[#55483C] sm:text-[10px]">
-                    {item}
+                  <span className="min-w-0 text-[9px] leading-3 text-[#55483C] sm:text-[10px]">
+                    <span className="block line-clamp-2 font-semibold">{name}</span>
+                    {quantity && (
+                      <span className="mt-0.5 block font-bold text-[#94600E]">
+                        {quantity}
+                      </span>
+                    )}
                   </span>
                 </div>
               );
