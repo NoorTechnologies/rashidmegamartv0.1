@@ -20,6 +20,7 @@ import {
 import { useCart, type CartItem } from "@/context/CartContext";
 import { kits } from "@/data/kits";
 import { estimateGroceryLines } from "@/data/grocery-rates";
+import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
 
 const formatPrice = (amount: number) =>
   new Intl.NumberFormat("en-IN", {
@@ -59,6 +60,8 @@ function getCartSuggestions(item: CartItem) {
 }
 
 export default function CartPage() {
+  const language = useSiteLanguage();
+  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : language === "hinglish" ? toHinglishCatalogue(value) : value;
   const {
     items,
     totalItems,
@@ -385,7 +388,7 @@ export default function CartPage() {
                               const parsed = parseKitQuantity(entry.quantity);
                               return (
                                 <li key={`${item.id}-kit-line-${index}`} className="flex items-center gap-2 px-2.5 py-2">
-                                  <span className="min-w-0 flex-1 break-words text-[10px] font-semibold text-[#202124]">{entry.name}</span>
+                                  <span className="min-w-0 flex-1 break-words text-[10px] font-semibold text-[#202124]">{displayCatalogue(entry.name)}</span>
                                   <div className="flex shrink-0 items-center rounded-lg border border-[#D8CBB8] bg-white p-0.5">
                                     <button type="button" aria-label={`Decrease ${entry.name}`} onClick={() => {
                                       const nextAmount = parsed.amount - 1;
@@ -394,7 +397,7 @@ export default function CartPage() {
                                         : item.kitContents!.map((line, lineIndex) => lineIndex === index ? { ...line, quantity: `${nextAmount}${parsed.unit}` } : line);
                                       updateKitCustomization(item.id, next, item.requestedItems ?? []);
                                     }} className="flex size-6 items-center justify-center rounded-md text-[#800020] transition hover:bg-[#F1EBDD]"><Minus size={11} /></button>
-                                    <span className="min-w-8 text-center text-[9px] font-extrabold tabular-nums text-[#202124]">{entry.quantity}</span>
+                                    <span className="min-w-8 text-center text-[9px] font-extrabold tabular-nums text-[#202124]">{displayCatalogue(entry.quantity)}</span>
                                     <button type="button" aria-label={`Increase ${entry.name}`} onClick={() => {
                                       const next = item.kitContents!.map((line, lineIndex) => lineIndex === index ? { ...line, quantity: `${parsed.amount + 1}${parsed.unit}` } : line);
                                       updateKitCustomization(item.id, next, item.requestedItems ?? []);
@@ -417,7 +420,7 @@ export default function CartPage() {
                             {getCartSuggestions(item).map((suggestion) => (
                               <div key={suggestion.name} className="flex min-w-0 items-center gap-2 rounded-lg bg-[#FAF7EF] px-2 py-2">
                                 <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[#EAF3E9] text-[#168447]"><PackageCheck size={13} /></span>
-                                <span className="min-w-0 flex-1 truncate text-[9px] font-semibold text-[#202124]">{suggestion.name}</span>
+                                <span className="min-w-0 flex-1 truncate text-[9px] font-semibold text-[#202124]">{displayCatalogue(suggestion.name)}</span>
                                 <button type="button" aria-label={`Add ${suggestion.name}`} onClick={() => updateKitCustomization(item.id, item.kitContents ?? [], [...(item.requestedItems ?? []), suggestion])} className="inline-flex min-h-7 shrink-0 items-center gap-1 rounded-md bg-[#168447] px-2 text-[9px] font-extrabold text-white transition hover:bg-[#106B38]"><Plus size={10} /> Add</button>
                               </div>
                             ))}
@@ -428,7 +431,7 @@ export default function CartPage() {
                       {item.requestedItems && item.requestedItems.length > 0 && (
                         <div className="mt-2 rounded-lg border border-[#F7C928]/60 bg-[#FAF0C8]/50 p-2">
                           <p className="text-[10px] font-bold text-[#806000]">Added extras · price confirmation pending</p>
-                          {item.requestedItems.map((entry, index) => <p key={index} className="mt-0.5 text-[10px] text-[#686868]">{entry.name} — {entry.quantity}</p>)}
+                          {item.requestedItems.map((entry, index) => <p key={index} className="mt-0.5 text-[10px] text-[#686868]">{displayCatalogue(entry.name)} — {displayCatalogue(entry.quantity)}</p>)}
                         </div>
                       )}
                     </div>
