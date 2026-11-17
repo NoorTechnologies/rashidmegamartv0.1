@@ -10,7 +10,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import type { GroceryKit } from "@/data/kits";
+import type { GroceryKit } from "@/data/kits";\nimport { useSiteLanguage, toEnglishCatalogue } from "@/components/LanguageProvider";
 
 interface KitCardProps {
   kit: GroceryKit;
@@ -26,7 +26,7 @@ const formatPrice = (price: number) =>
 
 
 export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
-  const [imageError, setImageError] = useState(false);
+  const [imageError, setImageError] = useState(false);\n  const language = useSiteLanguage();\n  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : value;
   const kitImage = kit.image;
 
   const savings =
@@ -102,7 +102,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         </Link>
 
         <p className="mt-1 line-clamp-1 text-[10px] leading-4 text-[#76665C] sm:text-xs">
-          {kit.subtitle}
+          {displayCatalogue(kit.subtitle)}
         </p>
 
         {/* INCLUDED ITEMS */}
@@ -135,7 +135,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
                     <span className="block line-clamp-2 font-semibold">{name}</span>
                     {quantity && (
                       <span className="mt-0.5 block font-bold text-[#936300]">
-                        {quantity}
+                        {quantity ? displayCatalogue(quantity) : quantity}
                       </span>
                     )}
                   </span>
