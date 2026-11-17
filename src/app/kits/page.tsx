@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Search,
   Package,
@@ -12,14 +12,14 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import KitCard from "@/components/KitCard";
-import { kits as allKits, type GroceryKit } from "@/data/kits";
+import { kits as allKits } from "@/data/kits";
 
 type SortOption = "featured" | "price-low" | "price-high" | "name";
 
 export default function KitsPage() {
   const kits = allKits;
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<AvailabilityFilter>("all");
+  const [filter, setFilter] = useState<"all" | "available" | "unavailable">("all");
   const [sortBy, setSortBy] = useState<SortOption>("featured");
 
   const filteredKits = useMemo(() => {
@@ -29,7 +29,6 @@ export default function KitsPage() {
       const searchableContent = [
         kit.name,
         kit.subtitle,
-        kit.category,
         kit.description,
         ...kit.items,
       ]
@@ -45,15 +44,7 @@ export default function KitsPage() {
         (filter === "available" && kit.isAvailable) ||
         (filter === "unavailable" && !kit.isAvailable);
 
-      const matchesCategory =
-        selectedCategory === "All" ||
-        kit.category === selectedCategory;
-
-      return (
-        matchesSearch &&
-        matchesAvailability &&
-        matchesCategory
-      );
+      return matchesSearch && matchesAvailability;
     });
 
     return [...result].sort((a, b) => {
