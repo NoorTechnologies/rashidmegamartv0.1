@@ -7,7 +7,6 @@ import { useState } from "react";
 import {
   Package,
   ArrowUpRight,
-  Sparkles,
   Tag,
 } from "lucide-react";
 
@@ -54,7 +53,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
       >
         <div className="relative aspect-[5/3] w-full overflow-hidden sm:aspect-[4/3] bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
           <span className="absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/30 bg-[#168447] px-2.5 py-1 text-[9px] font-black tracking-wide text-white shadow-lg shadow-[#800020]/25 sm:left-3 sm:top-3 sm:text-[10px]">
-            <Sparkles size={11} />
+            <Tag size={11} />
             {savings > 0 ? `YOU SAVE ${formatPrice(savings)}` : "KIT DEAL"}
           </span>
 
