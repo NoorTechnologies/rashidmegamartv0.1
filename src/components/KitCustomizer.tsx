@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Minus, Plus, ShoppingCart, Trash2, PlusCircle, Sparkles, BadgeCheck, Tag, Package } from "lucide-react";
 import type { GroceryKit } from "@/data/kits";
 import { kits } from "@/data/kits";
+import { estimateGroceryLines } from "@/data/grocery-rates";
 import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, toEnglishCatalogue } from "@/components/LanguageProvider";
 
@@ -43,6 +44,12 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
     () => Array.from(new Set(kits.flatMap((entry) => entry.items.map((line) => splitKitLine(line).name)))).sort((a, b) => a.localeCompare(b)),
     []
   );
+  const groceryEstimate = useMemo(
+    () => estimateGroceryLines([...contents, ...additions]),
+    [contents, additions],
+  );
+  const formatEstimate = (amount: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 }).format(amount);
+
   const saveContents = (next: KitLine[], nextAdditions = additions) => {
     setContents(next);
     setAdditions(nextAdditions);
@@ -77,7 +84,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   };
 
   return (
-    <section className="rmm-customizer mt-5 overflow-hidden rounded-[24px] border border-[#D8CBB8] bg-white shadow-[0_14px_38px_rgba(150,20,30,0.09)] sm:mt-6" aria-labelledby="customize-kit-title">
+    <section data-reveal className="rmm-customizer mt-5 overflow-hidden rounded-[24px] border border-[#D8CBB8] bg-white shadow-[0_14px_38px_rgba(150,20,30,0.09)] sm:mt-6" aria-labelledby="customize-kit-title">
       <div className="relative overflow-hidden bg-[linear-gradient(115deg,#106B38_0%,#168447_58%,#168447_100%)] px-4 py-4 text-white sm:px-5 sm:py-5">
         <span className="pointer-events-none absolute -right-6 -top-10 size-36 rounded-full bg-white/10 blur-2xl" />
         <div className="relative flex items-start justify-between gap-3">
@@ -173,6 +180,35 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
             </div>
           </div>
           <p className="border-t border-[#CDE5D2] bg-white/55 px-3 py-2 text-[9px] leading-4 text-[#42664B]">Changing quantities inside the kit updates your request. The base kit price stays fixed; extra-item rates and final amount are confirmed by the owner on WhatsApp.</p>
+        </div>
+
+
+        <div data-reveal className="mt-4 overflow-hidden rounded-2xl border border-[#D8CBB8] bg-white shadow-[0_4px_16px_rgba(32,33,36,0.04)]">
+          <div className="flex items-center justify-between gap-3 border-b border-[#E8DFD1] bg-[#FAF7EF] px-3 py-3">
+            <div>
+              <h3 className="text-xs font-black text-[#202124] sm:text-sm">Grocery Quantity Calculator</h3>
+              <p className="mt-0.5 text-[9px] font-medium text-[#686868]">Item rates will be added after owner confirmation.</p>
+            </div>
+            <span className="rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[9px] font-black text-[#806000]">{groceryEstimate.pendingCount} rates pending</span>
+          </div>
+          <div className="space-y-0 px-3">
+            {groceryEstimate.lines.map((line, index) => (
+              <div key={`${line.name}-${index}`} className="flex items-center justify-between gap-3 border-b border-[#F1EBDD] py-2 last:border-0">
+                <div className="min-w-0">
+                  <p className="truncate text-[10px] font-bold text-[#202124]">{displayCatalogue(line.name)}</p>
+                  <p className="text-[9px] font-medium text-[#686868]">{displayCatalogue(line.quantity)}</p>
+                </div>
+                <span className="shrink-0 text-[10px] font-extrabold tabular-nums text-[#806000]">{line.amount === null ? "Rate pending" : formatEstimate(line.amount)}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex items-center justify-between gap-3 border-t border-[#E8DFD1] bg-[#F0F8F1] px-3 py-3">
+            <div>
+              <p className="text-xs font-black text-[#174D2B]">Customized item total</p>
+              <p className="text-[9px] text-[#42664B]">{groceryEstimate.pendingCount ? "Final calculation appears when all item rates are set." : "Calculated from confirmed store rates."}</p>
+            </div>
+            <p className="text-base font-black tabular-nums text-[#106B38]">{groceryEstimate.total === null ? "Pending" : formatEstimate(groceryEstimate.total)}</p>
+          </div>
         </div>
 
         <button type="button" onClick={handleAddToCart} disabled={!isLoaded || !kit.isAvailable} className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(100deg,#168447_0%,#106B38_100%)] px-4 py-3 text-xs font-black text-white shadow-[0_7px_18px_rgba(22,132,71,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(22,132,71,0.28)] active:scale-[0.99] disabled:opacity-50 sm:text-sm">
