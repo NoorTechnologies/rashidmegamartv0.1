@@ -155,7 +155,7 @@ export default function CartPage() {
         "*Order Items*",
         itemText,
         "",
-        "*Kit Total: " + formatPrice(orderSubtotal) + "*",
+        "*Listed Kit Base Total: " + formatPrice(orderSubtotal) + "*",\n        "Extra/custom item prices and final customized kit price: Store confirmation pending",
         "Delivery charges: Please confirm",
         "Payment preference: " + (paymentMethod === "COD" ? "Cash on Delivery" : "UPI (share verified details after confirmation)"),
         cleanNote ? "Order note: " + cleanNote : "",
@@ -447,7 +447,7 @@ export default function CartPage() {
 
               <div className="mt-5 space-y-3.5 text-xs sm:text-sm">
                 <div className="flex items-center justify-between gap-3 text-[#817A74]">
-                  <span>Kit Subtotal</span>
+                  <span>Listed Kit Base Price</span>
                   <span className="font-bold text-[#29231F]">
                     {formatPrice(subtotal)}
                   </span>
@@ -464,10 +464,10 @@ export default function CartPage() {
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-sm font-extrabold text-[#29231F]">
-                        Product Total
+                        Current Base Total
                       </p>
                       <p className="mt-1 text-[10px] text-[#999087]">
-                        Before delivery charges
+                        Customized price not confirmed
                       </p>
                     </div>
 
