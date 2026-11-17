@@ -193,7 +193,7 @@ export default function CartPage() {
         itemText,
         "",
         "*Listed Kit Base Total: " + formatPrice(orderSubtotal) + "*",
-        "Extra/custom item prices and final customized kit price: Owner will confirm on WhatsApp",
+        customizedRatesReady ? "Estimated customized grocery total: " + formatPrice(customizedGrandTotal ?? 0) : "Customized item rates and final amount: Owner will confirm on WhatsApp",
         "Delivery charges: Please confirm",
                 cleanNote ? "Order note: " + cleanNote : "",
         "",
@@ -274,7 +274,7 @@ export default function CartPage() {
   }
 
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#FAF7EF] px-3 py-4 pb-24 min-[375px]:px-4 sm:px-6 sm:py-9 sm:pb-14">
+    <main data-reveal className="min-h-screen overflow-x-clip bg-[#FAF7EF] px-3 py-4 pb-24 min-[375px]:px-4 sm:px-6 sm:py-9 sm:pb-14">
       <div className="mx-auto w-full max-w-6xl">
         {/* Page Header */}
         <header className="mb-4 flex flex-col gap-3 min-[430px]:flex-row min-[430px]:items-center min-[430px]:justify-between sm:mb-8">
@@ -725,7 +725,7 @@ export default function CartPage() {
         <div className="fixed inset-x-0 bottom-[calc(66px+env(safe-area-inset-bottom))] z-30 border-t border-[#E8DFD1] bg-white/95 px-4 py-2.5 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
           <button type="submit" form="checkout-form" className="flex min-h-11 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white shadow-md shadow-green-900/10 transition hover:bg-[#168447] active:scale-[0.99]">
             <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Order on WhatsApp</span>
-            <span>{formatPrice(subtotal)}</span>
+            <span>{formatPrice(currentGrandTotal)}</span>
           </button>
         </div>
 
