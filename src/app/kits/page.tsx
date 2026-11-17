@@ -92,7 +92,7 @@ export default function KitsPage() {
   return (
     <main className="min-h-screen w-full overflow-x-clip bg-[radial-gradient(ellipse_at_8%_8%,rgba(181,18,50,0.08),transparent_30%),radial-gradient(ellipse_at_92%_24%,rgba(212,168,79,0.14),transparent_28%),linear-gradient(180deg,#FFF8F7_0%,#FAF6F3_48%,#FFF9F1_100%)]">
       {/* COMPACT HOME STYLE BANNER */}
-      <section className="relative isolate overflow-hidden border-b border-[#F3D8DC] bg-[linear-gradient(125deg,#8F1235_0%,#B51232_58%,#D33A4F_100%)] px-3 pb-5 pt-4 text-white shadow-[0_16px_45px_rgba(143,18,53,0.18)] sm:px-5 sm:pb-8 sm:pt-7">
+      <section className="relative isolate overflow-hidden border-b border-[#F3D8DC] bg-[linear-gradient(125deg,#B5121B_0%,#D71920_58%,#D33A4F_100%)] px-3 pb-5 pt-4 text-white shadow-[0_16px_45px_rgba(143,18,53,0.18)] sm:px-5 sm:pb-8 sm:pt-7">
         <div className="pointer-events-none absolute -left-16 top-5 h-40 w-40 rounded-full bg-white/10 blur-[65px]" />
         <div className="pointer-events-none absolute -right-16 bottom-0 h-40 w-40 rounded-full bg-[#FFD8A0]/20 blur-[65px]" />
 
@@ -141,8 +141,8 @@ export default function KitsPage() {
           </div>
 
           {/* SEARCH */}
-          <div className="relative mt-3 flex h-11 w-full max-w-[520px] items-center gap-2.5 rounded-xl border border-white/70 bg-white px-3 shadow-[0_5px_20px_rgba(60,0,15,0.12)] transition focus-within:border-[#B51232] sm:mt-5 sm:h-14 sm:rounded-2xl sm:px-4">
-            <Search size={18} className="shrink-0 text-[#B51232]" />
+          <div className="relative mt-3 flex h-11 w-full max-w-[520px] items-center gap-2.5 rounded-xl border border-white/70 bg-white px-3 shadow-[0_5px_20px_rgba(60,0,15,0.12)] transition focus-within:border-[#D71920] sm:mt-5 sm:h-14 sm:rounded-2xl sm:px-4">
+            <Search size={18} className="shrink-0 text-[#D71920]" />
 
             <input
               type="search"
@@ -214,7 +214,7 @@ export default function KitsPage() {
                 aria-pressed={filter === option.value}
                 className={`min-h-9 rounded-full border px-3.5 py-2 text-[10px] font-extrabold transition active:scale-95 sm:px-4 sm:text-xs ${
                   filter === option.value
-                    ? "border-[#8F1235] bg-gradient-to-r from-[#B51232] to-[#8F1235] text-white shadow-[0_4px_14px_rgba(143,18,53,0.22)]"
+                    ? "border-[#B5121B] bg-gradient-to-r from-[#D71920] to-[#B5121B] text-white shadow-[0_4px_14px_rgba(143,18,53,0.22)]"
                     : "border-[#F0D8DC] bg-white text-[#70545A] hover:border-[#D98A99] hover:bg-[#FFF0F2]"
                 }`}
               >
@@ -235,8 +235,8 @@ export default function KitsPage() {
             </p>
           </div>
 
-          <label className="flex min-h-9 max-w-[190px] shrink-0 items-center gap-1.5 rounded-lg border border-[#F0DDE0] bg-white px-2.5 py-2 text-[10px] font-semibold text-[#70545A] focus-within:border-[#B51232] sm:max-w-none sm:gap-2 sm:rounded-xl sm:px-3 sm:text-xs">
-            <SlidersHorizontal size={14} className="shrink-0 text-[#B51232]" />
+          <label className="flex min-h-9 max-w-[190px] shrink-0 items-center gap-1.5 rounded-lg border border-[#F0DDE0] bg-white px-2.5 py-2 text-[10px] font-semibold text-[#70545A] focus-within:border-[#D71920] sm:max-w-none sm:gap-2 sm:rounded-xl sm:px-3 sm:text-xs">
+            <SlidersHorizontal size={14} className="shrink-0 text-[#D71920]" />
 
             <span className="shrink-0">Sort:</span>
 
@@ -265,7 +265,7 @@ export default function KitsPage() {
           </div>
         ) : (
           <div className="mt-6 rounded-2xl border border-[#F0DDE0] bg-white px-4 py-10 text-center shadow-sm sm:px-6 sm:py-12">
-            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-[#EAF7EE] text-[#B51232]">
+            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-[#EAF7EE] text-[#D71920]">
               <Package size={28} />
             </div>
 
@@ -292,13 +292,13 @@ export default function KitsPage() {
       <section className="mx-auto w-full max-w-7xl px-3 pb-28 sm:px-6 sm:pb-16 lg:px-8" aria-labelledby="kit-suggestion-title">
         <div className="overflow-hidden rounded-2xl border border-white/80 bg-white/55 p-4 shadow-[0_12px_34px_rgba(70,40,30,0.08)] backdrop-blur-xl sm:rounded-3xl sm:p-6">
           <div className="mx-auto max-w-2xl text-center">
-            <span className="inline-flex rounded-full border border-[#A83250]/15 bg-white/70 px-3 py-1 text-[10px] font-bold text-[#A83250]">Your suggestion matters</span>
+            <span className="inline-flex rounded-full border border-[#D71920]/15 bg-white/70 px-3 py-1 text-[10px] font-bold text-[#D71920]">Your suggestion matters</span>
             <h2 id="kit-suggestion-title" className="mt-2 text-lg font-black text-[#30251F] sm:text-2xl">Apni Grocery Kit Suggest Karein</h2>
             <p className="mt-1 text-xs leading-5 text-[#766B63] sm:text-sm">Koi item ya kit chahiye jo yahan nahi mili? Humein batayein — hum aapki suggestion dekhenge.</p>
             <div className="mt-4 grid gap-2 text-left sm:grid-cols-[1fr_1.4fr]">
-              <input value={suggestionName} onChange={(event) => setSuggestionName(event.target.value.slice(0, 60))} placeholder="Aapka naam (optional)" aria-label="Your name" className="min-h-10 rounded-xl border border-[#E9E1DA] bg-white/85 px-3 text-xs outline-none focus:border-[#A83250]" />
-              <textarea value={suggestion} onChange={(event) => setSuggestion(event.target.value.slice(0, 500))} placeholder="Kaun si kit ya grocery items chahiye? Quantity bhi likh sakte hain..." aria-label="Kit suggestion" rows={3} className="min-h-20 rounded-xl border border-[#E9E1DA] bg-white/85 px-3 py-2.5 text-xs outline-none focus:border-[#A83250] sm:row-span-2" />
-              <button type="button" disabled={!suggestion.trim()} onClick={() => { const message = ["Namaste Rashid Mega Mart, meri grocery kit suggestion:", suggestion.trim(), suggestionName.trim() ? "Name: " + suggestionName.trim() : ""].filter(Boolean).join("\n"); window.location.assign("https://wa.me/918962531603?text=" + encodeURIComponent(message)); }} className="min-h-10 rounded-xl bg-[#A83250] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#87263F] disabled:cursor-not-allowed disabled:opacity-45">WhatsApp Par Suggest Karein</button>
+              <input value={suggestionName} onChange={(event) => setSuggestionName(event.target.value.slice(0, 60))} placeholder="Aapka naam (optional)" aria-label="Your name" className="min-h-10 rounded-xl border border-[#E9E1DA] bg-white/85 px-3 text-xs outline-none focus:border-[#D71920]" />
+              <textarea value={suggestion} onChange={(event) => setSuggestion(event.target.value.slice(0, 500))} placeholder="Kaun si kit ya grocery items chahiye? Quantity bhi likh sakte hain..." aria-label="Kit suggestion" rows={3} className="min-h-20 rounded-xl border border-[#E9E1DA] bg-white/85 px-3 py-2.5 text-xs outline-none focus:border-[#D71920] sm:row-span-2" />
+              <button type="button" disabled={!suggestion.trim()} onClick={() => { const message = ["Namaste Rashid Mega Mart, meri grocery kit suggestion:", suggestion.trim(), suggestionName.trim() ? "Name: " + suggestionName.trim() : ""].filter(Boolean).join("\n"); window.location.assign("https://wa.me/918962531603?text=" + encodeURIComponent(message)); }} className="min-h-10 rounded-xl bg-[#D71920] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#B5121B] disabled:cursor-not-allowed disabled:opacity-45">WhatsApp Par Suggest Karein</button>
             </div>
             <p className="mt-2 text-[10px] text-[#8B8078]">Suggestion WhatsApp par store ko bheji jayegi. Order ya price confirmation nahi hai.</p>
           </div>
