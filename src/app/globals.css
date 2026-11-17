@@ -386,15 +386,15 @@ video {
   }
 
   nav[aria-label="Main navigation"] > div:last-child {
-    height: 58px;
-    padding-right: 6px;
-    padding-left: 6px;
+    height: 72px;
+    padding-right: 8px;
+    padding-left: 8px;
   }
 
   nav[aria-label="Main navigation"] > div:last-child a,
   nav[aria-label="Main navigation"] > div:last-child button {
-    height: 48px;
-    gap: 3px;
+    height: 58px;
+    gap: 4px;
   }
 
   nav[aria-label="Main navigation"] > div:last-child svg {
@@ -403,7 +403,7 @@ video {
   }
 
   nav[aria-label="Main navigation"] > div:last-child span {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   a[aria-label^="Open cart"] {
@@ -454,7 +454,7 @@ video {
   }
 
   nav[aria-label="Main navigation"] > div:last-child {
-    height: 54px;
+    height: 68px;
   }
 
   a[aria-label^="Open cart"] {
