@@ -20,7 +20,7 @@ export default function HomePage() {
         <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#D71920]/[0.07] blur-[90px]" />
         <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#D4A84F]/40 bg-white/90 px-4 py-2 text-[10px] font-bold tracking-wide text-[#D71920] shadow-sm sm:text-xs">
-            <Package size={15} /> SMART GROCERY KITS
+            <Package size={15} /> MERI JAAN SPECIAL • BEST OFFERS
           </span>
           <div className="mt-5 flex flex-col items-center">
             <Image src="/images/logo2.png" alt="Rashid Mega Mart Logo" width={110} height={110} priority className="h-20 w-20 object-contain sm:h-24 sm:w-24" />
