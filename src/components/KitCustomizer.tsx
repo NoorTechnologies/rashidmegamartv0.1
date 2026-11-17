@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Minus, Plus, ShoppingCart, Trash2, PlusCircle, Sparkles, BadgeCheck, Tag, Package } from "lucide-react";
 import type { GroceryKit } from "@/data/kits";
 import { kits } from "@/data/kits";
-import { useCart } from "@/context/CartContext";\nimport { useSiteLanguage, toEnglishCatalogue } from "@/components/LanguageProvider";
+import { useCart } from "@/context/CartContext";
+import { useSiteLanguage, toEnglishCatalogue } from "@/components/LanguageProvider";
 
 type KitLine = { name: string; quantity: string };
 
@@ -21,7 +22,9 @@ function adjustQuantity(value: string, delta: number) {
 }
 
 export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
-  const { addToCart, updateKitCustomization, items, isLoaded } = useCart();\n  const language = useSiteLanguage();\n  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : value;
+  const { addToCart, updateKitCustomization, items, isLoaded } = useCart();
+  const language = useSiteLanguage();
+  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : value;
   const existingCartItem = items.find((item) => item.id === kit.id);
   const [contents, setContents] = useState<KitLine[]>(() => existingCartItem?.kitContents ?? kit.items.map(splitKitLine));
   const [additions, setAdditions] = useState<KitLine[]>(() => existingCartItem?.requestedItems ?? []);
