@@ -175,14 +175,20 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
 
         {/* ACTION BUTTONS */}
         <div className="mt-auto flex gap-1.5 pt-2 sm:gap-2 sm:pt-4">
-          <Link
-            href={`/kits/${kit.id}`}
-            aria-label={`Customize ${kit.name}`}
-            className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg bg-[#A83250] px-1.5 text-[10px] font-extrabold text-white transition hover:bg-[#87263F] sm:min-h-10 sm:rounded-xl sm:text-xs"
-          >
-            Customize
-            <ArrowUpRight size={12} />
-          </Link>
+          {kit.isAvailable ? (
+            <Link
+              href={`/kits/${kit.id}`}
+              aria-label={`Customize ${kit.name}`}
+              className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg bg-[#A83250] px-1.5 text-[10px] font-extrabold text-white transition hover:bg-[#87263F] sm:min-h-10 sm:rounded-xl sm:text-xs"
+            >
+              Customize
+              <ArrowUpRight size={12} />
+            </Link>
+          ) : (
+            <span className="inline-flex min-h-8 flex-1 items-center justify-center rounded-lg bg-[#F1EFED] px-1.5 text-[10px] font-bold text-[#948A83] sm:min-h-10 sm:rounded-xl sm:text-xs">
+              Out of Stock
+            </span>
+          )}
         </div>
       </div>
     </article>
