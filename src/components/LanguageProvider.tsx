@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useSyncExternalStore, type ReactNode } from "react";
 type Language = "en" | "hinglish" | "hi";
 
 const LanguageContext = createContext<Language>("en");
@@ -20,6 +20,32 @@ export function toEnglishCatalogue(value: string) {
 }
 
 const STORAGE_KEY = "rmm-language";
+
+let currentLanguage: Language = "en";
+
+function getLanguageSnapshot(): Language {
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    if (saved === "hi" || saved === "hinglish" || saved === "en") return saved;
+  } catch {
+    // Fall back to the in-memory language when browser storage is unavailable.
+  }
+  return currentLanguage;
+}
+
+function getServerLanguageSnapshot(): Language {
+  return "en";
+}
+
+function subscribeToLanguage(onStoreChange: () => void) {
+  const handleChange = () => onStoreChange();
+  window.addEventListener("storage", handleChange);
+  window.addEventListener("rmm-language-change", handleChange);
+  return () => {
+    window.removeEventListener("storage", handleChange);
+    window.removeEventListener("rmm-language-change", handleChange);
+  };
+}
 
 const translations: Record<string, string> = {
   "Home": "होम",
@@ -333,7 +359,7 @@ function translateText(value: string, dictionary: Record<string, string> = trans
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>("en");
+  const language = useSyncExternalStore(subscribeToLanguage, getLanguageSnapshot, getServerLanguageSnapshot);
   const textOriginals = useRef(new WeakMap<Text, { original: string; translated: string }>());
   const attrOriginals = useRef(new WeakMap<Element, Map<string, { original: string; translated: string }>>());
 
@@ -377,15 +403,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (saved === "hi" || saved === "hinglish" || saved === "en") setLanguage(saved);
-    } catch {
-      // Keep English when browser storage is unavailable.
-    }
-  }, []);
-
-  useEffect(() => {
     applyLanguage(language);
     const observer = new MutationObserver((records) => {
       if (records.some((record) => record.type === "childList" || record.type === "characterData" || record.type === "attributes")) {
@@ -400,12 +417,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const toggleLanguage = () => {
     const next: Language = language === "en" ? "hinglish" : language === "hinglish" ? "hi" : "en";
-    setLanguage(next);
+    currentLanguage = next;
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
     } catch {
-      // Language remains active for this session.
+      // Language remains active in memory for this session.
     }
+    window.dispatchEvent(new Event("rmm-language-change"));
   };
 
   return (
