@@ -261,12 +261,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const onScroll = () => {
       const currentY = window.scrollY;
-      const movingDown = currentY > lastScrollY.current;
+      const previousY = lastScrollY.current;
+      const movingDown = currentY > previousY;
       lastScrollY.current = currentY;
-      if (Math.abs(currentY - lastScrollY.current) < 1) return;
-      if (currentY < 40 || !movingDown) {
+      if (currentY < 40 || (!movingDown && currentY < previousY)) {
         setVisible(true);
-      } else if (!expanded) {
+      } else if (movingDown && currentY > 80 && !expanded) {
         setVisible(false);
         setExpanded(false);
       }
