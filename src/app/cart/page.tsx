@@ -18,7 +18,7 @@ import {
   Undo2,
 } from "lucide-react";
 
-import { useCart } from "@/context/CartContext";
+import { useCart, type CartItem } from "@/context/CartContext";
 import { kits } from "@/data/kits";
 
 const formatPrice = (amount: number) =>
@@ -27,6 +27,36 @@ const formatPrice = (amount: number) =>
     currency: "INR",
     maximumFractionDigits: 0,
   }).format(amount);
+
+function parseKitQuantity(value: string) {
+  const match = value.trim().match(/^(\\d+(?:\\.\\d+)?)(.*)$/);
+  return match
+    ? { amount: Number(match[1]), unit: match[2] }
+    : { amount: 1, unit: "" };
+}
+
+function getCartSuggestions(item: CartItem) {
+  const existing = new Set([
+    ...(item.kitContents ?? []).map((entry) => entry.name.trim().toLocaleLowerCase()),
+    ...(item.requestedItems ?? []).map((entry) => entry.name.trim().toLocaleLowerCase()),
+  ]);
+  const seen = new Set<string>();
+  return kits
+    .filter((kit) => kit.id !== item.id && kit.isAvailable)
+    .flatMap((kit) => kit.items.map((line) => {
+      const match = line.match(/^(.+?)\\s*[-–]\\s*(.+)$/);
+      return match
+        ? { name: match[1].trim(), quantity: match[2].trim() }
+        : { name: line.trim(), quantity: "1" };
+    }))
+    .filter((entry) => {
+      const key = entry.name.toLocaleLowerCase();
+      if (!key || existing.has(key) || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .slice(0, 4);
+}
 
 export default function CartPage() {
   const {
@@ -39,6 +69,7 @@ export default function CartPage() {
     removeFromCart,
     clearCart,
     addToCart,
+    updateKitCustomization,
   } = useCart();
 
   const [customerName, setCustomerName] = useState("");
@@ -334,17 +365,59 @@ export default function CartPage() {
                         {formatPrice(item.price)}
                       </p>
                       {item.kitContents && (
-                        <div className="mt-2 rounded-lg bg-[#FAF7EF] p-2">
-                          <p className="text-[10px] font-bold text-[#202124]">Customized kit · {item.kitContents.length} selected items</p>
-                          <ul className="mt-1 space-y-0.5 text-[10px] text-[#686868]">
-                            {item.kitContents.slice(0, 8).map((entry, index) => <li key={index}>{entry.name} — {entry.quantity}</li>)}
-                            {item.kitContents.length > 8 && <li>+ {item.kitContents.length - 8} more</li>}
+                        <div className="mt-2 overflow-hidden rounded-xl border border-[#E8DFD1] bg-[#FAF7EF]">
+                          <div className="flex items-center justify-between gap-2 border-b border-[#E8DFD1] px-2.5 py-2">
+                            <p className="text-[10px] font-extrabold text-[#202124]">Items in this kit</p>
+                            <span className="text-[9px] font-bold text-[#168447]">{item.kitContents.length} included</span>
+                          </div>
+                          <ul className="divide-y divide-[#E8DFD1]">
+                            {item.kitContents.map((entry, index) => {
+                              const parsed = parseKitQuantity(entry.quantity);
+                              return (
+                                <li key={`${item.id}-kit-line-${index}`} className="flex items-center gap-2 px-2.5 py-2">
+                                  <span className="min-w-0 flex-1 break-words text-[10px] font-semibold text-[#202124]">{entry.name}</span>
+                                  <div className="flex shrink-0 items-center rounded-lg border border-[#D8CBB8] bg-white p-0.5">
+                                    <button type="button" aria-label={`Decrease ${entry.name}`} onClick={() => {
+                                      const nextAmount = parsed.amount - 1;
+                                      const next = nextAmount <= 0
+                                        ? item.kitContents!.filter((_, lineIndex) => lineIndex !== index)
+                                        : item.kitContents!.map((line, lineIndex) => lineIndex === index ? { ...line, quantity: `${nextAmount}${parsed.unit}` } : line);
+                                      updateKitCustomization(item.id, next, item.requestedItems ?? []);
+                                    }} className="flex size-6 items-center justify-center rounded-md text-[#800020] transition hover:bg-[#F1EBDD]"><Minus size={11} /></button>
+                                    <span className="min-w-8 text-center text-[9px] font-extrabold tabular-nums text-[#202124]">{entry.quantity}</span>
+                                    <button type="button" aria-label={`Increase ${entry.name}`} onClick={() => {
+                                      const next = item.kitContents!.map((line, lineIndex) => lineIndex === index ? { ...line, quantity: `${parsed.amount + 1}${parsed.unit}` } : line);
+                                      updateKitCustomization(item.id, next, item.requestedItems ?? []);
+                                    }} className="flex size-6 items-center justify-center rounded-md text-[#168447] transition hover:bg-[#EAF3E9]"><Plus size={11} /></button>
+                                  </div>
+                                </li>
+                              );
+                            })}
                           </ul>
+                          {item.kitContents.length === 0 && <p className="px-3 py-3 text-center text-[10px] font-medium text-[#686868]">Kit ke saare original items remove ho gaye. Neeche suggestions se add karein.</p>}
+                        </div>
+                      )}
+                      {item.kitContents && getCartSuggestions(item).length > 0 && (
+                        <div className="mt-2 rounded-xl border border-[#D8CBB8] bg-white p-2.5">
+                          <div className="mb-2 flex items-center justify-between gap-2">
+                            <p className="text-[10px] font-extrabold text-[#202124]">You may also need</p>
+                            <span className="text-[9px] font-semibold text-[#686868]">Suggestions</span>
+                          </div>
+                          <div className="grid grid-cols-1 gap-1.5 min-[430px]:grid-cols-2">
+                            {getCartSuggestions(item).map((suggestion) => (
+                              <div key={suggestion.name} className="flex min-w-0 items-center gap-2 rounded-lg bg-[#FAF7EF] px-2 py-2">
+                                <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[#EAF3E9] text-[#168447]"><PackageCheck size={13} /></span>
+                                <span className="min-w-0 flex-1 truncate text-[9px] font-semibold text-[#202124]">{suggestion.name}</span>
+                                <button type="button" aria-label={`Add ${suggestion.name}`} onClick={() => updateKitCustomization(item.id, item.kitContents ?? [], [...(item.requestedItems ?? []), suggestion])} className="inline-flex min-h-7 shrink-0 items-center gap-1 rounded-md bg-[#168447] px-2 text-[9px] font-extrabold text-white transition hover:bg-[#106B38]"><Plus size={10} /> Add</button>
+                              </div>
+                            ))}
+                          </div>
+                          <p className="mt-2 text-[9px] leading-4 text-[#686868]">Suggested items are added as extras. Their prices will be confirmed by the store on WhatsApp.</p>
                         </div>
                       )}
                       {item.requestedItems && item.requestedItems.length > 0 && (
-                        <div className="mt-2 rounded-lg border border-[#E8DFD1] bg-white p-2">
-                          <p className="text-[10px] font-bold text-[#168447]">Extra items · price confirmation pending</p>
+                        <div className="mt-2 rounded-lg border border-[#F7C928]/60 bg-[#FAF0C8]/50 p-2">
+                          <p className="text-[10px] font-bold text-[#806000]">Added extras · price confirmation pending</p>
                           {item.requestedItems.map((entry, index) => <p key={index} className="mt-0.5 text-[10px] text-[#686868]">{entry.name} — {entry.quantity}</p>)}
                         </div>
                       )}
