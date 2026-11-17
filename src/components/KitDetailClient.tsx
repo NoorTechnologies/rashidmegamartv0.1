@@ -52,10 +52,10 @@ export default function KitDetailClient({ kit }: Props) {
   if (!isLoaded) {
     return (
       <div
-        className="flex min-h-14 w-full animate-pulse items-center justify-center rounded-xl bg-[#E5ECE6] px-5 py-4"
+        className="flex min-h-14 w-full animate-pulse items-center justify-center rounded-xl bg-[#E8DFD1] px-5 py-4"
         aria-label="Loading cart"
       >
-        <span className="text-sm font-bold text-[#68756B]">
+        <span className="text-sm font-bold text-[#686868]">
           Loading cart...
         </span>
       </div>
@@ -67,7 +67,7 @@ export default function KitDetailClient({ kit }: Props) {
       <button
         type="button"
         disabled
-        className="flex min-h-14 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-[#AAB8AD] px-5 py-4 text-sm font-extrabold text-white"
+        className="flex min-h-14 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-[#D8CBB8] px-5 py-4 text-sm font-extrabold text-white"
       >
         Currently Unavailable
       </button>
@@ -76,7 +76,7 @@ export default function KitDetailClient({ kit }: Props) {
 
   if (cartItem) {
     return (
-      <div className="flex min-h-14 w-full items-center justify-between gap-3 rounded-xl border border-[#B7E4C7] bg-[#EAF7EE] p-2">
+      <div className="flex min-h-14 w-full items-center justify-between gap-3 rounded-xl border border-[#D5E8D6] bg-[#EAF3E9] p-2">
         <div className="flex min-w-0 items-center gap-2 pl-2">
           <Check
             size={19}
@@ -84,10 +84,10 @@ export default function KitDetailClient({ kit }: Props) {
           />
 
           <div className="min-w-0">
-            <p className="text-xs font-extrabold text-[#087039] sm:text-sm">
+            <p className="text-xs font-extrabold text-[#168447] sm:text-sm">
               Added to Cart
             </p>
-            <p className="text-[10px] text-[#53665A]">
+            <p className="text-[10px] text-[#202124]">
               Quantity: {cartItem.quantity}
             </p>
           </div>
@@ -98,13 +98,13 @@ export default function KitDetailClient({ kit }: Props) {
             type="button"
             onClick={handleDecrease}
             aria-label={`Decrease ${kit.name} quantity`}
-            className="flex size-9 items-center justify-center rounded-md bg-[#F3F9F4] text-[#168447] transition hover:bg-[#DDF1E2] active:scale-95"
+            className="flex size-9 items-center justify-center rounded-md bg-[#FAF7EF] text-[#168447] transition hover:bg-[#EAF3E9] active:scale-95"
           >
             <Minus size={17} />
           </button>
 
           <span
-            className="min-w-5 text-center text-sm font-black tabular-nums text-[#202B24]"
+            className="min-w-5 text-center text-sm font-black tabular-nums text-[#202124]"
             aria-live="polite"
           >
             {cartItem.quantity}
@@ -114,7 +114,7 @@ export default function KitDetailClient({ kit }: Props) {
             type="button"
             onClick={handleIncrease}
             aria-label={`Increase ${kit.name} quantity`}
-            className="flex size-9 items-center justify-center rounded-md bg-[#168447] text-white transition hover:bg-[#075C2B] active:scale-95"
+            className="flex size-9 items-center justify-center rounded-md bg-[#168447] text-white transition hover:bg-[#106B38] active:scale-95"
           >
             <Plus size={17} />
           </button>
@@ -127,7 +127,7 @@ export default function KitDetailClient({ kit }: Props) {
     <button
       type="button"
       onClick={handleAddToCart}
-      className="flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-4 text-sm font-extrabold text-white shadow-lg shadow-[#168447]/15 transition hover:bg-[#075C2B] active:scale-[0.99]"
+      className="flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-4 text-sm font-extrabold text-white shadow-lg shadow-[#168447]/15 transition hover:bg-[#106B38] active:scale-[0.99]"
     >
       <ShoppingCart size={19} />
       Add Kit to Cart
