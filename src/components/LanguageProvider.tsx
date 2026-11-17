@@ -393,12 +393,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       >
         {expanded ? (
           <div className="flex items-center gap-1 rounded-full border border-white/80 bg-white/90 p-1.5 shadow-[0_10px_35px_rgba(30,20,25,0.18)] backdrop-blur-2xl">
-            <button type="button" onClick={() => chooseLanguage("en")} aria-pressed={language === "en"} className={`rounded-full px-3.5 py-2 text-xs font-extrabold transition ${language === "en" ? "bg-[#A83250] text-white shadow-sm" : "text-[#6F6267] hover:bg-[#F8E8ED]"}`}>EN</button>
-            <button type="button" onClick={() => chooseLanguage("hi")} aria-pressed={language === "hi"} className={`rounded-full px-3.5 py-2 text-xs font-extrabold transition ${language === "hi" ? "bg-[#A83250] text-white shadow-sm" : "text-[#6F6267] hover:bg-[#F8E8ED]"}`}>हिंदी</button>
-            <button type="button" onClick={() => setExpanded(false)} aria-label="Close language selector" className="ml-0.5 flex size-8 items-center justify-center rounded-full text-[#766D72] hover:bg-[#F5F1EF]"><ChevronDown size={15} /></button>
+            <button type="button" onClick={() => chooseLanguage("en")} aria-pressed={language === "en"} className={`rounded-full px-3.5 py-2 text-xs font-extrabold transition ${language === "en" ? "bg-[#800020] text-white shadow-sm" : "text-[#686868] hover:bg-[#F1EBDD]"}`}>EN</button>
+            <button type="button" onClick={() => chooseLanguage("hi")} aria-pressed={language === "hi"} className={`rounded-full px-3.5 py-2 text-xs font-extrabold transition ${language === "hi" ? "bg-[#800020] text-white shadow-sm" : "text-[#686868] hover:bg-[#F1EBDD]"}`}>हिंदी</button>
+            <button type="button" onClick={() => setExpanded(false)} aria-label="Close language selector" className="ml-0.5 flex size-8 items-center justify-center rounded-full text-[#686868] hover:bg-[#FAF7EF]"><ChevronDown size={15} /></button>
           </div>
         ) : (
-          <button type="button" onClick={() => { setExpanded(true); setVisible(true); }} aria-label={language === "hi" ? "भाषा बदलें" : "Change language"} className="flex h-11 items-center gap-2 rounded-full border border-white/80 bg-white/85 px-4 text-xs font-extrabold text-[#A83250] shadow-[0_8px_28px_rgba(40,25,30,0.16)] backdrop-blur-2xl transition hover:-translate-y-0.5 hover:bg-white active:scale-95">
+          <button type="button" onClick={() => { setExpanded(true); setVisible(true); }} aria-label={language === "hi" ? "भाषा बदलें" : "Change language"} className="flex h-11 items-center gap-2 rounded-full border border-white/80 bg-white/85 px-4 text-xs font-extrabold text-[#800020] shadow-[0_8px_28px_rgba(40,25,30,0.16)] backdrop-blur-2xl transition hover:-translate-y-0.5 hover:bg-white active:scale-95">
             <Languages size={16} />
             {language === "hi" ? "हिंदी" : "EN / HI"}
           </button>
