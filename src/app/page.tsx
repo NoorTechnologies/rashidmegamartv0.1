@@ -15,7 +15,7 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen w-full overflow-x-clip bg-[#FAF7EF]">
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#F1EBDD] via-white to-[#FAF7EF] px-3 pb-9 pt-6 text-[#171717] sm:px-5 sm:pb-12 sm:pt-10">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#F1EBDD] via-white to-[#FAF7EF] px-3 pb-9 pt-6 text-[#202124] sm:px-5 sm:pb-12 sm:pt-10">
         <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#F7C928]/15 blur-[90px]" />
         <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#168447]/[0.07] blur-[90px]" />
         <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
@@ -24,7 +24,7 @@ export default function HomePage() {
           </span>
           <div className="mt-5 flex flex-col items-center">
             <Image src="/images/logo2.png" alt="Rashid Mega Mart Logo" width={110} height={110} priority className="h-20 w-20 object-contain sm:h-24 sm:w-24" />
-            <h1 className="mt-3 max-w-2xl text-2xl font-black leading-tight tracking-tight text-[#171717] sm:text-4xl md:text-5xl">
+            <h1 className="mt-3 max-w-2xl text-2xl font-black leading-tight tracking-tight text-[#202124] sm:text-4xl md:text-5xl">
               Welcome to <span className="mt-1 block text-[#168447]">Rashid Mega Mart</span>
             </h1>
             <p className="mt-3 max-w-md text-xs leading-6 text-[#686868] sm:text-sm">
@@ -101,11 +101,11 @@ export default function HomePage() {
             { icon: Truck, problem: "Market Jaane Ka Time Nahi?", solution: "Ghar baithe WhatsApp par apni grocery list bhej dijiye.", tint: "bg-[#FAF0C8]", ink: "text-[#806000]" },
             { icon: Package, problem: "Ready Kit Ke Baare Mein Jankari Chahiye?", solution: "Available grocery kits ke products aur details WhatsApp par poochhein.", tint: "bg-[#F1EBDD]", ink: "text-[#168447]" },
             { icon: Wallet, problem: "Budget Ka Rakhna Hai Dhyan?", solution: "Apne budget ke hisaab se available ready-made kits dekhein.", tint: "bg-[#EAF3E9]", ink: "text-[#168447]" },
-            { icon: ClipboardList, problem: "Monthly Grocery Manage Karna Mushkil?", solution: "Monthly needs ke liye available kits dekhein aur order details confirm karein.", tint: "bg-[#F1EBDD]", ink: "text-[#1877F2]" },
+            { icon: ClipboardList, problem: "Monthly Grocery Manage Karna Mushkil?", solution: "Monthly needs ke liye available kits dekhein aur order details confirm karein.", tint: "bg-[#F1EBDD]", ink: "text-[#202124]" },
           ].map((item) => {
             const Icon = item.icon;
             return (
-              <article key={item.problem} className="flex gap-3 rounded-2xl border border-[#F0E5D8] bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md sm:gap-4 sm:p-5">
+              <article key={item.problem} className="flex gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md sm:gap-4 sm:p-5">
                 <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.tint} sm:h-12 sm:w-12`}>
                   <Icon size={21} className={item.ink} />
                 </div>
@@ -125,7 +125,7 @@ export default function HomePage() {
             <a href="https://wa.me/918962531603?text=Namaste%2C%20mujhe%20apni%20grocery%20kit%20customize%20karni%20hai." target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#106B38] sm:text-sm">
               <Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} className="h-5 w-5 object-contain" /> WhatsApp Par Poochhein
             </a>
-            <Link href="/kits" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D9C6B2] bg-white px-5 py-3 text-xs font-bold text-[#168447] transition hover:border-[#168447] sm:text-sm">
+            <Link href="/kits" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D8CBB8] bg-white px-5 py-3 text-xs font-bold text-[#168447] transition hover:border-[#168447] sm:text-sm">
               Ready Kits Dekhein <ArrowRight size={16} />
             </Link>
           </div>
