@@ -19,7 +19,8 @@ const navigationItems = [
 ];
 
 const mobileNavigationItems = [
-  ...navigationItems,
+  { label: "Home", href: "/", icon: House, external: false },
+  { label: "Kits", href: "/kits", icon: Package, external: false },
   { label: "Cart", href: "/cart", icon: ShoppingCart, external: false },
   { label: "WhatsApp", href: whatsappHref, icon: MessageCircle, external: true },
 ];
