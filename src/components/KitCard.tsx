@@ -79,7 +79,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
           )}
 
           <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full border border-white/70 bg-white/55 px-2.5 py-1 text-[9px] font-bold text-[#202124] shadow-lg backdrop-blur-xl">
-            <Sparkles size={11} className="text-[#A66B00]" />
+            <Sparkles size={11} className="text-[#806000]" />
             MERI JAAN DEAL
           </span>
 
@@ -134,7 +134,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
                   <span className="min-w-0 text-[9px] leading-3 text-[#202124] sm:text-[10px]">
                     <span className="block line-clamp-2 font-semibold">{displayCatalogue(name)}</span>
                     {quantity && (
-                      <span className="mt-0.5 block font-bold text-[#936300]">
+                      <span className="mt-0.5 block font-bold text-[#806000]">
                         {quantity ? displayCatalogue(quantity) : quantity}
                       </span>
                     )}
@@ -156,14 +156,14 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         </div>
 
         {/* PRICE AND SAVINGS */}
-        <div className="mt-2 overflow-hidden rounded-xl border border-[#D8CBB8] bg-[linear-gradient(135deg,#F1EBDD_0%,#FFF9E8_100%)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,.9)] sm:mt-4 sm:rounded-2xl sm:p-3">
+        <div className="mt-2 overflow-hidden rounded-xl border border-[#D8CBB8] bg-[linear-gradient(135deg,#F1EBDD_0%,#FAF0C8_100%)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,.9)] sm:mt-4 sm:rounded-2xl sm:p-3">
           <div className="flex min-w-0 flex-wrap items-center justify-between gap-1.5">
             <div className="min-w-0">
               <p className="text-[8px] font-black uppercase tracking-[0.16em] text-[#800020] sm:text-[9px]">BEST OFFER PRICE</p>
               <div className="mt-0.5 flex flex-wrap items-baseline gap-x-1.5">
                 <span className="text-xl font-black tracking-tight text-[#800020] sm:text-3xl">{formatPrice(kit.price)}</span>
                 {kit.oldPrice && kit.oldPrice > kit.price && (
-                  <span className="text-[10px] font-bold text-[#8D8585] line-through sm:text-xs">{formatPrice(kit.oldPrice)}</span>
+                  <span className="text-[10px] font-bold text-[#686868] line-through sm:text-xs">{formatPrice(kit.oldPrice)}</span>
                 )}
               </div>
             </div>
@@ -185,7 +185,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
               <ArrowUpRight size={12} />
             </Link>
           ) : (
-            <span className="inline-flex min-h-8 flex-1 items-center justify-center rounded-lg bg-[#F1EFED] px-1.5 text-[10px] font-bold text-[#948A83] sm:min-h-10 sm:rounded-xl sm:text-xs">
+            <span className="inline-flex min-h-8 flex-1 items-center justify-center rounded-lg bg-[#FAF7EF] px-1.5 text-[10px] font-bold text-[#686868] sm:min-h-10 sm:rounded-xl sm:text-xs">
               Out of Stock
             </span>
           )}
