@@ -21,6 +21,8 @@ export default function KitsPage() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "available" | "unavailable">("all");
   const [sortBy, setSortBy] = useState<SortOption>("featured");
+  const [suggestion, setSuggestion] = useState("");
+  const [suggestionName, setSuggestionName] = useState("");
 
   const filteredKits = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -285,6 +287,22 @@ export default function KitsPage() {
             </button>
           </div>
         )}
+      </section>
+
+      <section className="mx-auto w-full max-w-7xl px-3 pb-28 sm:px-6 sm:pb-16 lg:px-8" aria-labelledby="kit-suggestion-title">
+        <div className="overflow-hidden rounded-2xl border border-white/80 bg-white/55 p-4 shadow-[0_12px_34px_rgba(70,40,30,0.08)] backdrop-blur-xl sm:rounded-3xl sm:p-6">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="inline-flex rounded-full border border-[#A83250]/15 bg-white/70 px-3 py-1 text-[10px] font-bold text-[#A83250]">Your suggestion matters</span>
+            <h2 id="kit-suggestion-title" className="mt-2 text-lg font-black text-[#30251F] sm:text-2xl">Apni Grocery Kit Suggest Karein</h2>
+            <p className="mt-1 text-xs leading-5 text-[#766B63] sm:text-sm">Koi item ya kit chahiye jo yahan nahi mili? Humein batayein — hum aapki suggestion dekhenge.</p>
+            <div className="mt-4 grid gap-2 text-left sm:grid-cols-[1fr_1.4fr]">
+              <input value={suggestionName} onChange={(event) => setSuggestionName(event.target.value.slice(0, 60))} placeholder="Aapka naam (optional)" aria-label="Your name" className="min-h-10 rounded-xl border border-[#E9E1DA] bg-white/85 px-3 text-xs outline-none focus:border-[#A83250]" />
+              <textarea value={suggestion} onChange={(event) => setSuggestion(event.target.value.slice(0, 500))} placeholder="Kaun si kit ya grocery items chahiye? Quantity bhi likh sakte hain..." aria-label="Kit suggestion" rows={3} className="min-h-20 rounded-xl border border-[#E9E1DA] bg-white/85 px-3 py-2.5 text-xs outline-none focus:border-[#A83250] sm:row-span-2" />
+              <button type="button" disabled={!suggestion.trim()} onClick={() => { const message = ["Namaste Rashid Mega Mart, meri grocery kit suggestion:", suggestion.trim(), suggestionName.trim() ? "Name: " + suggestionName.trim() : ""].filter(Boolean).join("\\n"); window.location.assign("https://wa.me/918962531603?text=" + encodeURIComponent(message)); }} className="min-h-10 rounded-xl bg-[#A83250] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#87263F] disabled:cursor-not-allowed disabled:opacity-45">WhatsApp Par Suggest Karein</button>
+            </div>
+            <p className="mt-2 text-[10px] text-[#8B8078]">Suggestion WhatsApp par store ko bheji jayegi. Order ya price confirmation nahi hai.</p>
+          </div>
+        </div>
       </section>
     </main>
   );
