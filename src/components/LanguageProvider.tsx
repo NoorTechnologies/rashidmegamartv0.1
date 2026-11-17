@@ -379,33 +379,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     return () => observer.disconnect();
   }, [language, applyLanguage]);
 
-  const chooseLanguage = (next: Language) => {
-    setLanguage(next);
-    setExpanded(false);
-    try {
-      window.localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // Language still works for this session.
-    }
-  };
-
   const toggleLanguage = () => {
     const next: Language = language === "en" ? "hi" : "en";
     setLanguage(next);
-    try { window.localStorage.setItem(STORAGE_KEY, next); } catch { /* session-only fallback */ }
+    try {
+      window.localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // Language remains active for this session.
+    }
   };
 
   return (
-    <>
-      {children}
-      <div
-        className={`fixed bottom-[calc(104px+env(safe-area-inset-bottom))] right-3 z-[70] transition-all duration-300 sm:right-5 lg:bottom-6 lg:right-6 ${visible || expanded ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"}`}
-        onMouseEnter={() => setVisible(true)}
-      >
-        {expanded ? (
-          <div className="flex items-center gap-1 rounded-full border border-white/80 bg-white/90 p-1.5 shadow-[0_10px_35px_rgba(30,20,25,0.18)] backdrop-blur-2xl">
-            <button type="button" onClick={() => chooseLanguage("en")} aria-pressed={language === "en"} className={`rounded-full px-3.5 py-2 text-xs font-extrabold transition ${language === "en" ? "bg-[#800020] text-white shadow-sm" : "text-[#686868] hover:bg-[#F1EBDD]"}`}>EN</button>
-            <button type="button" onClick={() => chooseLanguage("hi")} aria-pressed={language === "hi"} className={`rounded-full px-3.5 py-2 text-xs font-extrabol  return (
     <LanguageContext.Provider value={language}>
       <LanguageToggleContext.Provider value={toggleLanguage}>
         {children}
