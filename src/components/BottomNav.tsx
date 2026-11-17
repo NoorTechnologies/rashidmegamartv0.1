@@ -71,7 +71,7 @@ export default function BottomNav() {
                   {item.external ? <Image src="/Whatsapp-3d.svg" alt="" width={23} height={23} unoptimized className="size-[22px] object-contain" /> : <Icon size={19} strokeWidth={active ? 2.7 : 2.2} />}
                   {item.href === "/cart" && totalItems > 0 && <span className="absolute -right-1 -top-1 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#FFD84D] px-1 text-[8px] font-black text-[#292014] ring-2 ring-white">{totalItems > 99 ? "99+" : totalItems}</span>}
                 </span>
-                <span className={`text-[10px] leading-none tracking-[-0.01em] ${item.external ? "font-black text-[#087A3D]" : active ? "font-black text-[#D71920]" : "font-bold text-[#59615C]"}`}>{item.external ? "Hello! WhatsApp" : item.label}</span>
+                <span className={`text-[10px] leading-none tracking-[-0.01em] ${item.external ? "font-black text-[#087A3D]" : active ? "font-black text-[#D71920]" : "font-bold text-[#59615C]"}`}>{item.external ? <span className="flex flex-col items-center gap-0.5"><b>Hello!</b><small className="text-[8px] font-extrabold">WhatsApp</small></span> : item.label}</span>
                 {active && <span className="absolute bottom-[3px] h-[3px] w-5 rounded-full bg-[#D71920]" />}
               </>
             );
