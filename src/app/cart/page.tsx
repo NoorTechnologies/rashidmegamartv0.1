@@ -207,7 +207,7 @@ export default function CartPage() {
             Rashid Mega Mart
           </p>
 
-          <h1 className="text-2xl font-black tracking-tight text-[#24201E] sm:text-3xl">
+          <h1 className="text-2xl font-black tracking-tight text-[#202124] sm:text-3xl">
             Your cart is empty
           </h1>
 
@@ -247,7 +247,7 @@ export default function CartPage() {
               Rashid Mega Mart
             </p>
 
-            <h1 className="text-2xl font-black tracking-tight text-[#24201E] sm:text-3xl">
+            <h1 className="text-2xl font-black tracking-tight text-[#202124] sm:text-3xl">
               My Shopping Cart
             </h1>
 
@@ -271,7 +271,7 @@ export default function CartPage() {
           <section className="min-w-0">
             <div className="mb-3 flex items-center justify-between gap-3">
               <div>
-                <h2 className="text-base font-extrabold text-[#24201E] sm:text-lg">
+                <h2 className="text-base font-extrabold text-[#202124] sm:text-lg">
                   Your Items
                 </h2>
                 <p className="mt-0.5 text-[11px] text-[#686868]">
@@ -297,10 +297,10 @@ export default function CartPage() {
               {items.map((item) => (
                 <article
                   key={item.id}
-                  className="group flex min-w-0 gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-3 shadow-[0_2px_12px_rgba(40,30,20,0.035)] transition hover:border-[#E5D4D9] hover:shadow-[0_5px_20px_rgba(40,30,20,0.06)] min-[430px]:gap-4 sm:p-4"
+                  className="group flex min-w-0 gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-3 shadow-[0_2px_12px_rgba(40,30,20,0.035)] transition hover:border-[#D8CBB8] hover:shadow-[0_5px_20px_rgba(40,30,20,0.06)] min-[430px]:gap-4 sm:p-4"
                 >
                   {/* Product Image */}
-                  <div className="relative size-[78px] shrink-0 overflow-hidden rounded-xl bg-[#F8F6F2] min-[375px]:size-[88px] sm:size-24">
+                  <div className="relative size-[78px] shrink-0 overflow-hidden rounded-xl bg-[#FAF7EF] min-[375px]:size-[88px] sm:size-24">
                     {item.image ? (
                       <Image
                         src={item.image}
@@ -325,13 +325,13 @@ export default function CartPage() {
                       </h3>
 
                       {item.brand && (
-                        <p className="mt-1 truncate text-[10px] font-medium text-[#8B827B] sm:text-xs">
+                        <p className="mt-1 truncate text-[10px] font-medium text-[#686868] sm:text-xs">
                           {item.brand}
                         </p>
                       )}
 
                       {item.packSize && (
-                        <p className="mt-1 text-[10px] text-[#A49B94] sm:text-xs">
+                        <p className="mt-1 text-[10px] text-[#686868] sm:text-xs">
                           {item.packSize}
                         </p>
                       )}
@@ -340,8 +340,8 @@ export default function CartPage() {
                         {formatPrice(item.price)}
                       </p>
                       {item.kitContents && (
-                        <div className="mt-2 rounded-lg bg-[#FCFAF8] p-2">
-                          <p className="text-[10px] font-bold text-[#62564E]">Customized kit · {item.kitContents.length} selected items</p>
+                        <div className="mt-2 rounded-lg bg-[#FAF7EF] p-2">
+                          <p className="text-[10px] font-bold text-[#202124]">Customized kit · {item.kitContents.length} selected items</p>
                           <ul className="mt-1 space-y-0.5 text-[10px] text-[#686868]">
                             {item.kitContents.slice(0, 8).map((entry, index) => <li key={index}>{entry.name} — {entry.quantity}</li>)}
                             {item.kitContents.length > 8 && <li>+ {item.kitContents.length - 8} more</li>}
@@ -395,7 +395,7 @@ export default function CartPage() {
                           type="button"
                           aria-label={`Remove ${item.name}`}
                           onClick={() => handleRemoveItem(item)}
-                          className="flex size-9 shrink-0 items-center justify-center rounded-lg text-[#B5AAA3] transition hover:bg-red-50 hover:text-red-600 active:bg-red-100"
+                          className="flex size-9 shrink-0 items-center justify-center rounded-lg text-[#D8CBB8] transition hover:bg-red-50 hover:text-red-600 active:bg-red-100"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -407,24 +407,24 @@ export default function CartPage() {
             </div>
 
             {removedItem && (
-              <div role="status" className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[#E8D7DC] bg-[#FFF8FA] px-3 py-2.5 text-xs">
-                <span className="min-w-0 truncate text-[#6F3545]">Removed {removedItem.name}</span>
+              <div role="status" className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[#F1EBDD] bg-[#FAF7EF] px-3 py-2.5 text-xs">
+                <span className="min-w-0 truncate text-[#800020]">Removed {removedItem.name}</span>
                 <button type="button" onClick={handleUndoRemove} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 font-extrabold text-[#168447] hover:bg-[#F1EBDD]"><Undo2 size={14} /> Undo</button>
               </div>
             )}
 
             {/* Delivery Information */}
             <div className="mt-4 flex gap-3 rounded-2xl border border-[#E8DFD1] bg-[#FAF7EF] p-3.5 sm:p-4">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#F5EAD6] text-[#806000]">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#F1EBDD] text-[#806000]">
                 <Truck size={19} />
               </div>
 
               <div className="min-w-0">
-                <p className="text-xs font-extrabold text-[#55432C] sm:text-sm">
+                <p className="text-xs font-extrabold text-[#202124] sm:text-sm">
                   Delivery details
                 </p>
 
-                <p className="mt-1 text-[11px] leading-5 text-[#81715C] sm:text-xs">
+                <p className="mt-1 text-[11px] leading-5 text-[#686868] sm:text-xs">
                   Delivery availability and charges will be confirmed by the
                   store after receiving your order.
                 </p>
@@ -461,13 +461,13 @@ export default function CartPage() {
                   </span>
                 </div>
 
-                <div className="border-t border-dashed border-[#E9E2DB] pt-4">
+                <div className="border-t border-dashed border-[#E8DFD1] pt-4">
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-sm font-extrabold text-[#202124]">
                         Current Base Total
                       </p>
-                      <p className="mt-1 text-[10px] text-[#999087]">
+                      <p className="mt-1 text-[10px] text-[#686868]">
                         Customized price not confirmed
                       </p>
                     </div>
@@ -477,7 +477,7 @@ export default function CartPage() {
                     </span>
                   </div>
 
-                  <p className="mt-3 rounded-lg bg-[#FAF7F2] p-2.5 text-[10px] leading-5 text-[#686868]">
+                  <p className="mt-3 rounded-lg bg-[#FAF7EF] p-2.5 text-[10px] leading-5 text-[#686868]">
                     Final payable amount will be confirmed by the store after
                     checking product availability and delivery charges.
                   </p>
@@ -512,7 +512,7 @@ export default function CartPage() {
                 <div>
                   <label
                     htmlFor="customerName"
-                    className="mb-1.5 block text-xs font-bold text-[#554D47]"
+                    className="mb-1.5 block text-xs font-bold text-[#202124]"
                   >
                     Full Name *
                   </label>
@@ -538,7 +538,7 @@ export default function CartPage() {
                 <div>
                   <label
                     htmlFor="phone"
-                    className="mb-1.5 block text-xs font-bold text-[#554D47]"
+                    className="mb-1.5 block text-xs font-bold text-[#202124]"
                   >
                     Mobile Number *
                   </label>
@@ -567,7 +567,7 @@ export default function CartPage() {
                 <div>
                   <label
                     htmlFor="address"
-                    className="mb-1.5 block text-xs font-bold text-[#554D47]"
+                    className="mb-1.5 block text-xs font-bold text-[#202124]"
                   >
                     Delivery Address *
                   </label>
@@ -592,14 +592,14 @@ export default function CartPage() {
 
               {/* Optional delivery note */}
               <div>
-                <label htmlFor="orderNote" className="mb-1.5 block text-xs font-bold text-[#554D47]">Order Note (Optional)</label>
+                <label htmlFor="orderNote" className="mb-1.5 block text-xs font-bold text-[#202124]">Order Note (Optional)</label>
                 <textarea id="orderNote" value={orderNote} onChange={(event) => setOrderNote(event.target.value.slice(0, 240))} maxLength={240} rows={2} placeholder="Any delivery instructions? (e.g. call before arrival)" className="min-h-20 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3.5 py-3 text-base text-[#202124] outline-none transition placeholder:text-sm placeholder:text-[#686868] focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10 sm:px-4 sm:text-sm" />
                 <p className="mt-1 text-right text-[10px] text-[#686868]">{orderNote.length}/240</p>
               </div>
 
               {/* Payment Preference */}
               <div>
-                <p className="mb-2.5 text-xs font-bold text-[#554D47]">
+                <p className="mb-2.5 text-xs font-bold text-[#202124]">
                   Payment Preference
                 </p>
 
@@ -658,7 +658,7 @@ export default function CartPage() {
                 </div>
 
                 {paymentMethod === "UPI" && (
-                  <p className="mt-2.5 rounded-xl border border-[#F1E1BC] bg-[#FFFBF0] p-3 text-[11px] leading-5 text-[#80612C]">
+                  <p className="mt-2.5 rounded-xl border border-[#FAF0C8] bg-[#FAF7EF] p-3 text-[11px] leading-5 text-[#806000]">
                     Store order confirm karne ke baad verified UPI details
                     share karega. Abhi payment mat karein.
                   </p>
@@ -678,7 +678,7 @@ export default function CartPage() {
               {/* WhatsApp Checkout */}
               <button
                 type="submit"
-                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#168447] px-3 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-green-900/10 transition hover:bg-[#0E6B3A] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168447]"
+                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#168447] px-3 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-green-900/10 transition hover:bg-[#168447] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168447]"
               >
                 <Image
                   src="/Whatsapp-3d.svg"
@@ -700,7 +700,7 @@ export default function CartPage() {
         </div>
 
         <div className="fixed inset-x-0 bottom-[calc(66px+env(safe-area-inset-bottom))] z-30 border-t border-[#E8DFD1] bg-white/95 px-4 py-2.5 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
-          <button type="submit" form="checkout-form" className="flex min-h-11 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white shadow-md shadow-green-900/10 transition hover:bg-[#0E6B3A] active:scale-[0.99]">
+          <button type="submit" form="checkout-form" className="flex min-h-11 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white shadow-md shadow-green-900/10 transition hover:bg-[#168447] active:scale-[0.99]">
             <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Order on WhatsApp</span>
             <span>{formatPrice(subtotal)}</span>
           </button>
