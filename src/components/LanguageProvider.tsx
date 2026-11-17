@@ -443,6 +443,8 @@ Object.assign(translations, {
   "Order on WhatsApp": "WhatsApp पर ऑर्डर करें"
 });
 
+
+
 const hindiTranslations = { ...translations };
 
 const hinglishTranslations: Record<string, string> = {
