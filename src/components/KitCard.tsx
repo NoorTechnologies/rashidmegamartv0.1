@@ -80,7 +80,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
 
           <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full border border-white/70 bg-white/55 px-2.5 py-1 text-[9px] font-bold text-[#6F321D] shadow-lg backdrop-blur-xl">
             <Sparkles size={11} className="text-[#A66B00]" />
-            BEST VALUE COMBO
+            MERI JAAN DEAL
           </span>
 
           {!kit.isAvailable && (
@@ -96,7 +96,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
       {/* KIT DETAILS */}
       <div className="relative flex min-w-0 flex-1 flex-col p-2 sm:p-4">
         <Link href={`/kits/${kit.id}`}>
-          <h3 className="line-clamp-2 min-h-9 text-[12px] font-extrabold leading-[18px] text-[#30251F] transition-colors group-hover:text-[#A83250] sm:min-h-11 sm:text-[15px] sm:leading-5">
+          <h3 className="line-clamp-2 min-h-9 text-[12px] font-extrabold leading-[18px] text-[#30251F] transition-colors group-hover:text-[#D71920] sm:min-h-11 sm:text-[15px] sm:leading-5">
             {kit.name}
           </h3>
         </Link>
@@ -112,7 +112,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
               Products inside
             </span>
 
-            <span className="shrink-0 rounded-full border border-[#A83250]/10 bg-[#D71920]/[0.07] px-2 py-0.5 text-[9px] font-bold text-[#B5121B]">
+            <span className="shrink-0 rounded-full border border-[#D71920]/10 bg-[#D71920]/[0.07] px-2 py-0.5 text-[9px] font-bold text-[#B5121B]">
               {kit.items.length} Products
             </span>
           </div>
@@ -128,7 +128,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
                   key={`${kit.id}-${index}`}
                   className="flex min-w-0 items-start gap-1.5"
                 >
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-white/90 bg-white/80 text-[#A83250] shadow-sm sm:h-8 sm:w-8">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-white/90 bg-white/80 text-[#D71920] shadow-sm sm:h-8 sm:w-8">
                     <Package size={14} strokeWidth={1.5} />
                   </div>
                   <span className="min-w-0 text-[9px] leading-3 text-[#55483C] sm:text-[10px]">
@@ -147,7 +147,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
           {remainingItems > 0 && (
             <Link
               href={`/kits/${kit.id}`}
-              className="mt-2 inline-flex items-center gap-1 text-[9px] font-extrabold text-[#A83250] transition hover:text-[#B5121B] sm:text-[10px]"
+              className="mt-2 inline-flex items-center gap-1 text-[9px] font-extrabold text-[#D71920] transition hover:text-[#B5121B] sm:text-[10px]"
             >
               + {remainingItems} more items
               <ArrowUpRight size={11} />
@@ -179,7 +179,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
             <Link
               href={`/kits/${kit.id}`}
               aria-label={`Customize ${kit.name}`}
-              className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg bg-[#A83250] px-1.5 text-[10px] font-extrabold text-white transition hover:bg-[#B5121B] sm:min-h-10 sm:rounded-xl sm:text-xs"
+              className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg bg-[#D71920] px-1.5 text-[10px] font-extrabold text-white transition hover:bg-[#B5121B] sm:min-h-10 sm:rounded-xl sm:text-xs"
             >
               Customize
               <ArrowUpRight size={12} />
