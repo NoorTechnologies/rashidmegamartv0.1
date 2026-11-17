@@ -188,14 +188,6 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         <div className="mt-auto flex gap-1.5 pt-2 sm:gap-2 sm:pt-4">
           <Link
             href={`/kits/${kit.id}`}
-            className="min-h-8 min-w-0 flex-1 rounded-lg border border-[#8F1235]/15 bg-white/55 px-1.5 text-[10px] font-extrabold text-[#8F1235] shadow-sm backdrop-blur-lg transition-all duration-300 hover:border-[#8F1235]/40 hover:bg-white/90 hover:shadow-md active:scale-[0.98] sm:min-h-10 sm:rounded-xl sm:text-xs"
-          >
-            View Kit
-            <ArrowUpRight size={12} />
-          </Link>
-
-          <Link
-            href={`/kits/${kit.id}`}
             aria-label={`Customize ${kit.name}`}
             className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg bg-[#A83250] px-1.5 text-[10px] font-extrabold text-white transition hover:bg-[#87263F] sm:min-h-10 sm:rounded-xl sm:text-xs"
           >
