@@ -15,7 +15,7 @@ const hindiCatalogueWords: Record<string, string> = {
 export function toEnglishCatalogue(value: string) {
   let result = value;
   for (const [hindi, english] of Object.entries(hindiCatalogueWords).sort(([a], [b]) => b.length - a.length)) result = result.replaceAll(hindi, english);
-  result = result.replace(/(\\d+)\\s*किलो/g, "$1 kg").replace(/(\\d+)\\s*लीटर/g, "$1 litres").replace(/(\\d+)\\s*ग्राम/g, "$1 g").replace(/(\\d+)\\s*पैकेट/g, "$1 packs").replace(/(\\d+)\\s*पीस/g, "$1 pcs").replace(/(\\d+)\\s*पाउच/g, "$1 pouches").replace(/(\\d+)\\s*सेट/g, "$1 sets").replace(/(\\d+)\\s*बोरी/g, "$1 sack");
+  result = result.replace(/(\d+)\s*किलो/g, "$1 kg").replace(/(\\d+)\\s*लीटर/g, "$1 litres").replace(/(\\d+)\\s*ग्राम/g, "$1 g").replace(/(\\d+)\\s*पैकेट/g, "$1 packs").replace(/(\\d+)\\s*पीस/g, "$1 pcs").replace(/(\\d+)\\s*पाउच/g, "$1 pouches").replace(/(\\d+)\\s*सेट/g, "$1 sets").replace(/(\\d+)\\s*बोरी/g, "$1 sack");
   return result;
 }
 
