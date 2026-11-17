@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BadgePercent, Sparkles, Tag } from "lucide-react";
+import { ArrowRight, Sparkles, Tag } from "lucide-react";
 import Footer from "@/components/Footer";
 import KitCard from "@/components/KitCard";
 import { kits } from "@/data/kits";
