@@ -138,7 +138,7 @@ export default async function KitDetailPage({ params }: PageProps) {
                 </div>
               </div>
 
-              <span className="rounded-full bg-[#FAF0C8] px-3 py-1.5 text-xs font-black text-[#9A6410]">
+              <span className="rounded-full bg-[#FAF0C8] px-3 py-1.5 text-xs font-black text-[#806000]">
                 {kit.items.length} Items
               </span>
             </div>
@@ -174,7 +174,7 @@ export default async function KitDetailPage({ params }: PageProps) {
             </p>
 
             {/* Price Card */}
-            <div className="mt-5 rounded-2xl border border-[#F1C6C8] bg-[linear-gradient(135deg,#F1EBDD_0%,#FFF9E8_100%)] p-4 shadow-[0_10px_28px_rgba(190,20,30,0.08)] sm:mt-7 sm:p-6">
+            <div className="mt-5 rounded-2xl border border-[#D8CBB8] bg-[linear-gradient(135deg,#F1EBDD_0%,#FAF0C8_100%)] p-4 shadow-[0_10px_28px_rgba(190,20,30,0.08)] sm:mt-7 sm:p-6">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#686868]">
                 Special Kit Price
               </p>
@@ -191,7 +191,7 @@ export default async function KitDetailPage({ params }: PageProps) {
                 )}
 
                 {discount > 0 && (
-                  <span className="rounded-lg bg-[#FAF0C8] px-3 py-1.5 text-xs font-extrabold text-[#9A6410]">
+                  <span className="rounded-lg bg-[#FAF0C8] px-3 py-1.5 text-xs font-extrabold text-[#806000]">
                     {discount}% OFF
                   </span>
                 )}
