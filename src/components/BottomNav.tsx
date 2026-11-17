@@ -52,9 +52,9 @@ export default function BottomNav() {
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
-            <button type="button" data-no-translate onClick={toggleLanguage} aria-label={language === "en" ? "Switch to Hinglish" : "Switch to English"} className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-[#D8CBB8] bg-white px-3 text-xs font-extrabold text-[#800020] transition hover:bg-[#F1EBDD] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#800020]">
+            <button type="button" data-no-translate onClick={toggleLanguage} aria-label={`Current language: ${language}. Switch to ${language === "en" ? "Hinglish" : language === "hinglish" ? "Hindi" : "English"}`} className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-[#D8CBB8] bg-white px-3 text-xs font-extrabold text-[#800020] transition hover:bg-[#F1EBDD] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#800020]">
               <Languages size={15} />
-              {language === "en" ? "Hinglish" : "English"}
+              {language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "हिंदी"}
             </button>
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer"
               className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[#EAF3E9] px-4 text-sm font-extrabold text-[#126B3A] transition-colors hover:bg-[#DCEBDD] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168447]">
@@ -103,7 +103,7 @@ export default function BottomNav() {
         <div className="fixed inset-x-3 bottom-[calc(78px+env(safe-area-inset-bottom))] z-[60] mx-auto grid max-w-[460px] grid-cols-3 gap-2 rounded-2xl border border-[#E8DFD1] bg-[#FAF7EF]/98 p-3 shadow-[0_14px_40px_rgba(32,20,18,0.20)] backdrop-blur-xl lg:hidden">
           <Link href="/deals" onClick={() => setMoreOpen(false)} className={`flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl text-xs font-extrabold ${isActive("/deals") ? "bg-[#800020] text-white" : "bg-white text-[#202124]"}`}><Tag size={19} /> Deals</Link>
           <Link href="/coupons" onClick={() => setMoreOpen(false)} className={`flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl text-xs font-extrabold ${isActive("/coupons") ? "bg-[#800020] text-white" : "bg-white text-[#202124]"}`}><Ticket size={19} /> Coupons</Link>
-          <button type="button" data-no-translate onClick={toggleLanguage} className="flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl bg-white text-xs font-extrabold text-[#800020]"><Languages size={19} /> {language === "en" ? "Hinglish" : "English"}</button>
+          <button type="button" data-no-translate onClick={toggleLanguage} className="flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl bg-white text-xs font-extrabold text-[#800020]"><Languages size={19} /> {language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "हिंदी"}</button>
         </div>
       )}
     </>
