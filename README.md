@@ -1,38 +1,35 @@
 # Rashid Mega Mart
 
-A mobile-first grocery storefront built with Next.js, React, TypeScript and Tailwind CSS. Customers can browse grocery products and curated kits, manage a local shopping cart, and send an order enquiry to the store through WhatsApp.
+A mobile-first grocery kits storefront built with Next.js, React, TypeScript and Tailwind CSS.
 
 ## Storefront
 
-- Home page with category discovery, featured grocery kits and best-selling products.
-- Shop page with product search, category filters, sorting and product details.
-- Grocery kits catalogue with search, category and availability filters.
-- Kit detail pages with item lists, pricing and cart controls.
-- Persistent browser cart with quantity updates and removal.
-- WhatsApp checkout enquiry with customer contact, address, selected items and payment preference.
+- Home page featuring available grocery kits.
+- Searchable and sortable grocery kits catalogue.
+- Individual kit detail pages with complete item lists and pricing.
+- Persistent browser cart with quantity controls.
+- WhatsApp checkout enquiry to **+91 89625 31603**.
 - Privacy Policy and Terms & Conditions pages.
-- Responsive mobile bottom navigation and desktop navigation.
-- Search-engine metadata, robots rules, sitemap and structured organization data.
+- Responsive desktop navigation and mobile bottom navigation.
+- Search metadata, robots rules and sitemap.
 
-## Important order-flow notes
+## Order flow
 
-- Checkout currently opens WhatsApp with a prepared order enquiry. It does **not** create a server-side order record.
-- Delivery availability, charges, stock and final payable amount must be confirmed by the store.
-- COD/UPI in checkout is a customer payment preference only. There is no payment gateway or automatic payment verification.
-- Product and kit data is maintained in local TypeScript files. Update names, brands, prices, availability, descriptions and images with verified store information before relying on the catalogue for live sales.
-- Customer reviews must only be published after receiving genuine permission-based feedback. Placeholder testimonials have been removed from the homepage.
+Checkout opens WhatsApp with a prepared order enquiry. The site does not create server-side orders, process payments, or automatically verify stock, delivery charges or payment. The store must confirm the final order details.
+
+Kit information is maintained in `src/data/kits.ts`. Verify prices, availability, contents and images before publishing changes.
 
 ## Tech stack
 
 - Next.js 16 App Router
 - React 19
-- TypeScript (strict mode)
+- TypeScript
 - Tailwind CSS 4
-- Lucide React icons
+- Lucide React
 
 ## Requirements
 
-- Node.js 22 or later
+- Node.js 22+
 - npm
 
 ## Local development
@@ -52,7 +49,7 @@ npm run typecheck
 npm run build
 ```
 
-A GitHub Actions workflow runs these checks for pushes and pull requests targeting `main`.
+GitHub Actions runs quality checks for pushes and pull requests targeting `main`.
 
 ## Project structure
 
@@ -62,24 +59,22 @@ src/
     cart/
     kits/
     privacy-policy/
-    shop/
     terms-and-conditions/
   components/
   context/
   data/
 public/
-  categories/
   images/
 ```
 
 ## Store contact
 
-- WhatsApp: [+91 89625 31603](https://wa.me/918962531603)
+[WhatsApp: +91 89625 31603](https://wa.me/918962531603)
 
-## Environment and secrets
+## Security
 
-No environment variables are currently required by the storefront. Never commit local environment files, API keys, passwords, tokens or other secrets. Keep `.env*` files out of version control.
+Never commit `.env*` files, API keys, passwords, tokens or other secrets.
 
 ## Deployment
 
-The project can be deployed on Vercel. Configure the production domain in the site's metadata, robots and sitemap settings whenever the domain changes.
+The project is deployed on Vercel. Update the canonical site URL in metadata, robots and sitemap when the production domain changes.
