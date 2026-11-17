@@ -94,7 +94,7 @@ export default function KitsPage() {
   return (
     <main className="min-h-screen w-full overflow-x-clip bg-[radial-gradient(ellipse_at_8%_8%,rgba(181,18,50,0.08),transparent_30%),radial-gradient(ellipse_at_92%_24%,rgba(212,168,79,0.14),transparent_28%),linear-gradient(180deg,#FAF7EF_0%,#FAF7EF_48%,#FAF7EF_100%)]">
       {/* COMPACT HOME STYLE BANNER */}
-      <section className="relative isolate overflow-hidden border-b border-[#F1EBDD] bg-[linear-gradient(125deg,#106B38_0%,#168447_58%,#800020_100%)] px-3 pb-5 pt-4 text-white shadow-[0_16px_45px_rgba(143,18,53,0.18)] sm:px-5 sm:pb-8 sm:pt-7">
+      <section data-reveal className="relative isolate overflow-hidden border-b border-[#F1EBDD] bg-[linear-gradient(125deg,#106B38_0%,#168447_58%,#800020_100%)] px-3 pb-5 pt-4 text-white shadow-[0_16px_45px_rgba(143,18,53,0.18)] sm:px-5 sm:pb-8 sm:pt-7">
         <div className="pointer-events-none absolute -left-16 top-5 h-40 w-40 rounded-full bg-white/10 blur-[65px]" />
         <div className="pointer-events-none absolute -right-16 bottom-0 h-40 w-40 rounded-full bg-[#FAF0C8]/20 blur-[65px]" />
 
@@ -296,7 +296,7 @@ export default function KitsPage() {
         )}
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-3 pb-28 sm:px-6 sm:pb-16 lg:px-8" aria-labelledby="kit-suggestion-title">
+      <section data-reveal className="mx-auto w-full max-w-7xl px-3 pb-28 sm:px-6 sm:pb-16 lg:px-8" aria-labelledby="kit-suggestion-title">
         <div className="overflow-hidden rounded-2xl border border-white/80 bg-white/55 p-4 shadow-[0_12px_34px_rgba(70,40,30,0.08)] backdrop-blur-xl sm:rounded-3xl sm:p-6">
           <div className="mx-auto max-w-2xl text-center">
             <span className="inline-flex rounded-full border border-[#168447]/15 bg-white/70 px-3 py-1 text-[10px] font-bold text-[#168447]">Your suggestion matters</span>

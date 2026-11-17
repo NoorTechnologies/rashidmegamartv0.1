@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 import type { GroceryKit } from "@/data/kits";
-import { useSiteLanguage, toEnglishCatalogue } from "@/components/LanguageProvider";
+import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
 
 interface KitCardProps {
   kit: GroceryKit;
@@ -29,7 +29,7 @@ const formatPrice = (price: number) =>
 export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
   const [imageError, setImageError] = useState(false);
   const language = useSiteLanguage();
-  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : value;
+  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : language === "hinglish" ? toHinglishCatalogue(value) : value;
   const kitImage = kit.image;
 
   const savings =

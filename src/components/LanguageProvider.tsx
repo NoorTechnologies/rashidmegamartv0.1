@@ -19,6 +19,42 @@ export function toEnglishCatalogue(value: string) {
   return result;
 }
 
+const hinglishCatalogueWords: Record<string, string> = {
+  "बोरी किंकी चावल": "Bori Kinki Chawal", "किनकी चावल": "Kinki Chawal", "चावल": "Chawal",
+  "सरसों तेल": "Sarson Tel", "रिफाइंड तेल": "Refined Tel", "तेल": "Tel", "टाटा नमक": "Tata Namak", "नमक": "Namak",
+  "ताज़ा मिर्च": "Taaza Mirch", "मिर्च": "Mirch", "ताज़ा धनिया": "Taaza Dhaniya", "धनिया": "Dhaniya",
+  "ताज़ा हल्दी": "Taazi Haldi", "हल्दी": "Haldi", "आटा": "Aata", "दाल": "Daal", "मिक्स दाल": "Mix Daal",
+  "जीरा": "Jeera", "कोलगेट मंजन": "Colgate Manjan", "मंजन बड़ा": "Bada Manjan", "सर्फ एक्सेल / निरमा": "Surf Excel / Nirma",
+  "कपड़े वाली साबुन": "Kapde wala sabun", "रिन साबुन": "Rin sabun", "नहाने वाला साबुन लक्स": "Lux nahane wala sabun",
+  "नहाने वाला साबुन": "Nahane wala sabun", "बर्तन वाला लिक्विड": "Bartan wala liquid", "बर्तन वाला विम जेल": "Vim bartan gel",
+  "बर्तन वाला साबुन": "Bartan wala sabun", "डेटॉल लिक्विड": "Dettol liquid", "डेटॉल हैंडवॉश": "Dettol handwash",
+  "पास्ता मसाला": "Pasta masala", "पास्ता": "Pasta", "बेसन": "Besan", "पोहा": "Poha", "काली मिर्च": "Kali mirch",
+  "शैम्पू": "Shampoo", "शक्कर": "Shakkar", "चायपत्ती": "Chai patti", "मैजिक मसाला": "Magic masala",
+  "लौंग": "Laung", "विनेगर": "Vinegar", "मखाना": "Makhana", "काजू": "Kaju", "बादाम": "Badam",
+  "सूजी": "Sooji", "देसी घी": "Desi ghee", "आंवला हेयर ऑयल": "Amla hair oil", "ऑल आउट मशीन सेट": "All Out machine set",
+  "मैगी फैमिली पैक": "Maggi family pack", "मैगी मसाला": "Maggi masala", "मैगी": "Maggi", "सौंफ": "Saunf",
+  "छोटी इलायची": "Chhoti elaichi", "जायफल": "Jaiphal", "मूंगफली": "Moongfali", "अगरबत्ती": "Agarbatti",
+  "दालचीनी": "Dalchini", "पत्ता": "Patta", "वाघ बकरी चाय": "Wagh Bakri chai", "किराना": "Kirana",
+  "रोज़मर्रा के सामान": "Rozmarra ka samaan", "ज़रूरी सामान": "Zaroori samaan", "एक ही किट में": "ek hi kit mein",
+  "रोज़मर्रा के उपयोग के": "rozmarra ke istemal ke"
+};
+
+export function toHinglishCatalogue(value: string) {
+  let result = value;
+  for (const [hindi, roman] of Object.entries(hinglishCatalogueWords).sort(([a], [b]) => b.length - a.length)) {
+    result = result.replaceAll(hindi, roman);
+  }
+  return result
+    .replace(/(\d+)\s*किलो/g, "$1 kilo")
+    .replace(/(\d+)\s*लीटर/g, "$1 litre")
+    .replace(/(\d+)\s*ग्राम/g, "$1 gram")
+    .replace(/(\d+)\s*पैकेट/g, "$1 packet")
+    .replace(/(\d+)\s*पीस/g, "$1 piece")
+    .replace(/(\d+)\s*पाउच/g, "$1 pouch")
+    .replace(/(\d+)\s*सेट/g, "$1 set")
+    .replace(/(\d+)\s*बोरी/g, "$1 bori");
+}
+
 const STORAGE_KEY = "rmm-language";
 
 let currentLanguage: Language = "en";
@@ -286,10 +322,132 @@ const translations: Record<string, string> = {
   "Hindi": "हिंदी",
 };
 
-const hindiTranslations = { ...translations };
 
 Object.assign(translations, {
-  "Home": "Ghar", "Kits": "Kits", "Cart": "Cart", "Contact": "Sampark",
+  "Build your own combo": "अपना कॉम्बो बनाएं",
+  "Make This Kit Yours!": "इस किट को अपनी पसंद का बनाएं!",
+  "Choose what you need, adjust quantities and add extra groceries.": "ज़रूरत का सामान चुनें, मात्रा बदलें और अतिरिक्त किराना जोड़ें।",
+  "KIT BUNDLE OFFER": "किट बंडल ऑफर",
+  "items selected": "सामान चुने गए",
+  "Your kit items": "आपकी किट का सामान",
+  "Your changes are saved as a custom request for the store.": "आपके बदलाव दुकान के लिए कस्टम अनुरोध के रूप में सेव होंगे।",
+  "included": "शामिल",
+  "Included in this kit": "इस किट में शामिल",
+  "No original items left. Add the groceries you want below.": "पुराना कोई सामान नहीं बचा। नीचे अपनी पसंद का किराना जोड़ें।",
+  "Add more groceries": "और किराना जोड़ें",
+  "Choose from our kits or type any item you need.": "हमारी किट से चुनें या अपनी ज़रूरत का सामान लिखें।",
+  "Try: Aata, Chini, Detergent...": "जैसे: आटा, चीनी, डिटर्जेंट...",
+  "Your extra items · price to be confirmed": "आपका अतिरिक्त सामान · कीमत की पुष्टि बाकी",
+  "Smart Kit Deal": "स्मार्ट किट डील",
+  "STORE PRICE": "दुकान की कीमत",
+  "Compare the full basket before you buy.": "खरीदने से पहले पूरी टोकरी की कीमत की तुलना करें।",
+  "Ready-made kit pricing keeps everyday essentials together. Ask us on WhatsApp for your best customized final quote.": "रेडीमेड किट में रोज़मर्रा का ज़रूरी सामान एक साथ मिलता है। अपनी कस्टम किट की अंतिम कीमत WhatsApp पर पूछें।",
+  "Kit base price": "किट की मूल कीमत",
+  "per kit": "प्रति किट",
+  "Changing quantities inside the kit updates your request. The base kit price stays fixed; extra-item rates and final amount are confirmed by the owner on WhatsApp.": "किट के अंदर मात्रा बदलने से आपका अनुरोध अपडेट होगा। किट की मूल कीमत तय रहेगी; अतिरिक्त सामान की दर और अंतिम राशि मालिक WhatsApp पर बताएंगे।",
+  "Update My Customized Kit": "मेरी कस्टम किट अपडेट करें",
+  "Add Customized Kit to Cart": "कस्टम किट कार्ट में जोड़ें",
+  "Live Kit Calculator": "लाइव किट कैलकुलेटर",
+  "Kit base total": "किट की मूल कुल राशि",
+  "Extra / customized items": "अतिरिक्त / कस्टम सामान",
+  "Owner quote pending": "मालिक की कीमत की पुष्टि बाकी",
+  "Current calculated total": "अभी की गणना की गई राशि",
+  "Kit price × kit quantity": "किट की कीमत × किट की संख्या",
+  "Quantity buttons recalculate this total instantly. Editing quantities inside a kit changes your item request, not the fixed bundle price.": "मात्रा बदलते ही यह कुल राशि अपडेट होती है। किट के अंदर सामान की मात्रा बदलने से अनुरोध बदलेगा, तय बंडल कीमत नहीं।",
+  "Ek kit mein zaroori samaan, ek saath smart deal mein.": "एक किट में ज़रूरी सामान, एक साथ स्मार्ट डील में।",
+  "Alag-alag kharidne se pehle apna total compare karein. Aapke customized order ka best possible final price Rashid Mega Mart ke owner WhatsApp par confirm karenge.": "अलग-अलग खरीदने से पहले कुल कीमत की तुलना करें। आपकी कस्टम खरीदारी की अंतिम कीमत Rashid Mega Mart के मालिक WhatsApp पर बताएंगे।",
+  "Delivery charge": "डिलीवरी शुल्क",
+  "WhatsApp par confirm": "WhatsApp पर पुष्टि करें",
+  "You may also need": "आपको ये सामान भी चाहिए हो सकता है",
+  "Suggestions": "सुझाव",
+  "Suggested items are added as extras. Their prices will be confirmed by the store on WhatsApp.": "सुझाए गए सामान अतिरिक्त रूप में जुड़ेंगे। उनकी कीमत दुकान WhatsApp पर बताएगी।",
+  "Added extras · price confirmation pending": "अतिरिक्त सामान जुड़ा · कीमत की पुष्टि बाकी",
+  "Order confirmation and final charges will be shared by the store.": "ऑर्डर की पुष्टि और अंतिम शुल्क दुकान बताएगी।",
+  "Delivery details are subject to store confirmation.": "डिलीवरी की जानकारी दुकान की पुष्टि पर निर्भर है।",
+  "Order on WhatsApp": "WhatsApp पर ऑर्डर करें",
+  "Delivery Address (Optional)": "डिलीवरी का पता (ज़रूरी नहीं)",
+  "Bas naam aur mobile number bharein. Address baad mein WhatsApp par bhi confirm kar sakte hain.": "बस नाम और मोबाइल नंबर भरें। पता बाद में WhatsApp पर भी बता सकते हैं।",
+  "Agar delivery chahiye: house no., area, landmark": "डिलीवरी चाहिए तो मकान नंबर, इलाका और पहचान की जगह लिखें",
+  "Open cart,": "कार्ट खोलें,"
+});
+
+Object.assign(translations, {
+  "Grocery Quantity Calculator": "किराना मात्रा कैलकुलेटर",
+  "Item rates will be added after owner confirmation.": "मालिक की पुष्टि के बाद सामान की दरें जोड़ी जाएंगी।",
+  "rates pending": "दरें बाकी",
+  "Rate pending": "दर की पुष्टि बाकी",
+  "Customized item total": "कस्टम सामान की कुल राशि",
+  "Final calculation appears when all item rates are set.": "सभी सामान की दरें जुड़ने के बाद पूरी गणना दिखेगी।",
+  "Calculated from confirmed store rates.": "दुकान की पुष्टि की गई दरों से गणना।",
+  "Customized grocery estimate": "कस्टम किराना अनुमान",
+  "Rates pending": "दरें बाकी",
+  "Included in estimate when rates are set": "दरें जुड़ने पर गणना में शामिल",
+  "Customized item breakdown": "कस्टम सामान का हिसाब",
+  "item rates need owner confirmation": "सामान की दरों की मालिक से पुष्टि बाकी",
+  "When every grocery rate is confirmed, the calculator uses (requested quantity ÷ rate quantity) × rate price, then multiplies by kit quantity. Until then, the listed bundle total remains visible separately.": "हर किराना सामान की दर की पुष्टि होने पर कैलकुलेटर (मांगी गई मात्रा ÷ दर वाली मात्रा) × दर की कीमत से हिसाब करेगा, फिर किट की संख्या से गुणा करेगा। तब तक किट की लिस्टेड कीमत अलग दिखाई जाएगी।"
+});
+
+Object.assign(translations, {
+  "Browse kit offers": "किट ऑफर देखें",
+  "Check active offers": "चालू ऑफर देखें",
+  "Pick your value": "अपनी बचत चुनें",
+  "Every kit shows its listed price and included essentials.": "हर किट की लिस्टेड कीमत और शामिल ज़रूरी सामान देखें।",
+  "New kit deals are coming soon.": "नई किट डील जल्द आ रही हैं।",
+  "Prices and kit contents are subject to store confirmation. No unverified discount is applied.": "कीमत और किट का सामान दुकान की पुष्टि के अधीन है। बिना पुष्टि की छूट नहीं दी जाती।",
+  "Smart grocery deals.": "किराने की स्मार्ट डील।",
+  "More value in every kit.": "हर किट में ज़्यादा फायदा।",
+  "Explore our available ready-made grocery kits, compare what is included and choose the one that fits your home.": "हमारी उपलब्ध रेडीमेड किराना किट देखें, शामिल सामान की तुलना करें और अपने घर के लिए सही किट चुनें।",
+  "A little extra saving": "थोड़ी और बचत",
+  "starts with the right coupon.": "सही कूपन से शुरू होती है।",
+  "Check with our store for current coupon availability, eligible kits and offer terms before placing your order.": "ऑर्डर करने से पहले मौजूदा कूपन, लागू किट और ऑफर की शर्तें दुकान से पूछें।",
+  "Store-confirmed offers": "दुकान से पुष्टि किए गए ऑफर",
+  "Coupon codes and discounts are shared only after the store confirms the current offer. Ask us which coupon applies to your selected kit.": "कूपन कोड और छूट दुकान की पुष्टि के बाद ही बताए जाते हैं। पूछें कि आपकी चुनी हुई किट पर कौन-सा कूपन लागू है।",
+  "Verified before checkout": "ऑर्डर से पहले पुष्टि",
+  "The store confirms coupon validity, eligible kits and final payable amount on WhatsApp.": "दुकान WhatsApp पर कूपन की वैधता, लागू किट और अंतिम राशि की पुष्टि करती है।",
+  "No expired code surprises": "एक्सपायर कूपन का झंझट नहीं",
+  "We do not display made-up coupon codes or discounts that have not been approved by the store.": "हम नकली कूपन कोड या दुकान से मंज़ूर न हुई छूट नहीं दिखाते।",
+  "Explore Top Deals": "टॉप डील देखें"
+});
+
+Object.assign(translations, {
+  "MERI JAAN SPECIAL • BEST OFFERS": "मेरी जान स्पेशल • बेहतरीन ऑफर",
+  "BEST OFFER · KITS STARTING AT": "खास ऑफर · किट की शुरुआती कीमत"
+});
+
+Object.assign(translations, {
+  "Make This Kit Yours!": "अपनी किट खुद बनाएं!",
+  "Choose what you need, adjust quantities and add extra groceries.": "अपनी ज़रूरत का सामान चुनें, मात्रा बदलें और किराने का सामान जोड़ें।",
+  "KIT BUNDLE OFFER": "किट बंडल ऑफर",
+  "Your kit items": "आपकी किट का सामान",
+  "Your changes are saved as a custom request for the store.": "आपके बदलाव दुकान के लिए कस्टम रिक्वेस्ट के रूप में सेव होंगे।",
+  "Included in this kit": "इस किट में शामिल",
+  "No original items left. Add the groceries you want below.": "कोई मूल सामान नहीं बचा। नीचे अपनी पसंद का किराना जोड़ें।",
+  "Add more groceries": "और किराना जोड़ें",
+  "Choose from our kits or type any item you need.": "हमारी किट से चुनें या अपनी ज़रूरत का सामान लिखें।",
+  "Add grocery item": "किराने का सामान जोड़ें",
+  "New item quantity": "नए सामान की मात्रा",
+  "Add item": "सामान जोड़ें",
+  "Your extra items · price to be confirmed": "आपका अतिरिक्त सामान · कीमत की पुष्टि बाकी",
+  "Remove": "हटाएं",
+  "Smart Kit Deal": "स्मार्ट किट डील",
+  "STORE PRICE": "दुकान की कीमत",
+  "Compare the full basket before you buy.": "खरीदने से पहले पूरे सामान की कीमत की तुलना करें।",
+  "Ready-made kit pricing keeps everyday essentials together. Ask us on WhatsApp for your best customized final quote.": "रेडीमेड किट में रोज़मर्रा का ज़रूरी सामान एक साथ मिलता है। अपने कस्टम ऑर्डर की सही कीमत WhatsApp पर पूछें।",
+  "Kit base price": "किट की मूल कीमत",
+  "per kit": "प्रति किट",
+  "Changing quantities inside the kit updates your request. The base kit price stays fixed; extra-item rates and final amount are confirmed by the owner on WhatsApp.": "किट के अंदर मात्रा बदलने से आपकी रिक्वेस्ट अपडेट होती है। किट की मूल कीमत वही रहती है; अतिरिक्त सामान की दर और अंतिम राशि मालिक WhatsApp पर बताएंगे।",
+  "Current calculated total": "अभी की गणना की गई कुल राशि",
+  "Item rates × kit quantity": "सामान की दर × किट की संख्या",
+  "Listed kit price × kit quantity · customized quote pending": "लिस्टेड किट कीमत × किट की संख्या · कस्टम कीमत बाकी",
+  "Extra items": "अतिरिक्त सामान",
+  "Order on WhatsApp": "WhatsApp पर ऑर्डर करें"
+});
+
+
+
+const hindiTranslations = { ...translations };
+
+const hinglishTranslations: Record<string, string> = {
   "SMART GROCERY KITS": "Smart Grocery Kits",
   "Explore Grocery Kits": "Grocery Kits Dekhein",
   "Value-packed combos": "Budget-friendly Combos",
@@ -301,28 +459,18 @@ Object.assign(translations, {
   "Ready Kits Dekhein": "Ready Kits Dekhein",
   "Our Grocery Kits": "Hamari Grocery Kits",
   "View All": "Sabhi Dekhein",
-  "Search grocery kits...": "Grocery kits search karein...",
-  "All Kits": "All Kits",
-  "In Stock": "Stock Mein",
-  "Out of Stock": "Out of Stock",
   "Reset": "Reset",
   "Customize": "Customize Karein",
   "Your cart is empty": "Aapka cart abhi khaali hai",
   "Your suggestion matters": "Aapka Suggestion Important Hai",
   "Your name": "Aapka Naam",
-  "Add item": "Item Add Karein",
   "You may also need": "Ye Items Bhi Kaam Aa Sakte Hain",
-  "Top Deals": "Top Deals",
-  "Deals": "Deals",
-  "Coupons": "Coupons",
-  "More": "More",
   "Explore all kits": "Saari Kits Dekhein",
   "Available Kit Deals": "Available Kit Deals",
   "Ask for today’s active coupon": "Aaj ka active coupon poochhein",
   "Get coupon on WhatsApp": "WhatsApp par coupon lein",
   "Your cart": "Aapka Cart",
   "Items in this kit": "Is Kit Mein Items",
-  "Your kit items": "Aapki Kit Ke Items",
   "Add to cart": "Cart Mein Add Karein",
   "Proceed to checkout": "Order Aage Badhaayein",
   "Order summary": "Order Summary",
@@ -334,7 +482,138 @@ Object.assign(translations, {
   "SPECIAL KIT OFFER": "SPECIAL KIT OFFER",
   "items ready for checkout": "items checkout ke liye ready",
   "Grocery kits will be available soon.": "Grocery kits jald available hongi.",
-});
+  "Build your own combo": "Apna combo banayein",
+  "items selected": "items select kiye",
+  "included": "included",
+  "Try: Aata, Chini, Detergent...": "Jaise: Aata, Chini, Detergent...",
+  "Update My Customized Kit": "Meri Customized Kit Update Karein",
+  "Add Customized Kit to Cart": "Customized Kit Cart Mein Add Karein",
+  "Live Kit Calculator": "Live Kit Calculator",
+  "Kit base total": "Kit ka base total",
+  "Extra / customized items": "Extra / customized items",
+  "Owner quote pending": "Owner quote pending",
+  "Kit price × kit quantity": "Kit price × kit quantity",
+  "Quantity buttons recalculate this total instantly. Editing quantities inside a kit changes your item request, not the fixed bundle price.": "Quantity buttons se total turant update hota hai. Kit ke andar quantity edit karne se item request badlegi, fixed bundle price nahi.",
+  "Ek kit mein zaroori samaan, ek saath smart deal mein.": "Ek kit mein zaroori samaan, ek saath smart deal mein.",
+  "Alag-alag kharidne se pehle apna total compare karein. Aapke customized order ka best possible final price Rashid Mega Mart ke owner WhatsApp par confirm karenge.": "Alag-alag kharidne se pehle total compare karein. Customized order ka final price Rashid Mega Mart ke owner WhatsApp par confirm karenge.",
+  "Delivery charge": "Delivery charge",
+  "WhatsApp par confirm": "WhatsApp par confirm",
+  "Suggestions": "Suggestions",
+  "Suggested items are added as extras. Their prices will be confirmed by the store on WhatsApp.": "Suggested items extras mein add honge. Inki price store WhatsApp par confirm karega.",
+  "Added extras · price confirmation pending": "Extra items add hue · price confirmation pending",
+  "Order confirmation and final charges will be shared by the store.": "Order confirmation aur final charges store share karega.",
+  "Delivery details are subject to store confirmation.": "Delivery details store confirmation par depend hain.",
+  "Delivery Address (Optional)": "Delivery Address (Optional)",
+  "Bas naam aur mobile number bharein. Address baad mein WhatsApp par bhi confirm kar sakte hain.": "Bas naam aur mobile number bharein. Address baad mein WhatsApp par bhi confirm kar sakte hain.",
+  "Agar delivery chahiye: house no., area, landmark": "Delivery chahiye to house no., area, landmark likhein",
+  "Grocery Quantity Calculator": "Grocery Quantity Calculator",
+  "Item rates will be added after owner confirmation.": "Owner confirm karne ke baad item rates add honge.",
+  "rates pending": "rates pending",
+  "Rate pending": "Rate pending",
+  "Customized item total": "Customized items ka total",
+  "Final calculation appears when all item rates are set.": "Sabhi item rates set hone par final calculation dikhegi.",
+  "Calculated from confirmed store rates.": "Store ke confirmed rates se calculated.",
+  "Customized grocery estimate": "Customized grocery estimate",
+  "Rates pending": "Rates pending",
+  "Included in estimate when rates are set": "Rates set hone par estimate mein included",
+  "Customized item breakdown": "Customized items ka breakdown",
+  "item rates need owner confirmation": "item rates owner se confirm hone baaki",
+  "When every grocery rate is confirmed, the calculator uses (requested quantity ÷ rate quantity) × rate price, then multiplies by kit quantity. Until then, the listed bundle total remains visible separately.": "Jab sabhi grocery rates confirm ho jayenge, calculator (requested quantity ÷ rate quantity) × rate price karega, phir kit quantity se multiply karega. Tab tak listed bundle total alag dikhega.",
+  "Every kit shows its listed price and included essentials.": "Har kit ki listed price aur included essentials dekhein.",
+  "Prices and kit contents are subject to store confirmation. No unverified discount is applied.": "Prices aur kit contents store confirmation par depend hain. Bina verify ki discount apply nahi hoti.",
+  "Explore our available ready-made grocery kits, compare what is included and choose the one that fits your home.": "Available ready-made grocery kits dekhein, included items compare karein aur apne ghar ke liye sahi kit chunein.",
+  "A little extra saving": "Thodi extra saving",
+  "starts with the right coupon.": "Sahi coupon se shuru hoti hai.",
+  "Check with our store for current coupon availability, eligible kits and offer terms before placing your order.": "Order se pehle current coupon availability, eligible kits aur offer terms store se confirm karein.",
+  "Store-confirmed offers": "Store-confirmed offers",
+  "Coupon codes and discounts are shared only after the store confirms the current offer. Ask us which coupon applies to your selected kit.": "Coupon codes aur discounts store ke current offer confirm karne ke baad hi share hote hain. Apni selected kit ke liye applicable coupon poochhein.",
+  "Verified before checkout": "Checkout se pehle verified",
+  "The store confirms coupon validity, eligible kits and final payable amount on WhatsApp.": "Store WhatsApp par coupon validity, eligible kits aur final payable amount confirm karta hai.",
+  "No expired code surprises": "Expired code ka surprise nahi",
+  "We do not display made-up coupon codes or discounts that have not been approved by the store.": "Hum fake coupon codes ya store se approve na hui discounts display nahi karte.",
+  "Explore Top Deals": "Top Deals dekhein",
+  "Grocery": "Kirana",
+  "Grocery Kit": "Kirana Kit",
+  "Grocery Kits": "Kirana Kits",
+  "Products in this kit": "Is kit mein samaan",
+  "Products": "Samaan",
+  "Clear search": "Search hataayein",
+  "Availability": "Availability",
+  "Sort:": "Sort karein:",
+  "Featured": "Featured",
+  "Price: Low to High": "Price: kam se zyada",
+  "Price: High to Low": "Price: zyada se kam",
+  "Name: A to Z": "Naam: A se Z",
+  "No kits found": "Koi kit nahi mili",
+  "Try another search or change the filters.": "Dusra search karein ya filters badlein.",
+  "Reset Filters": "Filters reset karein",
+  "Cart": "Cart",
+  "Contact": "Sampark",
+  "Language": "Bhasha",
+  "English": "English",
+  "Hindi": "Hindi",
+  "Current language:": "Abhi ki language:",
+  "Switch to": "Badlein:",
+
+  "MERI JAAN SPECIAL • BEST OFFERS": "Meri jaan special • best offers",
+  "BEST OFFER · KITS STARTING AT": "Special offer · Kits ki starting price",
+  "Add grocery item": "Grocery item add karein",
+  "New item quantity": "Naye item ki quantity",
+  "Remove": "Hataayein",
+  "Item rates × kit quantity": "Item rates × kit quantity",
+  "Listed kit price × kit quantity · customized quote pending": "Listed kit price × kit quantity · customized quote pending",
+  "Extra items": "Extra items",
+
+};
+
+const DEVANAGARI_CONSONANTS: Record<string, string> = {
+  क:"k", ख:"kh", ग:"g", घ:"gh", ङ:"ng", च:"ch", छ:"chh", ज:"j", झ:"jh", ञ:"ny",
+  ट:"t", ठ:"th", ड:"d", ढ:"dh", ण:"n", त:"t", थ:"th", द:"d", ध:"dh", न:"n",
+  प:"p", फ:"ph", ब:"b", भ:"bh", म:"m", य:"y", र:"r", ल:"l", व:"v", श:"sh", ष:"sh", स:"s", ह:"h"
+};
+const DEVANAGARI_VOWELS: Record<string, string> = {
+  अ:"a", आ:"aa", इ:"i", ई:"ee", उ:"u", ऊ:"oo", ऋ:"ri", ए:"e", ऐ:"ai", ओ:"o", औ:"au"
+};
+const DEVANAGARI_MATRAS: Record<string, string> = {
+  "ा":"aa", "ि":"i", "ी":"ee", "ु":"u", "ू":"oo", "ृ":"ri", "े":"e", "ै":"ai", "ो":"o", "ौ":"au"
+};
+
+function transliterateHindi(value: string) {
+  const chars = Array.from(value.replaceAll("क्ष", "ksh").replaceAll("ज्ञ", "gya").replaceAll("त्र", "tra"));
+  let output = "";
+  for (let index = 0; index < chars.length; index += 1) {
+    const char = chars[index];
+    if (DEVANAGARI_CONSONANTS[char]) {
+      output += DEVANAGARI_CONSONANTS[char];
+      const next = chars[index + 1];
+      if (next && DEVANAGARI_MATRAS[next]) {
+        output += DEVANAGARI_MATRAS[next];
+        index += 1;
+      } else if (next === "्") {
+        index += 1;
+      } else {
+        output += "a";
+      }
+    } else if (DEVANAGARI_VOWELS[char]) {
+      output += DEVANAGARI_VOWELS[char];
+    } else if (DEVANAGARI_MATRAS[char]) {
+      output += DEVANAGARI_MATRAS[char];
+    } else if (char === "ं" || char === "ँ") {
+      output += "n";
+    } else if (char === "ः") {
+      output += "h";
+    } else if (char === "़" || char === "्") {
+      continue;
+    } else {
+      output += char;
+    }
+  }
+  return output.replace(/a(?=[\s.,!?।]|$)/g, "");
+}
+
+for (const [source, target] of Object.entries(translations)) {
+  if (!hinglishTranslations[source]) hinglishTranslations[source] = transliterateHindi(target);
+}
 
 function translateText(value: string, dictionary: Record<string, string> = translations) {
   const trimmed = value.trim();
@@ -346,15 +625,27 @@ function translateText(value: string, dictionary: Record<string, string> = trans
   for (const [source, target] of Object.entries(dictionary).filter(([source]) => source.length > 3).sort(([a], [b]) => b.length - a.length)) {
     if (result.includes(source)) result = result.replaceAll(source, target);
   }
-  result = result.replace(/(\d+) WALI KIT/gi, "$1 वाली किट");
-  result = result.replace(/Open cart, (\d+) items?/gi, "कार्ट खोलें, $1 सामान");
-  result = result.replace(/Decrease (.+?) quantity/gi, "$1 की मात्रा घटाएं");
-  result = result.replace(/Increase (.+?) quantity/gi, "$1 की मात्रा बढ़ाएं");
-  result = result.replace(/(\d+) of (\d+) kits found/gi, "$1 में से $2 किट्स मिलीं");
-  result = result.replace(/(\d+) Kits Found/gi, "$1 किट्स मिलीं");
-  result = result.replace(/(\d+) items ready for checkout/gi, "$1 सामान ऑर्डर के लिए तैयार");
-  result = result.replace(/(\d+) items?/gi, "$1 सामान");
-  result = result.replace(/(\d+) Items/gi, "$1 सामान");
+  if (dictionary === hindiTranslations) {
+    result = result.replace(/(\d+) WALI KIT/gi, "$1 वाली किट");
+    result = result.replace(/Open cart, (\d+) items?/gi, "कार्ट खोलें, $1 सामान");
+    result = result.replace(/Decrease (.+?) quantity/gi, "$1 की मात्रा घटाएं");
+    result = result.replace(/Increase (.+?) quantity/gi, "$1 की मात्रा बढ़ाएं");
+    result = result.replace(/(\d+) of (\d+) kits found/gi, "$1 में से $2 किट्स मिलीं");
+    result = result.replace(/(\d+) Kits Found/gi, "$1 किट्स मिलीं");
+    result = result.replace(/(\d+) items ready for checkout/gi, "$1 सामान ऑर्डर के लिए तैयार");
+    result = result.replace(/(\d+) items?/gi, "$1 सामान");
+    result = result.replace(/(\d+) Items/gi, "$1 सामान");
+  } else {
+    result = result.replace(/(\d+) WALI KIT/gi, "$1 wali kit");
+    result = result.replace(/Open cart, (\d+) items?/gi, "Cart kholein, $1 items");
+    result = result.replace(/Decrease (.+?) quantity/gi, "$1 ki quantity kam karein");
+    result = result.replace(/Increase (.+?) quantity/gi, "$1 ki quantity badhayein");
+    result = result.replace(/(\d+) of (\d+) kits found/gi, "$1 mein se $2 kits mili");
+    result = result.replace(/(\d+) Kits Found/gi, "$1 kits mili");
+    result = result.replace(/(\d+) items ready for checkout/gi, "$1 items order ke liye ready");
+    result = result.replace(/(\d+) items?/gi, "$1 items");
+    result = result.replace(/(\d+) Items/gi, "$1 items");
+  }
   return result;
 }
 
@@ -376,7 +667,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const current = node.nodeValue ?? "";
       const record = textOriginals.current.get(node);
       const original = record && current === record.translated ? record.original : current;
-      const translated = nextLanguage === "en" ? original : translateText(original, nextLanguage === "hi" ? hindiTranslations : translations);
+      const translated = nextLanguage === "en" ? original : translateText(original, nextLanguage === "hi" ? hindiTranslations : hinglishTranslations);
       textOriginals.current.set(node, { original, translated });
       if (current !== translated) node.nodeValue = translated;
     }
@@ -393,7 +684,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         }
         const record = records.get(attribute);
         const original = record && current === record.translated ? record.original : current;
-        const translated = nextLanguage === "hi" ? translateText(original) : original;
+        const translated = nextLanguage === "en" ? original : translateText(original, nextLanguage === "hi" ? hindiTranslations : hinglishTranslations);
         records.set(attribute, { original, translated });
         if (current !== translated) element.setAttribute(attribute, translated);
       }

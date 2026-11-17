@@ -4,8 +4,9 @@ import { useMemo, useState } from "react";
 import { Minus, Plus, ShoppingCart, Trash2, PlusCircle, Sparkles, BadgeCheck, Tag, Package } from "lucide-react";
 import type { GroceryKit } from "@/data/kits";
 import { kits } from "@/data/kits";
+import { estimateGroceryLines, isValidGroceryQuantity } from "@/data/grocery-rates";
 import { useCart } from "@/context/CartContext";
-import { useSiteLanguage, toEnglishCatalogue } from "@/components/LanguageProvider";
+import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
 
 type KitLine = { name: string; quantity: string };
 
@@ -15,8 +16,11 @@ function splitKitLine(value: string): KitLine {
 }
 
 function adjustQuantity(value: string, delta: number) {
+  // Only adjust quantities supported by the calculator. This keeps mixed or
+  // descriptive catalogue values such as "2 फुल / 5 लीटर" unchanged.
+  if (!isValidGroceryQuantity(value)) return value;
   const match = value.match(/^(\d+(?:\.\d+)?)(.*)$/);
-  if (!match) return delta > 0 ? "2" : "1";
+  if (!match) return value;
   const next = Math.max(1, Number(match[1]) + delta);
   return String(next) + match[2];
 }
@@ -24,7 +28,7 @@ function adjustQuantity(value: string, delta: number) {
 export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   const { addToCart, updateKitCustomization, items, isLoaded } = useCart();
   const language = useSiteLanguage();
-  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : value;
+  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : language === "hinglish" ? toHinglishCatalogue(value) : value;
   const existingCartItem = items.find((item) => item.id === kit.id);
   const [contents, setContents] = useState<KitLine[]>(() => existingCartItem?.kitContents ?? kit.items.map(splitKitLine));
   const [additions, setAdditions] = useState<KitLine[]>(() => existingCartItem?.requestedItems ?? []);
@@ -43,6 +47,12 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
     () => Array.from(new Set(kits.flatMap((entry) => entry.items.map((line) => splitKitLine(line).name)))).sort((a, b) => a.localeCompare(b)),
     []
   );
+  const groceryEstimate = useMemo(
+    () => estimateGroceryLines([...contents, ...additions]),
+    [contents, additions],
+  );
+  const formatEstimate = (amount: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 }).format(amount);
+
   const saveContents = (next: KitLine[], nextAdditions = additions) => {
     setContents(next);
     setAdditions(nextAdditions);
@@ -53,6 +63,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
     const name = newItem.trim();
     if (!name) return setError("Item ka naam likhein.");
     if (name.length > 70 || newQuantity.trim().length > 24) return setError("Item ya quantity bahut lambi hai.");
+    if (!isValidGroceryQuantity(newQuantity.trim())) return setError("Quantity sahi likhein, jaise 500g, 1kg, 2 litre ya 1 piece.");
     if ([...contents, ...additions].some((item) => item.name.toLowerCase() === name.toLowerCase())) return setError("Ye item pehle se add hai.");
     saveContents(contents, [...additions, { name, quantity: newQuantity.trim() || "1" }]);
     setNewItem("");
@@ -77,7 +88,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   };
 
   return (
-    <section className="rmm-customizer mt-5 overflow-hidden rounded-[24px] border border-[#D8CBB8] bg-white shadow-[0_14px_38px_rgba(150,20,30,0.09)] sm:mt-6" aria-labelledby="customize-kit-title">
+    <section data-reveal className="rmm-customizer mt-5 overflow-hidden rounded-[24px] border border-[#D8CBB8] bg-white shadow-[0_14px_38px_rgba(150,20,30,0.09)] sm:mt-6" aria-labelledby="customize-kit-title">
       <div className="relative overflow-hidden bg-[linear-gradient(115deg,#106B38_0%,#168447_58%,#168447_100%)] px-4 py-4 text-white sm:px-5 sm:py-5">
         <span className="pointer-events-none absolute -right-6 -top-10 size-36 rounded-full bg-white/10 blur-2xl" />
         <div className="relative flex items-start justify-between gap-3">
@@ -109,16 +120,16 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
 
         <div className="overflow-hidden rounded-2xl border border-[#E8DFD1] bg-white">
           {contents.map((line, index) => (
-            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="flex items-center gap-2 border-b border-[#FAF7EF] px-2.5 py-2.5 last:border-b-0 sm:gap-3 sm:px-3">
+            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="rmm-grocery-row flex items-center gap-2 border-b border-[#FAF7EF] px-2.5 py-2.5 last:border-b-0 sm:gap-3 sm:px-3">
               <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E9] text-[#168447]"><Package size={15} /></span>
               <div className="min-w-0 flex-1">
                 <p className="break-words text-[11px] font-extrabold leading-4 text-[#202124] sm:text-xs">{displayCatalogue(line.name)}</p>
                 <p className="mt-0.5 text-[9px] font-semibold text-[#686868]">Included in this kit</p>
               </div>
               <div className="flex shrink-0 items-center rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] p-0.5">
-                <button type="button" aria-label={`Decrease ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD]"><Minus size={13} /></button>
+                <button type="button" aria-label={`Decrease ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD] disabled:cursor-not-allowed disabled:opacity-35"><Minus size={13} /></button>
                 <input aria-label={`${line.name} quantity`} value={displayCatalogue(line.quantity)} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: event.target.value.slice(0, 24) } : entry))} className="w-[58px] bg-transparent text-center text-[10px] font-extrabold text-[#202124] outline-none sm:w-[68px]" />
-                <button type="button" aria-label={`Increase ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD]"><Plus size={13} /></button>
+                <button type="button" aria-label={`Increase ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD] disabled:cursor-not-allowed disabled:opacity-35"><Plus size={13} /></button>
               </div>
               <button type="button" aria-label={`Remove ${line.name}`} onClick={() => saveContents(contents.filter((_, i) => i !== index))} className="flex size-8 shrink-0 items-center justify-center rounded-xl text-[#686868] transition hover:bg-[#F1EBDD] hover:text-[#800020]"><Trash2 size={14} /></button>
             </div>
@@ -173,6 +184,35 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
             </div>
           </div>
           <p className="border-t border-[#CDE5D2] bg-white/55 px-3 py-2 text-[9px] leading-4 text-[#42664B]">Changing quantities inside the kit updates your request. The base kit price stays fixed; extra-item rates and final amount are confirmed by the owner on WhatsApp.</p>
+        </div>
+
+
+        <div data-reveal className="mt-4 overflow-hidden rounded-2xl border border-[#D8CBB8] bg-white shadow-[0_4px_16px_rgba(32,33,36,0.04)]">
+          <div className="flex items-center justify-between gap-3 border-b border-[#E8DFD1] bg-[#FAF7EF] px-3 py-3">
+            <div>
+              <h3 className="text-xs font-black text-[#202124] sm:text-sm">Grocery Quantity Calculator</h3>
+              <p className="mt-0.5 text-[9px] font-medium text-[#686868]">Item rates will be added after owner confirmation.</p>
+            </div>
+            <span className="rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[9px] font-black text-[#806000]">{groceryEstimate.pendingCount} rates pending</span>
+          </div>
+          <div className="space-y-0 px-3">
+            {groceryEstimate.lines.map((line, index) => (
+              <div key={`${line.name}-${index}`} className="flex items-center justify-between gap-3 border-b border-[#F1EBDD] py-2 last:border-0">
+                <div className="min-w-0">
+                  <p className="truncate text-[10px] font-bold text-[#202124]">{displayCatalogue(line.name)}</p>
+                  <p className="text-[9px] font-medium text-[#686868]">{displayCatalogue(line.quantity)}</p>
+                </div>
+                <span className="shrink-0 text-[10px] font-extrabold tabular-nums text-[#806000]">{line.amount === null ? "Rate pending" : formatEstimate(line.amount)}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex items-center justify-between gap-3 border-t border-[#E8DFD1] bg-[#F0F8F1] px-3 py-3">
+            <div>
+              <p className="text-xs font-black text-[#174D2B]">Customized item total</p>
+              <p className="text-[9px] text-[#42664B]">{groceryEstimate.pendingCount ? "Final calculation appears when all item rates are set." : "Calculated from confirmed store rates."}</p>
+            </div>
+            <p className="text-base font-black tabular-nums text-[#106B38]">{groceryEstimate.total === null ? "Pending" : formatEstimate(groceryEstimate.total)}</p>
+          </div>
         </div>
 
         <button type="button" onClick={handleAddToCart} disabled={!isLoaded || !kit.isAvailable} className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(100deg,#168447_0%,#106B38_100%)] px-4 py-3 text-xs font-black text-white shadow-[0_7px_18px_rgba(22,132,71,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(22,132,71,0.28)] active:scale-[0.99] disabled:opacity-50 sm:text-sm">

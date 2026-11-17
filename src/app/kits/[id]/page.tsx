@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { getKitById } from "@/data/kits";
 import KitCustomizer from "@/components/KitCustomizer";
+import LocalizedKitCopy from "@/components/LocalizedKitCopy";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -82,7 +83,7 @@ export default async function KitDetailPage({ params }: PageProps) {
       </div>
 
       {/* Product Details */}
-      <section className="mx-auto max-w-7xl px-3 py-4 sm:px-6 sm:py-10 lg:px-8">
+      <section data-reveal className="mx-auto max-w-7xl px-3 py-4 sm:px-6 sm:py-10 lg:px-8">
         <div className="grid items-start gap-4 sm:gap-7 lg:grid-cols-2 lg:gap-14">
           {/* Product Image */}
           <div className="min-w-0">
@@ -165,12 +166,12 @@ export default async function KitDetailPage({ params }: PageProps) {
 
             {kit.subtitle && (
               <p className="mt-3 text-sm font-semibold text-[#168447] sm:text-base">
-                {kit.subtitle}
+                <LocalizedKitCopy value={kit.subtitle} />
               </p>
             )}
 
             <p className="mt-4 max-w-xl text-sm leading-7 text-[#686868] sm:text-base">
-              {kit.description}
+              <LocalizedKitCopy value={kit.description} />
             </p>
 
             {/* Price Card */}
@@ -218,7 +219,7 @@ export default async function KitDetailPage({ params }: PageProps) {
       </section>
 
       {/* Explore More Kits */}
-      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
+      <section data-reveal className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-[#E8DFD1] bg-white px-5 py-6 text-center shadow-sm sm:flex-row sm:text-left sm:px-7">
           <div>
             <h2 className="text-lg font-black text-[#202124]">

@@ -19,6 +19,8 @@ import {
 
 import { useCart, type CartItem } from "@/context/CartContext";
 import { kits } from "@/data/kits";
+import { estimateGroceryLines, isValidGroceryQuantity } from "@/data/grocery-rates";
+import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
 
 const formatPrice = (amount: number) =>
   new Intl.NumberFormat("en-IN", {
@@ -29,9 +31,10 @@ const formatPrice = (amount: number) =>
 
 function parseKitQuantity(value: string) {
   const match = value.trim().match(/^(\d+(?:\.\d+)?)(.*)$/);
-  return match
-    ? { amount: Number(match[1]), unit: match[2] }
-    : { amount: 1, unit: "" };
+  const isNumeric = isValidGroceryQuantity(value);
+  return match && isNumeric
+    ? { amount: Number(match[1]), unit: match[2], isNumeric: true }
+    : { amount: 0, unit: "", isNumeric: false };
 }
 
 function getCartSuggestions(item: CartItem) {
@@ -58,6 +61,8 @@ function getCartSuggestions(item: CartItem) {
 }
 
 export default function CartPage() {
+  const language = useSiteLanguage();
+  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : language === "hinglish" ? toHinglishCatalogue(value) : value;
   const {
     items,
     totalItems,
@@ -70,6 +75,17 @@ export default function CartPage() {
     addToCart,
     updateKitCustomization,
   } = useCart();
+
+  const groceryCalculations = items.map((item) => {
+    const lines = [...(item.kitContents ?? []), ...(item.requestedItems ?? [])];
+    return { item, estimate: lines.length ? estimateGroceryLines(lines) : null };
+  });
+  const hasCustomizedLines = groceryCalculations.some(({ estimate }) => estimate !== null);
+  const customizedRatesReady = hasCustomizedLines && groceryCalculations.every(({ estimate }) => !estimate || estimate.total !== null);
+  const customizedGrandTotal = customizedRatesReady
+    ? groceryCalculations.reduce((sum, { item, estimate }) => sum + (estimate?.total ?? item.price) * item.quantity, 0)
+    : null;
+  const currentGrandTotal = customizedGrandTotal ?? subtotal;
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
@@ -181,7 +197,7 @@ export default function CartPage() {
         itemText,
         "",
         "*Listed Kit Base Total: " + formatPrice(orderSubtotal) + "*",
-        "Extra/custom item prices and final customized kit price: Owner will confirm on WhatsApp",
+        customizedRatesReady ? "Estimated customized grocery total: " + formatPrice(customizedGrandTotal ?? 0) : "Customized item rates and final amount: Owner will confirm on WhatsApp",
         "Delivery charges: Please confirm",
                 cleanNote ? "Order note: " + cleanNote : "",
         "",
@@ -262,7 +278,7 @@ export default function CartPage() {
   }
 
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#FAF7EF] px-3 py-4 pb-24 min-[375px]:px-4 sm:px-6 sm:py-9 sm:pb-14">
+    <main data-reveal className="min-h-screen overflow-x-clip bg-[#FAF7EF] px-3 py-4 pb-24 min-[375px]:px-4 sm:px-6 sm:py-9 sm:pb-14">
       <div className="mx-auto w-full max-w-6xl">
         {/* Page Header */}
         <header className="mb-4 flex flex-col gap-3 min-[430px]:flex-row min-[430px]:items-center min-[430px]:justify-between sm:mb-8">
@@ -373,17 +389,17 @@ export default function CartPage() {
                               const parsed = parseKitQuantity(entry.quantity);
                               return (
                                 <li key={`${item.id}-kit-line-${index}`} className="flex items-center gap-2 px-2.5 py-2">
-                                  <span className="min-w-0 flex-1 break-words text-[10px] font-semibold text-[#202124]">{entry.name}</span>
+                                  <span className="min-w-0 flex-1 break-words text-[10px] font-semibold text-[#202124]">{displayCatalogue(entry.name)}</span>
                                   <div className="flex shrink-0 items-center rounded-lg border border-[#D8CBB8] bg-white p-0.5">
-                                    <button type="button" aria-label={`Decrease ${entry.name}`} onClick={() => {
+                                    <button type="button" aria-label={`Decrease ${entry.name}`} disabled={!parsed.isNumeric} onClick={() => {
                                       const nextAmount = parsed.amount - 1;
                                       const next = nextAmount <= 0
                                         ? item.kitContents!.filter((_, lineIndex) => lineIndex !== index)
                                         : item.kitContents!.map((line, lineIndex) => lineIndex === index ? { ...line, quantity: `${nextAmount}${parsed.unit}` } : line);
                                       updateKitCustomization(item.id, next, item.requestedItems ?? []);
                                     }} className="flex size-6 items-center justify-center rounded-md text-[#800020] transition hover:bg-[#F1EBDD]"><Minus size={11} /></button>
-                                    <span className="min-w-8 text-center text-[9px] font-extrabold tabular-nums text-[#202124]">{entry.quantity}</span>
-                                    <button type="button" aria-label={`Increase ${entry.name}`} onClick={() => {
+                                    <span className="min-w-8 text-center text-[9px] font-extrabold tabular-nums text-[#202124]">{displayCatalogue(entry.quantity)}</span>
+                                    <button type="button" aria-label={`Increase ${entry.name}`} disabled={!parsed.isNumeric} onClick={() => {
                                       const next = item.kitContents!.map((line, lineIndex) => lineIndex === index ? { ...line, quantity: `${parsed.amount + 1}${parsed.unit}` } : line);
                                       updateKitCustomization(item.id, next, item.requestedItems ?? []);
                                     }} className="flex size-6 items-center justify-center rounded-md text-[#168447] transition hover:bg-[#EAF3E9]"><Plus size={11} /></button>
@@ -405,7 +421,7 @@ export default function CartPage() {
                             {getCartSuggestions(item).map((suggestion) => (
                               <div key={suggestion.name} className="flex min-w-0 items-center gap-2 rounded-lg bg-[#FAF7EF] px-2 py-2">
                                 <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[#EAF3E9] text-[#168447]"><PackageCheck size={13} /></span>
-                                <span className="min-w-0 flex-1 truncate text-[9px] font-semibold text-[#202124]">{suggestion.name}</span>
+                                <span className="min-w-0 flex-1 truncate text-[9px] font-semibold text-[#202124]">{displayCatalogue(suggestion.name)}</span>
                                 <button type="button" aria-label={`Add ${suggestion.name}`} onClick={() => updateKitCustomization(item.id, item.kitContents ?? [], [...(item.requestedItems ?? []), suggestion])} className="inline-flex min-h-7 shrink-0 items-center gap-1 rounded-md bg-[#168447] px-2 text-[9px] font-extrabold text-white transition hover:bg-[#106B38]"><Plus size={10} /> Add</button>
                               </div>
                             ))}
@@ -416,7 +432,7 @@ export default function CartPage() {
                       {item.requestedItems && item.requestedItems.length > 0 && (
                         <div className="mt-2 rounded-lg border border-[#F7C928]/60 bg-[#FAF0C8]/50 p-2">
                           <p className="text-[10px] font-bold text-[#806000]">Added extras · price confirmation pending</p>
-                          {item.requestedItems.map((entry, index) => <p key={index} className="mt-0.5 text-[10px] text-[#686868]">{entry.name} — {entry.quantity}</p>)}
+                          {item.requestedItems.map((entry, index) => <p key={index} className="mt-0.5 text-[10px] text-[#686868]">{displayCatalogue(entry.name)} — {displayCatalogue(entry.quantity)}</p>)}
                         </div>
                       )}
                     </div>
@@ -453,7 +469,7 @@ export default function CartPage() {
                       {/* Item Total & Remove */}
                       <div className="flex min-w-0 items-center gap-1.5 min-[375px]:gap-2">
                         <span className="truncate text-xs font-black text-[#202124] min-[375px]:text-sm">
-                          {formatPrice(item.price * item.quantity)}
+                          {formatPrice((customizedRatesReady ? groceryCalculations.find(({ item: calculatedItem }) => calculatedItem.id === item.id)?.estimate?.total ?? item.price : item.price) * item.quantity)}
                         </span>
 
                         <button
@@ -528,18 +544,34 @@ export default function CartPage() {
                     <span className="font-black tabular-nums text-[#174D2B]">{formatPrice(subtotal)}</span>
                   </div>
                   <div className="mt-2 flex items-center justify-between gap-3 text-[10px]">
-                    <span className="font-semibold text-[#68766B]">Extra / customized items</span>
-                    <span className="font-extrabold text-[#806000]">Owner quote pending</span>
+                    <span className="font-semibold text-[#68766B]">Customized grocery estimate</span>
+                    <span className="font-extrabold text-[#806000]">{customizedRatesReady ? formatPrice(customizedGrandTotal ?? 0) : "Rates pending"}</span>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between gap-3 text-[10px]">
+                    <span className="font-semibold text-[#68766B]">Extra items</span>
+                    <span className="font-extrabold text-[#806000]">Included in estimate when rates are set</span>
                   </div>
                   <div className="mt-2 flex items-center justify-between gap-3 border-t border-[#CDE5D2] pt-2.5">
                     <div>
                       <p className="text-sm font-black text-[#174D2B]">Current calculated total</p>
-                      <p className="mt-0.5 text-[9px] text-[#42664B]">Kit price × kit quantity</p>
+                      <p className="mt-0.5 text-[9px] text-[#42664B]">{customizedRatesReady ? "Item rates × kit quantity" : "Listed kit price × kit quantity · customized quote pending"}</p>
                     </div>
-                    <p className="text-2xl font-black tracking-tight tabular-nums text-[#106B38]">{formatPrice(subtotal)}</p>
+                    <p className="text-2xl font-black tracking-tight tabular-nums text-[#106B38]">{formatPrice(currentGrandTotal)}</p>
                   </div>
                 </div>
-                <p className="text-[10px] leading-4 text-[#68766B]">Quantity buttons recalculate this total instantly. Editing quantities inside a kit changes your item request, not the fixed bundle price.</p>
+                <div className="space-y-2 rounded-xl border border-[#E8DFD1] bg-white p-3">
+                  <p className="text-[10px] font-black text-[#202124]">Customized item breakdown</p>
+                  {groceryCalculations.map(({ item, estimate }) => (
+                    <div key={item.id} className="border-t border-[#F1EBDD] pt-2 first:border-0 first:pt-0">
+                      <div className="flex items-center justify-between gap-2 text-[10px]">
+                        <span className="font-bold text-[#202124]">{item.name} × {item.quantity}</span>
+                        <span className="font-black text-[#106B38]">{!estimate ? formatPrice(item.price * item.quantity) : estimate.total === null ? "Rate pending" : formatPrice(estimate.total * item.quantity)}</span>
+                      </div>
+                      {estimate && estimate.pendingCount > 0 && <p className="mt-1 text-[9px] text-[#806000]">{estimate.pendingCount} item rates need owner confirmation</p>}
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[10px] leading-4 text-[#68766B]">When every grocery rate is confirmed, the calculator uses (requested quantity ÷ rate quantity) × rate price, then multiplies by kit quantity. Until then, the listed bundle total remains visible separately.</p>
                 <div className="rounded-xl border border-[#BBDCC5] bg-[linear-gradient(120deg,#EAF5EC_0%,#F7FBF7_100%)] p-3">
                   <p className="text-xs font-black text-[#106B38]">Ek kit mein zaroori samaan, ek saath smart deal mein.</p>
                   <p className="mt-1 text-[10px] leading-4 text-[#42664B]">Alag-alag kharidne se pehle apna total compare karein. Aapke customized order ka best possible final price Rashid Mega Mart ke owner WhatsApp par confirm karenge.</p>
@@ -697,7 +729,7 @@ export default function CartPage() {
         <div className="fixed inset-x-0 bottom-[calc(66px+env(safe-area-inset-bottom))] z-30 border-t border-[#E8DFD1] bg-white/95 px-4 py-2.5 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
           <button type="submit" form="checkout-form" className="flex min-h-11 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white shadow-md shadow-green-900/10 transition hover:bg-[#168447] active:scale-[0.99]">
             <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Order on WhatsApp</span>
-            <span>{formatPrice(subtotal)}</span>
+            <span>{formatPrice(currentGrandTotal)}</span>
           </button>
         </div>
 
