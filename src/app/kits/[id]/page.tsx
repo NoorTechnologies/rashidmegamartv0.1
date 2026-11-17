@@ -41,20 +41,20 @@ export default async function KitDetailPage({ params }: PageProps) {
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
             href="/kits"
-            className="inline-flex items-center gap-2 text-sm font-bold text-[#30251F] transition hover:text-[#A83250]"
+            className="inline-flex items-center gap-2 text-sm font-bold text-[#30251F] transition hover:text-[#D71920]"
           >
             <ArrowLeft size={18} />
             <span>Back to Kits</span>
           </Link>
 
-          <span className="text-sm font-black tracking-wide text-[#A83250]">
+          <span className="text-sm font-black tracking-wide text-[#D71920]">
             RASHID MEGA MART
           </span>
 
           <Link
             href="/cart"
             aria-label="Open cart"
-            className="flex size-9 items-center justify-center rounded-full bg-[#F8E8ED] text-[#A83250] transition hover:bg-[#F1D5DE]"
+            className="flex size-9 items-center justify-center rounded-full bg-[#FFF0F0] text-[#D71920] transition hover:bg-[#FFE0E0]"
           >
             <ShoppingBag size={18} />
           </Link>
@@ -67,15 +67,15 @@ export default async function KitDetailPage({ params }: PageProps) {
           aria-label="Breadcrumb"
           className="flex items-center gap-2 overflow-hidden text-xs text-[#94847A]"
         >
-          <Link href="/" className="shrink-0 hover:text-[#A83250]">
+          <Link href="/" className="shrink-0 hover:text-[#D71920]">
             Home
           </Link>
           <span>/</span>
-          <Link href="/kits" className="shrink-0 hover:text-[#A83250]">
+          <Link href="/kits" className="shrink-0 hover:text-[#D71920]">
             Grocery Kits
           </Link>
           <span>/</span>
-          <span className="truncate font-semibold text-[#A83250]">
+          <span className="truncate font-semibold text-[#D71920]">
             {kit.name}
           </span>
         </nav>
@@ -98,17 +98,17 @@ export default async function KitDetailPage({ params }: PageProps) {
                 />
               ) : (
                 <div className="flex h-full items-center justify-center">
-                  <Package size={76} className="text-[#A83250]/30" />
+                  <Package size={76} className="text-[#D71920]/30" />
                 </div>
               )}
 
               {discount > 0 && (
-                <span className="absolute left-4 top-4 rounded-xl bg-[#A83250] px-4 py-2 text-xs font-black tracking-wide text-white shadow-lg sm:left-6 sm:top-6">
+                <span className="absolute left-4 top-4 rounded-xl bg-[#D71920] px-4 py-2 text-xs font-black tracking-wide text-white shadow-lg sm:left-6 sm:top-6">
                   {discount}% OFF
                 </span>
               )}
 
-              <div className="absolute bottom-4 right-4 flex items-center gap-1.5 rounded-full border border-[#EFE3D9] bg-white/95 px-3 py-2 text-[11px] font-bold text-[#A83250] shadow-sm backdrop-blur-sm">
+              <div className="absolute bottom-4 right-4 flex items-center gap-1.5 rounded-full border border-[#EFE3D9] bg-white/95 px-3 py-2 text-[11px] font-bold text-[#D71920] shadow-sm backdrop-blur-sm">
                 <Sparkles size={13} />
                 RASHID MEGA MART
               </div>
@@ -125,7 +125,7 @@ export default async function KitDetailPage({ params }: PageProps) {
             {/* Image Information */}
             <div className="mt-4 flex items-center justify-between rounded-2xl border border-[#EFE3D9] bg-white px-4 py-4 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-[#F8E8ED] text-[#A83250]">
+                <div className="flex size-10 items-center justify-center rounded-xl bg-[#FFF0F0] text-[#D71920]">
                   <Package size={20} />
                 </div>
                 <div>
@@ -164,7 +164,7 @@ export default async function KitDetailPage({ params }: PageProps) {
             </h1>
 
             {kit.subtitle && (
-              <p className="mt-3 text-sm font-semibold text-[#A83250] sm:text-base">
+              <p className="mt-3 text-sm font-semibold text-[#D71920] sm:text-base">
                 {kit.subtitle}
               </p>
             )}
@@ -180,7 +180,7 @@ export default async function KitDetailPage({ params }: PageProps) {
               </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-3">
-                <span className="text-4xl font-black tracking-tight text-[#A83250]">
+                <span className="text-4xl font-black tracking-tight text-[#D71920]">
                   ₹{kit.price.toLocaleString("en-IN")}
                 </span>
 
