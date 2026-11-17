@@ -7,7 +7,6 @@ const WHATSAPP_URL = "https://wa.me/" + WHATSAPP_NUMBER;
 
 const quickLinks = [
   { label: "Home", href: "/" },
-  { label: "Shop All", href: "/shop" },
   { label: "Grocery Kits", href: "/kits" },
   { label: "My Cart", href: "/cart" },
 ];
@@ -29,16 +28,15 @@ export default function Footer() {
               <Image src="/images/logo2.png" alt="Rashid Mega Mart" width={240} height={90} className="mx-auto h-auto w-[145px] object-contain sm:w-[170px]" />
             </Link>
             <h2 className="mt-3 text-lg font-black leading-tight tracking-tight text-[#A83250] sm:text-xl">
-              Groceries Made
+              Grocery Kits Made
               <span className="block text-[#A47A2C]">Simple & Fresh.</span>
             </h2>
             <p className="mt-2 max-w-xs text-xs leading-5 text-[#76665C] sm:text-sm sm:leading-6">
-              Your trusted neighbourhood destination for everyday groceries,
-              household essentials and family shopping.
+              Your trusted neighbourhood destination for thoughtfully packed grocery kits and easy ordering.
             </p>
             <div className="mt-3 inline-flex items-center justify-center gap-2 rounded-full border border-[#D4A84F]/30 bg-[#FFF9D8]/60 px-3 py-2">
               <ShoppingBag size={14} className="shrink-0 text-[#A83250]" />
-              <span className="text-[10px] font-bold tracking-wide text-[#A83250]">YOUR EVERYDAY GROCERY PARTNER</span>
+              <span className="text-[10px] font-bold tracking-wide text-[#A83250]">YOUR GROCERY KIT PARTNER</span>
             </div>
           </div>
 
