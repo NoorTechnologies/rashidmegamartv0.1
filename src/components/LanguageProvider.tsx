@@ -414,6 +414,35 @@ Object.assign(translations, {
   "BEST OFFER · KITS STARTING AT": "खास ऑफर · किट की शुरुआती कीमत"
 });
 
+Object.assign(translations, {
+  "Make This Kit Yours!": "अपनी किट खुद बनाएं!",
+  "Choose what you need, adjust quantities and add extra groceries.": "अपनी ज़रूरत का सामान चुनें, मात्रा बदलें और किराने का सामान जोड़ें।",
+  "KIT BUNDLE OFFER": "किट बंडल ऑफर",
+  "Your kit items": "आपकी किट का सामान",
+  "Your changes are saved as a custom request for the store.": "आपके बदलाव दुकान के लिए कस्टम रिक्वेस्ट के रूप में सेव होंगे।",
+  "Included in this kit": "इस किट में शामिल",
+  "No original items left. Add the groceries you want below.": "कोई मूल सामान नहीं बचा। नीचे अपनी पसंद का किराना जोड़ें।",
+  "Add more groceries": "और किराना जोड़ें",
+  "Choose from our kits or type any item you need.": "हमारी किट से चुनें या अपनी ज़रूरत का सामान लिखें।",
+  "Add grocery item": "किराने का सामान जोड़ें",
+  "New item quantity": "नए सामान की मात्रा",
+  "Add item": "सामान जोड़ें",
+  "Your extra items · price to be confirmed": "आपका अतिरिक्त सामान · कीमत की पुष्टि बाकी",
+  "Remove": "हटाएं",
+  "Smart Kit Deal": "स्मार्ट किट डील",
+  "STORE PRICE": "दुकान की कीमत",
+  "Compare the full basket before you buy.": "खरीदने से पहले पूरे सामान की कीमत की तुलना करें।",
+  "Ready-made kit pricing keeps everyday essentials together. Ask us on WhatsApp for your best customized final quote.": "रेडीमेड किट में रोज़मर्रा का ज़रूरी सामान एक साथ मिलता है। अपने कस्टम ऑर्डर की सही कीमत WhatsApp पर पूछें।",
+  "Kit base price": "किट की मूल कीमत",
+  "per kit": "प्रति किट",
+  "Changing quantities inside the kit updates your request. The base kit price stays fixed; extra-item rates and final amount are confirmed by the owner on WhatsApp.": "किट के अंदर मात्रा बदलने से आपकी रिक्वेस्ट अपडेट होती है। किट की मूल कीमत वही रहती है; अतिरिक्त सामान की दर और अंतिम राशि मालिक WhatsApp पर बताएंगे।",
+  "Current calculated total": "अभी की गणना की गई कुल राशि",
+  "Item rates × kit quantity": "सामान की दर × किट की संख्या",
+  "Listed kit price × kit quantity · customized quote pending": "लिस्टेड किट कीमत × किट की संख्या · कस्टम कीमत बाकी",
+  "Extra items": "अतिरिक्त सामान",
+  "Order on WhatsApp": "WhatsApp पर ऑर्डर करें"
+});
+
 const hindiTranslations = { ...translations };
 
 const hinglishTranslations: Record<string, string> = {
@@ -577,6 +606,33 @@ const hinglishTranslations: Record<string, string> = {
 
   "MERI JAAN SPECIAL • BEST OFFERS": "Meri jaan special • best offers",
   "BEST OFFER · KITS STARTING AT": "Special offer · Kits ki starting price",
+  "Make This Kit Yours!": "Apni kit khud banayein!",
+  "Choose what you need, adjust quantities and add extra groceries.": "Apni zaroorat ka samaan chunein, quantity badlein aur extra grocery add karein.",
+  "KIT BUNDLE OFFER": "Kit bundle offer",
+  "Your kit items": "Aapki kit ka samaan",
+  "Your changes are saved as a custom request for the store.": "Aapke changes store ke liye custom request ke roop mein save honge.",
+  "Included in this kit": "Is kit mein included",
+  "No original items left. Add the groceries you want below.": "Koi original item nahi bacha. Neeche apni pasand ki grocery add karein.",
+  "Add more groceries": "Aur grocery add karein",
+  "Choose from our kits or type any item you need.": "Hamari kits se chunein ya apni zaroorat ka item type karein.",
+  "Add grocery item": "Grocery item add karein",
+  "New item quantity": "Naye item ki quantity",
+  "Add item": "Item add karein",
+  "Your extra items · price to be confirmed": "Aapke extra items · price confirm hona baaki",
+  "Remove": "Hataayein",
+  "Smart Kit Deal": "Smart Kit Deal",
+  "STORE PRICE": "Store price",
+  "Compare the full basket before you buy.": "Kharidne se pehle poore basket ki price compare karein.",
+  "Ready-made kit pricing keeps everyday essentials together. Ask us on WhatsApp for your best customized final quote.": "Ready-made kit pricing mein daily essentials ek saath milte hain. Customized order ka best final quote WhatsApp par poochhein.",
+  "Kit base price": "Kit ki base price",
+  "per kit": "per kit",
+  "Changing quantities inside the kit updates your request. The base kit price stays fixed; extra-item rates and final amount are confirmed by the owner on WhatsApp.": "Kit ke andar quantity badalne se request update hoti hai. Base kit price fixed rahegi; extra item rates aur final amount owner WhatsApp par confirm karenge.",
+  "Current calculated total": "Abhi ka calculated total",
+  "Item rates × kit quantity": "Item rates × kit quantity",
+  "Listed kit price × kit quantity · customized quote pending": "Listed kit price × kit quantity · customized quote pending",
+  "Extra items": "Extra items",
+  "Order on WhatsApp": "WhatsApp par order karein",
+
 };
 
 const DEVANAGARI_CONSONANTS: Record<string, string> = {
