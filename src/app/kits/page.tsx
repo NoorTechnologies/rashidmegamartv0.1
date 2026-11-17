@@ -88,14 +88,14 @@ export default function KitsPage() {
     sortBy !== "featured";
 
   return (
-    <main className="min-h-screen w-full overflow-x-clip bg-[#F7F9F7]">
+    <main className="min-h-screen w-full overflow-x-clip bg-[radial-gradient(ellipse_at_8%_8%,rgba(22,132,71,0.10),transparent_30%),radial-gradient(ellipse_at_92%_24%,rgba(212,168,79,0.14),transparent_28%),linear-gradient(180deg,#F8FBF8_0%,#F5F7F3_48%,#FFF9F1_100%)]">
       {/* COMPACT HOME STYLE BANNER */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#EAF5ED] via-white to-[#F7F9F7] px-3 pb-5 pt-4 text-[#202B24] sm:px-5 sm:pb-8 sm:pt-7">
+      <section className="relative isolate overflow-hidden border-b border-white/70 bg-white/35 px-3 pb-5 pt-4 text-[#202B24] shadow-[0_12px_40px_rgba(45,80,55,0.05)] backdrop-blur-2xl sm:px-5 sm:pb-8 sm:pt-7">
         <div className="pointer-events-none absolute -left-16 top-5 h-40 w-40 rounded-full bg-[#168447]/10 blur-[65px]" />
         <div className="pointer-events-none absolute -right-16 bottom-0 h-40 w-40 rounded-full bg-[#F5D9A8]/25 blur-[65px]" />
 
         <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#DDECE0] bg-white/90 px-3 py-1.5 text-[9px] font-extrabold tracking-wide text-[#168447] shadow-sm sm:text-xs">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#DDECE0] bg-white/55 px-3 py-1.5 text-[9px] font-extrabold tracking-wide text-[#168447] shadow-[0_6px_20px_rgba(22,132,71,0.08)] backdrop-blur-xl sm:text-xs">
             <ShoppingBag size={12} />
             YOUR NEIGHBOURHOOD GROCERY STORE
           </span>
