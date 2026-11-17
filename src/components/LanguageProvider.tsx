@@ -565,7 +565,7 @@ const hinglishTranslations: Record<string, string> = {
   "The store confirms coupon validity, eligible kits and final payable amount on WhatsApp.": "Store WhatsApp par coupon validity, eligible kits aur final payable amount confirm karta hai.",
   "No expired code surprises": "Expired code ka surprise nahi",
   "We do not display made-up coupon codes or discounts that have not been approved by the store.": "Hum fake coupon codes ya store se approve na hui discounts display nahi karte.",
-  "Explore Top Deals": "Top Deals dekhein"
+  "Explore Top Deals": "Top Deals dekhein",
   "Grocery": "Kirana",
   "Grocery Kit": "Kirana Kit",
   "Grocery Kits": "Kirana Kits",
