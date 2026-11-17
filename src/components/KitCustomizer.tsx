@@ -126,7 +126,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
       </div>
 
       <div className="mt-3 rounded-lg bg-[#F8F5F1] px-3 py-2 text-[10px] leading-4 text-[#766B63]">
-        Kit ka listed price abhi same rahega. Extra/custom items aur final amount store WhatsApp par confirm karega.
+        Cart mein abhi listed base kit price dikhega. Customized contents, extra-item rates aur final amount store WhatsApp par confirm karega.
       </div>
 
       <button type="button" onClick={handleAddToCart} disabled={!isLoaded || !kit.isAvailable} className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#A83250] px-4 py-3 text-xs font-extrabold text-white transition hover:bg-[#87263F] disabled:opacity-50">
