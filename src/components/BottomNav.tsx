@@ -111,26 +111,27 @@ export default function BottomNav() {
 
       <nav
         aria-label="Main navigation"
-        className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-3 pb-[calc(7px+env(safe-area-inset-bottom))] lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[440px] px-4 pb-[calc(12px+env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="relative grid h-[58px] grid-cols-4 items-center rounded-full border border-white/75 bg-white/60 px-2 shadow-[0_10px_36px_rgba(40,28,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(255,255,255,0.28)] backdrop-blur-2xl backdrop-saturate-150">
-          <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
+        <div className="relative grid h-[72px] grid-cols-4 items-center rounded-[28px] border border-white/80 bg-[rgba(250,250,252,0.76)] px-2 shadow-[0_12px_42px_rgba(30,30,38,0.16),0_2px_8px_rgba(30,30,38,0.06),inset_0_1px_0_rgba(255,255,255,0.98),inset_0_-1px_0_rgba(255,255,255,0.38)] backdrop-blur-[28px] backdrop-saturate-[190%]">
+          <span className="pointer-events-none absolute inset-x-10 top-0 h-px rounded-full bg-gradient-to-r from-transparent via-white to-transparent" />
+          <span className="pointer-events-none absolute inset-x-1/3 -top-3 h-5 rounded-full bg-white/40 blur-xl" />
 
           {mobileNavigationItems.map((item) => {
             const Icon = item.icon;
             const active = item.external ? false : isActive(item.href);
-            const className = `relative mx-auto flex h-12 w-[min(100%,76px)] flex-col items-center justify-center gap-1 rounded-full transition-all duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#A83250] ${
+            const className = `relative mx-auto flex h-[58px] w-[min(100%,82px)] flex-col items-center justify-center gap-1 rounded-[21px] transition-all duration-300 ease-[cubic-bezier(.2,.8,.2,1)] active:scale-[0.93] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#A83250] ${
               active
-                ? "bg-[#F8E8ED] text-[#A83250] shadow-[0_4px_14px_rgba(168,50,80,0.16)] ring-1 ring-[#A83250]/10"
+                ? "bg-white/90 text-[#A83250] shadow-[0_3px_12px_rgba(40,30,35,0.10),inset_0_1px_0_rgba(255,255,255,1)] ring-1 ring-black/[0.035]"
                 : "text-[#766D72] hover:bg-white/45 hover:text-[#87263F]"
             }`;
             const content = (
               <>
-                <span className={`relative flex size-8 items-center justify-center rounded-full transition-all duration-300 ${active ? "bg-[#A83250] text-white shadow-[0_4px_10px_rgba(168,50,80,0.24)]" : ""}`}>
+                <span className={`relative flex size-[34px] items-center justify-center rounded-[13px] transition-all duration-300 ${active ? "text-[#A83250]" : "text-[#77777F]"}`}>
                   {item.external ? (
                     <Image src="/Whatsapp-3d.svg" alt="" width={21} height={21} unoptimized className="size-5 object-contain" />
                   ) : (
-                    <Icon size={18} strokeWidth={active ? 2.4 : 1.8} className={active ? "scale-105" : ""} />
+                    <Icon size={18} strokeWidth={active ? 2.25 : 1.75} className={active ? "scale-105" : ""} />
                   )}
                 </span>
                 {item.href === "/cart" && totalItems > 0 && (
@@ -138,10 +139,10 @@ export default function BottomNav() {
                     {totalItems > 99 ? "99+" : totalItems}
                   </span>
                 )}
-                <span className={`text-[10px] leading-none ${active ? "font-bold" : "font-medium"}`}>
+                <span className={`text-[10px] tracking-[-0.015em] leading-none ${active ? "font-extrabold text-[#A83250]" : "font-semibold text-[#77777F]"}`}>
                   {item.label}
                 </span>
-                {active && <span className="absolute bottom-[5px] h-1 w-1 rounded-full bg-[#A83250]" />}
+                {active && <span className="absolute bottom-[3px] h-[3px] w-[3px] rounded-full bg-[#A83250]/70" />}
               </>
             );
 
