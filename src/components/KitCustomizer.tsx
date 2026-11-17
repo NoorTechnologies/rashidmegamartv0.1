@@ -71,8 +71,8 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   };
 
   return (
-    <section className="rmm-customizer mt-5 overflow-hidden rounded-[24px] border border-[#F4C9C9] bg-white shadow-[0_14px_38px_rgba(150,20,30,0.09)] sm:mt-6" aria-labelledby="customize-kit-title">
-      <div className="relative overflow-hidden bg-[linear-gradient(115deg,#106B38_0%,#168447_58%,#25A45E_100%)] px-4 py-4 text-white sm:px-5 sm:py-5">
+    <section className="rmm-customizer mt-5 overflow-hidden rounded-[24px] border border-[#D8CBB8] bg-white shadow-[0_14px_38px_rgba(150,20,30,0.09)] sm:mt-6" aria-labelledby="customize-kit-title">
+      <div className="relative overflow-hidden bg-[linear-gradient(115deg,#106B38_0%,#168447_58%,#168447_100%)] px-4 py-4 text-white sm:px-5 sm:py-5">
         <span className="pointer-events-none absolute -right-6 -top-10 size-36 rounded-full bg-white/10 blur-2xl" />
         <div className="relative flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -96,45 +96,45 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
         <div className="mb-3 flex items-center justify-between gap-2">
           <div>
             <h3 className="text-sm font-black text-[#202124] sm:text-base">Your kit items</h3>
-            <p className="mt-0.5 text-[10px] font-medium text-[#6B7280] sm:text-xs">Edit each item before adding the kit to your cart.</p>
+            <p className="mt-0.5 text-[10px] font-medium text-[#686868] sm:text-xs">Edit each item before adding the kit to your cart.</p>
           </div>
-          <span className="rounded-full bg-[#FFF4D6] px-2.5 py-1 text-[10px] font-black text-[#805500]">{contents.length} included</span>
+          <span className="rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[10px] font-black text-[#805500]">{contents.length} included</span>
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-[#E9ECEF] bg-white">
           {contents.map((line, index) => (
             <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="flex items-center gap-2 border-b border-[#F0F1F2] px-2.5 py-2.5 last:border-b-0 sm:gap-3 sm:px-3">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#EAF6EE] text-[#168447]"><Package size={15} /></span>
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E9] text-[#168447]"><Package size={15} /></span>
               <div className="min-w-0 flex-1">
-                <p className="break-words text-[11px] font-extrabold leading-4 text-[#25282B] sm:text-xs">{displayCatalogue(line.name)}</p>
+                <p className="break-words text-[11px] font-extrabold leading-4 text-[#202124] sm:text-xs">{displayCatalogue(line.name)}</p>
                 <p className="mt-0.5 text-[9px] font-semibold text-[#899098]">Included in this kit</p>
               </div>
               <div className="flex shrink-0 items-center rounded-xl border border-[#E2E5E8] bg-[#F8F9FA] p-0.5">
-                <button type="button" aria-label={`Decrease ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#D71920] hover:bg-[#FFE6E6]"><Minus size={13} /></button>
+                <button type="button" aria-label={`Decrease ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD]"><Minus size={13} /></button>
                 <input aria-label={`${line.name} quantity`} value={displayCatalogue(line.quantity)} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: event.target.value.slice(0, 24) } : entry))} className="w-[58px] bg-transparent text-center text-[10px] font-extrabold text-[#272B2F] outline-none sm:w-[68px]" />
-                <button type="button" aria-label={`Increase ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#D71920] hover:bg-[#FFE6E6]"><Plus size={13} /></button>
+                <button type="button" aria-label={`Increase ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD]"><Plus size={13} /></button>
               </div>
-              <button type="button" aria-label={`Remove ${line.name}`} onClick={() => saveContents(contents.filter((_, i) => i !== index))} className="flex size-8 shrink-0 items-center justify-center rounded-xl text-[#9AA0A6] transition hover:bg-[#FFF0F0] hover:text-[#D71920]"><Trash2 size={14} /></button>
+              <button type="button" aria-label={`Remove ${line.name}`} onClick={() => saveContents(contents.filter((_, i) => i !== index))} className="flex size-8 shrink-0 items-center justify-center rounded-xl text-[#9AA0A6] transition hover:bg-[#F1EBDD] hover:text-[#800020]"><Trash2 size={14} /></button>
             </div>
           ))}
-          {contents.length === 0 && <p className="px-4 py-6 text-center text-xs font-semibold text-[#6B7280]">No original items left. Add the groceries you want below.</p>}
+          {contents.length === 0 && <p className="px-4 py-6 text-center text-xs font-semibold text-[#686868]">No original items left. Add the groceries you want below.</p>}
         </div>
 
-        <div className="mt-4 rounded-2xl border border-dashed border-[#E8A0A4] bg-[linear-gradient(135deg,#FFF8F1_0%,#FFF1F1_100%)] p-3 sm:p-4">
+        <div className="mt-4 rounded-2xl border border-dashed border-[#E8A0A4] bg-[linear-gradient(135deg,#FFF8F1_0%,#F1EBDD_100%)] p-3 sm:p-4">
           <div className="flex items-center gap-2">
             <span className="flex size-9 items-center justify-center rounded-xl bg-[#168447] text-white shadow-sm"><PlusCircle size={18} /></span>
             <div>
               <h3 className="text-xs font-black text-[#292B2D] sm:text-sm">Add more groceries</h3>
-              <p className="text-[10px] font-medium text-[#6B7280]">Choose from our kits or type any item you need.</p>
+              <p className="text-[10px] font-medium text-[#686868]">Choose from our kits or type any item you need.</p>
             </div>
           </div>
-          <input list={`grocery-options-${kit.id}`} value={newItem} onChange={(event) => { setNewItem(event.target.value); setError(""); }} placeholder="Try: Aata, Chini, Detergent..." aria-label="Add grocery item" maxLength={70} className="mt-3 min-h-11 w-full rounded-xl border border-[#E2D4D4] bg-white px-3 text-xs font-semibold text-[#25282B] outline-none transition placeholder:font-medium placeholder:text-[#9AA0A6] focus:border-[#D71920] focus:ring-3 focus:ring-[#D71920]/10" />
+          <input list={`grocery-options-${kit.id}`} value={newItem} onChange={(event) => { setNewItem(event.target.value); setError(""); }} placeholder="Try: Aata, Chini, Detergent..." aria-label="Add grocery item" maxLength={70} className="mt-3 min-h-11 w-full rounded-xl border border-[#E2D4D4] bg-white px-3 text-xs font-semibold text-[#202124] outline-none transition placeholder:font-medium placeholder:text-[#9AA0A6] focus:border-[#800020] focus:ring-3 focus:ring-[#800020]/10" />
           <datalist id={`grocery-options-${kit.id}`}>{catalog.map((name) => <option key={name} value={name} />)}</datalist>
           <div className="mt-2 flex gap-2">
-            <input aria-label="New item quantity" value={newQuantity} onChange={(event) => setNewQuantity(event.target.value.slice(0, 24))} placeholder="Qty" className="min-h-11 w-24 rounded-xl border border-[#E2D4D4] bg-white px-3 text-center text-xs font-extrabold outline-none focus:border-[#D71920]" />
+            <input aria-label="New item quantity" value={newQuantity} onChange={(event) => setNewQuantity(event.target.value.slice(0, 24))} placeholder="Qty" className="min-h-11 w-24 rounded-xl border border-[#E2D4D4] bg-white px-3 text-center text-xs font-extrabold outline-none focus:border-[#800020]" />
             <button type="button" onClick={handleAdd} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#168447] px-3 text-xs font-black text-white shadow-[0_5px_14px_rgba(22,132,71,0.18)] transition hover:-translate-y-0.5 hover:bg-[#106B38] active:scale-[0.98]"><Plus size={15} /> Add item</button>
           </div>
-          {error && <p role="alert" className="mt-2 text-[10px] font-bold text-[#C1121F]">{error}</p>}
+          {error && <p role="alert" className="mt-2 text-[10px] font-bold text-[#800020]">{error}</p>}
           {additions.length > 0 && (
             <div className="mt-3 rounded-xl border border-[#F3D98A] bg-[#FFF9E6] p-3">
               <p className="text-[10px] font-black uppercase tracking-wide text-[#805500]">Your extra items · price to be confirmed</p>
@@ -142,7 +142,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
                 {additions.map((item, index) => (
                   <div key={`${displayCatalogue(item.name)}-${index}`} className="flex items-center justify-between gap-2 text-[11px]">
                     <span className="min-w-0 flex-1 font-bold text-[#37312A]">{displayCatalogue(item.name)} <span className="font-semibold text-[#806C48]">· {displayCatalogue(item.quantity)}</span></span>
-                    <button type="button" onClick={() => saveContents(contents, additions.filter((_, i) => i !== index))} className="rounded-lg px-2 py-1 font-extrabold text-[#C1121F] hover:bg-white">Remove</button>
+                    <button type="button" onClick={() => saveContents(contents, additions.filter((_, i) => i !== index))} className="rounded-lg px-2 py-1 font-extrabold text-[#800020] hover:bg-white">Remove</button>
                   </div>
                 ))}
               </div>
@@ -159,9 +159,9 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
             </div>
           </div>
           <div className="text-right">
-            <p className="text-[9px] font-bold uppercase tracking-wide text-[#6A826F]">Kit price</p>
-            <p className="text-lg font-black leading-tight text-[#D71920]">₹{kit.price.toLocaleString("en-IN")}</p>
-            <p className="text-[8px] font-semibold text-[#6A826F]">listed base price</p>
+            <p className="text-[9px] font-bold uppercase tracking-wide text-[#686868]">Kit price</p>
+            <p className="text-lg font-black leading-tight text-[#800020]">₹{kit.price.toLocaleString("en-IN")}</p>
+            <p className="text-[8px] font-semibold text-[#686868]">listed base price</p>
           </div>
         </div>
 
