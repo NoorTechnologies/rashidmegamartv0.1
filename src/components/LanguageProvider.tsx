@@ -375,7 +375,7 @@ Object.assign(translations, {
 
 const hindiTranslations = { ...translations };
 
-Object.assign(translations, {
+const hinglishTranslations: Record<string, string> = {
   "Home": "Ghar", "Kits": "Kits", "Cart": "Cart", "Contact": "Sampark",
   "SMART GROCERY KITS": "Smart Grocery Kits",
   "Explore Grocery Kits": "Grocery Kits Dekhein",
@@ -496,7 +496,45 @@ Object.assign(translations, {
   "No expired code surprises": "Expired code ka surprise nahi",
   "We do not display made-up coupon codes or discounts that have not been approved by the store.": "Hum fake coupon codes ya store se approve na hui discounts display nahi karte.",
   "Explore Top Deals": "Top Deals dekhein"
-});
+  "Grocery": "Kirana",
+  "Grocery Kit": "Kirana Kit",
+  "Grocery Kits": "Kirana Kits",
+  "Products in this kit": "Is kit mein samaan",
+  "Products": "Samaan",
+  "Search grocery kits...": "Kirana kits search karein...",
+  "Clear search": "Search hataayein",
+  "Availability": "Availability",
+  "All Kits": "Saari Kits",
+  "In Stock": "Stock mein",
+  "Out of Stock": "Stock mein nahi",
+  "Sort:": "Sort karein:",
+  "Featured": "Featured",
+  "Price: Low to High": "Price: kam se zyada",
+  "Price: High to Low": "Price: zyada se kam",
+  "Name: A to Z": "Naam: A se Z",
+  "No kits found": "Koi kit nahi mili",
+  "Try another search or change the filters.": "Dusra search karein ya filters badlein.",
+  "Reset Filters": "Filters reset karein",
+  "Browse kit offers": "Kit offers dekhein",
+  "Check active offers": "Active offers check karein",
+  "Pick your value": "Apni value chunein",
+  "More value in every kit.": "Har kit mein zyada value.",
+  "Smart grocery deals.": "Smart grocery deals.",
+  "New kit deals are coming soon.": "Nayi kit deals jald aa rahi hain.",
+  "Top Deals": "Top Deals",
+  "Deals": "Deals",
+  "Coupons": "Coupons",
+  "More": "More",
+  "Home": "Ghar",
+  "Cart": "Cart",
+  "Contact": "Sampark",
+  "Language": "Bhasha",
+  "English": "English",
+  "Hindi": "Hindi",
+  "Current language:": "Abhi ki language:",
+  "Switch to": "Badlein:",
+
+};
 
 function translateText(value: string, dictionary: Record<string, string> = translations) {
   const trimmed = value.trim();
@@ -508,15 +546,27 @@ function translateText(value: string, dictionary: Record<string, string> = trans
   for (const [source, target] of Object.entries(dictionary).filter(([source]) => source.length > 3).sort(([a], [b]) => b.length - a.length)) {
     if (result.includes(source)) result = result.replaceAll(source, target);
   }
-  result = result.replace(/(\d+) WALI KIT/gi, "$1 वाली किट");
-  result = result.replace(/Open cart, (\d+) items?/gi, "कार्ट खोलें, $1 सामान");
-  result = result.replace(/Decrease (.+?) quantity/gi, "$1 की मात्रा घटाएं");
-  result = result.replace(/Increase (.+?) quantity/gi, "$1 की मात्रा बढ़ाएं");
-  result = result.replace(/(\d+) of (\d+) kits found/gi, "$1 में से $2 किट्स मिलीं");
-  result = result.replace(/(\d+) Kits Found/gi, "$1 किट्स मिलीं");
-  result = result.replace(/(\d+) items ready for checkout/gi, "$1 सामान ऑर्डर के लिए तैयार");
-  result = result.replace(/(\d+) items?/gi, "$1 सामान");
-  result = result.replace(/(\d+) Items/gi, "$1 सामान");
+  if (dictionary === hindiTranslations) {
+    result = result.replace(/(\d+) WALI KIT/gi, "$1 वाली किट");
+    result = result.replace(/Open cart, (\d+) items?/gi, "कार्ट खोलें, $1 सामान");
+    result = result.replace(/Decrease (.+?) quantity/gi, "$1 की मात्रा घटाएं");
+    result = result.replace(/Increase (.+?) quantity/gi, "$1 की मात्रा बढ़ाएं");
+    result = result.replace(/(\d+) of (\d+) kits found/gi, "$1 में से $2 किट्स मिलीं");
+    result = result.replace(/(\d+) Kits Found/gi, "$1 किट्स मिलीं");
+    result = result.replace(/(\d+) items ready for checkout/gi, "$1 सामान ऑर्डर के लिए तैयार");
+    result = result.replace(/(\d+) items?/gi, "$1 सामान");
+    result = result.replace(/(\d+) Items/gi, "$1 सामान");
+  } else {
+    result = result.replace(/(\d+) WALI KIT/gi, "$1 wali kit");
+    result = result.replace(/Open cart, (\d+) items?/gi, "Cart kholein, $1 items");
+    result = result.replace(/Decrease (.+?) quantity/gi, "$1 ki quantity kam karein");
+    result = result.replace(/Increase (.+?) quantity/gi, "$1 ki quantity badhayein");
+    result = result.replace(/(\d+) of (\d+) kits found/gi, "$1 mein se $2 kits mili");
+    result = result.replace(/(\d+) Kits Found/gi, "$1 kits mili");
+    result = result.replace(/(\d+) items ready for checkout/gi, "$1 items order ke liye ready");
+    result = result.replace(/(\d+) items?/gi, "$1 items");
+    result = result.replace(/(\d+) Items/gi, "$1 items");
+  }
   return result;
 }
 
@@ -538,7 +588,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const current = node.nodeValue ?? "";
       const record = textOriginals.current.get(node);
       const original = record && current === record.translated ? record.original : current;
-      const translated = nextLanguage === "en" ? original : translateText(original, nextLanguage === "hi" ? hindiTranslations : translations);
+      const translated = nextLanguage === "en" ? original : translateText(original, nextLanguage === "hi" ? hindiTranslations : hinglishTranslations);
       textOriginals.current.set(node, { original, translated });
       if (current !== translated) node.nodeValue = translated;
     }
