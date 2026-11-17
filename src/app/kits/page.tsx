@@ -88,14 +88,14 @@ export default function KitsPage() {
     sortBy !== "featured";
 
   return (
-    <main className="min-h-screen w-full overflow-x-clip bg-[radial-gradient(ellipse_at_8%_8%,rgba(22,132,71,0.10),transparent_30%),radial-gradient(ellipse_at_92%_24%,rgba(212,168,79,0.14),transparent_28%),linear-gradient(180deg,#F8FBF8_0%,#F5F7F3_48%,#FFF9F1_100%)]">
+    <main className="min-h-screen w-full overflow-x-clip bg-[radial-gradient(ellipse_at_8%_8%,rgba(181,18,50,0.08),transparent_30%),radial-gradient(ellipse_at_92%_24%,rgba(212,168,79,0.14),transparent_28%),linear-gradient(180deg,#FFF8F7_0%,#FAF6F3_48%,#FFF9F1_100%)]">
       {/* COMPACT HOME STYLE BANNER */}
-      <section className="relative isolate overflow-hidden border-b border-white/70 bg-white/35 px-3 pb-5 pt-4 text-[#202B24] shadow-[0_12px_40px_rgba(45,80,55,0.05)] backdrop-blur-2xl sm:px-5 sm:pb-8 sm:pt-7">
-        <div className="pointer-events-none absolute -left-16 top-5 h-40 w-40 rounded-full bg-[#168447]/10 blur-[65px]" />
-        <div className="pointer-events-none absolute -right-16 bottom-0 h-40 w-40 rounded-full bg-[#F5D9A8]/25 blur-[65px]" />
+      <section className="relative isolate overflow-hidden border-b border-[#F3D8DC] bg-[linear-gradient(125deg,#8F1235_0%,#B51232_58%,#D33A4F_100%)] px-3 pb-5 pt-4 text-white shadow-[0_16px_45px_rgba(143,18,53,0.18)] sm:px-5 sm:pb-8 sm:pt-7">
+        <div className="pointer-events-none absolute -left-16 top-5 h-40 w-40 rounded-full bg-white/10 blur-[65px]" />
+        <div className="pointer-events-none absolute -right-16 bottom-0 h-40 w-40 rounded-full bg-[#FFD8A0]/20 blur-[65px]" />
 
         <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#DDECE0] bg-white/55 px-3 py-1.5 text-[9px] font-extrabold tracking-wide text-[#168447] shadow-[0_6px_20px_rgba(22,132,71,0.08)] backdrop-blur-xl sm:text-xs">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[9px] font-extrabold tracking-wide text-white shadow-lg backdrop-blur-xl sm:text-xs">
             <ShoppingBag size={12} />
             YOUR NEIGHBOURHOOD GROCERY STORE
           </span>
@@ -112,16 +112,16 @@ export default function KitsPage() {
 
             <div className="text-left">
               <h1 className="text-lg font-black leading-tight sm:text-2xl">
-                Grocery <span className="text-[#168447]">Kits</span>
+                Grocery <span className="text-[#FFE0E5]">Kits</span>
               </h1>
-              <p className="text-[9px] font-medium text-[#647067] sm:text-xs">
+              <p className="text-[9px] font-medium text-white/80 sm:text-xs">
                 Smart combos for every home
               </p>
             </div>
           </div>
 
-          <p className="mt-2 max-w-md text-[10px] leading-5 text-[#647067] sm:mt-3 sm:text-sm sm:leading-6">
-            Everyday grocery essentials, thoughtfully packed together at great value.
+          <p className="mt-2 max-w-md text-[10px] leading-5 text-white/80 sm:mt-3 sm:text-sm sm:leading-6">
+            Special grocery combos. More essentials, one simple price.
           </p>
 
           {/* HERO IMAGE */}
@@ -139,8 +139,8 @@ export default function KitsPage() {
           </div>
 
           {/* SEARCH */}
-          <div className="relative mt-3 flex h-11 w-full max-w-[520px] items-center gap-2.5 rounded-xl border border-[#DDECE0] bg-white px-3 shadow-[0_5px_20px_rgba(7,92,43,0.07)] transition focus-within:border-[#168447] sm:mt-5 sm:h-14 sm:rounded-2xl sm:px-4">
-            <Search size={18} className="shrink-0 text-[#168447]" />
+          <div className="relative mt-3 flex h-11 w-full max-w-[520px] items-center gap-2.5 rounded-xl border border-white/70 bg-white px-3 shadow-[0_5px_20px_rgba(60,0,15,0.12)] transition focus-within:border-[#B51232] sm:mt-5 sm:h-14 sm:rounded-2xl sm:px-4">
+            <Search size={18} className="shrink-0 text-[#B51232]" />
 
             <input
               type="search"
@@ -148,7 +148,7 @@ export default function KitsPage() {
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search grocery kits..."
               aria-label="Search grocery kits"
-              className="min-w-0 flex-1 bg-transparent text-xs text-[#202B24] outline-none placeholder:text-[#98A69C] sm:text-sm"
+              className="min-w-0 flex-1 bg-transparent text-xs text-[#202B24] outline-none placeholder:text-[#A69A98] sm:text-sm"
             />
 
             {search && (
@@ -171,7 +171,7 @@ export default function KitsPage() {
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <h2 className="text-lg font-black text-[#202B24] sm:text-2xl">
-              Explore Grocery Kits
+              Shop Best-Value Kits
             </h2>
 
             <p className="mt-1 text-[10px] text-[#68756B] sm:text-xs">
@@ -212,8 +212,8 @@ export default function KitsPage() {
                 aria-pressed={filter === option.value}
                 className={`min-h-9 rounded-full border px-3.5 py-2 text-[10px] font-extrabold transition active:scale-95 sm:px-4 sm:text-xs ${
                   filter === option.value
-                    ? "border-[#168447] bg-gradient-to-r from-[#168447] to-[#087039] text-white shadow-[0_4px_12px_rgba(22,132,71,0.20)]"
-                    : "border-[#DFEEE3] bg-white text-[#53665A] hover:border-[#95D5B2] hover:bg-[#E8F5E9]"
+                    ? "border-[#8F1235] bg-gradient-to-r from-[#B51232] to-[#8F1235] text-white shadow-[0_4px_14px_rgba(143,18,53,0.22)]"
+                    : "border-[#F0D8DC] bg-white text-[#70545A] hover:border-[#D98A99] hover:bg-[#FFF0F2]"
                 }`}
               >
                 {option.label}
@@ -223,18 +223,18 @@ export default function KitsPage() {
         </div>
 
         {/* SORT AND RESULT COUNT */}
-        <div className="mt-4 flex items-center justify-between gap-2 border-y border-[#E5ECE6] py-3 sm:mt-5">
+        <div className="mt-4 flex items-center justify-between gap-2 border-y border-[#F0DDE0] py-3 sm:mt-5">
           <div className="min-w-0">
-            <p className="text-[10px] font-bold text-[#53665A] sm:text-xs">
+            <p className="text-[10px] font-bold text-[#70545A] sm:text-xs">
               {filteredKits.length} Kits Found
             </p>
-            <p className="mt-0.5 text-[9px] text-[#98A69C] sm:text-[10px]">
-              Find the right combo for your home
+            <p className="mt-0.5 text-[9px] text-[#A69A98] sm:text-[10px]">
+              Choose a kit that fits your family
             </p>
           </div>
 
-          <label className="flex min-h-9 max-w-[190px] shrink-0 items-center gap-1.5 rounded-lg border border-[#DFEEE3] bg-white px-2.5 py-2 text-[10px] font-semibold text-[#53665A] focus-within:border-[#168447] sm:max-w-none sm:gap-2 sm:rounded-xl sm:px-3 sm:text-xs">
-            <SlidersHorizontal size={14} className="shrink-0 text-[#168447]" />
+          <label className="flex min-h-9 max-w-[190px] shrink-0 items-center gap-1.5 rounded-lg border border-[#F0DDE0] bg-white px-2.5 py-2 text-[10px] font-semibold text-[#70545A] focus-within:border-[#B51232] sm:max-w-none sm:gap-2 sm:rounded-xl sm:px-3 sm:text-xs">
+            <SlidersHorizontal size={14} className="shrink-0 text-[#B51232]" />
 
             <span className="shrink-0">Sort:</span>
 
@@ -262,8 +262,8 @@ export default function KitsPage() {
             ))}
           </div>
         ) : (
-          <div className="mt-6 rounded-2xl border border-[#DFEEE3] bg-white px-4 py-10 text-center shadow-sm sm:px-6 sm:py-12">
-            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-[#EAF7EE] text-[#168447]">
+          <div className="mt-6 rounded-2xl border border-[#F0DDE0] bg-white px-4 py-10 text-center shadow-sm sm:px-6 sm:py-12">
+            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-[#EAF7EE] text-[#B51232]">
               <Package size={28} />
             </div>
 
