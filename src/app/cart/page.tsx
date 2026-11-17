@@ -276,8 +276,7 @@ export default function CartPage() {
             </h1>
 
             <p className="mt-1.5 text-xs text-[#686868] sm:text-sm">
-              {totalItems} {totalItems === 1 ? "item" : "items"} ready for
-              checkout
+              {totalItems} {totalItems === 1 ? "kit unit" : "kit units"} in your cart
             </p>
           </div>
 
