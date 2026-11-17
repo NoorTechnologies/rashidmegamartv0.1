@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import {
   ArrowLeft,
-  CheckCircle2,
   MapPin,
   Minus,
   Plus,
