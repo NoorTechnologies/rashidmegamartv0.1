@@ -468,7 +468,7 @@ export default function CartPage() {
                       {/* Item Total & Remove */}
                       <div className="flex min-w-0 items-center gap-1.5 min-[375px]:gap-2">
                         <span className="truncate text-xs font-black text-[#202124] min-[375px]:text-sm">
-                          {formatPrice((groceryCalculations.find(({ item: calculatedItem }) => calculatedItem.id === item.id)?.estimate.total ?? item.price) * item.quantity)}
+                          {formatPrice((customizedRatesReady ? groceryCalculations.find(({ item: calculatedItem }) => calculatedItem.id === item.id)?.estimate.total ?? item.price : item.price) * item.quantity)}
                         </span>
 
                         <button
