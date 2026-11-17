@@ -211,8 +211,7 @@ export default function CartPage() {
           </h1>
 
           <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-[#77716C]">
-            Abhi aapke cart mein koi product nahi hai. Apne favourite grocery
-            products explore karein aur shopping shuru karein.
+            Abhi aapke cart mein koi product nahi hai. Apni pasand ki grocery kits dekhein aur shopping shuru karein.
           </p>
 
           <Link
@@ -258,7 +257,7 @@ export default function CartPage() {
           </div>
 
           <Link
-            href="/shop"
+            href="/kits"
             className="rmm-button-secondary min-h-10 w-fit rounded-xl px-4 py-2 text-xs sm:min-h-11 sm:text-sm"
           >
             <ArrowLeft size={15} />
@@ -303,7 +302,7 @@ export default function CartPage() {
                   <div className="relative size-[78px] shrink-0 overflow-hidden rounded-xl bg-[#F8F6F2] min-[375px]:size-[88px] sm:size-24">
                     {item.image ? (
                       <Image
-                        src={item.image || "/categories/cerels.webp"}
+                        src={item.image}
                         alt={item.name}
                         fill
                         unoptimized
