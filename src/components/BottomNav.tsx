@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   House,
-  LayoutGrid,
   Package,
   ShoppingCart,
 } from "lucide-react";
@@ -16,7 +15,6 @@ const WHATSAPP_NUMBER = "918962531603";
 
 const navigationItems = [
   { label: "Home", href: "/", icon: House, external: false },
-  { label: "Shop", href: "/shop", icon: LayoutGrid, external: false },
   { label: "Kits", href: "/kits", icon: Package, external: false },
 ];
 
@@ -115,7 +113,7 @@ export default function BottomNav() {
         aria-label="Main navigation"
         className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-3 pb-[calc(7px+env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="relative grid h-[58px] grid-cols-5 items-center rounded-full border border-white/75 bg-white/60 px-2 shadow-[0_10px_36px_rgba(40,28,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(255,255,255,0.28)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[58px] grid-cols-4 items-center rounded-full border border-white/75 bg-white/60 px-2 shadow-[0_10px_36px_rgba(40,28,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(255,255,255,0.28)] backdrop-blur-2xl backdrop-saturate-150">
           <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
 
           {mobileNavigationItems.map((item) => {
