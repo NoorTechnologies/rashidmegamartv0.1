@@ -15,7 +15,6 @@ import {
 
 import { useCart } from "@/context/CartContext";
 import type { GroceryKit } from "@/data/kits";
-import { getGroceryItemImageFallback, KIT_IMAGE_FALLBACK } from "@/lib/catalog-images";
 
 interface KitCardProps {
   kit: GroceryKit;
@@ -29,14 +28,13 @@ const formatPrice = (price: number) =>
     maximumFractionDigits: 0,
   }).format(price);
 
-const getProductImage = (item: string) => getGroceryItemImageFallback(item);
 
 export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
   const { addToCart, items, isLoaded } = useCart();
   const [imageError, setImageError] = useState(false);
 
   const cartItem = items.find((item) => item.id === kit.id);
-  const kitImage = kit.image || KIT_IMAGE_FALLBACK;
+  const kitImage = kit.image;
 
   const discount =
     kit.oldPrice && kit.oldPrice > kit.price
@@ -145,29 +143,13 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
 
           <div className="grid grid-cols-2 gap-x-2 gap-y-2">
             {visibleItems.map((item, index) => {
-              const productImage = getProductImage(item);
-
               return (
                 <div
                   key={`${kit.id}-${index}`}
                   className="flex min-w-0 items-center gap-1.5"
                 >
                   <div className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/90 bg-white/80 shadow-sm sm:h-8 sm:w-8">
-                    {productImage ? (
-                      <Image
-                        src={productImage}
-                        alt=""
-                        fill
-                        sizes="32px"
-                        className="object-contain p-0.5"
-                      />
-                    ) : (
-                      <Package
-                        size={14}
-                        strokeWidth={1.5}
-                        className="text-[#A83250]"
-                      />
-                    )}
+                    <Package size={14} strokeWidth={1.5} className="text-[#A83250]" />
                   </div>
 
                   <span className="line-clamp-2 min-w-0 text-[9px] font-medium leading-3 text-[#55483C] sm:text-[10px]">
