@@ -174,13 +174,13 @@ export default async function KitDetailPage({ params }: PageProps) {
             </p>
 
             {/* Price Card */}
-            <div className="mt-5 rounded-2xl border border-[#EFE3D9] bg-white p-4 shadow-[0_8px_28px_rgba(70,40,30,0.04)] sm:mt-7 sm:p-6">
+            <div className="mt-5 rounded-2xl border border-[#F1C6C8] bg-[linear-gradient(135deg,#FFF2F2_0%,#FFF9E8_100%)] p-4 shadow-[0_10px_28px_rgba(190,20,30,0.08)] sm:mt-7 sm:p-6">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#94847A]">
                 Special Kit Price
               </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-3">
-                <span className="text-4xl font-black tracking-tight text-[#D71920]">
+                <span className="text-4xl font-black tracking-tight text-[#D71920] drop-shadow-[0_2px_0_rgba(215,25,32,0.08)]">
                   ₹{kit.price.toLocaleString("en-IN")}
                 </span>
 
