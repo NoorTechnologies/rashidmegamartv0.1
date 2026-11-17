@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Truck, MessageCircle, Package, Wallet, ClipboardList } from "lucide-react";
 import Footer from "@/components/Footer";
-import KitCard from "@/components/KitCard";
+import FeaturedKitsCarousel from "@/components/FeaturedKitsCarousel";
 import { kits } from "@/data/kits";
 
 export default function HomePage() {
@@ -78,9 +78,7 @@ export default function HomePage() {
           <Link href="/kits" className="inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#168447] transition hover:text-[#106B38] sm:text-xs">View All <ArrowRight size={15} /></Link>
         </div>
         {displayKits.length ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
-            {displayKits.map((kit, index) => <KitCard key={kit.id} kit={kit} eagerImage={index === 0} />)}
-          </div>
+          <FeaturedKitsCarousel kits={displayKits} />
         ) : (
           <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6 text-center sm:p-8">
             <Package className="mx-auto text-[#F7C928]" size={30} />
