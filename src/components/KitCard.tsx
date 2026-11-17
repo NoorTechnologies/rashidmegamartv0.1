@@ -37,18 +37,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
   const visibleItems = kit.items.slice(0, 4);
   const remainingItems = Math.max(0, kit.items.length - visibleItems.length);
 
-  const handleAddToCart = () => {
-    if (!isLoaded || !kit.isAvailable || cartItem) return;
 
-    addToCart({
-      id: kit.id,
-      name: kit.name,
-      price: kit.price,
-      image: kit.image,
-      brand: "Rashid Mega Mart",
-      packSize: `Grocery Kit - ${kit.items.length} Products`,
-    });
-  };
 
   return (
     <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#EEE7E1] bg-white shadow-[0_3px_14px_rgba(74,34,22,0.05)] transition-shadow duration-200 hover:shadow-md sm:rounded-[24px]">
