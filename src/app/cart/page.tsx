@@ -44,7 +44,6 @@ export default function CartPage() {
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<"COD" | "UPI">("COD");
   const [orderNote, setOrderNote] = useState("");
   const [removedItem, setRemovedItem] = useState<(typeof items)[number] | null>(null);
   const [formError, setFormError] = useState("");
@@ -82,10 +81,6 @@ export default function CartPage() {
     }
     if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
       setFormError("Please enter a valid 10-digit mobile number.");
-      return;
-    }
-    if (cleanAddress.length < 10) {
-      setFormError("Please enter a complete delivery address.");
       return;
     }
     if (items.length > 30) {
@@ -150,7 +145,7 @@ export default function CartPage() {
         "*Customer Details*",
         "Name: " + cleanName,
         "Mobile: " + cleanPhone,
-        "Delivery Address: " + cleanAddress,
+        "Delivery Address: " + (cleanAddress || "Customer will confirm on WhatsApp"),
         "",
         "*Order Items*",
         itemText,
@@ -158,10 +153,9 @@ export default function CartPage() {
         "*Listed Kit Base Total: " + formatPrice(orderSubtotal) + "*",
         "Extra/custom item prices and final customized kit price: Store confirmation pending",
         "Delivery charges: Please confirm",
-        "Payment preference: " + (paymentMethod === "COD" ? "Cash on Delivery" : "UPI (share verified details after confirmation)"),
-        cleanNote ? "Order note: " + cleanNote : "",
+                cleanNote ? "Order note: " + cleanNote : "",
         "",
-        "Please confirm customized kit contents, extra-item prices, item availability, delivery charges and final payable amount.",
+        "Please confirm customized kit contents, extra-item prices, item availability, delivery address, payment method, delivery charges and final payable amount.",
       ].filter(Boolean).join("\n");
 
       const whatsappUrl =
@@ -502,8 +496,7 @@ export default function CartPage() {
                 </div>
 
                 <p className="mt-2 text-[11px] leading-5 text-[#686868] sm:text-xs">
-                  Apni details fill karein. Order WhatsApp par store ko bheja
-                  jayega.
+                  Bas naam aur mobile number bharein. Address baad mein WhatsApp par bhi confirm kar sakte hain.
                 </p>
               </div>
 
@@ -569,13 +562,11 @@ export default function CartPage() {
                     htmlFor="address"
                     className="mb-1.5 block text-xs font-bold text-[#202124]"
                   >
-                    Delivery Address *
+                    Delivery Address (Optional)
                   </label>
 
                   <textarea
                     id="address"
-                    required
-                    minLength={10}
                     maxLength={300}
                     rows={3}
                     autoComplete="street-address"
@@ -584,7 +575,7 @@ export default function CartPage() {
                       setAddress(event.target.value);
                       setFormError("");
                     }}
-                    placeholder="House no., street, area and landmark"
+                    placeholder="Agar delivery chahiye: house no., area, landmark"
                     className="min-h-24 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3.5 py-3 text-base text-[#202124] outline-none transition placeholder:text-sm placeholder:text-[#686868] focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10 sm:px-4 sm:text-sm"
                   />
                 </div>
@@ -595,74 +586,6 @@ export default function CartPage() {
                 <label htmlFor="orderNote" className="mb-1.5 block text-xs font-bold text-[#202124]">Order Note (Optional)</label>
                 <textarea id="orderNote" value={orderNote} onChange={(event) => setOrderNote(event.target.value.slice(0, 240))} maxLength={240} rows={2} placeholder="Any delivery instructions? (e.g. call before arrival)" className="min-h-20 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3.5 py-3 text-base text-[#202124] outline-none transition placeholder:text-sm placeholder:text-[#686868] focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10 sm:px-4 sm:text-sm" />
                 <p className="mt-1 text-right text-[10px] text-[#686868]">{orderNote.length}/240</p>
-              </div>
-
-              {/* Payment Preference */}
-              <div>
-                <p className="mb-2.5 text-xs font-bold text-[#202124]">
-                  Payment Preference
-                </p>
-
-                <div className="grid grid-cols-2 gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("COD")}
-                    aria-pressed={paymentMethod === "COD"}
-                    className={`min-h-[76px] rounded-xl border p-3 text-left transition active:scale-[0.99] ${
-                      paymentMethod === "COD"
-                        ? "border-[#168447] bg-[#FAF7EF] ring-1 ring-[#168447]/10"
-                        : "border-[#E8DFD1] bg-white hover:border-[#D8CBB8]"
-                    }`}
-                  >
-                    <span className="block text-xs font-extrabold text-[#202124]">
-                      Cash on Delivery
-                    </span>
-
-                    <span className="mt-1 block text-[10px] leading-4 text-[#686868]">
-                      Pay when delivered
-                    </span>
-
-                    {paymentMethod === "COD" && (
-                      <span className="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-[#168447]">
-                        <CheckCircle2 size={12} />
-                        Selected
-                      </span>
-                    )}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("UPI")}
-                    aria-pressed={paymentMethod === "UPI"}
-                    className={`min-h-[76px] rounded-xl border p-3 text-left transition active:scale-[0.99] ${
-                      paymentMethod === "UPI"
-                        ? "border-[#168447] bg-[#FAF7EF] ring-1 ring-[#168447]/10"
-                        : "border-[#E8DFD1] bg-white hover:border-[#D8CBB8]"
-                    }`}
-                  >
-                    <span className="block text-xs font-extrabold text-[#202124]">
-                      UPI Payment
-                    </span>
-
-                    <span className="mt-1 block text-[10px] leading-4 text-[#686868]">
-                      Details after confirmation
-                    </span>
-
-                    {paymentMethod === "UPI" && (
-                      <span className="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-[#168447]">
-                        <CheckCircle2 size={12} />
-                        Selected
-                      </span>
-                    )}
-                  </button>
-                </div>
-
-                {paymentMethod === "UPI" && (
-                  <p className="mt-2.5 rounded-xl border border-[#FAF0C8] bg-[#FAF7EF] p-3 text-[11px] leading-5 text-[#806000]">
-                    Store order confirm karne ke baad verified UPI details
-                    share karega. Abhi payment mat karein.
-                  </p>
-                )}
               </div>
 
               {/* Validation Message */}
