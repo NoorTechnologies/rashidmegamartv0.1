@@ -599,7 +599,7 @@ function transliterateHindi(value: string) {
     if (DEVANAGARI_CONSONANTS[char]) {
       output += DEVANAGARI_CONSONANTS[char];
       const next = chars[index + 1];
-      if (DEVANAGARI_MATRAS[next]) {
+      if (next && DEVANAGARI_MATRAS[next]) {
         output += DEVANAGARI_MATRAS[next];
         index += 1;
       } else if (next === "्") {
