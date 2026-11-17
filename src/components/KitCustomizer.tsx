@@ -72,7 +72,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
 
   return (
     <section className="rmm-customizer mt-5 overflow-hidden rounded-[24px] border border-[#F4C9C9] bg-white shadow-[0_14px_38px_rgba(150,20,30,0.09)] sm:mt-6" aria-labelledby="customize-kit-title">
-      <div className="relative overflow-hidden bg-[linear-gradient(115deg,#B5121B_0%,#E21D2B_58%,#F04438_100%)] px-4 py-4 text-white sm:px-5 sm:py-5">
+      <div className="relative overflow-hidden bg-[linear-gradient(115deg,#106B38_0%,#168447_58%,#25A45E_100%)] px-4 py-4 text-white sm:px-5 sm:py-5">
         <span className="pointer-events-none absolute -right-6 -top-10 size-36 rounded-full bg-white/10 blur-2xl" />
         <div className="relative flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -122,7 +122,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
 
         <div className="mt-4 rounded-2xl border border-dashed border-[#E8A0A4] bg-[linear-gradient(135deg,#FFF8F1_0%,#FFF1F1_100%)] p-3 sm:p-4">
           <div className="flex items-center gap-2">
-            <span className="flex size-9 items-center justify-center rounded-xl bg-[#D71920] text-white shadow-sm"><PlusCircle size={18} /></span>
+            <span className="flex size-9 items-center justify-center rounded-xl bg-[#168447] text-white shadow-sm"><PlusCircle size={18} /></span>
             <div>
               <h3 className="text-xs font-black text-[#292B2D] sm:text-sm">Add more groceries</h3>
               <p className="text-[10px] font-medium text-[#6B7280]">Choose from our kits or type any item you need.</p>
@@ -132,7 +132,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           <datalist id={`grocery-options-${kit.id}`}>{catalog.map((name) => <option key={name} value={name} />)}</datalist>
           <div className="mt-2 flex gap-2">
             <input aria-label="New item quantity" value={newQuantity} onChange={(event) => setNewQuantity(event.target.value.slice(0, 24))} placeholder="Qty" className="min-h-11 w-24 rounded-xl border border-[#E2D4D4] bg-white px-3 text-center text-xs font-extrabold outline-none focus:border-[#D71920]" />
-            <button type="button" onClick={handleAdd} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#D71920] px-3 text-xs font-black text-white shadow-[0_5px_14px_rgba(215,25,32,0.18)] transition hover:-translate-y-0.5 hover:bg-[#B5121B] active:scale-[0.98]"><Plus size={15} /> Add item</button>
+            <button type="button" onClick={handleAdd} className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#168447] px-3 text-xs font-black text-white shadow-[0_5px_14px_rgba(22,132,71,0.18)] transition hover:-translate-y-0.5 hover:bg-[#106B38] active:scale-[0.98]"><Plus size={15} /> Add item</button>
           </div>
           {error && <p role="alert" className="mt-2 text-[10px] font-bold text-[#C1121F]">{error}</p>}
           {additions.length > 0 && (
@@ -165,7 +165,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           </div>
         </div>
 
-        <button type="button" onClick={handleAddToCart} disabled={!isLoaded || !kit.isAvailable} className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(100deg,#D71920_0%,#B5121B_100%)] px-4 py-3 text-xs font-black text-white shadow-[0_7px_18px_rgba(215,25,32,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(215,25,32,0.28)] active:scale-[0.99] disabled:opacity-50 sm:text-sm">
+        <button type="button" onClick={handleAddToCart} disabled={!isLoaded || !kit.isAvailable} className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(100deg,#168447_0%,#106B38_100%)] px-4 py-3 text-xs font-black text-white shadow-[0_7px_18px_rgba(22,132,71,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(22,132,71,0.28)] active:scale-[0.99] disabled:opacity-50 sm:text-sm">
           <ShoppingCart size={17} /> {cartItem ? "Update My Customized Kit" : "Add Customized Kit to Cart"}
         </button>
       </div>
