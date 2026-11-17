@@ -8,9 +8,11 @@ import {
   Package,
   ArrowUpRight,
   Sparkles,
+  Tag,
 } from "lucide-react";
 
-import type { GroceryKit } from "@/data/kits";\nimport { useSiteLanguage, toEnglishCatalogue } from "@/components/LanguageProvider";
+import type { GroceryKit } from "@/data/kits";
+import { useSiteLanguage, toEnglishCatalogue } from "@/components/LanguageProvider";
 
 interface KitCardProps {
   kit: GroceryKit;
@@ -26,7 +28,9 @@ const formatPrice = (price: number) =>
 
 
 export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
-  const [imageError, setImageError] = useState(false);\n  const language = useSiteLanguage();\n  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : value;
+  const [imageError, setImageError] = useState(false);
+  const language = useSiteLanguage();
+  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : value;
   const kitImage = kit.image;
 
   const savings =
@@ -78,9 +82,9 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
             </div>
           )}
 
-          <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full border border-white/70 bg-white/55 px-2.5 py-1 text-[9px] font-bold text-[#202124] shadow-lg backdrop-blur-xl">
-            <Sparkles size={11} className="text-[#806000]" />
-            MERI JAAN DEAL
+          <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1.5 rounded-lg border border-white/30 bg-[#800020]/90 px-2.5 py-1.5 text-[9px] font-extrabold tracking-[0.08em] text-white shadow-md backdrop-blur-md">
+            <Tag size={11} className="text-[#F7C928]" />
+            SPECIAL KIT OFFER
           </span>
 
           {!kit.isAvailable && (
