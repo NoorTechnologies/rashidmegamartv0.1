@@ -351,6 +351,28 @@ Object.assign(translations, {
   "When every grocery rate is confirmed, the calculator uses (requested quantity ÷ rate quantity) × rate price, then multiplies by kit quantity. Until then, the listed bundle total remains visible separately.": "हर किराना सामान की दर की पुष्टि होने पर कैलकुलेटर (मांगी गई मात्रा ÷ दर वाली मात्रा) × दर की कीमत से हिसाब करेगा, फिर किट की संख्या से गुणा करेगा। तब तक किट की लिस्टेड कीमत अलग दिखाई जाएगी।"
 });
 
+Object.assign(translations, {
+  "Browse kit offers": "किट ऑफर देखें",
+  "Check active offers": "चालू ऑफर देखें",
+  "Pick your value": "अपनी बचत चुनें",
+  "Every kit shows its listed price and included essentials.": "हर किट की लिस्टेड कीमत और शामिल ज़रूरी सामान देखें।",
+  "New kit deals are coming soon.": "नई किट डील जल्द आ रही हैं।",
+  "Prices and kit contents are subject to store confirmation. No unverified discount is applied.": "कीमत और किट का सामान दुकान की पुष्टि के अधीन है। बिना पुष्टि की छूट नहीं दी जाती।",
+  "Smart grocery deals.": "किराने की स्मार्ट डील।",
+  "More value in every kit.": "हर किट में ज़्यादा फायदा।",
+  "Explore our available ready-made grocery kits, compare what is included and choose the one that fits your home.": "हमारी उपलब्ध रेडीमेड किराना किट देखें, शामिल सामान की तुलना करें और अपने घर के लिए सही किट चुनें।",
+  "A little extra saving": "थोड़ी और बचत",
+  "starts with the right coupon.": "सही कूपन से शुरू होती है।",
+  "Check with our store for current coupon availability, eligible kits and offer terms before placing your order.": "ऑर्डर करने से पहले मौजूदा कूपन, लागू किट और ऑफर की शर्तें दुकान से पूछें।",
+  "Store-confirmed offers": "दुकान से पुष्टि किए गए ऑफर",
+  "Coupon codes and discounts are shared only after the store confirms the current offer. Ask us which coupon applies to your selected kit.": "कूपन कोड और छूट दुकान की पुष्टि के बाद ही बताए जाते हैं। पूछें कि आपकी चुनी हुई किट पर कौन-सा कूपन लागू है।",
+  "Verified before checkout": "ऑर्डर से पहले पुष्टि",
+  "The store confirms coupon validity, eligible kits and final payable amount on WhatsApp.": "दुकान WhatsApp पर कूपन की वैधता, लागू किट और अंतिम राशि की पुष्टि करती है।",
+  "No expired code surprises": "एक्सपायर कूपन का झंझट नहीं",
+  "We do not display made-up coupon codes or discounts that have not been approved by the store.": "हम नकली कूपन कोड या दुकान से मंज़ूर न हुई छूट नहीं दिखाते।",
+  "Explore Top Deals": "टॉप डील देखें"
+});
+
 const hindiTranslations = { ...translations };
 
 Object.assign(translations, {
@@ -455,6 +477,26 @@ Object.assign(translations, {
   "Customized item breakdown": "Customized items ka breakdown",
   "item rates need owner confirmation": "item rates owner se confirm hone baaki",
   "When every grocery rate is confirmed, the calculator uses (requested quantity ÷ rate quantity) × rate price, then multiplies by kit quantity. Until then, the listed bundle total remains visible separately.": "Jab sabhi grocery rates confirm ho jayenge, calculator (requested quantity ÷ rate quantity) × rate price karega, phir kit quantity se multiply karega. Tab tak listed bundle total alag dikhega."
+
+  "Browse kit offers": "Kit offers dekhein",
+  "Check active offers": "Active offers check karein",
+  "Pick your value": "Apni value chunein",
+  "Every kit shows its listed price and included essentials.": "Har kit ki listed price aur included essentials dekhein.",
+  "New kit deals are coming soon.": "Nayi kit deals jald aa rahi hain.",
+  "Prices and kit contents are subject to store confirmation. No unverified discount is applied.": "Prices aur kit contents store confirmation par depend hain. Bina verify ki discount apply nahi hoti.",
+  "Smart grocery deals.": "Smart grocery deals.",
+  "More value in every kit.": "Har kit mein zyada value.",
+  "Explore our available ready-made grocery kits, compare what is included and choose the one that fits your home.": "Available ready-made grocery kits dekhein, included items compare karein aur apne ghar ke liye sahi kit chunein.",
+  "A little extra saving": "Thodi extra saving",
+  "starts with the right coupon.": "Sahi coupon se shuru hoti hai.",
+  "Check with our store for current coupon availability, eligible kits and offer terms before placing your order.": "Order se pehle current coupon availability, eligible kits aur offer terms store se confirm karein.",
+  "Store-confirmed offers": "Store-confirmed offers",
+  "Coupon codes and discounts are shared only after the store confirms the current offer. Ask us which coupon applies to your selected kit.": "Coupon codes aur discounts store ke current offer confirm karne ke baad hi share hote hain. Apni selected kit ke liye applicable coupon poochhein.",
+  "Verified before checkout": "Checkout se pehle verified",
+  "The store confirms coupon validity, eligible kits and final payable amount on WhatsApp.": "Store WhatsApp par coupon validity, eligible kits aur final payable amount confirm karta hai.",
+  "No expired code surprises": "Expired code ka surprise nahi",
+  "We do not display made-up coupon codes or discounts that have not been approved by the store.": "Hum fake coupon codes ya store se approve na hui discounts display nahi karte.",
+  "Explore Top Deals": "Top Deals dekhein"
 });
 
 function translateText(value: string, dictionary: Record<string, string> = translations) {
