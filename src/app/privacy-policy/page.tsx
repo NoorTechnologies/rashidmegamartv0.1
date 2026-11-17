@@ -28,21 +28,21 @@ export default function PrivacyPolicyPage() {
   return (
     <main className="min-h-screen bg-[#FFFDF8] px-4 py-10 text-[#30251F] sm:px-6 sm:py-14">
       <article className="mx-auto max-w-3xl">
-        <Link href="/" className="inline-flex items-center gap-2 text-sm font-semibold text-[#A83250] transition hover:text-[#87263F]">
+        <Link href="/" className="inline-flex items-center gap-2 text-sm font-semibold text-[#D71920] transition hover:text-[#B5121B]">
           <ArrowLeft size={16} /> Back to Home
         </Link>
-        <div className="mt-8 rounded-3xl border border-[#A83250]/10 bg-white p-6 shadow-[0_16px_50px_rgba(70,40,30,0.05)] sm:p-10">
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-[#F8E8ED] text-[#A83250]">
+        <div className="mt-8 rounded-3xl border border-[#D71920]/10 bg-white p-6 shadow-[0_16px_50px_rgba(70,40,30,0.05)] sm:p-10">
+          <div className="flex size-12 items-center justify-center rounded-2xl bg-[#FFF0F0] text-[#D71920]">
             <ShieldCheck size={24} />
           </div>
           <p className="mt-5 text-xs font-extrabold uppercase tracking-[0.16em] text-[#A47A2C]">Rashid Mega Mart</p>
-          <h1 className="mt-2 text-3xl font-black tracking-tight text-[#A83250] sm:text-4xl">Privacy Policy</h1>
+          <h1 className="mt-2 text-3xl font-black tracking-tight text-[#D71920] sm:text-4xl">Privacy Policy</h1>
           <p className="mt-3 text-sm leading-7 text-[#76665C]">
             Your privacy matters to us. This page explains, in simple terms, how we handle information you choose to share when you contact our store.
           </p>
           <div className="mt-8 space-y-7">
             {sections.map((section, index) => (
-              <section key={section.title} className="border-t border-[#A83250]/10 pt-6">
+              <section key={section.title} className="border-t border-[#D71920]/10 pt-6">
                 <h2 className="text-base font-extrabold text-[#30251F]">{index + 1}. {section.title}</h2>
                 <p className="mt-2 text-sm leading-7 text-[#76665C]">{section.body}</p>
               </section>
