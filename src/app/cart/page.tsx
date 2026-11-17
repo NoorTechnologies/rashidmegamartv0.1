@@ -181,11 +181,11 @@ export default function CartPage() {
         itemText,
         "",
         "*Listed Kit Base Total: " + formatPrice(orderSubtotal) + "*",
-        "Extra/custom item prices and final customized kit price: Store confirmation pending",
+        "Extra/custom item prices and final customized kit price: Owner will confirm on WhatsApp",
         "Delivery charges: Please confirm",
                 cleanNote ? "Order note: " + cleanNote : "",
         "",
-        "Please confirm customized kit contents, extra-item prices, item availability, delivery address, payment method, delivery charges and final payable amount.",
+        "Please share your best possible final price for this order, confirm customized kit contents, extra-item prices, availability, delivery address, payment method and delivery charges.",
       ].filter(Boolean).join("\n");
 
       const whatsappUrl =
@@ -500,53 +500,54 @@ export default function CartPage() {
 
           {/* RIGHT: ORDER SUMMARY + CHECKOUT */}
           <aside className="min-w-0 space-y-4 lg:sticky lg:top-5">
-            {/* Order Summary */}
-            <section className="rounded-2xl border border-[#E8DFD1] bg-white p-3.5 shadow-[0_3px_18px_rgba(40,30,20,0.04)] sm:p-5">
-              <div className="flex items-center justify-between">
-                <h2 className="text-base font-extrabold text-[#202124] sm:text-lg">
-                  Order Summary
-                </h2>
-
-                <span className="rounded-full bg-[#F1EBDD] px-2.5 py-1 text-[10px] font-extrabold text-[#168447]">
-                  {totalItems} ITEMS
-                </span>
-              </div>
-
-              <div className="mt-5 space-y-3.5 text-xs sm:text-sm">
-                <div className="flex items-center justify-between gap-3 text-[#686868]">
-                  <span>Listed Kit Base Price</span>
-                  <span className="font-bold text-[#202124]">
-                    {formatPrice(subtotal)}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between gap-3 text-[#686868]">
-                  <span>Delivery Charge</span>
-                  <span className="text-right font-bold text-[#806000]">
-                    To be confirmed
-                  </span>
-                </div>
-
-                <div className="border-t border-dashed border-[#E8DFD1] pt-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-extrabold text-[#202124]">
-                        Current Base Total
-                      </p>
-                      <p className="mt-1 text-[10px] text-[#686868]">
-                        Customized price not confirmed
-                      </p>
-                    </div>
-
-                    <span className="text-xl font-black tracking-tight text-[#800020]">
-                      {formatPrice(subtotal)}
-                    </span>
+            {/* Live Kit Price Calculator */}
+            <section className="overflow-hidden rounded-2xl border border-[#BBDCC5] bg-white shadow-[0_5px_22px_rgba(22,132,71,0.08)]">
+              <div className="bg-[linear-gradient(110deg,#106B38_0%,#168447_65%,#239653_100%)] px-4 py-3.5 text-white">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[9px] font-black uppercase tracking-[0.16em] text-white/75">Rashid Mega Mart</p>
+                    <h2 className="mt-0.5 text-base font-black sm:text-lg">Live Kit Calculator</h2>
                   </div>
-
-                  <p className="mt-3 rounded-lg bg-[#FAF7EF] p-2.5 text-[10px] leading-5 text-[#686868]">
-                    Final payable amount will be confirmed by the store after
-                    checking product availability and delivery charges.
-                  </p>
+                  <span className="rounded-full border border-white/25 bg-white/15 px-2.5 py-1 text-[9px] font-black">{totalItems} KIT {totalItems === 1 ? "UNIT" : "UNITS"}</span>
+                </div>
+              </div>
+              <div className="space-y-3 p-3.5 sm:p-4">
+                <div className="space-y-2.5">
+                  {items.map((item) => (
+                    <div key={item.id} className="flex items-start justify-between gap-3 text-xs">
+                      <div className="min-w-0">
+                        <p className="break-words font-extrabold text-[#202124]">{item.name}</p>
+                        <p className="mt-0.5 text-[10px] font-semibold text-[#68766B]">{formatPrice(item.price)} × {item.quantity} kit {item.quantity === 1 ? "unit" : "units"}</p>
+                      </div>
+                      <p className="shrink-0 font-black tabular-nums text-[#106B38]">{formatPrice(item.price * item.quantity)}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="rounded-xl border border-dashed border-[#BBDCC5] bg-[#F0F8F1] p-3">
+                  <div className="flex items-center justify-between gap-3 text-xs">
+                    <span className="font-bold text-[#42664B]">Kit base total</span>
+                    <span className="font-black tabular-nums text-[#174D2B]">{formatPrice(subtotal)}</span>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between gap-3 text-[10px]">
+                    <span className="font-semibold text-[#68766B]">Extra / customized items</span>
+                    <span className="font-extrabold text-[#806000]">Owner quote pending</span>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between gap-3 border-t border-[#CDE5D2] pt-2.5">
+                    <div>
+                      <p className="text-sm font-black text-[#174D2B]">Current calculated total</p>
+                      <p className="mt-0.5 text-[9px] text-[#42664B]">Kit price × kit quantity</p>
+                    </div>
+                    <p className="text-2xl font-black tracking-tight tabular-nums text-[#106B38]">{formatPrice(subtotal)}</p>
+                  </div>
+                </div>
+                <p className="text-[10px] leading-4 text-[#68766B]">Quantity buttons recalculate this total instantly. Editing quantities inside a kit changes your item request, not the fixed bundle price.</p>
+                <div className="rounded-xl border border-[#BBDCC5] bg-[linear-gradient(120deg,#EAF5EC_0%,#F7FBF7_100%)] p-3">
+                  <p className="text-xs font-black text-[#106B38]">Ek kit mein zaroori samaan, ek saath smart deal mein.</p>
+                  <p className="mt-1 text-[10px] leading-4 text-[#42664B]">Alag-alag kharidne se pehle apna total compare karein. Aapke customized order ka best possible final price Rashid Mega Mart ke owner WhatsApp par confirm karenge.</p>
+                </div>
+                <div className="flex items-center justify-between gap-3 border-t border-[#E8DFD1] pt-3 text-xs">
+                  <span className="font-semibold text-[#686868]">Delivery charge</span>
+                  <span className="font-bold text-[#806000]">WhatsApp par confirm</span>
                 </div>
               </div>
             </section>
