@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Minus, Plus, ShoppingCart, Trash2, PlusCircle, Sparkles, BadgeCheck, Tag, Package } from "lucide-react";
 import type { GroceryKit } from "@/data/kits";
 import { kits } from "@/data/kits";
-import { estimateGroceryLines } from "@/data/grocery-rates";
+import { estimateGroceryLines, isValidGroceryQuantity } from "@/data/grocery-rates";
 import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
 
@@ -60,6 +60,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
     const name = newItem.trim();
     if (!name) return setError("Item ka naam likhein.");
     if (name.length > 70 || newQuantity.trim().length > 24) return setError("Item ya quantity bahut lambi hai.");
+    if (!isValidGroceryQuantity(newQuantity.trim())) return setError("Quantity sahi likhein, jaise 500g, 1kg, 2 litre ya 1 piece.");
     if ([...contents, ...additions].some((item) => item.name.toLowerCase() === name.toLowerCase())) return setError("Ye item pehle se add hai.");
     saveContents(contents, [...additions, { name, quantity: newQuantity.trim() || "1" }]);
     setNewItem("");
