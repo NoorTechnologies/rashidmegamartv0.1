@@ -15,32 +15,32 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen w-full overflow-x-clip bg-[#FAF7EF]">
-      <section data-reveal className="relative overflow-hidden bg-gradient-to-b from-[#F1EBDD] via-white to-[#FAF7EF] px-3 pb-9 pt-6 text-[#202124] sm:px-5 sm:pb-12 sm:pt-10">
+      <section data-reveal-group className="relative overflow-hidden bg-gradient-to-b from-[#F1EBDD] via-white to-[#FAF7EF] px-3 pb-9 pt-6 text-[#202124] sm:px-5 sm:pb-12 sm:pt-10">
         <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#F7C928]/15 blur-[90px]" />
         <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#168447]/[0.07] blur-[90px]" />
         <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#F7C928]/40 bg-white/90 px-4 py-2 text-[10px] font-bold tracking-wide text-[#168447] shadow-sm sm:text-xs">
+          <span data-reveal-item className="inline-flex items-center gap-2 rounded-full border border-[#F7C928]/40 bg-white/90 px-4 py-2 text-[10px] font-bold tracking-wide text-[#168447] shadow-sm sm:text-xs">
             <Package size={15} /> MERI JAAN SPECIAL • BEST OFFERS
           </span>
           <div className="mt-5 flex flex-col items-center">
-            <Image src="/images/logo2.png" alt="Rashid Mega Mart Logo" width={110} height={110} priority className="h-20 w-20 object-contain sm:h-24 sm:w-24" />
-            <h1 className="mt-3 max-w-2xl text-2xl font-black leading-tight tracking-tight text-[#202124] sm:text-4xl md:text-5xl">
+            <Image data-reveal-item src="/images/logo2.png" alt="Rashid Mega Mart Logo" width={110} height={110} priority className="h-20 w-20 object-contain sm:h-24 sm:w-24" />
+            <h1 data-reveal-item className="mt-3 max-w-2xl text-2xl font-black leading-tight tracking-tight text-[#202124] sm:text-4xl md:text-5xl">
               Welcome to <span className="mt-1 block text-[#168447]">Rashid Mega Mart</span>
             </h1>
-            <p className="mt-3 max-w-md text-xs leading-6 text-[#686868] sm:text-sm">
+            <p data-reveal-item className="mt-3 max-w-md text-xs leading-6 text-[#686868] sm:text-sm">
               Thoughtfully packed grocery kits for your home, at great value.
             </p>
           </div>
-          <div className="relative mt-3 w-full max-w-[560px]">
+          <div data-reveal-item className="relative mt-3 w-full max-w-[560px]">
             <div className="pointer-events-none absolute inset-x-8 bottom-2 h-10 rounded-full bg-[#F7C928]/20 blur-2xl" />
             <div className="relative mx-auto h-[176px] w-full overflow-hidden rounded-2xl sm:h-[340px] sm:rounded-3xl">
               <Image src="/hero.png" alt="Rashid Mega Mart grocery kits" fill priority sizes="(max-width: 640px) 100vw, 560px" className="object-contain drop-shadow-[0_12px_22px_rgba(0,0,0,0.12)]" />
             </div>
           </div>
-          <Link href="/kits" className="rmm-button-primary mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-7 py-3 text-sm">
+          <Link data-reveal-item href="/kits" className="rmm-button-primary mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-7 py-3 text-sm">
             Explore Grocery Kits <ArrowRight size={18} />
           </Link>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] font-semibold text-[#686868] sm:text-xs">
+          <div data-reveal-item className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] font-semibold text-[#686868] sm:text-xs">
             <span className="flex items-center gap-2"><ShieldCheck size={16} className="text-[#168447]" /> Value-packed combos</span>
             <span className="flex items-center gap-2"><Truck size={16} className="text-[#168447]" /> Delivery on confirmation</span>
           </div>
@@ -59,7 +59,7 @@ export default function HomePage() {
       </section>
 
       {startingPrice !== null && (
-        <section className="mx-auto w-full max-w-7xl px-3 pt-3 min-[480px]:px-5 sm:pt-4 md:px-6 lg:px-8" aria-label="Grocery kit starting price">
+        <section data-reveal className="mx-auto w-full max-w-7xl px-3 pt-3 min-[480px]:px-5 sm:pt-4 md:px-6 lg:px-8" aria-label="Grocery kit starting price">
           <Link
             href="/kits"
             className="group flex min-h-12 items-center justify-between gap-3 rounded-xl border border-[#D8CBB8] bg-white px-3.5 py-2.5 shadow-sm transition hover:border-[#800020] hover:shadow-md sm:px-4"
@@ -105,7 +105,7 @@ export default function HomePage() {
           <p className="mx-auto mt-2 max-w-lg text-xs leading-5 text-[#686868] sm:text-sm">Market ke chakkar aur fixed grocery combos ki tension chhodiye. Apni zaroorat batayein, humse ghar baithe baat karein.</p>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+        <div data-reveal-group className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           {[
             { icon: Truck, problem: "Market Jaane Ka Time Nahi?", solution: "Ghar baithe WhatsApp par apni grocery list bhej dijiye.", tint: "bg-[#FAF0C8]", ink: "text-[#806000]" },
             { icon: Package, problem: "Ready Kit Ke Baare Mein Jankari Chahiye?", solution: "Available grocery kits ke products aur details WhatsApp par poochhein.", tint: "bg-[#F1EBDD]", ink: "text-[#168447]" },
@@ -114,7 +114,7 @@ export default function HomePage() {
           ].map((item) => {
             const Icon = item.icon;
             return (
-              <article key={item.problem} className="flex gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md sm:gap-4 sm:p-5">
+              <article data-reveal-item key={item.problem} className="flex gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md sm:gap-4 sm:p-5">
                 <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.tint} sm:h-12 sm:w-12`}>
                   <Icon size={21} className={item.ink} />
                 </div>
