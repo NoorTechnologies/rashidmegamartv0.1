@@ -416,3 +416,25 @@ video {
 }
 
 
+
+
+/* Subtle interaction polish for grocery rows and touch surfaces. */
+.rmm-grocery-row {
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .rmm-grocery-row:hover { background-color: #FAF7EF; }
+}
+.rmm-customizer button:not(:disabled),
+.rmm-customizer a,
+.rmm-customizer input {
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-duration: .18s;
+  transition-timing-function: ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rmm-grocery-row,
+  .rmm-customizer button,
+  .rmm-customizer a,
+  .rmm-customizer input { transition: none !important; }
+}
