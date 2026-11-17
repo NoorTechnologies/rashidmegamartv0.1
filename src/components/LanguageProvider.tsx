@@ -409,6 +409,11 @@ Object.assign(translations, {
   "Explore Top Deals": "टॉप डील देखें"
 });
 
+Object.assign(translations, {
+  "MERI JAAN SPECIAL • BEST OFFERS": "मेरी जान स्पेशल • बेहतरीन ऑफर",
+  "BEST OFFER · KITS STARTING AT": "खास ऑफर · किट की शुरुआती कीमत"
+});
+
 const hindiTranslations = { ...translations };
 
 const hinglishTranslations: Record<string, string> = {
@@ -570,6 +575,8 @@ const hinglishTranslations: Record<string, string> = {
   "Current language:": "Abhi ki language:",
   "Switch to": "Badlein:",
 
+  "MERI JAAN SPECIAL • BEST OFFERS": "Meri jaan special • best offers",
+  "BEST OFFER · KITS STARTING AT": "Special offer · Kits ki starting price",
 };
 
 const DEVANAGARI_CONSONANTS: Record<string, string> = {
