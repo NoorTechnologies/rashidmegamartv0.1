@@ -45,14 +45,14 @@ export function toHinglishCatalogue(value: string) {
     result = result.replaceAll(hindi, roman);
   }
   return result
-    .replace(/(\\d+)\\s*किलो/g, "$1 kilo")
-    .replace(/(\\d+)\\s*लीटर/g, "$1 litre")
-    .replace(/(\\d+)\\s*ग्राम/g, "$1 gram")
-    .replace(/(\\d+)\\s*पैकेट/g, "$1 packet")
-    .replace(/(\\d+)\\s*पीस/g, "$1 piece")
-    .replace(/(\\d+)\\s*पाउच/g, "$1 pouch")
-    .replace(/(\\d+)\\s*सेट/g, "$1 set")
-    .replace(/(\\d+)\\s*बोरी/g, "$1 bori");
+    .replace(/(\d+)\s*किलो/g, "$1 kilo")
+    .replace(/(\d+)\s*लीटर/g, "$1 litre")
+    .replace(/(\d+)\s*ग्राम/g, "$1 gram")
+    .replace(/(\d+)\s*पैकेट/g, "$1 packet")
+    .replace(/(\d+)\s*पीस/g, "$1 piece")
+    .replace(/(\d+)\s*पाउच/g, "$1 pouch")
+    .replace(/(\d+)\s*सेट/g, "$1 set")
+    .replace(/(\d+)\s*बोरी/g, "$1 bori");
 }
 
 const STORAGE_KEY = "rmm-language";
