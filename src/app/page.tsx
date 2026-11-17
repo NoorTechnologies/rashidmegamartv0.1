@@ -14,12 +14,12 @@ export default function HomePage() {
     : null;
 
   return (
-    <main className="min-h-screen w-full overflow-x-clip bg-[#FFF9F6]">
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#FFF0F0] via-white to-[#FFF9F4] px-3 pb-9 pt-6 text-[#171717] sm:px-5 sm:pb-12 sm:pt-10">
-        <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#D4A84F]/15 blur-[90px]" />
+    <main className="min-h-screen w-full overflow-x-clip bg-[#FAF7EF]">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#F1EBDD] via-white to-[#FAF7EF] px-3 pb-9 pt-6 text-[#171717] sm:px-5 sm:pb-12 sm:pt-10">
+        <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#F7C928]/15 blur-[90px]" />
         <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#168447]/[0.07] blur-[90px]" />
         <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#D4A84F]/40 bg-white/90 px-4 py-2 text-[10px] font-bold tracking-wide text-[#168447] shadow-sm sm:text-xs">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#F7C928]/40 bg-white/90 px-4 py-2 text-[10px] font-bold tracking-wide text-[#168447] shadow-sm sm:text-xs">
             <Package size={15} /> MERI JAAN SPECIAL • BEST OFFERS
           </span>
           <div className="mt-5 flex flex-col items-center">
@@ -27,12 +27,12 @@ export default function HomePage() {
             <h1 className="mt-3 max-w-2xl text-2xl font-black leading-tight tracking-tight text-[#171717] sm:text-4xl md:text-5xl">
               Welcome to <span className="mt-1 block text-[#168447]">Rashid Mega Mart</span>
             </h1>
-            <p className="mt-3 max-w-md text-xs leading-6 text-[#6A7282] sm:text-sm">
+            <p className="mt-3 max-w-md text-xs leading-6 text-[#686868] sm:text-sm">
               Thoughtfully packed grocery kits for your home, at great value.
             </p>
           </div>
           <div className="relative mt-3 w-full max-w-[560px]">
-            <div className="pointer-events-none absolute inset-x-8 bottom-2 h-10 rounded-full bg-[#D4A84F]/20 blur-2xl" />
+            <div className="pointer-events-none absolute inset-x-8 bottom-2 h-10 rounded-full bg-[#F7C928]/20 blur-2xl" />
             <div className="relative mx-auto h-[176px] w-full overflow-hidden rounded-2xl sm:h-[340px] sm:rounded-3xl">
               <Image src="/hero.png" alt="Rashid Mega Mart grocery kits" fill priority sizes="(max-width: 640px) 100vw, 560px" className="object-contain drop-shadow-[0_12px_22px_rgba(0,0,0,0.12)]" />
             </div>
@@ -40,9 +40,9 @@ export default function HomePage() {
           <Link href="/kits" className="rmm-button-primary mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-7 py-3 text-sm">
             Explore Grocery Kits <ArrowRight size={18} />
           </Link>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] font-semibold text-[#6A7282] sm:text-xs">
-            <span className="flex items-center gap-2"><ShieldCheck size={16} className="text-[#138047]" /> Value-packed combos</span>
-            <span className="flex items-center gap-2"><Truck size={16} className="text-[#138047]" /> Delivery on confirmation</span>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] font-semibold text-[#686868] sm:text-xs">
+            <span className="flex items-center gap-2"><ShieldCheck size={16} className="text-[#168447]" /> Value-packed combos</span>
+            <span className="flex items-center gap-2"><Truck size={16} className="text-[#168447]" /> Delivery on confirmation</span>
           </div>
         </div>
       </section>
@@ -51,15 +51,15 @@ export default function HomePage() {
         <section className="mx-auto w-full max-w-7xl px-3 pt-3 min-[480px]:px-5 sm:pt-4 md:px-6 lg:px-8" aria-label="Grocery kit starting price">
           <Link
             href="/kits"
-            className="group flex min-h-12 items-center justify-between gap-3 rounded-xl border border-[#F2C8C9] bg-white px-3.5 py-2.5 shadow-sm transition hover:border-[#D98A99] hover:shadow-md sm:px-4"
+            className="group flex min-h-12 items-center justify-between gap-3 rounded-xl border border-[#D8CBB8] bg-white px-3.5 py-2.5 shadow-sm transition hover:border-[#800020] hover:shadow-md sm:px-4"
           >
             <span className="flex min-w-0 items-center gap-2.5">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#FFF0F2] text-[#168447]">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#F1EBDD] text-[#168447]">
                 <Package size={16} />
               </span>
               <span className="min-w-0">
                 <span className="block truncate text-[10px] font-black uppercase tracking-wide text-[#106B38] sm:text-xs">BEST OFFER · KITS STARTING AT</span>
-                <span className="block text-lg font-black leading-tight text-[#D71920] sm:text-2xl">₹{startingPrice.toLocaleString("en-IN")} <span className="text-[10px] font-bold text-[#6B7280] sm:text-xs">· {availableKits.length} kits to explore</span></span>
+                <span className="block text-lg font-black leading-tight text-[#800020] sm:text-2xl">₹{startingPrice.toLocaleString("en-IN")} <span className="text-[10px] font-bold text-[#686868] sm:text-xs">· {availableKits.length} kits to explore</span></span>
               </span>
             </span>
             <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-bold text-[#168447] sm:text-xs">
@@ -72,7 +72,7 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-7xl px-3 pb-10 pt-7 min-[480px]:px-5 sm:pb-14 sm:pt-10 md:px-6 lg:px-8">
         <div className="mb-5 flex items-end justify-between gap-3 sm:mb-6">
           <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#A47A2C] sm:text-xs">Smart shopping combos</p>
+            <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#806000] sm:text-xs">Smart shopping combos</p>
             <h2 className="mt-1 text-xl font-extrabold text-[#168447] sm:text-2xl">Our Grocery Kits</h2>
           </div>
           <Link href="/kits" className="inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#168447] transition hover:text-[#106B38] sm:text-xs">View All <ArrowRight size={15} /></Link>
@@ -83,25 +83,25 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6 text-center sm:p-8">
-            <Package className="mx-auto text-[#D4A84F]" size={30} />
-            <p className="mt-2 text-sm font-semibold text-[#6A7282]">Grocery kits will be available soon.</p>
+            <Package className="mx-auto text-[#F7C928]" size={30} />
+            <p className="mt-2 text-sm font-semibold text-[#686868]">Grocery kits will be available soon.</p>
           </div>
         )}
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-3 py-8 min-[480px]:px-5 sm:py-12 md:px-6 lg:px-8">
         <div className="mx-auto mb-6 max-w-2xl text-center sm:mb-8">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#A47A2C] sm:text-xs">Grocery Shopping, Made Easier</p>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#806000] sm:text-xs">Grocery Shopping, Made Easier</p>
           <h2 className="mt-2 text-2xl font-black tracking-tight text-[#168447] sm:text-3xl">Why Choose Us?</h2>
-          <p className="mx-auto mt-2 max-w-lg text-xs leading-5 text-[#6A7282] sm:text-sm">Market ke chakkar aur fixed grocery combos ki tension chhodiye. Apni zaroorat batayein, humse ghar baithe baat karein.</p>
+          <p className="mx-auto mt-2 max-w-lg text-xs leading-5 text-[#686868] sm:text-sm">Market ke chakkar aur fixed grocery combos ki tension chhodiye. Apni zaroorat batayein, humse ghar baithe baat karein.</p>
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           {[
-            { icon: Truck, problem: "Market Jaane Ka Time Nahi?", solution: "Ghar baithe WhatsApp par apni grocery list bhej dijiye.", tint: "bg-[#FFF4D6]", ink: "text-[#A47A2C]" },
-            { icon: Package, problem: "Ready Kit Ke Baare Mein Jankari Chahiye?", solution: "Available grocery kits ke products aur details WhatsApp par poochhein.", tint: "bg-[#FFF0F0]", ink: "text-[#168447]" },
-            { icon: Wallet, problem: "Budget Ka Rakhna Hai Dhyan?", solution: "Apne budget ke hisaab se available ready-made kits dekhein.", tint: "bg-[#E8F5EC]", ink: "text-[#138047]" },
-            { icon: ClipboardList, problem: "Monthly Grocery Manage Karna Mushkil?", solution: "Monthly needs ke liye available kits dekhein aur order details confirm karein.", tint: "bg-[#EAF1FF]", ink: "text-[#1877F2]" },
+            { icon: Truck, problem: "Market Jaane Ka Time Nahi?", solution: "Ghar baithe WhatsApp par apni grocery list bhej dijiye.", tint: "bg-[#FAF0C8]", ink: "text-[#806000]" },
+            { icon: Package, problem: "Ready Kit Ke Baare Mein Jankari Chahiye?", solution: "Available grocery kits ke products aur details WhatsApp par poochhein.", tint: "bg-[#F1EBDD]", ink: "text-[#168447]" },
+            { icon: Wallet, problem: "Budget Ka Rakhna Hai Dhyan?", solution: "Apne budget ke hisaab se available ready-made kits dekhein.", tint: "bg-[#EAF3E9]", ink: "text-[#168447]" },
+            { icon: ClipboardList, problem: "Monthly Grocery Manage Karna Mushkil?", solution: "Monthly needs ke liye available kits dekhein aur order details confirm karein.", tint: "bg-[#F1EBDD]", ink: "text-[#1877F2]" },
           ].map((item) => {
             const Icon = item.icon;
             return (
@@ -110,17 +110,17 @@ export default function HomePage() {
                   <Icon size={21} className={item.ink} />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-sm font-extrabold text-[#30251F] sm:text-base">{item.problem}</h3>
-                  <p className="mt-1.5 text-xs leading-5 text-[#6A7282] sm:text-sm">{item.solution}</p>
+                  <h3 className="text-sm font-extrabold text-[#202124] sm:text-base">{item.problem}</h3>
+                  <p className="mt-1.5 text-xs leading-5 text-[#686868] sm:text-sm">{item.solution}</p>
                 </div>
               </article>
             );
           })}
         </div>
 
-        <div className="mt-4 rounded-xl border border-[#E9E1DA] bg-white px-3 py-3 text-center sm:mt-7 sm:rounded-2xl sm:px-6 sm:py-6">
-          <p className="text-base font-black text-[#30251F] sm:text-lg">Apni Zaroorat Ki Kit Khud Banayein</p>
-          <p className="mx-auto mt-1.5 max-w-lg text-xs leading-5 text-[#6A7282] sm:text-sm">Ready-made kit ke items badlein, quantity set karein aur apni pasand ke grocery items add karein.</p>
+        <div className="mt-4 rounded-xl border border-[#E8DFD1] bg-white px-3 py-3 text-center sm:mt-7 sm:rounded-2xl sm:px-6 sm:py-6">
+          <p className="text-base font-black text-[#202124] sm:text-lg">Apni Zaroorat Ki Kit Khud Banayein</p>
+          <p className="mx-auto mt-1.5 max-w-lg text-xs leading-5 text-[#686868] sm:text-sm">Ready-made kit ke items badlein, quantity set karein aur apni pasand ke grocery items add karein.</p>
           <div className="mt-4 flex flex-col justify-center gap-2 min-[420px]:flex-row">
             <a href="https://wa.me/918962531603?text=Namaste%2C%20mujhe%20apni%20grocery%20kit%20customize%20karni%20hai." target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#106B38] sm:text-sm">
               <Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} className="h-5 w-5 object-contain" /> WhatsApp Par Poochhein
