@@ -199,11 +199,11 @@ export default function CartPage() {
     return (
       <main className="flex min-h-[72vh] items-center justify-center bg-[#FAF8F5] px-4 py-12 pb-28">
         <div className="w-full max-w-md text-center">
-          <div className="mx-auto mb-6 flex size-24 items-center justify-center rounded-[30px] bg-[#F8E8ED] text-[#A83250] shadow-sm">
+          <div className="mx-auto mb-6 flex size-24 items-center justify-center rounded-[30px] bg-[#FFF0F0] text-[#D71920] shadow-sm">
             <ShoppingBag size={42} strokeWidth={1.7} />
           </div>
 
-          <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#A83250]">
+          <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#D71920]">
             Rashid Mega Mart
           </p>
 
@@ -226,7 +226,7 @@ export default function CartPage() {
           <div className="mt-5">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-[#77716C] transition hover:text-[#A83250]"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#77716C] transition hover:text-[#D71920]"
             >
               <ArrowLeft size={16} />
               Back to Home
@@ -243,7 +243,7 @@ export default function CartPage() {
         {/* Page Header */}
         <header className="mb-4 flex flex-col gap-3 min-[430px]:flex-row min-[430px]:items-center min-[430px]:justify-between sm:mb-8">
           <div>
-            <p className="mb-1.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#A83250] sm:text-xs">
+            <p className="mb-1.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#D71920] sm:text-xs">
               Rashid Mega Mart
             </p>
 
@@ -336,7 +336,7 @@ export default function CartPage() {
                         </p>
                       )}
 
-                      <p className="mt-1.5 text-xs font-extrabold text-[#A83250] sm:text-sm">
+                      <p className="mt-1.5 text-xs font-extrabold text-[#D71920] sm:text-sm">
                         {formatPrice(item.price)}
                       </p>
                       {item.kitContents && (
@@ -350,7 +350,7 @@ export default function CartPage() {
                       )}
                       {item.requestedItems && item.requestedItems.length > 0 && (
                         <div className="mt-2 rounded-lg border border-[#E9E1DA] bg-white p-2">
-                          <p className="text-[10px] font-bold text-[#A83250]">Extra items · price confirmation pending</p>
+                          <p className="text-[10px] font-bold text-[#D71920]">Extra items · price confirmation pending</p>
                           {item.requestedItems.map((entry, index) => <p key={index} className="mt-0.5 text-[10px] text-[#81766F]">{entry.name} — {entry.quantity}</p>)}
                         </div>
                       )}
@@ -409,7 +409,7 @@ export default function CartPage() {
             {removedItem && (
               <div role="status" className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[#E8D7DC] bg-[#FFF8FA] px-3 py-2.5 text-xs">
                 <span className="min-w-0 truncate text-[#6F3545]">Removed {removedItem.name}</span>
-                <button type="button" onClick={handleUndoRemove} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 font-extrabold text-[#A83250] hover:bg-[#F8E8ED]"><Undo2 size={14} /> Undo</button>
+                <button type="button" onClick={handleUndoRemove} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 font-extrabold text-[#D71920] hover:bg-[#FFF0F0]"><Undo2 size={14} /> Undo</button>
               </div>
             )}
 
@@ -441,7 +441,7 @@ export default function CartPage() {
                   Order Summary
                 </h2>
 
-                <span className="rounded-full bg-[#F8E8ED] px-2.5 py-1 text-[10px] font-extrabold text-[#A83250]">
+                <span className="rounded-full bg-[#FFF0F0] px-2.5 py-1 text-[10px] font-extrabold text-[#D71920]">
                   {totalItems} ITEMS
                 </span>
               </div>
@@ -472,7 +472,7 @@ export default function CartPage() {
                       </p>
                     </div>
 
-                    <span className="text-xl font-black tracking-tight text-[#A83250]">
+                    <span className="text-xl font-black tracking-tight text-[#D71920]">
                       {formatPrice(subtotal)}
                     </span>
                   </div>
@@ -492,7 +492,7 @@ export default function CartPage() {
             >
               <div>
                 <div className="flex items-center gap-2">
-                  <div className="flex size-8 items-center justify-center rounded-lg bg-[#F8E8ED] text-[#A83250]">
+                  <div className="flex size-8 items-center justify-center rounded-lg bg-[#FFF0F0] text-[#D71920]">
                     <ShoppingBag size={16} />
                   </div>
 
@@ -530,7 +530,7 @@ export default function CartPage() {
                       setFormError("");
                     }}
                     placeholder="Enter your full name"
-                    className="min-h-12 w-full rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm"
+                    className="min-h-12 w-full rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#D71920] focus:ring-2 focus:ring-[#D71920]/10 sm:px-4 sm:text-sm"
                   />
                 </div>
 
@@ -559,7 +559,7 @@ export default function CartPage() {
                       setFormError("");
                     }}
                     placeholder="10-digit mobile number"
-                    className="min-h-12 w-full rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm"
+                    className="min-h-12 w-full rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#D71920] focus:ring-2 focus:ring-[#D71920]/10 sm:px-4 sm:text-sm"
                   />
                 </div>
 
@@ -585,7 +585,7 @@ export default function CartPage() {
                       setFormError("");
                     }}
                     placeholder="House no., street, area and landmark"
-                    className="min-h-24 w-full resize-y rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm"
+                    className="min-h-24 w-full resize-y rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#D71920] focus:ring-2 focus:ring-[#D71920]/10 sm:px-4 sm:text-sm"
                   />
                 </div>
               </div>
@@ -593,7 +593,7 @@ export default function CartPage() {
               {/* Optional delivery note */}
               <div>
                 <label htmlFor="orderNote" className="mb-1.5 block text-xs font-bold text-[#554D47]">Order Note (Optional)</label>
-                <textarea id="orderNote" value={orderNote} onChange={(event) => setOrderNote(event.target.value.slice(0, 240))} maxLength={240} rows={2} placeholder="Any delivery instructions? (e.g. call before arrival)" className="min-h-20 w-full resize-y rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm" />
+                <textarea id="orderNote" value={orderNote} onChange={(event) => setOrderNote(event.target.value.slice(0, 240))} maxLength={240} rows={2} placeholder="Any delivery instructions? (e.g. call before arrival)" className="min-h-20 w-full resize-y rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#D71920] focus:ring-2 focus:ring-[#D71920]/10 sm:px-4 sm:text-sm" />
                 <p className="mt-1 text-right text-[10px] text-[#A09890]">{orderNote.length}/240</p>
               </div>
 
@@ -610,7 +610,7 @@ export default function CartPage() {
                     aria-pressed={paymentMethod === "COD"}
                     className={`min-h-[76px] rounded-xl border p-3 text-left transition active:scale-[0.99] ${
                       paymentMethod === "COD"
-                        ? "border-[#A83250] bg-[#FDF6F8] ring-1 ring-[#A83250]/10"
+                        ? "border-[#D71920] bg-[#FDF6F8] ring-1 ring-[#D71920]/10"
                         : "border-[#EAE4DE] bg-white hover:border-[#D8C6CB]"
                     }`}
                   >
@@ -623,7 +623,7 @@ export default function CartPage() {
                     </span>
 
                     {paymentMethod === "COD" && (
-                      <span className="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-[#A83250]">
+                      <span className="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-[#D71920]">
                         <CheckCircle2 size={12} />
                         Selected
                       </span>
@@ -636,7 +636,7 @@ export default function CartPage() {
                     aria-pressed={paymentMethod === "UPI"}
                     className={`min-h-[76px] rounded-xl border p-3 text-left transition active:scale-[0.99] ${
                       paymentMethod === "UPI"
-                        ? "border-[#A83250] bg-[#FDF6F8] ring-1 ring-[#A83250]/10"
+                        ? "border-[#D71920] bg-[#FDF6F8] ring-1 ring-[#D71920]/10"
                         : "border-[#EAE4DE] bg-white hover:border-[#D8C6CB]"
                     }`}
                   >
@@ -649,7 +649,7 @@ export default function CartPage() {
                     </span>
 
                     {paymentMethod === "UPI" && (
-                      <span className="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-[#A83250]">
+                      <span className="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-[#D71920]">
                         <CheckCircle2 size={12} />
                         Selected
                       </span>
