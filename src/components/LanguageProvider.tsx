@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-type Language = "en" | "hi";
+type Language = "en" | "hinglish" | "hi";
 
 const LanguageContext = createContext<Language>("en");
 const LanguageToggleContext = createContext<() => void>(() => {});
@@ -260,6 +260,8 @@ const translations: Record<string, string> = {
   "Hindi": "हिंदी",
 };
 
+const hindiTranslations = { ...translations };
+
 Object.assign(translations, {
   "Home": "Ghar", "Kits": "Kits", "Cart": "Cart", "Contact": "Sampark",
   "SMART GROCERY KITS": "Smart Grocery Kits",
@@ -312,14 +314,14 @@ const phraseReplacements = Object.entries(translations)
   .filter(([source]) => source.length > 3)
   .sort(([a], [b]) => b.length - a.length);
 
-function translateText(value: string) {
+function translateText(value: string, dictionary: Record<string, string> = translations) {
   const trimmed = value.trim();
   if (!trimmed) return value;
-  const exact = translations[trimmed];
+  const exact = dictionary[trimmed];
   if (exact) return value.replace(trimmed, exact);
 
   let result = value;
-  for (const [source, target] of phraseReplacements) {
+  for (const [source, target] of Object.entries(dictionary).filter(([source]) => source.length > 3).sort(([a], [b]) => b.length - a.length)) {
     if (result.includes(source)) result = result.replaceAll(source, target);
   }
   result = result.replace(/(\d+) WALI KIT/gi, "$1 वाली किट");
@@ -352,7 +354,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const current = node.nodeValue ?? "";
       const record = textOriginals.current.get(node);
       const original = record && current === record.translated ? record.original : current;
-      const translated = nextLanguage === "hi" ? translateText(original) : original;
+      const translated = nextLanguage === "en" ? original : translateText(original, nextLanguage === "hi" ? hindiTranslations : translations);
       textOriginals.current.set(node, { original, translated });
       if (current !== translated) node.nodeValue = translated;
     }
@@ -375,13 +377,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    document.documentElement.lang = nextLanguage === "hi" ? "hi-Latn" : "en-IN";
+    document.documentElement.lang = nextLanguage === "hi" ? "hi-IN" : nextLanguage === "hinglish" ? "hi-Latn" : "en-IN";
   }, []);
 
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (saved === "hi" || saved === "en") setLanguage(saved);
+      if (saved === "hi" || saved === "hinglish" || saved === "en") setLanguage(saved);
     } catch {
       // Keep English when browser storage is unavailable.
     }
@@ -401,7 +403,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [language, applyLanguage]);
 
   const toggleLanguage = () => {
-    const next: Language = language === "en" ? "hi" : "en";
+    const next: Language = language === "en" ? "hinglish" : language === "hinglish" ? "hi" : "en";
     setLanguage(next);
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
