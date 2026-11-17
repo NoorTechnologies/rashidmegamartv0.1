@@ -121,10 +121,6 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
 
       {/* KIT DETAILS */}
       <div className="flex min-w-0 flex-1 flex-col p-2 sm:p-4">
-        <p className="mb-1.5 truncate text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#A47A2C] sm:text-[10px]">
-          {kit.category}
-        </p>
-
         <Link href={`/kits/${kit.id}`}>
           <h3 className="line-clamp-2 min-h-9 text-[12px] font-extrabold leading-[18px] text-[#30251F] transition-colors group-hover:text-[#A83250] sm:min-h-11 sm:text-[15px] sm:leading-5">
             {kit.name}
