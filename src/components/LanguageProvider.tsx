@@ -280,11 +280,25 @@ Object.assign(translations, {
   "Reset": "Reset",
   "Customize": "Customize Karein",
   "Your cart is empty": "Aapka cart abhi khaali hai",
-  "Explore Grocery Kits": "Grocery Kits Dekhein",
   "Your suggestion matters": "Aapka Suggestion Important Hai",
   "Your name": "Aapka Naam",
   "Add item": "Item Add Karein",
-  "You may also need": "Ye Items Bhi Kaam Aa Sakte Hain"
+  "You may also need": "Ye Items Bhi Kaam Aa Sakte Hain",
+  "Your cart": "Aapka Cart",
+  "Items in this kit": "Is Kit Mein Items",
+  "Your kit items": "Aapki Kit Ke Items",
+  "You may also need": "Ye Items Bhi Kaam Aa Sakte Hain",
+  "Add to cart": "Cart Mein Add Karein",
+  "Proceed to checkout": "Order Aage Badhaayein",
+  "Order summary": "Order Summary",
+  "Subtotal": "Subtotal",
+  "Continue shopping": "Shopping Jaari Rakhein",
+  "Back to Kits": "Kits Par Wapas Jayein",
+  "Special Kit Price": "Special Kit Price",
+  "BEST OFFER PRICE": "BEST OFFER PRICE",
+  "SPECIAL KIT OFFER": "SPECIAL KIT OFFER",
+  "items ready for checkout": "items checkout ke liye ready",
+  "Grocery kits will be available soon.": "Grocery kits jald available hongi.",
 });
 
 const phraseReplacements = Object.entries(translations)
