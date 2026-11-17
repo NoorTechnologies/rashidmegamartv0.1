@@ -9,12 +9,12 @@ import { useCart } from "@/context/CartContext";
 type KitLine = { name: string; quantity: string };
 
 function splitKitLine(value: string): KitLine {
-  const match = value.match(/^(.+?)\\s*[-–]\\s*(.+)$/);
+  const match = value.match(/^(.+?)\s*[-–]\s*(.+)$/);
   return match ? { name: match[1].trim(), quantity: match[2].trim() } : { name: value.trim(), quantity: "1" };
 }
 
 function adjustQuantity(value: string, delta: number) {
-  const match = value.match(/^(\\d+(?:\\.\\d+)?)(.*)$/);
+  const match = value.match(/^(\d+(?:\\.\d+)?)(.*)$/);
   if (!match) return delta > 0 ? "2" : "1";
   const next = Math.max(1, Number(match[1]) + delta);
   return String(next) + match[2];
@@ -22,7 +22,8 @@ function adjustQuantity(value: string, delta: number) {
 
 export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   const { addToCart, updateKitCustomization, items, isLoaded } = useCart();
-  const [contents, setContents] = useState<KitLine[]>(() => kit.items.map(splitKitLine));
+  const existingCartItem = items.find((item) => item.id === kit.id);
+  const [contents, setContents] = useState<KitLine[]>(() => existingCartItem?.kitContents ?? kit.items.map(splitKitLine));
   const [newItem, setNewItem] = useState("");
   const [newQuantity, setNewQuantity] = useState("1");
   const [error, setError] = useState("");
@@ -31,7 +32,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
     () => Array.from(new Set(kits.flatMap((entry) => entry.items.map((line) => splitKitLine(line).name)))).sort((a, b) => a.localeCompare(b)),
     []
   );
-  const requestedItems = items.find((item) => item.id === kit.id)?.requestedItems ?? [];
+  const requestedItems = existingCartItem?.requestedItems ?? [];
 
   const saveContents = (next: KitLine[], additions = requestedItems) => {
     setContents(next);
@@ -58,7 +59,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
     setError("");
   };
 
-  const cartItem = items.find((item) => item.id === kit.id);
+  const cartItem = existingCartItem;
   const handleAddToCart = () => {
     if (!isLoaded || !kit.isAvailable) return;
     if (!cartItem) {
