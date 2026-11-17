@@ -14,27 +14,13 @@ import {
 import KitCard from "@/components/KitCard";
 import { kits as allKits, type GroceryKit } from "@/data/kits";
 
-type AvailabilityFilter = "all" | "available" | "unavailable";
 type SortOption = "featured" | "price-low" | "price-high" | "name";
 
 export default function KitsPage() {
   const kits = allKits;
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<AvailabilityFilter>("all");
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState<SortOption>("featured");
-
-  const kitCategories = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          kits
-            .map((kit) => kit.category?.trim())
-            .filter((category): category is string => Boolean(category))
-        )
-      ),
-    [kits]
-  );
 
   const filteredKits = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -97,19 +83,17 @@ export default function KitsPage() {
         }
       }
     });
-  }, [kits, search, filter, selectedCategory, sortBy]);
+  }, [kits, search, filter, sortBy]);
 
   const clearFilters = () => {
     setSearch("");
     setFilter("all");
-    setSelectedCategory("All");
     setSortBy("featured");
   };
 
   const hasActiveFilters =
     search.trim() !== "" ||
     filter !== "all" ||
-    selectedCategory !== "All" ||
     sortBy !== "featured";
 
   return (
@@ -246,33 +230,6 @@ export default function KitsPage() {
             ))}
           </div>
         </div>
-
-        {/* CATEGORY FILTERS */}
-        {kitCategories.length > 0 && (
-          <div className="mt-4 sm:mt-5">
-            <p className="mb-2 text-[10px] font-extrabold uppercase tracking-wider text-[#819087] sm:text-xs">
-              Browse Categories
-            </p>
-
-            <div className="-mx-3 flex gap-2 overflow-x-auto px-3 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0">
-              {["All", ...kitCategories].map((category) => (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => setSelectedCategory(category)}
-                  aria-pressed={selectedCategory === category}
-                  className={`min-h-9 shrink-0 rounded-full border px-3.5 py-2 text-[10px] font-bold transition active:scale-95 sm:text-xs ${
-                    selectedCategory === category
-                      ? "border-[#168447] bg-[#E5F5E9] text-[#087039] shadow-sm"
-                      : "border-[#DFEEE3] bg-white text-[#53665A] hover:border-[#95D5B2] hover:bg-[#F0F8F1]"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* SORT AND RESULT COUNT */}
         <div className="mt-4 flex items-center justify-between gap-2 border-y border-[#E5ECE6] py-3 sm:mt-5">
