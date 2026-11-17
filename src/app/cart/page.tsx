@@ -117,7 +117,7 @@ export default function CartPage() {
           index: index + 1,
           type: "Grocery Kit",
           name: kit.name,
-          detail: kit.subtitle,
+          detail: [kit.subtitle, cartItem.kitContents?.length ? "Customized contents: " + cartItem.kitContents.map((entry) => entry.name + " (" + entry.quantity + ")").join(", ") : "", cartItem.requestedItems?.length ? "Extra items (price confirmation pending): " + cartItem.requestedItems.map((entry) => entry.name + " (" + entry.quantity + ")").join(", ") : ""].filter(Boolean).join("\\n"),
           quantity: cartItem.quantity,
           unitPrice: kit.price,
           lineTotal: kit.price * cartItem.quantity,
@@ -160,7 +160,7 @@ export default function CartPage() {
         "Payment preference: " + (paymentMethod === "COD" ? "Cash on Delivery" : "UPI (share verified details after confirmation)"),
         cleanNote ? "Order note: " + cleanNote : "",
         "",
-        "Please confirm item availability, delivery charges and final payable amount.",
+        "Please confirm customized kit contents, extra-item prices, item availability, delivery charges and final payable amount.",
       ].filter(Boolean).join("\n");
 
       const whatsappUrl =
@@ -338,6 +338,21 @@ export default function CartPage() {
                       <p className="mt-1.5 text-xs font-extrabold text-[#A83250] sm:text-sm">
                         {formatPrice(item.price)}
                       </p>
+                      {item.kitContents && (
+                        <div className="mt-2 rounded-lg bg-[#FCFAF8] p-2">
+                          <p className="text-[10px] font-bold text-[#62564E]">Customized kit · {item.kitContents.length} selected items</p>
+                          <ul className="mt-1 space-y-0.5 text-[10px] text-[#81766F]">
+                            {item.kitContents.slice(0, 8).map((entry, index) => <li key={index}>{entry.name} — {entry.quantity}</li>)}
+                            {item.kitContents.length > 8 && <li>+ {item.kitContents.length - 8} more</li>}
+                          </ul>
+                        </div>
+                      )}
+                      {item.requestedItems && item.requestedItems.length > 0 && (
+                        <div className="mt-2 rounded-lg border border-[#E9E1DA] bg-white p-2">
+                          <p className="text-[10px] font-bold text-[#A83250]">Extra items · price confirmation pending</p>
+                          {item.requestedItems.map((entry, index) => <p key={index} className="mt-0.5 text-[10px] text-[#81766F]">{entry.name} — {entry.quantity}</p>)}
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
