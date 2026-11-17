@@ -16,9 +16,10 @@ function splitKitLine(value: string): KitLine {
 }
 
 function adjustQuantity(value: string, delta: number) {
+  // Only adjust quantities supported by the calculator. This keeps mixed or
+  // descriptive catalogue values such as "2 फुल / 5 लीटर" unchanged.
+  if (!isValidGroceryQuantity(value)) return value;
   const match = value.match(/^(\d+(?:\.\d+)?)(.*)$/);
-  // Keep descriptive quantities (for example, "छोटी बोतल") intact;
-  // only numeric quantities can be safely incremented or decremented.
   if (!match) return value;
   const next = Math.max(1, Number(match[1]) + delta);
   return String(next) + match[2];
@@ -126,9 +127,9 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
                 <p className="mt-0.5 text-[9px] font-semibold text-[#686868]">Included in this kit</p>
               </div>
               <div className="flex shrink-0 items-center rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] p-0.5">
-                <button type="button" aria-label={`Decrease ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD]"><Minus size={13} /></button>
+                <button type="button" aria-label={`Decrease ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD] disabled:cursor-not-allowed disabled:opacity-35"><Minus size={13} /></button>
                 <input aria-label={`${line.name} quantity`} value={displayCatalogue(line.quantity)} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: event.target.value.slice(0, 24) } : entry))} className="w-[58px] bg-transparent text-center text-[10px] font-extrabold text-[#202124] outline-none sm:w-[68px]" />
-                <button type="button" aria-label={`Increase ${line.name}`} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD]"><Plus size={13} /></button>
+                <button type="button" aria-label={`Increase ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD] disabled:cursor-not-allowed disabled:opacity-35"><Plus size={13} /></button>
               </div>
               <button type="button" aria-label={`Remove ${line.name}`} onClick={() => saveContents(contents.filter((_, i) => i !== index))} className="flex size-8 shrink-0 items-center justify-center rounded-xl text-[#686868] transition hover:bg-[#F1EBDD] hover:text-[#800020]"><Trash2 size={14} /></button>
             </div>
