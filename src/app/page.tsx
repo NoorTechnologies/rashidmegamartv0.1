@@ -48,38 +48,24 @@ export default function HomePage() {
       </section>
 
       {startingPrice !== null && (
-        <section className="mx-auto w-full max-w-7xl px-3 pt-7 min-[480px]:px-5 sm:pt-10 md:px-6 lg:px-8" aria-label="Grocery kit offers">
-          <div className="relative isolate overflow-hidden rounded-[24px] bg-gradient-to-r from-[#8F1235] via-[#B51232] to-[#D62E46] px-5 py-6 text-white shadow-[0_18px_45px_rgba(143,18,53,0.22)] sm:rounded-[30px] sm:px-8 sm:py-8 lg:px-10">
-            <div className="pointer-events-none absolute -right-10 -top-20 h-56 w-56 rounded-full border-[28px] border-white/10" />
-            <div className="pointer-events-none absolute -bottom-24 right-1/3 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
-            <div className="relative flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
-              <div className="max-w-xl">
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/15 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-white sm:text-xs">
-                  <Package size={14} /> Rashid Mega Mart · Kit Offers
-                </span>
-                <h2 className="mt-3 text-2xl font-black leading-tight tracking-tight sm:text-3xl lg:text-4xl">
-                  Ghar ki zaroorat, ek hi kit mein!
-                </h2>
-                <p className="mt-2 max-w-lg text-xs leading-5 text-white/85 sm:text-sm sm:leading-6">
-                  Apni pasand ki grocery kit chunein — everyday essentials ek convenient combo mein.
-                </p>
-                <div className="mt-4 flex flex-wrap items-center gap-2">
-                  <span className="rounded-xl bg-white px-3.5 py-2 text-sm font-black text-[#9B1738] shadow-sm sm:text-base">
-                    Kits ₹{startingPrice.toLocaleString("en-IN")} se shuru
-                  </span>
-                  <span className="text-[10px] font-semibold text-white/80 sm:text-xs">
-                    {availableKits.length} kits available
-                  </span>
-                </div>
-              </div>
-              <Link
-                href="/kits"
-                className="inline-flex min-h-12 w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-extrabold text-[#9B1738] shadow-lg shadow-black/10 transition duration-300 hover:-translate-y-0.5 hover:bg-[#FFF1F3] active:translate-y-0 sm:w-auto"
-              >
-                Explore All Kits <ArrowRight size={17} />
-              </Link>
-            </div>
-          </div>
+        <section className="mx-auto w-full max-w-7xl px-3 pt-3 min-[480px]:px-5 sm:pt-4 md:px-6 lg:px-8" aria-label="Grocery kit starting price">
+          <Link
+            href="/kits"
+            className="group flex min-h-12 items-center justify-between gap-3 rounded-xl border border-[#F0D8DC] bg-white px-3.5 py-2.5 shadow-sm transition hover:border-[#D98A99] hover:shadow-md sm:px-4"
+          >
+            <span className="flex min-w-0 items-center gap-2.5">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#FFF0F2] text-[#B51232]">
+                <Package size={16} />
+              </span>
+              <span className="min-w-0">
+                <span className="block truncate text-xs font-bold text-[#30251F] sm:text-sm">Grocery kits starting at ₹{startingPrice.toLocaleString("en-IN")}</span>
+                <span className="block text-[10px] text-[#8A7778] sm:text-xs">{availableKits.length} kits to explore</span>
+              </span>
+            </span>
+            <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-bold text-[#A83250] sm:text-xs">
+              View kits <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </Link>
         </section>
       )}
 
