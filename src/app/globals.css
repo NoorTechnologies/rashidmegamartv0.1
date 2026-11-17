@@ -10,7 +10,7 @@
 }
 
 :root {
-  /* Primary Green Palette */
+  /* Primary Grocery Red Palette */
   --primary: #D71920;
   --primary-dark: #B5121B;
   --primary-light: #FFF0F0;
@@ -282,9 +282,9 @@ video {
   justify-content: center;
   gap: 0.5rem;
   min-height: 2.75rem;
-  border: 1px solid #800020;
+  border: 1px solid #B5121B;
   border-radius: 0.875rem;
-  background: linear-gradient(135deg, #8F1235 0%, #70001D 100%);
+  background: linear-gradient(135deg, #E21D2B 0%, #B5121B 100%);
   padding: 0.7rem 1.25rem;
   color: #fff;
   font-weight: 800;
@@ -293,7 +293,7 @@ video {
 }
 .rmm-button-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, #72001D 0%, #520016 100%);
-  border-color: #5C0018;
+  border-color: #A30F18;
   box-shadow: 0 8px 20px rgba(190, 16, 30, 0.26);
   transform: translateY(-1px);
 }
@@ -322,8 +322,8 @@ video {
   transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
 }
 .rmm-button-secondary:hover:not(:disabled) {
-  border-color: #800020;
-  background: #800020;
+  border-color: #D71920;
+  background: #D71920;
   color: #fff;
   box-shadow: 0 5px 14px rgba(128, 0, 32, .14);
 }
@@ -333,7 +333,7 @@ video {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #800020;
+  color: #D71920;
   transition: background .18s ease, color .18s ease;
 }
 .rmm-quantity-button:hover:not(:disabled) { background: #FFF0F0; color: #A30F18; }
