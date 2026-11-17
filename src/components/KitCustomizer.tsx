@@ -86,14 +86,14 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
               <Sparkles size={11} /> Build your own combo
             </span>
             <h2 id="customize-kit-title" className="mt-2 text-lg font-black leading-tight tracking-tight sm:text-2xl">Make This Kit Yours!</h2>
-            <p className="mt-1 max-w-md text-[11px] font-semibold leading-5 text-white/90 sm:text-sm">Keep what you need. Change quantities. Add your favourite groceries.</p>
+            <p className="mt-1 max-w-md text-[11px] font-semibold leading-5 text-white/90 sm:text-sm">Choose what you need, adjust quantities and add extra groceries.</p>
           </div>
           <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/15 shadow-inner sm:size-14">
             <Package size={25} />
           </div>
         </div>
         <div className="relative mt-4 flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[9px] font-black text-[#806000]"><Tag size={10} /> KIT SPECIAL</span>
+          <span className="inline-flex items-center gap-1 rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[9px] font-black text-[#806000]"><Tag size={10} /> KIT BUNDLE OFFER</span>
           <span className="text-[10px] font-bold text-white/90">{contents.length + additions.length} items selected</span>
         </div>
       </div>
@@ -102,7 +102,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
         <div className="mb-3 flex items-center justify-between gap-2">
           <div>
             <h3 className="text-sm font-black text-[#202124] sm:text-base">Your kit items</h3>
-            <p className="mt-0.5 text-[10px] font-medium text-[#686868] sm:text-xs">Edit each item before adding the kit to your cart.</p>
+            <p className="mt-0.5 text-[10px] font-medium text-[#686868] sm:text-xs">Your changes are saved as a custom request for the store.</p>
           </div>
           <span className="rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[10px] font-black text-[#806000]">{contents.length} included</span>
         </div>
@@ -156,19 +156,23 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           )}
         </div>
 
-        <div className="mt-4 grid grid-cols-[1fr_auto] items-center gap-3 rounded-2xl border border-[#D5E8D6] bg-[#EAF3E9] p-3">
-          <div className="flex min-w-0 items-start gap-2">
-            <BadgeCheck size={17} className="mt-0.5 shrink-0 text-[#168447]" />
-            <div>
-              <p className="text-[11px] font-black text-[#168447]">Your kit, your choice!</p>
-              <p className="mt-0.5 text-[10px] leading-4 text-[#686868]">Extra item prices and final customized total will be confirmed by our store on WhatsApp.</p>
+        <div className="mt-4 overflow-hidden rounded-2xl border border-[#BBDCC5] bg-[linear-gradient(135deg,#F0F8F1_0%,#E2F2E6_100%)]">
+          <div className="flex items-center justify-between gap-3 border-b border-[#CDE5D2] px-3 py-2.5">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#106B38]"><BadgeCheck size={14} /> Smart Kit Deal</span>
+            <span className="rounded-full bg-[#168447] px-2.5 py-1 text-[9px] font-black text-white">STORE PRICE</span>
+          </div>
+          <div className="grid grid-cols-[1fr_auto] items-center gap-3 p-3">
+            <div className="min-w-0">
+              <p className="text-xs font-black text-[#174D2B]">Compare the full basket before you buy.</p>
+              <p className="mt-1 text-[10px] leading-4 text-[#42664B]">Ready-made kit pricing keeps everyday essentials together. Ask us on WhatsApp for your best customized final quote.</p>
+            </div>
+            <div className="text-right">
+              <p className="text-[9px] font-bold uppercase tracking-wide text-[#42664B]">Kit base price</p>
+              <p className="text-xl font-black leading-tight text-[#106B38]">₹{kit.price.toLocaleString("en-IN")}</p>
+              <p className="text-[8px] font-semibold text-[#42664B]">per kit</p>
             </div>
           </div>
-          <div className="text-right">
-            <p className="text-[9px] font-bold uppercase tracking-wide text-[#686868]">Kit price</p>
-            <p className="text-lg font-black leading-tight text-[#800020]">₹{kit.price.toLocaleString("en-IN")}</p>
-            <p className="text-[8px] font-semibold text-[#686868]">listed base price</p>
-          </div>
+          <p className="border-t border-[#CDE5D2] bg-white/55 px-3 py-2 text-[9px] leading-4 text-[#42664B]">Changing quantities inside the kit updates your request. The base kit price stays fixed; extra-item rates and final amount are confirmed by the owner on WhatsApp.</p>
         </div>
 
         <button type="button" onClick={handleAddToCart} disabled={!isLoaded || !kit.isAvailable} className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(100deg,#168447_0%,#106B38_100%)] px-4 py-3 text-xs font-black text-white shadow-[0_7px_18px_rgba(22,132,71,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(22,132,71,0.28)] active:scale-[0.99] disabled:opacity-50 sm:text-sm">
