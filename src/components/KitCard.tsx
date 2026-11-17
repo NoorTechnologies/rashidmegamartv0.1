@@ -194,44 +194,14 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
             <ArrowUpRight size={12} />
           </Link>
 
-          <button
-            type="button"
-            onClick={handleAddToCart}
-            disabled={!kit.isAvailable || !isLoaded || Boolean(cartItem)}
-            aria-label={
-              !kit.isAvailable
-                ? `${kit.name} unavailable`
-                : !isLoaded
-                  ? "Loading cart"
-                  : cartItem
-                    ? `${kit.name}, ${cartItem.quantity} in cart`
-                    : `Add ${kit.name} to cart`
-            }
-            className={`inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg px-1.5 text-[10px] font-extrabold transition active:scale-95 disabled:cursor-not-allowed sm:min-h-10 sm:rounded-xl sm:text-xs ${
-              !kit.isAvailable || !isLoaded
-                ? "bg-gray-100 text-gray-400"
-                : cartItem
-                  ? "border border-[#138047]/20 bg-[#EDF8F0] text-[#138047]"
-                  : "rmm-button-primary"
-            }`}
+          <Link
+            href={`/kits/${kit.id}`}
+            aria-label={`Customize ${kit.name}`}
+            className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg bg-[#A83250] px-1.5 text-[10px] font-extrabold text-white transition hover:bg-[#87263F] sm:min-h-10 sm:rounded-xl sm:text-xs"
           >
-            {!kit.isAvailable ? (
-              "Unavailable"
-            ) : !isLoaded ? (
-              "Loading..."
-            ) : cartItem ? (
-              <>
-                <Check size={13} />
-                Added ({cartItem.quantity})
-              </>
-            ) : (
-              <>
-                <Plus size={13} />
-                <ShoppingCart size={12} />
-                Add
-              </>
-            )}
-          </button>
+            Customize
+            <ArrowUpRight size={12} />
+          </Link> </button>
         </div>
       </div>
     </article>
