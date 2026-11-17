@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Truck, MessageCircle, Package, Wallet, ClipboardList } from "lucide-react";
+import { ArrowRight, ShieldCheck, Truck, MessageCircle, Package, Wallet, ClipboardList, Tag, Ticket } from "lucide-react";
 import Footer from "@/components/Footer";
 import FeaturedKitsCarousel from "@/components/FeaturedKitsCarousel";
 import { kits } from "@/data/kits";
@@ -15,7 +15,7 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen w-full overflow-x-clip bg-[#FAF7EF]">
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#F1EBDD] via-white to-[#FAF7EF] px-3 pb-9 pt-6 text-[#202124] sm:px-5 sm:pb-12 sm:pt-10">
+      <section data-reveal className="relative overflow-hidden bg-gradient-to-b from-[#F1EBDD] via-white to-[#FAF7EF] px-3 pb-9 pt-6 text-[#202124] sm:px-5 sm:pb-12 sm:pt-10">
         <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#F7C928]/15 blur-[90px]" />
         <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#168447]/[0.07] blur-[90px]" />
         <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
@@ -47,6 +47,17 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-2.5 px-3 pt-4 min-[480px]:gap-3 min-[480px]:px-5 md:px-6 lg:px-8" data-reveal-group>
+        <Link href="/deals" data-reveal-item className="group flex min-h-[92px] items-center gap-2.5 rounded-2xl border border-[#D8CBB8] bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:min-h-[112px] sm:gap-3 sm:p-4">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E9] text-[#168447] sm:size-11"><Tag size={19} /></span>
+          <span className="min-w-0"><span className="block text-[9px] font-black uppercase tracking-wide text-[#168447] sm:text-[10px]">Top Deals</span><span className="mt-1 block text-xs font-extrabold leading-tight text-[#202124] sm:text-sm">Value-packed kits</span><span className="mt-1 inline-flex items-center gap-1 text-[9px] font-bold text-[#800020]">Explore <ArrowRight size={11} /></span></span>
+        </Link>
+        <Link href="/coupons" data-reveal-item className="group flex min-h-[92px] items-center gap-2.5 rounded-2xl border border-[#E8D99A] bg-[#FFF9E5] p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:min-h-[112px] sm:gap-3 sm:p-4">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#F7C928]/25 text-[#806000] sm:size-11"><Ticket size={19} /></span>
+          <span className="min-w-0"><span className="block text-[9px] font-black uppercase tracking-wide text-[#806000] sm:text-[10px]">Coupons</span><span className="mt-1 block text-xs font-extrabold leading-tight text-[#202124] sm:text-sm">Ask for active offers</span><span className="mt-1 inline-flex items-center gap-1 text-[9px] font-bold text-[#800020]">Check now <ArrowRight size={11} /></span></span>
+        </Link>
+      </section>
+
       {startingPrice !== null && (
         <section className="mx-auto w-full max-w-7xl px-3 pt-3 min-[480px]:px-5 sm:pt-4 md:px-6 lg:px-8" aria-label="Grocery kit starting price">
           <Link
@@ -69,7 +80,7 @@ export default function HomePage() {
         </section>
       )}
 
-      <section className="mx-auto w-full max-w-7xl px-3 pb-10 pt-7 min-[480px]:px-5 sm:pb-14 sm:pt-10 md:px-6 lg:px-8">
+      <section data-reveal className="mx-auto w-full max-w-7xl px-3 pb-10 pt-7 min-[480px]:px-5 sm:pb-14 sm:pt-10 md:px-6 lg:px-8">
         <div className="mb-5 flex items-end justify-between gap-3 sm:mb-6">
           <div>
             <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#806000] sm:text-xs">Smart shopping combos</p>
@@ -87,7 +98,7 @@ export default function HomePage() {
         )}
       </section>
 
-      <section className="mx-auto w-full max-w-7xl px-3 py-8 min-[480px]:px-5 sm:py-12 md:px-6 lg:px-8">
+      <section data-reveal className="mx-auto w-full max-w-7xl px-3 py-8 min-[480px]:px-5 sm:py-12 md:px-6 lg:px-8">
         <div className="mx-auto mb-6 max-w-2xl text-center sm:mb-8">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#806000] sm:text-xs">Grocery Shopping, Made Easier</p>
           <h2 className="mt-2 text-2xl font-black tracking-tight text-[#168447] sm:text-3xl">Why Choose Us?</h2>
