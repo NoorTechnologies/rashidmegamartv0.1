@@ -58,7 +58,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
       price: kit.price,
       image: kit.image,
       brand: "Rashid Mega Mart",
-      packSize: `Grocery Kit - ${kit.items.length} Listed Items`,
+      packSize: `Grocery Kit - ${kit.items.length} Products`,
     });
   };
 
