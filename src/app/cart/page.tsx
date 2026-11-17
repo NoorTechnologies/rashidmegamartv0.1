@@ -19,7 +19,7 @@ import {
 
 import { useCart, type CartItem } from "@/context/CartContext";
 import { kits } from "@/data/kits";
-import { estimateGroceryLines } from "@/data/grocery-rates";
+import { estimateGroceryLines, isValidGroceryQuantity } from "@/data/grocery-rates";
 import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
 
 const formatPrice = (amount: number) =>
@@ -31,7 +31,8 @@ const formatPrice = (amount: number) =>
 
 function parseKitQuantity(value: string) {
   const match = value.trim().match(/^(\d+(?:\.\d+)?)(.*)$/);
-  return match
+  const isNumeric = isValidGroceryQuantity(value);
+  return match && isNumeric
     ? { amount: Number(match[1]), unit: match[2], isNumeric: true }
     : { amount: 0, unit: "", isNumeric: false };
 }
