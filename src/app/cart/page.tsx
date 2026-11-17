@@ -32,8 +32,8 @@ const formatPrice = (amount: number) =>
 function parseKitQuantity(value: string) {
   const match = value.trim().match(/^(\d+(?:\.\d+)?)(.*)$/);
   return match
-    ? { amount: Number(match[1]), unit: match[2] }
-    : { amount: 1, unit: "" };
+    ? { amount: Number(match[1]), unit: match[2], isNumeric: true }
+    : { amount: 0, unit: "", isNumeric: false };
 }
 
 function getCartSuggestions(item: CartItem) {
@@ -390,7 +390,7 @@ export default function CartPage() {
                                 <li key={`${item.id}-kit-line-${index}`} className="flex items-center gap-2 px-2.5 py-2">
                                   <span className="min-w-0 flex-1 break-words text-[10px] font-semibold text-[#202124]">{displayCatalogue(entry.name)}</span>
                                   <div className="flex shrink-0 items-center rounded-lg border border-[#D8CBB8] bg-white p-0.5">
-                                    <button type="button" aria-label={`Decrease ${entry.name}`} onClick={() => {
+                                    <button type="button" aria-label={`Decrease ${entry.name}`} disabled={!parsed.isNumeric} onClick={() => {
                                       const nextAmount = parsed.amount - 1;
                                       const next = nextAmount <= 0
                                         ? item.kitContents!.filter((_, lineIndex) => lineIndex !== index)
@@ -398,7 +398,7 @@ export default function CartPage() {
                                       updateKitCustomization(item.id, next, item.requestedItems ?? []);
                                     }} className="flex size-6 items-center justify-center rounded-md text-[#800020] transition hover:bg-[#F1EBDD]"><Minus size={11} /></button>
                                     <span className="min-w-8 text-center text-[9px] font-extrabold tabular-nums text-[#202124]">{displayCatalogue(entry.quantity)}</span>
-                                    <button type="button" aria-label={`Increase ${entry.name}`} onClick={() => {
+                                    <button type="button" aria-label={`Increase ${entry.name}`} disabled={!parsed.isNumeric} onClick={() => {
                                       const next = item.kitContents!.map((line, lineIndex) => lineIndex === index ? { ...line, quantity: `${parsed.amount + 1}${parsed.unit}` } : line);
                                       updateKitCustomization(item.id, next, item.requestedItems ?? []);
                                     }} className="flex size-6 items-center justify-center rounded-md text-[#168447] transition hover:bg-[#EAF3E9]"><Plus size={11} /></button>
