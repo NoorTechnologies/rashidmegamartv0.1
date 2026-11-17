@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { House, Package, ShoppingCart, MessageCircle } from "lucide-react";
+import { House, Package, ShoppingCart, MessageCircle, Languages } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useSiteLanguage, useToggleSiteLanguage } from "@/components/LanguageProvider";
 
 const WHATSAPP_NUMBER = "918962531603";
 const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rashid Mega Mart! I want to know more about your grocery kits and best offers.")}`;
@@ -23,13 +24,15 @@ const mobileNavigationItems = [
 export default function BottomNav() {
   const pathname = usePathname();
   const { totalItems } = useCart();
+  const language = useSiteLanguage();
+  const toggleLanguage = useToggleSiteLanguage();
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <>
       <header className="pointer-events-none fixed inset-x-0 top-3 z-50 hidden px-4 lg:block">
-        <nav aria-label="Main navigation" className="pointer-events-auto mx-auto flex h-[64px] max-w-5xl items-center justify-between gap-5 rounded-full bg-[#FAF7EF]/95 px-5 shadow-[0_12px_34px_rgba(32,20,18,0.16)] backdrop-blur-xl xl:px-7">
+        <nav aria-label="Main navigation" className="pointer-events-auto mx-auto flex h-[64px] max-w-6xl items-center justify-between gap-3 rounded-full bg-[#FAF7EF]/95 px-4 shadow-[0_12px_34px_rgba(32,20,18,0.16)] backdrop-blur-xl xl:px-6">
           <Link href="/" aria-label="Rashid Mega Mart home" className="flex shrink-0 items-center gap-2.5 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#800020]">
             <Image src="/images/logo2.png" alt="" width={42} height={42} priority className="size-9 object-contain" />
             <span className="text-base font-black tracking-tight text-[#202124]">Rashid <span className="text-[#800020]">Mega Mart</span></span>
@@ -45,6 +48,10 @@ export default function BottomNav() {
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
+            <button type="button" data-no-translate onClick={toggleLanguage} aria-label={language === "en" ? "Switch to Hinglish" : "Switch to English"} className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-[#D8CBB8] bg-white px-3 text-xs font-extrabold text-[#800020] transition hover:bg-[#F1EBDD] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#800020]">
+              <Languages size={15} />
+              {language === "en" ? "Hinglish" : "English"}
+            </button>
             <a href={whatsappHref} target="_blank" rel="noopener noreferrer"
               className="inline-flex min-h-10 items-center gap-2 rounded-full bg-[#EAF3E9] px-4 text-sm font-extrabold text-[#126B3A] transition-colors hover:bg-[#DCEBDD] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#168447]">
               <Image src="/Whatsapp-3d.svg" alt="" width={22} height={22} unoptimized className="size-5 object-contain" />
@@ -59,8 +66,8 @@ export default function BottomNav() {
         </nav>
       </header>
 
-      <nav aria-label="Main navigation" className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[390px] px-4 pb-[calc(12px+env(safe-area-inset-bottom))] lg:hidden">
-        <div className="grid h-[58px] grid-cols-4 items-center rounded-full bg-[#FAF7EF]/95 px-1 shadow-[0_12px_32px_rgba(32,20,18,0.20)] backdrop-blur-xl">
+      <nav aria-label="Main navigation" className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full px-2 pb-[calc(8px+env(safe-area-inset-bottom))] sm:px-4 lg:hidden">
+        <div className="mx-auto grid h-[62px] w-full max-w-[520px] grid-cols-5 items-center rounded-[22px] border border-white/70 bg-[#FAF7EF]/96 px-1 shadow-[0_8px_28px_rgba(32,20,18,0.16)] backdrop-blur-xl">
           {mobileNavigationItems.map((item) => {
             const Icon = item.icon;
             const active = item.external ? false : isActive(item.href);
@@ -82,6 +89,10 @@ export default function BottomNav() {
               ? <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" className={className}>{content}</a>
               : <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={className}>{content}</Link>;
           })}
+          <button type="button" data-no-translate onClick={toggleLanguage} aria-label={language === "en" ? "Switch to Hinglish" : "Switch to English"} className="mx-auto flex h-[54px] w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl text-[#800020] transition hover:bg-[#F1EBDD] active:scale-[0.97]">
+            <span className="flex size-7 items-center justify-center rounded-full bg-[#F1EBDD]"><Languages size={17} /></span>
+            <span className="text-[9px] font-extrabold leading-none">{language === "en" ? "Hinglish" : "English"}</span>
+          </button>
         </div>
       </nav>
     </>
