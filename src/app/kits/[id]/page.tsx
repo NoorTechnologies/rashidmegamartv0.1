@@ -208,10 +208,6 @@ export default async function KitDetailPage({ params }: PageProps) {
           {/* Product Information */}
           <div className="flex min-w-0 flex-col pt-1">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-[#F8E8ED] px-3 py-1.5 text-[11px] font-extrabold text-[#A83250]">
-                {kit.category}
-              </span>
-
               {kit.isAvailable ? (
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAF6EE] px-3 py-1.5 text-[11px] font-bold text-[#138047]">
                   <Check size={13} />
