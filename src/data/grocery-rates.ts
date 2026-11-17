@@ -27,7 +27,11 @@ function parseQuantity(value: string) {
   if (!match) return null;
   const amount = Number(match[1]);
   const unit = UNIT_ALIASES[match[2] ?? "pcs"];
-  return Number.isFinite(amount) && amount >= 0 && unit ? { amount, unit } : null;
+  return Number.isFinite(amount) && amount > 0 && unit ? { amount, unit } : null;
+}
+
+export function isValidGroceryQuantity(value: string) {
+  return parseQuantity(value) !== null;
 }
 
 export function estimateGroceryLine(name: string, quantity: string): GroceryLineEstimate {
