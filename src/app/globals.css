@@ -13,9 +13,9 @@
   /* Approved brand palette: cream, maroon, green, yellow and black */
   --primary: #168447;
   --primary-dark: #106B38;
-  --primary-light: #EAF6EE;
-  --primary-mint: #BFE7CB;
-  --primary-fresh: #95D5A8;
+  --primary-light: #EAF3E9;
+  --primary-mint: #D5E8D6;
+  --primary-fresh: #D5E8D6;
 
   /* Keep surfaces calm; no decorative multicolour gradients. */
   --gradient-green: #EAF3E9;
@@ -23,7 +23,7 @@
 
   /* Secondary */
   --secondary: #F7C928;
-  --secondary-light: #FFF8D9;
+  --secondary-light: #FAF0C8;
 
   /* Backgrounds */
   --background: #FAF7EF;
@@ -33,11 +33,11 @@
   /* Text */
   --foreground: #202124;
   --muted: #686868;
-  --border: #E7E5DF;
+  --border: #D8CBB8;
 
   /* Status */
   --success: #168447;
-  --danger: #DC2626;
+  --danger: #800020;
 
   /* Layout */
   --radius-card: 16px;
@@ -303,11 +303,11 @@ video {
   min-height: 2.5rem;
   border: 1px solid rgba(230, 184, 58, .72);
   border-radius: 0.8rem;
-  background: linear-gradient(180deg, #FFFDF7 0%, #FFF7E7 100%);
+  background: #FAF7EF;
   padding: 0.55rem 1rem;
   color: #800020;
   font-weight: 800;
-  box-shadow: 0 2px 8px rgba(53, 18, 13, .05);
+  box-shadow: 0 2px 8px rgba(32, 20, 18, .05);
   transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
 }
 .rmm-button-secondary:hover:not(:disabled) {
@@ -325,7 +325,7 @@ video {
   color: #168447;
   transition: background .18s ease, color .18s ease;
 }
-.rmm-quantity-button:hover:not(:disabled) { background: #EAF6EE; color: #106B38; }
+.rmm-quantity-button:hover:not(:disabled) { background: #EAF3E9; color: #106B38; }
 .rmm-quantity-button:active:not(:disabled) { transform: scale(.94); }
 
 .rmm-button-primary:focus-visible,
