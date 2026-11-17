@@ -476,8 +476,7 @@ Object.assign(translations, {
   "Included in estimate when rates are set": "Rates set hone par estimate mein included",
   "Customized item breakdown": "Customized items ka breakdown",
   "item rates need owner confirmation": "item rates owner se confirm hone baaki",
-  "When every grocery rate is confirmed, the calculator uses (requested quantity ÷ rate quantity) × rate price, then multiplies by kit quantity. Until then, the listed bundle total remains visible separately.": "Jab sabhi grocery rates confirm ho jayenge, calculator (requested quantity ÷ rate quantity) × rate price karega, phir kit quantity se multiply karega. Tab tak listed bundle total alag dikhega."
-
+  "When every grocery rate is confirmed, the calculator uses (requested quantity ÷ rate quantity) × rate price, then multiplies by kit quantity. Until then, the listed bundle total remains visible separately.": "Jab sabhi grocery rates confirm ho jayenge, calculator (requested quantity ÷ rate quantity) × rate price karega, phir kit quantity se multiply karega. Tab tak listed bundle total alag dikhega.",
   "Browse kit offers": "Kit offers dekhein",
   "Check active offers": "Active offers check karein",
   "Pick your value": "Apni value chunein",
