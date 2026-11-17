@@ -5,76 +5,16 @@ import { notFound } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
-  Check,
   Package,
   ShoppingBag,
   Tag,
   Sparkles,
-  Wheat,
-  Droplets,
-  Bean,
-  Candy,
-  Coffee,
-  Leaf,
-  CookingPot,
 } from "lucide-react";
 import { getKitById } from "@/data/kits";
-import KitDetailClient from "@/components/KitDetailClient";
+import KitCustomizer from "@/components/KitCustomizer";
 
 interface PageProps {
   params: Promise<{ id: string }>;
-}
-
-function getGroceryIcon(item: string) {
-  const name = item.toLowerCase();
-
-  if (
-    name.includes("rice") ||
-    name.includes("atta") ||
-    name.includes("wheat") ||
-    name.includes("poha") ||
-    name.includes("suji") ||
-    name.includes("besan")
-  ) {
-    return Wheat;
-  }
-
-  if (name.includes("oil") || name.includes("ghee")) {
-    return Droplets;
-  }
-
-  if (
-    name.includes("dal") ||
-    name.includes("beans") ||
-    name.includes("peanuts")
-  ) {
-    return Bean;
-  }
-
-  if (name.includes("sugar") || name.includes("jaggery")) {
-    return Candy;
-  }
-
-  if (name.includes("tea") || name.includes("coffee")) {
-    return Coffee;
-  }
-
-  if (
-    name.includes("spice") ||
-    name.includes("masala") ||
-    name.includes("turmeric") ||
-    name.includes("chilli") ||
-    name.includes("cumin") ||
-    name.includes("mustard")
-  ) {
-    return Leaf;
-  }
-
-  if (name.includes("salt")) {
-    return Sparkles;
-  }
-
-  return CookingPot;
 }
 
 export default async function KitDetailPage({ params }: PageProps) {
@@ -266,111 +206,12 @@ export default async function KitDetailPage({ params }: PageProps) {
 
             {/* Cart Action */}
             <div className="mt-6">
-              <KitDetailClient kit={kit} />
+              <KitCustomizer kit={kit} />
             </div>
 
             <p className="mt-3 text-center text-xs text-[#94847A]">
               Add this kit to your cart to continue shopping.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* What's Included */}
-      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-[28px] border border-[#EFE3D9] bg-white shadow-[0_12px_40px_rgba(70,40,30,0.05)]">
-          {/* Section Heading */}
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#EFE3D9] bg-gradient-to-r from-[#FFF8F5] to-[#FFFDF8] px-5 py-6 sm:px-8">
-            <div>
-              <div className="mb-2 flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.16em] text-[#A83250]">
-                <Sparkles size={15} />
-                Inside Your Grocery Kit
-              </div>
-
-              <h2 className="text-2xl font-black tracking-tight text-[#30251F] sm:text-3xl">
-                What&apos;s Included?
-              </h2>
-
-              <p className="mt-2 text-sm text-[#796B61]">
-                Everything you get in this grocery combo.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2 rounded-xl bg-[#A83250] px-4 py-3 text-white shadow-md shadow-[#A83250]/15">
-              <Package size={19} />
-              <span className="text-lg font-black">
-                {kit.items.length}
-              </span>
-              <span className="text-xs font-bold text-white/80">
-                Products
-              </span>
-            </div>
-          </div>
-
-          {/* Grocery Items */}
-          <div className="p-4 sm:p-7">
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-              <p className="text-sm font-bold text-[#30251F]">
-                Every product included in your kit
-              </p>
-              <span className="text-xs font-semibold text-[#796B61]">
-                {kit.items.length} products included
-              </span>
-            </div>
-
-            <ol className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
-              {kit.items.map((item, index) => {
-                const parts = item.match(/^(.+?)\s*[-–]\s*(.+)$/);
-                const productName = parts ? parts[1].trim() : item;
-                const quantity = parts ? parts[2].trim() : "Included";
-                const Icon = getGroceryIcon(productName);
-
-                return (
-                  <li
-                    key={`${kit.id}-${index}`}
-                    className="flex min-w-0 items-center gap-3 rounded-xl border border-[#EFE3D9] bg-[#FFFCF8] p-3 transition-colors hover:border-[#DDB3BE] hover:bg-[#FFF8F8] sm:p-3.5"
-                  >
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#F8E8ED] text-[#A83250]">
-                      <Icon size={17} strokeWidth={1.8} />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[10px] font-bold uppercase tracking-wide text-[#A69A90]">
-                        Product {index + 1}
-                      </span>
-                      <span className="mt-0.5 block break-words text-sm font-bold leading-5 text-[#30251F]">
-                        {productName}
-                      </span>
-                    </span>
-                    <span className="max-w-[42%] shrink-0 rounded-lg border border-[#F0DDB7] bg-[#FFF4DF] px-2.5 py-1.5 text-right text-[11px] font-extrabold leading-4 text-[#94600E]">
-                      {quantity}
-                    </span>
-                  </li>
-                );
-              })}
-            </ol>
-
-            {/* Brand Footer */}
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#EFE3D9] bg-[#FFFDF8] px-4 py-4 sm:px-5">
-              <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-[#F8E8ED] text-[#A83250]">
-                  <ShoppingBag size={19} />
-                </div>
-
-                <div>
-                  <p className="text-xs font-black tracking-wide text-[#30251F]">
-                    RASHID MEGA MART
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-[#94847A]">
-                    Your everyday grocery destination
-                  </p>
-                </div>
-              </div>
-
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#138047]">
-                <Check size={15} />
-                All products included
-              </span>
-            </div>
           </div>
         </div>
       </section>
