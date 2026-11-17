@@ -36,11 +36,6 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
   const cartItem = items.find((item) => item.id === kit.id);
   const kitImage = kit.image;
 
-  const discount =
-    kit.oldPrice && kit.oldPrice > kit.price
-      ? Math.round(((kit.oldPrice - kit.price) / kit.oldPrice) * 100)
-      : 0;
-
   const savings =
     kit.oldPrice && kit.oldPrice > kit.price
       ? kit.oldPrice - kit.price
@@ -72,11 +67,10 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         className="block"
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
-          {discount > 0 && (
-            <span className="absolute left-2.5 top-2.5 z-10 rounded-full border border-white/40 bg-[#8F1235]/90 px-2.5 py-1 text-[9px] font-extrabold tracking-wide text-white shadow-lg shadow-[#8F1235]/20 backdrop-blur-md sm:left-3 sm:top-3 sm:px-2.5 sm:text-[10px]">
-              {discount}% OFF
-            </span>
-          )}
+          <span className="absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/30 bg-[#B51232] px-2.5 py-1 text-[9px] font-black tracking-wide text-white shadow-lg shadow-[#8F1235]/25 sm:left-3 sm:top-3 sm:text-[10px]">
+            <Sparkles size={11} />
+            {savings > 0 ? `SAVE ${formatPrice(savings)}` : "KIT DEAL"}
+          </span>
 
           <span className="absolute right-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/70 bg-white/65 px-2.5 py-1 text-[9px] font-bold text-[#6F321D] shadow-lg backdrop-blur-xl sm:right-3 sm:top-3 sm:text-[10px]">
             <Package size={12} />
@@ -180,23 +174,22 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         </div>
 
         {/* PRICE AND SAVINGS */}
-        <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 sm:mt-4">
-          <span className="text-[17px] font-black tracking-tight text-[#8F1235] sm:text-xl">
-            {formatPrice(kit.price)}
-          </span>
-
-          {kit.oldPrice && kit.oldPrice > kit.price && (
-            <span className="text-[10px] font-medium text-[#99A1AF] line-through sm:text-xs">
-              {formatPrice(kit.oldPrice)}
-            </span>
-          )}
+        <div className="mt-3 overflow-hidden rounded-xl border border-[#F1C7CE] bg-[linear-gradient(135deg,#FFF4F5_0%,#FFF9F6_100%)] p-2.5 sm:mt-4 sm:rounded-2xl sm:p-3">
+          <div className="flex min-w-0 flex-wrap items-center justify-between gap-1.5">
+            <div className="min-w-0">
+              <p className="text-[8px] font-black uppercase tracking-[0.16em] text-[#A83250] sm:text-[9px]">Special kit price</p>
+              <div className="mt-0.5 flex flex-wrap items-baseline gap-x-1.5">
+                <span className="text-[18px] font-black tracking-tight text-[#8F1235] sm:text-2xl">{formatPrice(kit.price)}</span>
+                {kit.oldPrice && kit.oldPrice > kit.price && (
+                  <span className="text-[9px] font-semibold text-[#9B8589] line-through sm:text-xs">{formatPrice(kit.oldPrice)}</span>
+                )}
+              </div>
+            </div>
+            {savings > 0 && (
+              <span className="inline-flex shrink-0 items-center rounded-lg bg-[#B51232] px-2 py-1 text-[8px] font-black text-white shadow-sm sm:text-[10px]">SAVE {formatPrice(savings)}</span>
+            )}
+          </div>
         </div>
-
-        {savings > 0 && (
-          <p className="mt-1 text-[9px] font-extrabold text-[#087A43] sm:text-[10px]">
-            You save {formatPrice(savings)}
-          </p>
-        )}
 
         {/* ACTION BUTTONS */}
         <div className="mt-auto flex gap-2 pt-3 sm:pt-4">
