@@ -128,11 +128,11 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
                   key={`${kit.id}-${index}`}
                   className="flex min-w-0 items-start gap-1.5"
                 >
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-white/90 bg-white/80 text-[#D71920] shadow-sm sm:h-8 sm:w-8">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-white/90 bg-white/80 text-[#168447] shadow-sm sm:h-8 sm:w-8">
                     <Package size={14} strokeWidth={1.5} />
                   </div>
                   <span className="min-w-0 text-[9px] leading-3 text-[#55483C] sm:text-[10px]">
-                    <span className="block line-clamp-2 font-semibold">{name}</span>
+                    <span className="block line-clamp-2 font-semibold">{displayCatalogue(name)}</span>
                     {quantity && (
                       <span className="mt-0.5 block font-bold text-[#936300]">
                         {quantity ? displayCatalogue(quantity) : quantity}
@@ -179,7 +179,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
             <Link
               href={`/kits/${kit.id}`}
               aria-label={`Customize ${kit.name}`}
-              className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg bg-[#D71920] px-1.5 text-[10px] font-extrabold text-white transition hover:bg-[#B5121B] sm:min-h-10 sm:rounded-xl sm:text-xs"
+              className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg bg-[#168447] px-1.5 text-[10px] font-extrabold text-white transition hover:bg-[#106B38] sm:min-h-10 sm:rounded-xl sm:text-xs"
             >
               Customize
               <ArrowUpRight size={12} />
