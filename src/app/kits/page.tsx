@@ -94,7 +94,7 @@ export default function KitsPage() {
       {/* COMPACT HOME STYLE BANNER */}
       <section className="relative isolate overflow-hidden border-b border-[#F1EBDD] bg-[linear-gradient(125deg,#106B38_0%,#168447_58%,#800020_100%)] px-3 pb-5 pt-4 text-white shadow-[0_16px_45px_rgba(143,18,53,0.18)] sm:px-5 sm:pb-8 sm:pt-7">
         <div className="pointer-events-none absolute -left-16 top-5 h-40 w-40 rounded-full bg-white/10 blur-[65px]" />
-        <div className="pointer-events-none absolute -right-16 bottom-0 h-40 w-40 rounded-full bg-[#FFD8A0]/20 blur-[65px]" />
+        <div className="pointer-events-none absolute -right-16 bottom-0 h-40 w-40 rounded-full bg-[#FAF0C8]/20 blur-[65px]" />
 
         <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[9px] font-extrabold tracking-wide text-white shadow-lg backdrop-blur-xl sm:text-xs">
@@ -158,7 +158,7 @@ export default function KitsPage() {
                 type="button"
                 onClick={() => setSearch("")}
                 aria-label="Clear search"
-                className="shrink-0 rounded-full p-1.5 transition hover:bg-[#E8F5E9]"
+                className="shrink-0 rounded-full p-1.5 transition hover:bg-[#EAF3E9]"
               >
                 <X size={16} className="text-[#686868]" />
               </button>
@@ -195,7 +195,7 @@ export default function KitsPage() {
 
         {/* AVAILABILITY FILTERS */}
         <div className="mt-4 sm:mt-6">
-          <p className="mb-2 text-[10px] font-extrabold uppercase tracking-wider text-[#819087] sm:text-xs">
+          <p className="mb-2 text-[10px] font-extrabold uppercase tracking-wider text-[#686868] sm:text-xs">
             Availability
           </p>
 
@@ -294,13 +294,13 @@ export default function KitsPage() {
           <div className="mx-auto max-w-2xl text-center">
             <span className="inline-flex rounded-full border border-[#168447]/15 bg-white/70 px-3 py-1 text-[10px] font-bold text-[#168447]">Your suggestion matters</span>
             <h2 id="kit-suggestion-title" className="mt-2 text-lg font-black text-[#202124] sm:text-2xl">Apni Grocery Kit Suggest Karein</h2>
-            <p className="mt-1 text-xs leading-5 text-[#766B63] sm:text-sm">Koi item ya kit chahiye jo yahan nahi mili? Humein batayein — hum aapki suggestion dekhenge.</p>
+            <p className="mt-1 text-xs leading-5 text-[#686868] sm:text-sm">Koi item ya kit chahiye jo yahan nahi mili? Humein batayein — hum aapki suggestion dekhenge.</p>
             <div className="mt-4 grid gap-2 text-left sm:grid-cols-[1fr_1.4fr]">
               <input value={suggestionName} onChange={(event) => setSuggestionName(event.target.value.slice(0, 60))} placeholder="Aapka naam (optional)" aria-label="Your name" className="min-h-10 rounded-xl border border-[#E8DFD1] bg-white/85 px-3 text-xs outline-none focus:border-[#168447]" />
               <textarea value={suggestion} onChange={(event) => setSuggestion(event.target.value.slice(0, 500))} placeholder="Kaun si kit ya grocery items chahiye? Quantity bhi likh sakte hain..." aria-label="Kit suggestion" rows={3} className="min-h-20 rounded-xl border border-[#E8DFD1] bg-white/85 px-3 py-2.5 text-xs outline-none focus:border-[#168447] sm:row-span-2" />
               <button type="button" disabled={!suggestion.trim()} onClick={() => { const message = ["Namaste Rashid Mega Mart, meri grocery kit suggestion:", suggestion.trim(), suggestionName.trim() ? "Name: " + suggestionName.trim() : ""].filter(Boolean).join("\n"); window.location.assign("https://wa.me/918962531603?text=" + encodeURIComponent(message)); }} className="min-h-10 rounded-xl bg-[#168447] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#106B38] disabled:cursor-not-allowed disabled:opacity-45">WhatsApp Par Suggest Karein</button>
             </div>
-            <p className="mt-2 text-[10px] text-[#8B8078]">Suggestion WhatsApp par store ko bheji jayegi. Order ya price confirmation nahi hai.</p>
+            <p className="mt-2 text-[10px] text-[#686868]">Suggestion WhatsApp par store ko bheji jayegi. Order ya price confirmation nahi hai.</p>
           </div>
         </div>
       </section>
