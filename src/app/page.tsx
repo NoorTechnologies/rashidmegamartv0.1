@@ -14,8 +14,8 @@ export default function HomePage() {
     : null;
 
   return (
-    <main className="min-h-screen w-full overflow-x-clip bg-[#FFF9D8]/30">
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#FEF9C3] via-white to-[#FFF9D8]/50 px-3 pb-9 pt-6 text-[#171717] sm:px-5 sm:pb-12 sm:pt-10">
+    <main className="min-h-screen w-full overflow-x-clip bg-[#FFF9F6]">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#FFF0F0] via-white to-[#FFF9F4] px-3 pb-9 pt-6 text-[#171717] sm:px-5 sm:pb-12 sm:pt-10">
         <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#D4A84F]/15 blur-[90px]" />
         <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#D71920]/[0.07] blur-[90px]" />
         <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
@@ -51,15 +51,15 @@ export default function HomePage() {
         <section className="mx-auto w-full max-w-7xl px-3 pt-3 min-[480px]:px-5 sm:pt-4 md:px-6 lg:px-8" aria-label="Grocery kit starting price">
           <Link
             href="/kits"
-            className="group flex min-h-12 items-center justify-between gap-3 rounded-xl border border-[#F0D8DC] bg-white px-3.5 py-2.5 shadow-sm transition hover:border-[#D98A99] hover:shadow-md sm:px-4"
+            className="group flex min-h-12 items-center justify-between gap-3 rounded-xl border border-[#F2C8C9] bg-white px-3.5 py-2.5 shadow-sm transition hover:border-[#D98A99] hover:shadow-md sm:px-4"
           >
             <span className="flex min-w-0 items-center gap-2.5">
               <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#FFF0F2] text-[#D71920]">
                 <Package size={16} />
               </span>
               <span className="min-w-0">
-                <span className="block truncate text-xs font-bold text-[#30251F] sm:text-sm">Grocery kits starting at ₹{startingPrice.toLocaleString("en-IN")}</span>
-                <span className="block text-[10px] text-[#8A7778] sm:text-xs">{availableKits.length} kits to explore</span>
+                <span className="block truncate text-[10px] font-black uppercase tracking-wide text-[#B5121B] sm:text-xs">BEST OFFER · KITS STARTING AT</span>
+                <span className="block text-lg font-black leading-tight text-[#D71920] sm:text-2xl">₹{startingPrice.toLocaleString("en-IN")} <span className="text-[10px] font-bold text-[#6B7280] sm:text-xs">· {availableKits.length} kits to explore</span></span>
               </span>
             </span>
             <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-bold text-[#D71920] sm:text-xs">
