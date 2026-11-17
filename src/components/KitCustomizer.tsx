@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Minus, Plus, ShoppingCart, Trash2, PlusCircle } from "lucide-react";
 import type { GroceryKit } from "@/data/kits";
 import { kits } from "@/data/kits";
@@ -24,7 +24,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   const { addToCart, updateKitCustomization, items, isLoaded } = useCart();
   const existingCartItem = items.find((item) => item.id === kit.id);
   const [contents, setContents] = useState<KitLine[]>(() => existingCartItem?.kitContents ?? kit.items.map(splitKitLine));
-  const [newItem, setNewItem] = useState("");
+  useEffect(() => {\n    if (existingCartItem?.kitContents) setContents(existingCartItem.kitContents);\n  }, [existingCartItem?.kitContents]);\n  const [newItem, setNewItem] = useState("");
   const [newQuantity, setNewQuantity] = useState("1");
   const [error, setError] = useState("");
 
