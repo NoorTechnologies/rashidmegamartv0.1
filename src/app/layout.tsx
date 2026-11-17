@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
 import BottomNav from "@/components/BottomNav";
+import SiteMotion from "@/components/SiteMotion";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { CartProvider } from "@/context/CartContext";
 
@@ -126,6 +127,7 @@ export default function RootLayout({
               {children}
             </div>
 
+            <SiteMotion />
             <BottomNav />
           </LanguageProvider>
         </CartProvider>
