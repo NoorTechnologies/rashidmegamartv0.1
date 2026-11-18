@@ -18,6 +18,9 @@ export interface CartItem {
   quantity: number;
   brand?: string;
   packSize?: string;
+  catalogProductId?: string;
+  kitGroupId?: string;
+  kitGroupName?: string;
 }
 
 interface CartContextType {
@@ -26,6 +29,7 @@ interface CartContextType {
   subtotal: number;
   isLoaded: boolean;
   addToCart: (item: Omit<CartItem, "quantity">) => void;
+  addCustomKitToCart: (kit: { id: string; name: string; items: Array<{ product: Omit<CartItem, "quantity" | "catalogProductId" | "kitGroupId" | "kitGroupName">; quantity: number }> }) => void;
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
   removeFromCart: (id: string) => void;
@@ -62,7 +66,10 @@ function isValidCartItem(item: unknown): item is CartItem {
     (value.quantity as number) > 0 &&
     (value.quantity as number) <= MAX_CART_QUANTITY &&
     (value.brand === undefined || typeof value.brand === "string") &&
-    (value.packSize === undefined || typeof value.packSize === "string")
+    (value.packSize === undefined || typeof value.packSize === "string") &&
+    (value.catalogProductId === undefined || typeof value.catalogProductId === "string") &&
+    (value.kitGroupId === undefined || typeof value.kitGroupId === "string") &&
+    (value.kitGroupName === undefined || typeof value.kitGroupName === "string")
   );
 }
 
@@ -205,6 +212,32 @@ export function CartProvider({ children }: { children: ReactNode }) {
     []
   );
 
+  const addCustomKitToCart = useCallback((kit: { id: string; name: string; items: Array<{ product: Omit<CartItem, "quantity" | "catalogProductId" | "kitGroupId" | "kitGroupName">; quantity: number }> }) => {
+    if (!kit.id.trim() || !kit.name.trim() || !kit.items.length) return;
+    updateCart((currentItems) => {
+      const next = [...currentItems];
+      for (const line of kit.items) {
+        if (!line.product.id || !Number.isSafeInteger(line.quantity) || line.quantity < 1 || line.quantity > MAX_CART_QUANTITY) continue;
+        const lineId = `${kit.id}::${line.product.id}`;
+        const existingIndex = next.findIndex((item) => item.id === lineId);
+        const row: CartItem = {
+          ...line.product,
+          id: lineId,
+          catalogProductId: line.product.id,
+          kitGroupId: kit.id,
+          kitGroupName: kit.name,
+          quantity: line.quantity,
+        };
+        if (existingIndex >= 0) {
+          next[existingIndex] = { ...next[existingIndex], quantity: Math.min(MAX_CART_QUANTITY, next[existingIndex].quantity + line.quantity), kitGroupName: kit.name };
+        } else {
+          next.push(row);
+        }
+      }
+      return next;
+    });
+  }, []);
+
   const increaseQuantity = useCallback((id: string) => {
     updateCart((currentItems) =>
       currentItems.map((item) =>
@@ -264,6 +297,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotal,
       isLoaded,
       addToCart,
+      addCustomKitToCart,
       increaseQuantity,
       decreaseQuantity,
       removeFromCart,
@@ -275,6 +309,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotal,
       isLoaded,
       addToCart,
+      addCustomKitToCart,
       increaseQuantity,
       decreaseQuantity,
       removeFromCart,
