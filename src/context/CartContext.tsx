@@ -229,18 +229,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
           (item) => item.id === product.id
         );
 
+        // Adding a kit that is already in the cart must not silently
+        // increase its quantity. Quantity changes belong to the explicit + control.
         if (existing) {
-          return currentItems.map((item) =>
-            item.id === product.id
-              ? {
-                  ...item,
-                  quantity: Math.min(
-                    item.quantity + 1,
-                    MAX_CART_QUANTITY
-                  ),
-                }
-              : item
-          );
+          return currentItems;
         }
 
         return currentItems.length >= MAX_CART_ITEMS
