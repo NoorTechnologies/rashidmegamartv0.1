@@ -4,8 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-  const authorization = request.headers.get("authorization");
-  const accessToken = authorization?.startsWith("Bearer ")
+  const authorization = request.headers.get("authorization") ?? "";
+  const accessToken = authorization.startsWith("Bearer ")
     ? authorization.slice("Bearer ".length).trim()
     : "";
 
@@ -26,43 +26,45 @@ export async function POST(request: Request) {
     );
   }
 
-  const authClient = createClient(supabaseUrl, publishableKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  const { data: authData, error: authError } = await authClient.auth.getUser(accessToken);
+  try {
+    const authClient = createClient(supabaseUrl, publishableKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { data, error: authError } = await authClient.auth.getUser(accessToken);
 
-  if (authError || !authData.user) {
-    return NextResponse.json({ error: "Your session has expired. Please log in again." }, { status: 401 });
-  }
-
-  const adminClient = createClient(supabaseUrl, serviceRoleKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  const userId = authData.user.id;
-
-  // Remove customer-owned data before deleting the Auth identity.
-  // Each query is scoped to the verified user ID from Supabase Auth.
-  const ownedTables = ["customer_saved_kits", "customer_addresses", "customer_profiles"] as const;
-
-  for (const table of ownedTables) {
-    const { error } = await adminClient.from(table).delete().eq("user_id", userId);
-    if (error) {
-      console.error("Account data deletion failed for table:", table, error.message);
+    if (authError || !data.user) {
       return NextResponse.json(
-        { error: "Some account data could not be deleted. No further deletion was attempted; please contact support." },
+        { error: "Your session has expired. Please log in again." },
+        { status: 401 },
+      );
+    }
+
+    const adminClient = createClient(supabaseUrl, serviceRoleKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+
+    // These account-owned tables reference auth.users with ON DELETE CASCADE.
+    // Deleting the verified Auth user removes profile, addresses and saved kits
+    // through the database foreign keys, avoiding a partially deleted account.
+    const { error: deleteError } = await adminClient.auth.admin.deleteUser(data.user.id);
+
+    if (deleteError) {
+      console.error("Supabase Auth user deletion failed:", deleteError.message);
+      return NextResponse.json(
+        { error: "Account could not be deleted. Your data has not been intentionally changed; please try again or contact support." },
         { status: 500 },
       );
     }
-  }
 
-  const { error: deleteUserError } = await adminClient.auth.admin.deleteUser(userId);
-  if (deleteUserError) {
-    console.error("Supabase Auth user deletion failed:", deleteUserError.message);
+    return NextResponse.json({ success: true });
+  } catch (cause) {
+    console.error(
+      "Unexpected account deletion error:",
+      cause instanceof Error ? cause.message : "Unknown error",
+    );
     return NextResponse.json(
-      { error: "Your saved account data was removed, but the login account could not be deleted. Please contact support before trying again." },
+      { error: "Something went wrong while deleting the account. Please contact support." },
       { status: 500 },
     );
   }
-
-  return NextResponse.json({ success: true });
 }
