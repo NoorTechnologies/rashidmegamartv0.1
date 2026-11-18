@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Search,
   Package,
@@ -12,7 +12,7 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import KitCard from "@/components/KitCard";
-import { kits as allKits, type GroceryKit } from "@/data/kits";
+import { kits as allKits } from "@/data/kits";
 
 type AvailabilityFilter = "all" | "available" | "unavailable";
 type SortOption = "featured" | "price-low" | "price-high" | "name";
