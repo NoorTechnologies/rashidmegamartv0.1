@@ -537,3 +537,60 @@ video {
     font-size: 10.5px;
   }
 }
+
+
+/* ========================================
+   RMM GLASS NAVIGATION — LIGHTWEIGHT MOTION
+======================================== */
+.rmm-desktop-nav {
+  -webkit-backdrop-filter: blur(22px) saturate(165%);
+  backdrop-filter: blur(22px) saturate(165%);
+  transition: background-color 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+}
+.rmm-desktop-nav::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.95), transparent);
+  content: "";
+  pointer-events: none;
+}
+.rmm-nav-brand img { transition: transform 260ms cubic-bezier(.2,.75,.25,1); }
+.rmm-nav-brand:hover img { transform: translateY(-1px) scale(1.035); }
+.rmm-nav-link::after {
+  position: absolute;
+  right: 18px;
+  bottom: 3px;
+  left: 18px;
+  height: 2px;
+  border-radius: 99px;
+  background: currentColor;
+  content: "";
+  opacity: 0;
+  transform: scaleX(.45);
+  transition: opacity 220ms ease, transform 260ms cubic-bezier(.2,.75,.25,1);
+}
+.rmm-nav-link:hover::after,
+.rmm-nav-link[aria-current="page"]::after {
+  opacity: .65;
+  transform: scaleX(1);
+}
+.rmm-nav-link:hover { transform: translateY(-1px); }
+.rmm-nav-cart { will-change: transform; }
+.rmm-nav-action:active { transform: scale(.97); }
+
+@media (max-width: 1023px) {
+  .rmm-desktop-nav { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rmm-desktop-nav,
+  .rmm-nav-brand img,
+  .rmm-nav-link::after {
+    transition: none !important;
+  }
+  .rmm-nav-link:hover,
+  .rmm-nav-action:active,
+  .rmm-nav-cart:hover {
+    transform: none !important;
+  }
+}
