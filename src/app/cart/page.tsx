@@ -31,7 +31,7 @@ export default function CartPage() {
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [orderNote, setOrderNote] = useState("");
+  const [specialInstructions, setSpecialInstructions] = useState("");
   const [formError, setFormError] = useState("");
 
   // Always use the current catalogue price, not a stale price stored in localStorage.
@@ -57,14 +57,14 @@ export default function CartPage() {
     [pricedItems]
   );
 
-  const handleCheckout = (event: FormEvent<HTMLFormElement>) => {
+  const handleWhatsAppEnquiry = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError("");
 
     const cleanName = customerName.trim();
     const cleanPhone = phone.replace(/\D/g, "");
     const cleanAddress = address.trim();
-    const cleanNote = orderNote.trim();
+    const cleanInstructions = specialInstructions.trim();
 
     if (cleanName.length < 2) {
       setFormError("Please enter your name.");
@@ -83,7 +83,7 @@ export default function CartPage() {
       return;
     }
 
-    const orderDetails = pricedItems
+    const enquiryDetails = pricedItems
       .map((item, index) => {
         const contents = [
           ...(item.kitContents ?? []).map((line) => line.name + " (" + line.quantity + ")"),
@@ -99,7 +99,9 @@ export default function CartPage() {
 
     const hasExtras = items.some((item) => (item.requestedItems?.length ?? 0) > 0);
     const message = [
-      "🛒 *Rashid Mega Mart — Order Request*",
+      "🛒 *Rashid Mega Mart — Shopping Enquiry*",
+      "",
+      "This is an enquiry only. Final availability, weight (where applicable), delivery charges and payable amount will be confirmed by the store.",
       "",
       "*Customer*",
       "Name: " + cleanName,
@@ -107,18 +109,18 @@ export default function CartPage() {
       "Address: " + (cleanAddress || "Will confirm on WhatsApp"),
       "",
       "*Your Items*",
-      orderDetails,
+      enquiryDetails,
       "",
       "*Subtotal: " + formatPrice(subtotal) + "*",
       "Delivery: Confirm on WhatsApp",
       hasExtras ? "Extra item prices: Owner will confirm separately." : "",
-      cleanNote ? "Note: " + cleanNote : "",
+      cleanInstructions ? "Note: " + cleanInstructions : "",
       "",
-      "Please confirm availability, delivery charges and final amount.",
+      "Please confirm availability, actual weights where applicable, delivery charges and final amount.",
     ].filter(Boolean).join("\n");
 
     if (message.length > 3500) {
-      setFormError("Order details are too long. Please reduce the extra items.");
+      setFormError("Enquiry details are too long. Please reduce the extra items.");
       return;
     }
 
@@ -242,7 +244,7 @@ export default function CartPage() {
 
           <aside className="space-y-4 lg:sticky lg:top-5">
             <section className="rounded-2xl border border-[#BBDCC5] bg-white p-4 shadow-sm sm:p-5">
-              <h2 className="text-lg font-black text-[#202124]">Order Summary</h2>
+              <h2 className="text-lg font-black text-[#202124]">Cart Summary</h2>
               <div className="mt-4 space-y-3">
                 {pricedItems.map((item) => (
                   <div key={item.id} className="flex items-start justify-between gap-3 text-sm">
@@ -260,9 +262,9 @@ export default function CartPage() {
               </div>
             </section>
 
-            <form id="cart-checkout" onSubmit={handleCheckout} className="space-y-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 shadow-sm sm:p-5">
+            <form id="cart-checkout" onSubmit={handleWhatsAppEnquiry} className="space-y-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 shadow-sm sm:p-5">
               <div>
-                <h2 className="text-lg font-black text-[#202124]">Place Your Order</h2>
+                <h2 className="text-lg font-black text-[#202124]">Send WhatsApp Enquiry</h2>
                 <p className="mt-1 text-xs text-[#686868]">Bas naam aur mobile number bharein.</p>
               </div>
               <label className="block text-xs font-bold text-[#202124]">
@@ -278,12 +280,12 @@ export default function CartPage() {
                 <textarea maxLength={250} rows={2} autoComplete="street-address" value={address} onChange={(event) => setAddress(event.target.value)} placeholder="House no., area, landmark" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
               </label>
               <label className="block text-xs font-bold text-[#202124]">
-                Order note <span className="font-normal text-[#8A8175]">(optional)</span>
-                <textarea maxLength={240} rows={2} value={orderNote} onChange={(event) => setOrderNote(event.target.value)} placeholder="Any special instructions?" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+                Special instructions <span className="font-normal text-[#8A8175]">(optional)</span>
+                <textarea maxLength={240} rows={2} value={specialInstructions} onChange={(event) => setSpecialInstructions(event.target.value)} placeholder="Any special instructions?" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
               </label>
               {formError ? <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-700">{formError}</p> : null}
               <button type="submit" className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#168447] px-4 py-3 text-sm font-extrabold text-white shadow-md transition hover:bg-[#106B38] active:scale-[0.99]">
-                <Image src="/Whatsapp-3d.svg" alt="" width={22} height={22} unoptimized /> Order on WhatsApp
+                <Image src="/Whatsapp-3d.svg" alt="" width={22} height={22} unoptimized /> Send Enquiry
               </button>
               <p className="flex items-center justify-center gap-1.5 text-center text-[10px] leading-4 text-[#777064]"><ShieldCheck size={13} /> Details will be shared with the store.</p>
             </form>
@@ -292,7 +294,7 @@ export default function CartPage() {
 
         <div className="fixed inset-x-0 bottom-[calc(70px+env(safe-area-inset-bottom))] z-40 border-t border-[#E8DFD1] bg-white/98 px-3 py-2 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
           <button type="button" onClick={() => document.querySelector<HTMLFormElement>("#cart-checkout")?.requestSubmit()} className="flex min-h-12 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white shadow-sm active:scale-[.99]">
-            <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Order on WhatsApp</span>
+            <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Send Enquiry</span>
             <span className="tabular-nums">{formatPrice(subtotal)}</span>
           </button>
         </div>

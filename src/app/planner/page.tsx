@@ -121,8 +121,14 @@ export default function PlannerPage() {
       });
       return () => { active = false; listener.subscription.unsubscribe(); };
     } catch (cause) {
-      setNotice(cause instanceof Error ? cause.message : "Supabase configuration is missing.");
-      setIsLoaded(true);
+      const message = cause instanceof Error ? cause.message : "Supabase configuration is missing.";
+      queueMicrotask(() => {
+        if (active) {
+          setNotice(message);
+          setIsLoaded(true);
+        }
+      });
+      return () => { active = false; };
     }
   }, []);
 

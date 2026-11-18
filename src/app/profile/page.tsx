@@ -1,20 +1,26 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { ArrowRight, Check, KeyRound, LogOut, Mail, MapPin, Package, Pencil, Plus, Trash2, UserRound, X, Home, BriefcaseBusiness } from "lucide-react";
+import { ArrowRight, Check, Copy, Gift, KeyRound, LogOut, Mail, MapPin, Package, Pencil, Plus, ShoppingCart, Trash2, UserRound, X, Home, BriefcaseBusiness } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { useCart } from "@/context/CartContext";
 
 type SavedKit = { id: string; name: string; items: { productId: string; quantity: number }[]; updated_at: string };
 type Profile = { full_name: string; phone: string };
 type Address = { id: string; label: string; recipient_name: string; phone: string; address_line1: string; address_line2: string; landmark: string; city: string; state: string; postal_code: string; is_default: boolean };
 type AddressDraft = Omit<Address, "id">;
+type Coupon = { id: string; code: string; title: string; description: string; discount_type: "percentage" | "fixed"; discount_value: number | string; minimum_order: number | string; valid_from: string; expires_at: string | null };
+const WHATSAPP_CONTACT_URL = "https://wa.me/918962531603?text=" + encodeURIComponent("Hello Rashid Mega Mart! I need help with my account.");
+const formatCurrency = (value: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value);
 const blankAddress: AddressDraft = { label: "Home", recipient_name: "", phone: "", address_line1: "", address_line2: "", landmark: "", city: "", state: "", postal_code: "", is_default: false };
 const input = "min-h-11 w-full rounded-xl border border-[#E8E4DA] bg-white px-3 text-sm text-[#292B25] outline-none transition focus:border-[#78956E] focus:ring-2 focus:ring-[#78956E]/15 placeholder:text-[#AAA69B]";
 const label = "mb-1.5 block text-xs font-bold text-[#625F56]";
 
 export default function ProfilePage() {
+  const { subtotal } = useCart();
   const [session, setSession] = useState<Session | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,6 +40,14 @@ export default function ProfilePage() {
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(false);
   const [configured, setConfigured] = useState(true);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteConfirmed, setDeleteConfirmed] = useState(false);
+  const [pendingVerificationEmail, setPendingVerificationEmail] = useState("");
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
+  const [couponsLoading, setCouponsLoading] = useState(true);
+  const [couponError, setCouponError] = useState("");
 
   const loadData = useCallback(async () => {
     if (!session?.user.id) { setKits([]); setAddresses([]); setProfile({ full_name: "", phone: "" }); return; }
@@ -52,18 +66,63 @@ export default function ProfilePage() {
       setKits((results[2].data ?? []) as SavedKit[]);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Account details could not be loaded."); }
     finally { setLoading(false); }
-  }, [session?.user.id]);
+  }, [session]);
 
   useEffect(() => {
+    let active = true;
     try {
       const supabase = getSupabaseBrowserClient();
-      if (new URLSearchParams(window.location.search).get("mode") === "reset") setMode("reset");
-      supabase.auth.getSession().then(({ data }) => setSession(data.session));
-      const { data } = supabase.auth.onAuthStateChange((_event, next) => setSession(next));
-      return () => data.subscription.unsubscribe();
-    } catch { setConfigured(false); }
+      const { data } = supabase.auth.onAuthStateChange((_event, next) => {
+        if (active) setSession(next);
+      });
+      void supabase.auth.getSession().then(({ data: sessionData }) => {
+        if (!active) return;
+        setSession(sessionData.session);
+        if (new URLSearchParams(window.location.search).get("mode") === "reset") setMode("reset");
+      }).catch(() => {
+        if (active) setConfigured(false);
+      });
+      return () => {
+        active = false;
+        data.subscription.unsubscribe();
+      };
+    } catch {
+      queueMicrotask(() => { if (active) setConfigured(false); });
+      return () => { active = false; };
+    }
   }, []);
-  useEffect(() => { void loadData(); }, [loadData]);
+  useEffect(() => { void Promise.resolve().then(loadData); }, [loadData]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadCoupons = async () => {
+      try {
+        const now = new Date().toISOString();
+        const { data, error: queryError } = await getSupabaseBrowserClient()
+          .from("coupons")
+          .select("id,code,title,description,discount_type,discount_value,minimum_order,valid_from,expires_at")
+          .eq("is_active", true)
+          .lte("valid_from", now)
+          .order("expires_at", { ascending: true, nullsFirst: false });
+        if (queryError) throw queryError;
+        const activeCoupons = ((data ?? []) as Coupon[]).filter(
+          (coupon) => !coupon.expires_at || Date.parse(coupon.expires_at) >= Date.now()
+        );
+        if (!cancelled) setCoupons(activeCoupons);
+      } catch (cause) {
+        if (!cancelled) setCouponError(cause instanceof Error ? cause.message : "Coupons could not be loaded.");
+      } finally {
+        if (!cancelled) setCouponsLoading(false);
+      }
+    };
+    void loadCoupons();
+    return () => { cancelled = true; };
+  }, []);
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const timer = window.setTimeout(() => setResendCooldown((seconds) => Math.max(0, seconds - 1)), 1000);
+    return () => window.clearTimeout(timer);
+  }, [resendCooldown]);
 
   const submitAuth = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault(); setBusy(true); setError(""); setMessage("");
@@ -72,7 +131,13 @@ export default function ProfilePage() {
       if (mode === "signup") {
         const { data, error: e } = await supabase.auth.signUp({ email: email.trim(), password, options: { emailRedirectTo: window.location.origin + "/profile", data: { full_name: signupName.trim() } } });
         if (e) throw e;
-        setMessage(data.session ? "Account successfully created." : "Account created. Email inbox mein verification link check karein, phir login karein.");
+        if (data.session) {
+          setPendingVerificationEmail("");
+          setMessage("Account successfully created.");
+        } else {
+          setPendingVerificationEmail(email.trim());
+          setMessage("Account ban gaya hai. Inbox ya spam folder mein verification email check karein. Link verify hone ke baad login karein.");
+        }
       } else if (mode === "forgot") {
         const { error: e } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: window.location.origin + "/profile?mode=reset" });
         if (e) throw e;
@@ -88,8 +153,40 @@ export default function ProfilePage() {
         const next = new URLSearchParams(window.location.search).get("next");
         if (next?.startsWith("/") && !next.startsWith("//")) window.location.assign(next);
       }
-    } catch (cause) { setError(cause instanceof Error ? cause.message : "Something went wrong."); }
-    finally { setBusy(false); }
+    } catch (cause) {
+      const rawMessage = cause instanceof Error ? cause.message : "Something went wrong.";
+      if (/rate.?limit|too many requests|email rate limit/i.test(rawMessage)) {
+        setResendCooldown(60);
+        setError("Email abhi bahut baar bhejne ki wajah se temporarily limit ho gaya hai. 1 minute baad ek baar try karein. Agar issue rahe, shop team ko contact karein.");
+      } else if (/user already registered|already been registered|already exists/i.test(rawMessage)) {
+        setError("Is email se account pehle se bana hua hai. Login karein ya Forgot password use karein.");
+      } else {
+        setError(rawMessage);
+      }
+    } finally { setBusy(false); }
+  };
+
+  const resendVerificationEmail = async () => {
+    if (!pendingVerificationEmail || busy || resendCooldown > 0) return;
+    setBusy(true); setError(""); setMessage("");
+    try {
+      const { error: resendError } = await getSupabaseBrowserClient().auth.resend({
+        type: "signup",
+        email: pendingVerificationEmail,
+        options: { emailRedirectTo: window.location.origin + "/profile" },
+      });
+      if (resendError) throw resendError;
+      setResendCooldown(60);
+      setMessage("Verification email dobara bhej diya gaya hai. Inbox aur spam folder check karein.");
+    } catch (cause) {
+      const rawMessage = cause instanceof Error ? cause.message : "Email dobara nahi bheja ja saka.";
+      if (/rate.?limit|too many requests|email rate limit/i.test(rawMessage)) {
+        setResendCooldown(60);
+        setError("Email sending limit abhi lagi hui hai. Thodi der baad dobara try karein.");
+      } else {
+        setError(rawMessage);
+      }
+    } finally { setBusy(false); }
   };
 
   const saveProfile = async (event: FormEvent<HTMLFormElement>) => {
@@ -164,6 +261,41 @@ export default function ProfilePage() {
     finally { setBusy(false); }
   };
 
+  const copyCouponCode = async (code: string) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setMessage(`${code} copied. Share it with the store when enquiring on WhatsApp.`);
+    } catch {
+      setMessage(`Coupon code: ${code}. You can copy it manually.`);
+    }
+  };
+
+  const deleteAccount = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!session?.user.email || !deleteConfirmed) return;
+    setBusy(true); setError(""); setMessage("");
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { error: reauthError } = await supabase.auth.signInWithPassword({ email: session.user.email, password: deletePassword });
+      if (reauthError) throw new Error("Password sahi nahi hai. Account delete nahi kiya gaya.");
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !sessionData.session?.access_token) throw new Error("Session verify nahi ho paya. Dobara login karein.");
+      const response = await fetch("/api/account/delete", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${sessionData.session.access_token}` },
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(result?.error || "Account delete nahi ho paya. Support se contact karein.");
+      await supabase.auth.signOut({ scope: "local" });
+      setSession(null); setKits([]); setAddresses([]); setProfile({ full_name: "", phone: "" });
+      setDeleteDialogOpen(false); setDeletePassword(""); setDeleteConfirmed(false);
+      setMode("signup");
+      setMessage("Aapka account permanently delete ho gaya hai. Rashid Mega Mart dobara use karne ke liye naya account banayein.");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Account delete nahi ho paya.");
+    } finally { setBusy(false); }
+  };
+
   const heading = mode === "signup" ? "Create your account" : mode === "forgot" ? "Reset password" : mode === "reset" ? "Set a new password" : "Welcome back";
 
   return (
@@ -171,6 +303,86 @@ export default function ProfilePage() {
       <div className="mx-auto max-w-3xl">
         <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#71866A]">Rashid Mega Mart</p>
         <div className="mt-1 flex items-end justify-between gap-3"><div><h1 className="text-2xl font-black tracking-tight text-[#292B25]">My Account</h1><p className="mt-1 text-sm text-[#77776E]">Profile details and saved addresses.</p></div>{session && <button type="button" disabled={busy} onClick={signOut} className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-[#E8E4DA] bg-white px-3 text-xs font-bold text-[#6A6B62] hover:bg-[#F4F3ED] disabled:opacity-50"><LogOut size={14}/> Logout</button>}</div>
+
+        <section className="mt-5 rounded-2xl border border-[#E9E7DE] bg-white p-4 shadow-[0_8px_30px_rgba(44,48,37,0.035)] sm:p-5">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-extrabold text-[#292B25]">Quick Actions</h2>
+              <p className="mt-1 text-xs text-[#85857B]">Your everyday store shortcuts.</p>
+            </div>
+          </div>
+          <div className="mt-3 grid grid-cols-3 gap-2 sm:gap-3">
+            <Link href="/cart" className="group flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-xl border border-[#EEEDE6] bg-[#FAFAF6] px-2 py-3 text-center transition hover:border-[#D9E4D2] hover:bg-[#F3F7EF]">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]"><ShoppingCart size={18}/></span>
+              <span className="text-xs font-extrabold text-[#3B4937]">Cart</span>
+            </Link>
+            <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noopener noreferrer" className="group flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-xl border border-[#EEEDE6] bg-[#FAFAF6] px-2 py-3 text-center transition hover:border-[#D9E4D2] hover:bg-[#F3F7EF]">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-[#EAF3E6]"><Image src="/Whatsapp-3d.svg" alt="" width={24} height={24} unoptimized className="size-6 object-contain"/></span>
+              <span className="text-xs font-extrabold text-[#3B4937]">WhatsApp</span>
+            </a>
+            <Link href="/rewards" className="group flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-xl border border-[#EEEDE6] bg-[#FAFAF6] px-2 py-3 text-center transition hover:border-[#D9E4D2] hover:bg-[#F3F7EF]">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-[#F8F1DE] text-[#8A6A22]"><Gift size={18}/></span>
+              <span className="text-xs font-extrabold text-[#3B4937]">Rewards</span>
+            </Link>
+          </div>
+        </section>
+
+        <section className="mt-4 overflow-hidden rounded-2xl border border-[#E9E7DE] bg-white shadow-[0_8px_30px_rgba(44,48,37,0.035)]">
+          <div className="flex items-center justify-between gap-3 border-b border-[#F0EFE9] px-4 py-4 sm:px-5">
+            <div>
+              <h2 className="text-sm font-extrabold text-[#292B25]">Available Coupons</h2>
+              <p className="mt-1 text-xs text-[#85857B]">Offers currently active at Rashid Mega Mart.</p>
+            </div>
+            <span className="rounded-full bg-[#F1F3EC] px-2.5 py-1 text-[10px] font-bold text-[#58744F]">{coupons.length} active</span>
+          </div>
+          <div className="space-y-2.5 p-3.5 sm:p-4">
+            {couponsLoading ? (
+              <p className="py-5 text-center text-xs text-[#85857B]">Checking available coupons...</p>
+            ) : couponError ? (
+              <p role="status" className="rounded-xl bg-[#FAFAF6] px-3 py-4 text-center text-xs leading-5 text-[#85857B]">Coupons are temporarily unavailable. Please try again later.</p>
+            ) : coupons.length === 0 ? (
+              <div className="rounded-xl bg-[#FAFAF6] px-3 py-6 text-center">
+                <Gift size={22} className="mx-auto text-[#9AA18F]"/>
+                <p className="mt-2 text-sm font-bold text-[#55564E]">No active coupons right now</p>
+                <p className="mt-1 text-xs text-[#929187]">New store offers will appear here when available.</p>
+              </div>
+            ) : coupons.map((coupon) => {
+              const minimumOrder = Number(coupon.minimum_order);
+              const remaining = Math.max(0, minimumOrder - subtotal);
+              const discountValue = Number(coupon.discount_value);
+              const discountLabel = coupon.discount_type === "percentage" ? `${discountValue}% OFF` : `${formatCurrency(discountValue)} OFF`;
+              const expiryLabel = coupon.expires_at
+                ? `Valid till ${new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric" }).format(new Date(coupon.expires_at))}`
+                : "No expiry date";
+              return (
+                <article key={coupon.id} className="rounded-xl border border-[#EEEDE6] bg-[#FFFEFC] p-3.5">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-sm font-extrabold text-[#303129]">{coupon.title}</p>
+                      {coupon.description && <p className="mt-1 text-xs leading-5 text-[#77776E]">{coupon.description}</p>}
+                    </div>
+                    <span className="shrink-0 rounded-full bg-[#EAF3E6] px-2.5 py-1 text-[10px] font-black text-[#315F35]">{discountLabel}</span>
+                  </div>
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-extrabold tracking-[0.08em] text-[#315F35]">{coupon.code}</p>
+                      <p className="mt-1 text-[10px] text-[#85857B]">{minimumOrder > 0 ? `Minimum cart ${formatCurrency(minimumOrder)}` : "No minimum cart value"} · {expiryLabel}</p>
+                    </div>
+                    <div className="flex shrink-0 flex-col items-end gap-1.5">
+                      <span className={`rounded-full px-2 py-1 text-[9px] font-extrabold ${remaining === 0 ? "bg-[#EAF3E6] text-[#315F35]" : "bg-[#F8F1DE] text-[#8A6A22]"}`}>
+                        {remaining === 0 ? "Available" : `Add ${formatCurrency(remaining)} more`}
+                      </span>
+                      <button type="button" onClick={() => void copyCouponCode(coupon.code)} className="inline-flex min-h-8 items-center gap-1 rounded-lg border border-[#E8E4DA] bg-white px-2.5 text-[10px] font-bold text-[#5F6257] transition hover:bg-[#F4F3ED]">
+                        <Copy size={12}/> Copy code
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+            <p className="px-1 text-[10px] leading-4 text-[#929187]">Coupon discounts are not automatically deducted from the cart. Share the code with the store team on WhatsApp to confirm eligibility and the final price.</p>
+          </div>
+        </section>
 
         {!configured ? <div className="mt-6 rounded-2xl border border-[#E8D7DC] bg-white p-5 text-sm text-[#6F3545]">Supabase configuration missing hai. Project root ki .env.local file mein Supabase URL aur publishable key add karein.</div> :
         session && mode !== "reset" ? <div className="mt-6 space-y-4">
@@ -205,6 +417,27 @@ export default function ProfilePage() {
           </section>
 
           <section className="overflow-hidden rounded-2xl border border-[#E9E7DE] bg-white"><div className="flex items-center justify-between border-b border-[#F0EFE9] px-4 py-4 sm:px-5"><div className="flex items-center gap-3"><span className="flex size-10 items-center justify-center rounded-full bg-[#F2F1EB] text-[#73766A]"><Package size={19}/></span><div><h2 className="text-sm font-extrabold text-[#292B25]">My Saved Kits</h2><p className="text-xs text-[#85857B]">Private to your account</p></div></div><span className="rounded-full bg-[#F1F3EC] px-3 py-1 text-xs font-bold text-[#58744F]">{kits.length} kits</span></div><div className="p-4 sm:p-5">{kits.length?<div className="space-y-2">{kits.map(kit=><article key={kit.id} className="flex items-center gap-3 rounded-xl border border-[#EEEDE6] p-3"><Package size={18} className="shrink-0 text-[#58744F]"/><div className="min-w-0 flex-1"><p className="truncate text-sm font-bold text-[#303129]">{kit.name}</p><p className="text-xs text-[#85857B]">{kit.items?.reduce((sum,item)=>sum+item.quantity,0)??0} items</p></div><Link href={"/planner?kit="+encodeURIComponent(kit.id)} className="inline-flex items-center gap-1 text-xs font-bold text-[#4D7046]">Open <ArrowRight size={13}/></Link></article>)}</div>:<p className="rounded-xl bg-[#FAFAF6] p-4 text-sm text-[#85857B]">Abhi koi saved kit nahi hai. Planner mein apna pehla kit save karein.</p>}<Link href="/planner" className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#426B43] px-4 text-xs font-bold text-white hover:bg-[#345A36]">Open Grocery Planner <ArrowRight size={15}/></Link></div></section>
+          <section className="overflow-hidden rounded-2xl border border-[#F0DAD7] bg-white">
+            <div className="border-b border-[#F7E9E7] px-4 py-3.5 sm:px-5">
+              <div className="flex items-center gap-2"><span className="flex size-9 items-center justify-center rounded-xl bg-[#FFF0EE] text-[#A7473F]"><Trash2 size={17}/></span><div><h2 className="text-sm font-extrabold text-[#8F3933]">Danger Zone</h2><p className="text-xs text-[#9A7772]">Permanent account action</p></div></div>
+            </div>
+            <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+              <div className="min-w-0"><p className="text-sm font-bold text-[#39332F]">Delete your account</p><p className="mt-1 max-w-xl text-xs leading-5 text-[#77716C]">Account, profile details, saved addresses aur saved kits permanently delete ho jayenge. Dobara use karne ke liye naya account banana padega.</p></div>
+              <button type="button" disabled={busy} onClick={()=>{setDeleteDialogOpen(true);setDeleteConfirmed(false);setDeletePassword("");setError("");}} className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-[#E8C7C3] bg-white px-4 text-xs font-extrabold text-[#A13F38] transition hover:bg-[#FFF5F3] disabled:opacity-50"><Trash2 size={14}/> Delete Account</button>
+            </div>
+          </section>
+          {deleteDialogOpen && <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#201C18]/55 p-4 backdrop-blur-sm" role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget&&!busy)setDeleteDialogOpen(false);}}>
+            <section role="dialog" aria-modal="true" aria-labelledby="delete-account-title" className="w-full max-w-md rounded-2xl border border-white/70 bg-[#FFFEFA] p-5 shadow-[0_24px_80px_rgba(20,20,16,0.28)] sm:p-6">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-[#FFF0EE] text-[#A7473F]"><Trash2 size={20}/></div>
+              <h2 id="delete-account-title" className="mt-4 text-lg font-black tracking-tight text-[#292B25]">Permanently delete account?</h2>
+              <p className="mt-2 text-sm leading-6 text-[#706D64]">Aapka Rashid Mega Mart account, profile details, saved addresses aur saved kits permanently delete ho jayenge. Purane email/password se login nahi hoga. Website dobara use karne ke liye aapko naya account banana padega.</p>
+              <form onSubmit={deleteAccount} className="mt-4 space-y-3">
+                <label className="block"><span className={label}>Confirm with your current password</span><input required type="password" autoComplete="current-password" value={deletePassword} onChange={event=>setDeletePassword(event.target.value)} className={input} placeholder="Enter current password"/></label>
+                <label className="flex items-start gap-2 rounded-xl bg-[#FFF5F3] p-3 text-xs leading-5 text-[#75433E]"><input type="checkbox" checked={deleteConfirmed} onChange={event=>setDeleteConfirmed(event.target.checked)} className="mt-0.5 size-4 shrink-0 accent-[#A7473F]"/><span>I understand this action is permanent and I will need to create a new account to use the website again.</span></label>
+                <div className="flex flex-col-reverse gap-2 pt-1 sm:flex-row sm:justify-end"><button type="button" disabled={busy} onClick={()=>setDeleteDialogOpen(false)} className="min-h-10 rounded-xl border border-[#E8E4DA] px-4 text-xs font-bold text-[#62635B] disabled:opacity-50">Cancel</button><button type="submit" disabled={busy||!deleteConfirmed||!deletePassword} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#A13F38] px-4 text-xs font-extrabold text-white transition hover:bg-[#87332D] disabled:cursor-not-allowed disabled:opacity-45"><Trash2 size={14}/>{busy?"Deleting account...":"Permanently Delete Account"}</button></div>
+              </form>
+            </section>
+          </div>}
         </div> :
         <section className="mt-6 rounded-2xl border border-[#E9E7DE] bg-white p-5 shadow-[0_8px_30px_rgba(44,48,37,0.035)] sm:p-6">
           <div className="flex items-center gap-3"><span className="flex size-11 items-center justify-center rounded-xl bg-[#EDF3E9] text-[#496C43]"><UserRound size={21}/></span><div><h2 className="text-lg font-black text-[#292B25]">{heading}</h2><p className="text-xs text-[#85857B]">Login to manage your account details.</p></div></div>
@@ -215,6 +448,8 @@ export default function ProfilePage() {
             {mode==="reset"&&<label className="block"><span className={label}>New password</span><input required minLength={8} type="password" autoComplete="new-password" value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="At least 8 characters" className={input}/></label>}
             <button disabled={busy} type="submit" className="min-h-11 w-full rounded-xl bg-[#426B43] px-4 text-sm font-extrabold text-white hover:bg-[#345A36] disabled:opacity-50">{busy?"Please wait...":mode==="signup"?"Create Account":mode==="forgot"?"Send Reset Link":mode==="reset"?"Update Password":"Login"}</button>
           </form>
+          {pendingVerificationEmail && mode === "login" && <div className="mt-4 rounded-xl border border-[#E8E9D9] bg-[#F7F8F0] p-3"><p className="text-xs leading-5 text-[#5F6257]">Verification pending for <strong>{pendingVerificationEmail}</strong>. Email inbox aur spam folder check karein.</p><button type="button" onClick={() => { setMode("signup"); setEmail(pendingVerificationEmail); }} className="mt-2 text-xs font-bold text-[#426B43]">Back to signup details</button></div>}
+          {pendingVerificationEmail && mode === "signup" && <div className="mt-4 rounded-xl border border-[#E8E9D9] bg-[#F7F8F0] p-3"><p className="text-xs leading-5 text-[#5F6257]">Verification email <strong>{pendingVerificationEmail}</strong> par bheja gaya hai. Inbox ke saath spam folder bhi check karein.</p><button type="button" disabled={busy || resendCooldown > 0} onClick={() => void resendVerificationEmail()} className="mt-3 min-h-9 rounded-lg border border-[#D7E1CE] bg-white px-3 text-xs font-bold text-[#426B43] disabled:cursor-not-allowed disabled:opacity-50">{busy ? "Please wait..." : resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend verification email"}</button></div>}
           <div className="mt-4 flex flex-wrap justify-between gap-2 text-xs font-bold text-[#4D7046]">{mode==="login"?<><button type="button" onClick={()=>setMode("signup")}>Create account</button><button type="button" onClick={()=>setMode("forgot")}>Forgot password?</button></>:<button type="button" onClick={()=>setMode("login")}>Back to login</button>}</div>
           <p className="mt-4 text-[11px] leading-5 text-[#929187]">Password securely Supabase Auth handle karta hai. Hum plain-text password store nahi karte. Signup ke baad email verification required ho sakti hai.</p>
         </section>}
