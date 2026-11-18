@@ -53,15 +53,6 @@ export const metadata: Metadata = {
     title: "Rashid Mega Mart | Online Grocery Shopping",
     description:
       "Your trusted destination for thoughtfully packed grocery kits.",
-    images: [
-      {
-        url: SOCIAL_SHARE_IMAGE,
-        width: 1200,
-        height: 630,
-        type: "image/svg+xml",
-        alt: "Rashid Mega Mart grocery shopping and grocery kits banner",
-      },
-    ],
   },
 
   twitter: {
@@ -69,12 +60,6 @@ export const metadata: Metadata = {
     title: "Rashid Mega Mart | Online Grocery Shopping",
     description:
       "Explore value-packed grocery kits at Rashid Mega Mart.",
-    images: [
-      {
-        url: SOCIAL_SHARE_IMAGE,
-        alt: "Rashid Mega Mart grocery shopping and grocery kits banner",
-      },
-    ],
   },
 
   formatDetection: {
