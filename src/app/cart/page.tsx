@@ -158,21 +158,21 @@ export default function CartPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FAF7EF] px-3 py-5 pb-28 sm:px-6 sm:py-9">
+    <main className="min-h-screen bg-[#FAF7EF] px-3 pt-4 pb-[calc(142px+env(safe-area-inset-bottom))] sm:px-6 sm:py-9 sm:pb-32">
       <div className="mx-auto max-w-5xl">
-        <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <header className="mb-4 flex flex-wrap items-center justify-between gap-2 sm:mb-6 sm:gap-3">
           <div>
             <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#168447]">Rashid Mega Mart</p>
             <h1 className="mt-1 text-2xl font-black tracking-tight text-[#202124] sm:text-3xl">Your Cart</h1>
             <p className="mt-1 text-sm text-[#686868]">{totalItems} {totalItems === 1 ? "kit" : "kits"} selected</p>
           </div>
-          <Link href="/kits" className="rmm-button-secondary min-h-10 rounded-xl px-4 py-2 text-xs">
+          <Link href="/kits" className="rmm-button-secondary min-h-11 rounded-xl px-3 py-2 text-[11px] sm:px-4 sm:text-xs">
             <ArrowLeft size={15} /> Continue Shopping
           </Link>
         </header>
 
-        <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_350px]">
-          <section className="space-y-3">
+        <div className="grid items-start gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1fr)_350px]">
+          <section className="space-y-2.5 sm:space-y-3">
             <div className="flex items-center justify-between px-1">
               <h2 className="font-extrabold text-[#202124]">Selected Kits</h2>
               <button
@@ -180,15 +180,15 @@ export default function CartPage() {
                 onClick={() => {
                   if (window.confirm("Remove all items from your cart?")) clearCart();
                 }}
-                className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-xs font-bold text-red-600 hover:bg-red-50"
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-lg px-2 text-[11px] font-bold text-red-600 hover:bg-red-50 sm:text-xs"
               >
                 <Trash2 size={14} /> Clear cart
               </button>
             </div>
 
             {pricedItems.map((item) => (
-              <article key={item.id} className="flex gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-3 shadow-sm sm:gap-4 sm:p-4">
-                <div className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-[#FAF7EF] sm:size-24">
+              <article key={item.id} className="flex gap-2.5 rounded-2xl border border-[#E8DFD1] bg-white p-2.5 shadow-sm sm:gap-4 sm:p-4">
+                <div className="relative size-[76px] shrink-0 overflow-hidden rounded-xl bg-[#FAF7EF] min-[380px]:size-20 sm:size-24">
                   {item.image ? (
                     <Image src={item.image} alt={item.name} fill unoptimized sizes="96px" className="object-contain p-2" />
                   ) : (
@@ -201,22 +201,22 @@ export default function CartPage() {
                       <h3 className="break-words text-sm font-extrabold text-[#202124] sm:text-base">{item.name}</h3>
                       <p className="mt-1 text-xs text-[#686868]">{formatPrice(item.unitPrice)} per kit</p>
                     </div>
-                    <button type="button" aria-label={"Remove " + item.name} onClick={() => removeFromCart(item.id)} className="flex size-9 shrink-0 items-center justify-center rounded-lg text-[#9B8F80] hover:bg-red-50 hover:text-red-600">
+                    <button type="button" aria-label={"Remove " + item.name} onClick={() => removeFromCart(item.id)} className="flex size-10 shrink-0 items-center justify-center rounded-xl text-[#9B8F80] hover:bg-red-50 hover:text-red-600">
                       <Trash2 size={16} />
                     </button>
                   </div>
 
-                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-                    <div className="inline-flex h-9 items-center rounded-lg border border-[#E8DFD1] bg-[#FAF7EF]">
-                      <button type="button" aria-label={"Decrease " + item.name} onClick={() => decreaseQuantity(item.id)} className="flex size-9 items-center justify-center rounded-l-lg text-[#800020] hover:bg-[#F1EBDD]"><Minus size={14} /></button>
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 sm:mt-4 sm:gap-3">
+                    <div className="inline-flex h-11 items-center rounded-xl border border-[#E8DFD1] bg-[#FAF7EF]">
+                      <button type="button" aria-label={"Decrease " + item.name} onClick={() => decreaseQuantity(item.id)} className="flex size-11 items-center justify-center rounded-l-xl text-[#800020] hover:bg-[#F1EBDD]"><Minus size={14} /></button>
                       <span aria-live="polite" className="min-w-8 text-center text-sm font-black tabular-nums text-[#202124]">{item.quantity}</span>
-                      <button type="button" aria-label={"Increase " + item.name} onClick={() => increaseQuantity(item.id)} className="flex size-9 items-center justify-center rounded-r-lg text-[#168447] hover:bg-[#EAF3E9]"><Plus size={14} /></button>
+                      <button type="button" aria-label={"Increase " + item.name} onClick={() => increaseQuantity(item.id)} className="flex size-11 items-center justify-center rounded-r-xl text-[#168447] hover:bg-[#EAF3E9]"><Plus size={14} /></button>
                     </div>
                     <p className="text-base font-black tabular-nums text-[#168447]">{formatPrice(item.lineTotal)}</p>
                   </div>
 
                   {(item.kitContents?.length || item.requestedItems?.length) ? (
-                    <details className="mt-3 rounded-xl bg-[#FAF7EF] px-3 py-2">
+                    <details className="mt-2.5 rounded-xl bg-[#FAF7EF] px-3 py-2.5">
                       <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-xs font-bold text-[#5E574E]">
                         View kit items / changes <ChevronDown size={14} />
                       </summary>
@@ -289,8 +289,8 @@ export default function CartPage() {
           </aside>
         </div>
 
-        <div className="fixed inset-x-0 bottom-[calc(66px+env(safe-area-inset-bottom))] z-30 border-t border-[#E8DFD1] bg-white/95 px-4 py-2.5 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
-          <button type="button" onClick={() => document.querySelector<HTMLFormElement>("#cart-checkout")?.requestSubmit()} className="flex min-h-11 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white">
+        <div className="fixed inset-x-0 bottom-[calc(70px+env(safe-area-inset-bottom))] z-40 border-t border-[#E8DFD1] bg-white/98 px-3 py-2 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
+          <button type="button" onClick={() => document.querySelector<HTMLFormElement>("#cart-checkout")?.requestSubmit()} className="flex min-h-12 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white shadow-sm active:scale-[.99]">
             <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Order on WhatsApp</span>
             <span className="tabular-nums">{formatPrice(subtotal)}</span>
           </button>
