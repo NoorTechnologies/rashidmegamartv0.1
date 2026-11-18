@@ -505,10 +505,12 @@ video {
 @media (max-width: 359px) {
   :root { --page-gutter: 10px; }
 
-  body { font-size: 12.5px; }
+  body { font-size: 13px; }
 
   main [class~="p-5"],
   main [class~="p-6"] { padding: 0.75rem !important; }
+
+  main [class~="min-h-[88px]"] { min-height: 72px !important; }
 
   main [class~="text-3xl"] { font-size: 1.45rem !important; }
   main [class~="text-2xl"] { font-size: 1.2rem !important; }
