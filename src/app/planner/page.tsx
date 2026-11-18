@@ -400,7 +400,7 @@ export default function PlannerPage() {
               savedKits.map((kit) => {
                 const count = kit.items.reduce((sum, line) => sum + line.quantity, 0);
                 const total = kit.items.reduce((sum, line) => {
-                  const product = products.find((item) => item.id === line.productId);
+                  const product = catalogProducts.find((item) => item.id === line.productId);
                   return sum + (product?.price ?? 0) * line.quantity;
                 }, 0);
                 return (
