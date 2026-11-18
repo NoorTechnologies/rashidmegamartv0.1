@@ -68,13 +68,14 @@ export default function PlannerPage() {
         ]);
         if (!productError && productRows) {
           const categoryNames = new Map((categoryRows ?? []).map((row) => [row.id, row.name]));
-          setCatalogProducts(productRows.map((row) => ({
+          const liveProducts: Product[] = productRows.map((row) => ({
             id: row.id, name: row.name, brand: row.brand ?? "", category: categoryNames.get(row.category_id ?? "") ?? "Other",
             categoryId: row.category_id ?? "", packSize: row.pack_size ?? "", price: Number(row.price),
             oldPrice: row.old_price == null ? undefined : Number(row.old_price), image: row.image ?? "",
             description: row.description ?? "", isFeatured: row.is_featured, isBestSeller: row.is_best_seller,
             isAvailable: row.is_available, stock: row.stock ?? undefined,
-          })));
+          }));
+          setCatalogProducts(liveProducts);
         } else if (productError) {
           setNotice("Live catalogue could not load. Showing the saved catalogue copy. " + productError.message);
         }
@@ -99,7 +100,7 @@ export default function PlannerPage() {
             if (requestedKit) {
               const next: Record<string, number> = {};
               for (const line of requestedKit.items) {
-                const product = catalogProducts.find((item) => item.id === line.productId);
+                const product = liveProducts.find((item) => item.id === line.productId);
                 if (product?.isAvailable) next[product.id] = line.quantity;
               }
               setSelected(next);
@@ -152,7 +153,7 @@ export default function PlannerPage() {
           product.packSize.toLowerCase().includes(term)
       )
       .sort((a, b) => a.name.localeCompare(b.name));
-  }, [search, category]);
+  }, [search, category, catalogProducts]);
 
   const changeQuantity = (product: Product, delta: number) => {
     setSelected((current) => {
