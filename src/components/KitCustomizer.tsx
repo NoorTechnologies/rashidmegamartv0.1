@@ -134,23 +134,28 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           <span className="rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[10px] font-black text-[#806000]">{contents.length} included</span>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-[#E8DFD1] bg-white">
+        <div className="grid gap-2 sm:grid-cols-2">
           {contents.map((line, index) => (
-            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="rmm-grocery-row flex items-center gap-2 border-b border-[#FAF7EF] px-2.5 py-2.5 last:border-b-0 sm:gap-3 sm:px-3">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E9] text-[#168447]"><Package size={15} /></span>
-              <div className="min-w-0 flex-1">
-                <p className="break-words text-[11px] font-extrabold leading-4 text-[#202124] sm:text-xs">{displayCatalogue(line.name)}</p>
-                <p className="mt-0.5 text-[9px] font-semibold text-[#686868]">Included in this kit</p>
+            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="rounded-2xl border border-[#E8DFD1] bg-white p-3 shadow-[0_2px_8px_rgba(32,33,36,.035)]">
+              <div className="flex min-w-0 items-center gap-2">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E9] text-[#168447]"><Package size={16} /></span>
+                <div className="min-w-0 flex-1">
+                  <p className="break-words text-xs font-extrabold leading-4 text-[#202124]">{displayCatalogue(line.name)}</p>
+                  <p className="mt-0.5 text-[9px] font-semibold text-[#8A8178]">Included in kit</p>
+                </div>
+                <button type="button" aria-label={`Remove ${line.name}`} onClick={() => saveContents(contents.filter((_, i) => i !== index))} className="flex size-8 shrink-0 items-center justify-center rounded-lg text-[#8A8178] transition hover:bg-red-50 hover:text-red-600"><Trash2 size={14} /></button>
               </div>
-              <div className="flex shrink-0 items-center rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] p-0.5">
-                <button type="button" aria-label={`Decrease ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD] disabled:cursor-not-allowed disabled:opacity-35"><Minus size={13} /></button>
-                <input aria-label={`${line.name} quantity`} value={displayCatalogue(line.quantity)} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: event.target.value.slice(0, 24) } : entry))} className="w-[58px] bg-transparent text-center text-[10px] font-extrabold text-[#202124] outline-none sm:w-[68px]" />
-                <button type="button" aria-label={`Increase ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="rmm-quantity-button size-7 rounded-lg text-[#800020] hover:bg-[#F1EBDD] disabled:cursor-not-allowed disabled:opacity-35"><Plus size={13} /></button>
+              <div className="mt-3 flex items-center justify-between gap-2 rounded-xl bg-[#FAF7EF] p-1.5">
+                <span className="pl-2 text-[10px] font-bold text-[#686868]">Quantity</span>
+                <div className="flex items-center gap-1">
+                  <button type="button" aria-label={`Decrease ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="flex size-8 items-center justify-center rounded-lg bg-white text-[#800020] shadow-sm hover:bg-[#F1EBDD] disabled:opacity-35"><Minus size={13} /></button>
+                  <input aria-label={`${line.name} quantity`} value={displayCatalogue(line.quantity)} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: event.target.value.slice(0, 24) } : entry))} className="w-[76px] rounded-lg border border-[#E8DFD1] bg-white px-1 py-2 text-center text-[11px] font-extrabold text-[#202124] outline-none focus:border-[#168447]" />
+                  <button type="button" aria-label={`Increase ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="flex size-8 items-center justify-center rounded-lg bg-white text-[#168447] shadow-sm hover:bg-[#EAF3E9] disabled:opacity-35"><Plus size={13} /></button>
+                </div>
               </div>
-              <button type="button" aria-label={`Remove ${line.name}`} onClick={() => saveContents(contents.filter((_, i) => i !== index))} className="flex size-8 shrink-0 items-center justify-center rounded-xl text-[#686868] transition hover:bg-[#F1EBDD] hover:text-[#800020]"><Trash2 size={14} /></button>
             </div>
           ))}
-          {contents.length === 0 && <p className="px-4 py-6 text-center text-xs font-semibold text-[#686868]">No original items left. Add the groceries you want below.</p>}
+          {contents.length === 0 && <p className="rounded-2xl border border-dashed border-[#D8CBB8] bg-[#FAF7EF] px-4 py-6 text-center text-xs font-semibold text-[#686868] sm:col-span-2">No original items left. Add the groceries you want below.</p>}
         </div>
 
         <div className="mt-4 rounded-2xl border border-dashed border-[#D8CBB8] bg-[linear-gradient(135deg,#FAF7EF_0%,#F1EBDD_100%)] p-3 sm:p-4">
@@ -158,7 +163,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
             <span className="flex size-9 items-center justify-center rounded-xl bg-[#168447] text-white shadow-sm"><PlusCircle size={18} /></span>
             <div>
               <h3 className="text-xs font-black text-[#202124] sm:text-sm">Add more groceries</h3>
-              <p className="text-[10px] font-medium text-[#686868]">Choose from our kits or type any item you need.</p>
+              <p className="text-[10px] font-medium text-[#686868]">Search a suggested item or type your own name and quantity.</p>
             </div>
           </div>
           <input list={`grocery-options-${kit.id}`} value={newItem} onChange={(event) => { setNewItem(event.target.value); setError(""); }} placeholder="Try: Aata, Chini, Detergent..." aria-label="Add grocery item" maxLength={70} className="mt-3 min-h-11 w-full rounded-xl border border-[#D8CBB8] bg-white px-3 text-xs font-semibold text-[#202124] outline-none transition placeholder:font-medium placeholder:text-[#686868] focus:border-[#800020] focus:ring-3 focus:ring-[#800020]/10" />
