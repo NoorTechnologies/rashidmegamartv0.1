@@ -418,7 +418,7 @@ export default function PlannerPage() {
                     </div>
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {kit.items.slice(0, 5).map((line) => {
-                        const product = products.find((item) => item.id === line.productId);
+                        const product = catalogProducts.find((item) => item.id === line.productId);
                         return product ? <span key={line.productId} className="rounded-full bg-[#F5F0E9] px-2.5 py-1 text-[10px] font-semibold text-[#62574E]">{product.name} × {line.quantity}</span> : null;
                       })}
                       {kit.items.length > 5 && <span className="rounded-full bg-[#F5F0E9] px-2.5 py-1 text-[10px] font-semibold text-[#62574E]">+{kit.items.length - 5} more</span>}
