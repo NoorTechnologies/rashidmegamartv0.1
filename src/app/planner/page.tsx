@@ -19,6 +19,7 @@ import {
 import { useCart } from "@/context/CartContext";
 import { products, type Product } from "@/data/products";
 import { categories } from "@/data/categories";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type KitLine = { productId: string; quantity: number };
 type SavedKit = {
@@ -37,7 +38,7 @@ const money = (value: number) =>
   }).format(value);
 
 export default function PlannerPage() {
-  const { addToCart, increaseQuantity } = useCart();
+  const { addCustomKitToCart } = useCart();
   const [kitName, setKitName] = useState("");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
@@ -46,27 +47,42 @@ export default function PlannerPage() {
   const [activeTab, setActiveTab] = useState<"create" | "saved">("create");
   const [notice, setNotice] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [editingKitId, setEditingKitId] = useState<string | null>(null);
+  const [showAuth, setShowAuth] = useState(false);
+  const [authMode, setAuthMode] = useState<"login" | "signup">("login");
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [authBusy, setAuthBusy] = useState(false);
 
   useEffect(() => {
+    let active = true;
     try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed: unknown = JSON.parse(raw);
-        if (Array.isArray(parsed)) {
-          setSavedKits(
-            parsed.filter(
-              (kit): kit is SavedKit =>
-                !!kit &&
-                typeof kit.id === "string" &&
-                typeof kit.name === "string" &&
-                Array.isArray(kit.items)
-            )
-          );
+      const supabase = getSupabaseBrowserClient();
+      supabase.auth.getSession().then(async ({ data, error }) => {
+        if (!active) return;
+        if (error) setNotice(error.message);
+        const user = data.session?.user;
+        setCurrentUserId(user?.id ?? null);
+        if (user) {
+          const { data: rows, error: queryError } = await supabase
+            .from("customer_saved_kits")
+            .select("id,name,items,updated_at")
+            .eq("user_id", user.id)
+            .order("updated_at", { ascending: false });
+          if (queryError) setNotice(queryError.message);
+          else if (active) setSavedKits((rows ?? []).map((row) => ({
+            id: row.id, name: row.name, items: row.items as KitLine[], updatedAt: row.updated_at,
+          })));
         }
-      }
-    } catch {
-      setNotice("Saved kits could not be loaded from this browser.");
-    } finally {
+        if (active) setIsLoaded(true);
+      });
+      const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (active) setCurrentUserId(session?.user.id ?? null);
+      });
+      return () => { active = false; listener.subscription.unsubscribe(); };
+    } catch (cause) {
+      setNotice(cause instanceof Error ? cause.message : "Supabase configuration is missing.");
       setIsLoaded(true);
     }
   }, []);
@@ -114,38 +130,29 @@ export default function PlannerPage() {
     });
   };
 
-  const persistKits = (next: SavedKit[]) => {
-    setSavedKits(next);
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      setNotice("Your kit has been saved on this device.");
-    } catch {
-      setNotice("Unable to save. Please check your browser storage.");
-    }
-  };
-
-  const saveKit = () => {
+  const saveKit = async () => {
     const name = kitName.trim();
-    if (!name) {
-      setNotice("Please enter a name for your grocery kit.");
-      return;
-    }
-    if (selectedProducts.length === 0) {
-      setNotice("Add at least one product before saving your kit.");
-      return;
-    }
+    if (!name) { setNotice("Please enter a name for your grocery kit."); return; }
+    if (selectedProducts.length === 0) { setNotice("Add at least one product before saving your kit."); return; }
+    if (!currentUserId) { setShowAuth(true); return; }
 
-    const kit: SavedKit = {
-      id: crypto.randomUUID(),
-      name,
-      items: selectedProducts.map((product) => ({
-        productId: product.id,
-        quantity: selected[product.id],
-      })),
-      updatedAt: new Date().toISOString(),
-    };
-    persistKits([kit, ...savedKits]);
-    setActiveTab("saved");
+    const kitId = editingKitId ?? crypto.randomUUID();
+    const kitItems = selectedProducts.map((product) => ({ productId: product.id, quantity: selected[product.id] }));
+    try {
+      const { data, error } = await getSupabaseBrowserClient()
+        .from("customer_saved_kits")
+        .upsert({ id: kitId, user_id: currentUserId, name, items: kitItems, updated_at: new Date().toISOString() })
+        .select("id,name,items,updated_at")
+        .single();
+      if (error) throw error;
+      const saved: SavedKit = { id: data.id, name: data.name, items: data.items as KitLine[], updatedAt: data.updated_at };
+      setSavedKits((current) => [saved, ...current.filter((item) => item.id !== saved.id)]);
+      setEditingKitId(saved.id);
+      setActiveTab("saved");
+      setNotice("Your kit is saved securely in your account.");
+    } catch (cause) {
+      setNotice(cause instanceof Error ? cause.message : "Unable to save your kit.");
+    }
   };
 
   const loadKit = (kit: SavedKit) => {
@@ -156,12 +163,38 @@ export default function PlannerPage() {
     }
     setSelected(next);
     setKitName(kit.name);
+    setEditingKitId(kit.id);
     setActiveTab("create");
     setNotice(`"${kit.name}" is ready to edit.`);
   };
 
-  const deleteKit = (id: string) => {
-    persistKits(savedKits.filter((kit) => kit.id !== id));
+  const deleteKit = async (id: string) => {
+    if (!currentUserId) return;
+    const { error } = await getSupabaseBrowserClient().from("customer_saved_kits").delete().eq("id", id).eq("user_id", currentUserId);
+    if (error) { setNotice(error.message); return; }
+    setSavedKits((current) => current.filter((kit) => kit.id !== id));
+    setNotice("Saved kit deleted.");
+  };
+
+  const submitPlannerAuth = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); setAuthBusy(true); setNotice("");
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const response = authMode === "signup"
+        ? await supabase.auth.signUp({ email: authEmail.trim(), password: authPassword, options: { emailRedirectTo: window.location.origin + "/planner" } })
+        : await supabase.auth.signInWithPassword({ email: authEmail.trim(), password: authPassword });
+      if (response.error) throw response.error;
+      if (!response.data.session) {
+        setNotice("Account create ho gaya. Email verification link check karein, phir login karke Save My Kit karein.");
+        setAuthMode("login");
+        return;
+      }
+      setCurrentUserId(response.data.session.user.id);
+      setShowAuth(false);
+      setNotice("Login successful. Ab Save My Kit dobara press karein.");
+    } catch (cause) {
+      setNotice(cause instanceof Error ? cause.message : "Login failed. Please try again.");
+    } finally { setAuthBusy(false); }
   };
 
   const addKitToCart = () => {
@@ -169,21 +202,15 @@ export default function PlannerPage() {
       setNotice("Choose products for your kit first.");
       return;
     }
-    for (const product of selectedProducts) {
-      const quantity = selected[product.id] ?? 0;
-      addToCart({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        brand: product.brand,
-        packSize: product.packSize,
-      });
-      for (let index = 1; index < quantity; index += 1) {
-        increaseQuantity(product.id);
-      }
-    }
-    setNotice(`${totalItems} items added to your cart.`);
+    addCustomKitToCart({
+      id: editingKitId ?? crypto.randomUUID(),
+      name: kitName.trim() || "My Grocery Kit",
+      items: selectedProducts.map((product) => ({
+        product: { id: product.id, name: product.name, price: product.price, image: product.image, brand: product.brand, packSize: product.packSize },
+        quantity: selected[product.id] ?? 1,
+      })),
+    });
+    setNotice(`${totalItems} items added to your cart as a kit.`);
   };
 
   return (
@@ -306,7 +333,7 @@ export default function PlannerPage() {
                   <p className="text-xs font-bold text-[#56704F]">Your kit · {totalItems} items</p>
                   <p className="mt-0.5 text-2xl font-black text-[#800020]">{money(totalPrice)}</p>
                 </div>
-                <button type="button" onClick={saveKit} disabled={!isLoaded || selectedProducts.length === 0} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#800020] px-4 text-sm font-extrabold text-white shadow-md transition hover:bg-[#650019] disabled:cursor-not-allowed disabled:opacity-45">
+                <button type="button" onClick={() => void saveKit()} disabled={!isLoaded || selectedProducts.length === 0} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#800020] px-4 text-sm font-extrabold text-white shadow-md transition hover:bg-[#650019] disabled:cursor-not-allowed disabled:opacity-45">
                   <Check size={17} /> Save My Kit
                 </button>
               </div>
@@ -320,7 +347,7 @@ export default function PlannerPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-black">Your saved grocery kits</h2>
-                <p className="text-xs text-[#776B61]">Saved on this device for quick reuse.</p>
+                <p className="text-xs text-[#776B61]">Saved privately in your account.</p>
               </div>
               <button type="button" onClick={() => setActiveTab("create")} className="inline-flex min-h-9 items-center gap-1 rounded-full bg-[#800020] px-3 text-xs font-bold text-white"><Plus size={15} /> New kit</button>
             </div>
@@ -362,13 +389,29 @@ export default function PlannerPage() {
           </section>
         )}
 
+        {showAuth && (
+          <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#21171A]/45 px-4 py-8" role="dialog" aria-modal="true" aria-labelledby="planner-auth-title">
+            <div className="w-full max-w-sm rounded-2xl border border-[#EDE4D8] bg-white p-5 shadow-2xl">
+              <div className="flex items-start justify-between gap-3">
+                <div><h2 id="planner-auth-title" className="text-lg font-black text-[#30251F]">Login to save your kit</h2><p className="mt-1 text-xs text-[#776B61]">Your custom kits will stay private in your account.</p></div>
+                <button type="button" onClick={() => setShowAuth(false)} aria-label="Close login" className="text-xl text-[#85786D]">×</button>
+              </div>
+              <form onSubmit={submitPlannerAuth} className="mt-4 space-y-3">
+                <input required type="email" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} placeholder="Email address" className="min-h-11 w-full rounded-xl border border-[#E7DED2] px-3 text-sm outline-none focus:border-[#168447]" />
+                <input required minLength={8} type="password" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} placeholder="Password (minimum 8 characters)" className="min-h-11 w-full rounded-xl border border-[#E7DED2] px-3 text-sm outline-none focus:border-[#168447]" />
+                <button disabled={authBusy} type="submit" className="min-h-11 w-full rounded-xl bg-[#800020] text-sm font-extrabold text-white disabled:opacity-50">{authBusy ? "Please wait..." : authMode === "login" ? "Login" : "Create Account"}</button>
+              </form>
+              <button type="button" onClick={() => setAuthMode(authMode === "login" ? "signup" : "login")} className="mt-3 text-xs font-bold text-[#800020]">{authMode === "login" ? "New customer? Create account" : "Already registered? Login"}</button>
+            </div>
+          </div>
+        )}
         {notice && (
           <div role="status" aria-live="polite" className="mt-4 flex items-start justify-between gap-3 rounded-xl border border-[#DDE9D1] bg-[#F2F8E9] px-4 py-3 text-xs font-semibold text-[#28643B]">
             <span>{notice}</span>
             <button type="button" onClick={() => setNotice("")} aria-label="Dismiss message" className="font-black">×</button>
           </div>
         )}
-        <p className="mt-6 flex items-center justify-center gap-2 text-center text-[11px] text-[#8B7B70]"><CalendarDays size={14} /> Your saved kits stay in this browser on this device.</p>
+        <p className="mt-6 flex items-center justify-center gap-2 text-center text-[11px] text-[#8B7B70]"><CalendarDays size={14} /> Your saved kits are linked to your account.</p>
       </div>
     </main>
   );
