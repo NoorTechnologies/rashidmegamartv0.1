@@ -34,6 +34,9 @@ export default function ProfilePage() {
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(false);
   const [configured, setConfigured] = useState(true);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteConfirmed, setDeleteConfirmed] = useState(false);
 
   const loadData = useCallback(async () => {
     if (!session?.user.id) { setKits([]); setAddresses([]); setProfile({ full_name: "", phone: "" }); return; }
@@ -164,6 +167,32 @@ export default function ProfilePage() {
     finally { setBusy(false); }
   };
 
+  const deleteAccount = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!session?.user.email || !deleteConfirmed) return;
+    setBusy(true); setError(""); setMessage("");
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { error: reauthError } = await supabase.auth.signInWithPassword({ email: session.user.email, password: deletePassword });
+      if (reauthError) throw new Error("Password sahi nahi hai. Account delete nahi kiya gaya.");
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !sessionData.session?.access_token) throw new Error("Session verify nahi ho paya. Dobara login karein.");
+      const response = await fetch("/api/account/delete", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${sessionData.session.access_token}` },
+      });
+      const result = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(result?.error || "Account delete nahi ho paya. Support se contact karein.");
+      await supabase.auth.signOut();
+      setSession(null); setKits([]); setAddresses([]); setProfile({ full_name: "", phone: "" });
+      setDeleteDialogOpen(false); setDeletePassword(""); setDeleteConfirmed(false);
+      setMode("signup");
+      setMessage("Aapka account permanently delete ho gaya hai. Rashid Mega Mart dobara use karne ke liye naya account banayein.");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Account delete nahi ho paya.");
+    } finally { setBusy(false); }
+  };
+
   const heading = mode === "signup" ? "Create your account" : mode === "forgot" ? "Reset password" : mode === "reset" ? "Set a new password" : "Welcome back";
 
   return (
@@ -205,6 +234,27 @@ export default function ProfilePage() {
           </section>
 
           <section className="overflow-hidden rounded-2xl border border-[#E9E7DE] bg-white"><div className="flex items-center justify-between border-b border-[#F0EFE9] px-4 py-4 sm:px-5"><div className="flex items-center gap-3"><span className="flex size-10 items-center justify-center rounded-full bg-[#F2F1EB] text-[#73766A]"><Package size={19}/></span><div><h2 className="text-sm font-extrabold text-[#292B25]">My Saved Kits</h2><p className="text-xs text-[#85857B]">Private to your account</p></div></div><span className="rounded-full bg-[#F1F3EC] px-3 py-1 text-xs font-bold text-[#58744F]">{kits.length} kits</span></div><div className="p-4 sm:p-5">{kits.length?<div className="space-y-2">{kits.map(kit=><article key={kit.id} className="flex items-center gap-3 rounded-xl border border-[#EEEDE6] p-3"><Package size={18} className="shrink-0 text-[#58744F]"/><div className="min-w-0 flex-1"><p className="truncate text-sm font-bold text-[#303129]">{kit.name}</p><p className="text-xs text-[#85857B]">{kit.items?.reduce((sum,item)=>sum+item.quantity,0)??0} items</p></div><Link href={"/planner?kit="+encodeURIComponent(kit.id)} className="inline-flex items-center gap-1 text-xs font-bold text-[#4D7046]">Open <ArrowRight size={13}/></Link></article>)}</div>:<p className="rounded-xl bg-[#FAFAF6] p-4 text-sm text-[#85857B]">Abhi koi saved kit nahi hai. Planner mein apna pehla kit save karein.</p>}<Link href="/planner" className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#426B43] px-4 text-xs font-bold text-white hover:bg-[#345A36]">Open Grocery Planner <ArrowRight size={15}/></Link></div></section>
+          <section className="overflow-hidden rounded-2xl border border-[#F0DAD7] bg-white">
+            <div className="border-b border-[#F7E9E7] px-4 py-3.5 sm:px-5">
+              <div className="flex items-center gap-2"><span className="flex size-9 items-center justify-center rounded-xl bg-[#FFF0EE] text-[#A7473F]"><Trash2 size={17}/></span><div><h2 className="text-sm font-extrabold text-[#8F3933]">Danger Zone</h2><p className="text-xs text-[#9A7772]">Permanent account action</p></div></div>
+            </div>
+            <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+              <div className="min-w-0"><p className="text-sm font-bold text-[#39332F]">Delete your account</p><p className="mt-1 max-w-xl text-xs leading-5 text-[#77716C]">Account, profile details, saved addresses aur saved kits permanently delete ho jayenge. Dobara use karne ke liye naya account banana padega.</p></div>
+              <button type="button" disabled={busy} onClick={()=>{setDeleteDialogOpen(true);setDeleteConfirmed(false);setDeletePassword("");setError("");}} className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-[#E8C7C3] bg-white px-4 text-xs font-extrabold text-[#A13F38] transition hover:bg-[#FFF5F3] disabled:opacity-50"><Trash2 size={14}/> Delete Account</button>
+            </div>
+          </section>
+          {deleteDialogOpen && <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#201C18]/55 p-4 backdrop-blur-sm" role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget&&!busy)setDeleteDialogOpen(false);}}>
+            <section role="dialog" aria-modal="true" aria-labelledby="delete-account-title" className="w-full max-w-md rounded-2xl border border-white/70 bg-[#FFFEFA] p-5 shadow-[0_24px_80px_rgba(20,20,16,0.28)] sm:p-6">
+              <div className="flex size-11 items-center justify-center rounded-xl bg-[#FFF0EE] text-[#A7473F]"><Trash2 size={20}/></div>
+              <h2 id="delete-account-title" className="mt-4 text-lg font-black tracking-tight text-[#292B25]">Permanently delete account?</h2>
+              <p className="mt-2 text-sm leading-6 text-[#706D64]">Aapka Rashid Mega Mart account, profile details, saved addresses aur saved kits permanently delete ho jayenge. Purane email/password se login nahi hoga. Website dobara use karne ke liye aapko naya account banana padega.</p>
+              <form onSubmit={deleteAccount} className="mt-4 space-y-3">
+                <label className="block"><span className={label}>Confirm with your current password</span><input required type="password" autoComplete="current-password" value={deletePassword} onChange={event=>setDeletePassword(event.target.value)} className={input} placeholder="Enter current password"/></label>
+                <label className="flex items-start gap-2 rounded-xl bg-[#FFF5F3] p-3 text-xs leading-5 text-[#75433E]"><input type="checkbox" checked={deleteConfirmed} onChange={event=>setDeleteConfirmed(event.target.checked)} className="mt-0.5 size-4 shrink-0 accent-[#A7473F]"/><span>I understand this action is permanent and I will need to create a new account to use the website again.</span></label>
+                <div className="flex flex-col-reverse gap-2 pt-1 sm:flex-row sm:justify-end"><button type="button" disabled={busy} onClick={()=>setDeleteDialogOpen(false)} className="min-h-10 rounded-xl border border-[#E8E4DA] px-4 text-xs font-bold text-[#62635B] disabled:opacity-50">Cancel</button><button type="submit" disabled={busy||!deleteConfirmed||!deletePassword} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[#A13F38] px-4 text-xs font-extrabold text-white transition hover:bg-[#87332D] disabled:cursor-not-allowed disabled:opacity-45"><Trash2 size={14}/>{busy?"Deleting account...":"Permanently Delete Account"}</button></div>
+              </form>
+            </section>
+          </div>}
         </div> :
         <section className="mt-6 rounded-2xl border border-[#E9E7DE] bg-white p-5 shadow-[0_8px_30px_rgba(44,48,37,0.035)] sm:p-6">
           <div className="flex items-center gap-3"><span className="flex size-11 items-center justify-center rounded-xl bg-[#EDF3E9] text-[#496C43]"><UserRound size={21}/></span><div><h2 className="text-lg font-black text-[#292B25]">{heading}</h2><p className="text-xs text-[#85857B]">Login to manage your account details.</p></div></div>
