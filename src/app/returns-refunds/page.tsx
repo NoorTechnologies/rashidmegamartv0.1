@@ -261,7 +261,7 @@ export default function ReturnsRefundsPage() {
             </h2>
           </div>
           <div className="overflow-hidden rounded-2xl border border-[#EAE5DC] bg-white">
-            {faqItems.map((item, index) => (
+            {faqItems.map((item) => (
               <details
                 key={item.question}
                 name="returns-faq"
