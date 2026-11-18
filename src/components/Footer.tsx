@@ -3,7 +3,9 @@ import Link from "next/link";
 import { MapPin, Phone, Clock, ArrowUpRight, ShoppingBag, ShieldCheck, FileText } from "lucide-react";
 
 const WHATSAPP_NUMBER = "918962531603";
-const WHATSAPP_URL = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Namaste Rashid Mega Mart! Mujhe store, grocery kits aur ordering ke baare mein jaankari chahiye. Please help karein.");
+const WHATSAPP_URL = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Namaste Rashid Mega Mart! Mujhe aapke grocery kits aur shopping options ke baare mein jaankari chahiye.");
+const WHATSAPP_CONTACT_URL = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Namaste Rashid Mega Mart! Main aapse contact karna chahta/chahti hoon. Kripya mujhe guide karein.");
+const WHATSAPP_PHONE_URL = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Namaste Rashid Mega Mart! Main +91 89625 31603 par aapse baat karna chahta/chahti hoon.");
 const STORE_MAP_URL = "https://maps.app.goo.gl/peGoceS36ZfBqKsdA";
 
 const quickLinks = [
@@ -56,7 +58,7 @@ export default function Footer() {
             <h3 className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#800020] sm:text-sm">Help & Policies</h3>
             <ul className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 sm:flex-col sm:gap-3">
               <li>
-                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-xs text-[#686868] transition-colors hover:text-[#800020] sm:text-sm">Contact Us</a>
+                <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs text-[#686868] transition-colors hover:text-[#800020] sm:text-sm"><Image src="/Whatsapp-3d.svg" alt="" width={17} height={17} unoptimized /> Contact Us</a>
               </li>
               {policyLinks.map(({ label, href }) => (
                 <li key={href}>
@@ -88,7 +90,7 @@ export default function Footer() {
               <Phone size={17} className="text-[#800020]" />
               <div>
                 <p className="text-xs font-bold text-[#202124]">Call / WhatsApp</p>
-                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs text-[#686868] transition hover:text-[#168447]">+91 89625 31603</a>
+                <a href={WHATSAPP_PHONE_URL} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex items-center gap-1.5 text-xs text-[#686868] transition hover:text-[#168447]"><Image src="/Whatsapp-3d.svg" alt="" width={16} height={16} unoptimized /> +91 89625 31603</a>
               </div>
             </div>
             <div className="mt-3 flex flex-col items-center gap-1.5">
