@@ -22,7 +22,7 @@ export default function FeaturedKitsCarousel({ kits }: FeaturedKitsCarouselProps
 
   return (
     <div className="relative">
-      <div className="mb-2 flex justify-end gap-1.5">
+      <div className="mb-2 hidden justify-end gap-1.5 sm:flex">
         <button
           type="button"
           onClick={() => move("prev")}
@@ -48,7 +48,7 @@ export default function FeaturedKitsCarousel({ kits }: FeaturedKitsCarouselProps
           <div
             key={kit.id}
             data-kit-slide
-            className="w-[76vw] max-w-[270px] shrink-0 snap-start min-[480px]:w-[48vw] sm:w-[260px] lg:w-[260px]"
+            className="w-[82vw] max-w-[310px] shrink-0 snap-start min-[420px]:w-[76vw] min-[480px]:w-[48vw] sm:w-[260px] lg:w-[260px]"
           >
             <KitCard kit={kit} eagerImage={index === 0} />
           </div>
