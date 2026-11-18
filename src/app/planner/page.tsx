@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
   CalendarDays,
   Check,
@@ -29,7 +29,6 @@ type SavedKit = {
   updatedAt: string;
 };
 
-const STORAGE_KEY = "rashid-mega-mart-planner-kits";
 const money = (value: number) =>
   new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -176,7 +175,7 @@ export default function PlannerPage() {
     setNotice("Saved kit deleted.");
   };
 
-  const submitPlannerAuth = async (event: React.FormEvent<HTMLFormElement>) => {
+  const submitPlannerAuth = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault(); setAuthBusy(true); setNotice("");
     try {
       const supabase = getSupabaseBrowserClient();
@@ -190,6 +189,9 @@ export default function PlannerPage() {
         return;
       }
       setCurrentUserId(response.data.session.user.id);
+      const { data: rows, error: queryError } = await supabase.from("customer_saved_kits").select("id,name,items,updated_at").eq("user_id", response.data.session.user.id).order("updated_at", { ascending: false });
+      if (queryError) throw queryError;
+      setSavedKits((rows ?? []).map((row) => ({ id: row.id, name: row.name, items: row.items as KitLine[], updatedAt: row.updated_at })));
       setShowAuth(false);
       setNotice("Login successful. Ab Save My Kit dobara press karein.");
     } catch (cause) {
