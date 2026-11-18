@@ -5,7 +5,6 @@ import { ArrowRight, CalendarDays, FileText, ShieldCheck } from "lucide-react";
 
 const links = [
   { title: "Contact on WhatsApp", description: "Chat with Rashid Mega Mart for help and orders.", href: "https://wa.me/918962531603?text=" + encodeURIComponent("Namaste Rashid Mega Mart! Mujhe website par help chahiye. Please guide karein."), whatsapp: true, icon: CalendarDays },
-  { title: "Monthly Grocery Planner", description: "Create and manage your personal grocery kits.", href: "/planner", icon: CalendarDays },
   { title: "Returns & Refunds", description: "What to do if an item is damaged, incorrect, or missing.", href: "/returns-refunds", icon: RotateCcw },
   { title: "Privacy Policy", description: "How customer information is handled.", href: "/privacy-policy", icon: ShieldCheck },
   { title: "Terms & Conditions", description: "Store policies and customer terms.", href: "/terms-and-conditions", icon: FileText },
