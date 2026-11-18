@@ -234,11 +234,7 @@ export default function BottomNav() {
         className="pointer-events-none fixed bottom-[calc(76px+env(safe-area-inset-bottom))] right-3 z-[80] lg:bottom-6 lg:right-6"
       >
         <div className="pointer-events-auto relative">
-          {helpOpen && (
-            <div className="absolute bottom-[calc(100%+10px)] right-0">
-              <HelpCentreMenu onClose={() => setHelpOpen(false)} />
-            </div>
-          )}
+          {helpOpen && <HelpCentreMenu mobile onClose={() => setHelpOpen(false)} />}
           <button
             type="button"
             aria-label="Open Help Centre"
