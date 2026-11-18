@@ -183,7 +183,7 @@ export default function ProfilePage() {
       });
       const result = await response.json().catch(() => null);
       if (!response.ok) throw new Error(result?.error || "Account delete nahi ho paya. Support se contact karein.");
-      await supabase.auth.signOut();
+      await supabase.auth.signOut({ scope: "local" });
       setSession(null); setKits([]); setAddresses([]); setProfile({ full_name: "", phone: "" });
       setDeleteDialogOpen(false); setDeletePassword(""); setDeleteConfirmed(false);
       setMode("signup");
