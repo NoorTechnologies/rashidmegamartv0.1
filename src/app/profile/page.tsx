@@ -38,6 +38,7 @@ export default function ProfilePage() {
   useEffect(() => {
     try {
       const supabase = getSupabaseBrowserClient();
+      if (new URLSearchParams(window.location.search).get("mode") === "reset") setMode("reset");
       supabase.auth.getSession().then(({ data }) => setSession(data.session));
       const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => setSession(nextSession));
       return () => listener.subscription.unsubscribe();
@@ -75,6 +76,8 @@ export default function ProfilePage() {
         const { error: authError } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
         if (authError) throw authError;
         setMessage("Login successful.");
+        const next = new URLSearchParams(window.location.search).get("next");
+        if (next?.startsWith("/")) window.location.assign(next);
       }
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Something went wrong. Please try again.");
