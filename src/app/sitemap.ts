@@ -16,6 +16,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${SITE_URL}/returns-refunds`,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
       url: `${SITE_URL}/privacy-policy`,
       changeFrequency: "yearly",
       priority: 0.3,
