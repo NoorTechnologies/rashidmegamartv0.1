@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MapPin, Phone, Clock, ArrowUpRight, ShoppingBag, ShieldCheck, FileText } from "lucide-react";
 
 const WHATSAPP_NUMBER = "918962531603";
-const WHATSAPP_URL = "https://wa.me/" + WHATSAPP_NUMBER;
+const WHATSAPP_URL = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Namaste Rashid Mega Mart! Mujhe store, grocery kits aur ordering ke baare mein jaankari chahiye. Please help karein.");
 const STORE_MAP_URL = "https://maps.app.goo.gl/peGoceS36ZfBqKsdA";
 
 const quickLinks = [
