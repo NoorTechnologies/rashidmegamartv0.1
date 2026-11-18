@@ -19,13 +19,29 @@ export default function MorePage() {
         <h1 className="mt-2 text-2xl font-black text-[#24201E]">Customer Help & Policies</h1>
         <p className="mt-1 text-sm text-[#817A74]">Important store information, customer support and policies.</p>
         <div className="mt-6 space-y-3">
-          {links.map(({ title, description, href, icon: Icon, whatsapp }) => (
-            {whatsapp ? <a key={href} href={href} target="_blank" rel="noopener noreferrer" className="flex min-h-[76px] items-center gap-3 rounded-2xl border border-[#EEE8E1] bg-white p-4 transition hover:border-[#E5D4D9]"> : <Link key={href} href={href} className="flex min-h-[76px] items-center gap-3 rounded-2xl border border-[#EEE8E1] bg-white p-4 transition hover:border-[#E5D4D9]">}
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]">{whatsapp ? <Image src="/Whatsapp-3d.svg" alt="" width={25} height={25} unoptimized /> : Icon ? <Icon size={20} /> : null}</span>
-              <span className="min-w-0 flex-1"><span className="block text-sm font-extrabold text-[#29231F]">{title}</span><span className="mt-1 block text-xs text-[#817A74]">{description}</span></span>
-              <ArrowRight size={17} className="text-[#315F35]" />
-            {whatsapp ? </a> : </Link>}
-          ))}
+          {links.map(({ title, description, href, icon: Icon, whatsapp }) => {
+            const content = (
+              <>
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]">
+                  {whatsapp ? <Image src="/Whatsapp-3d.svg" alt="" width={25} height={25} unoptimized /> : Icon ? <Icon size={20} /> : null}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-sm font-extrabold text-[#29231F]">{title}</span>
+                  <span className="mt-1 block text-xs text-[#817A74]">{description}</span>
+                </span>
+                <ArrowRight size={17} className="text-[#315F35]" />
+              </>
+            );
+            return whatsapp ? (
+              <a key={href} href={href} target="_blank" rel="noopener noreferrer" className="flex min-h-[76px] items-center gap-3 rounded-2xl border border-[#EEE8E1] bg-white p-4 transition hover:border-[#E5D4D9]">
+                {content}
+              </a>
+            ) : (
+              <Link key={href} href={href} className="flex min-h-[76px] items-center gap-3 rounded-2xl border border-[#EEE8E1] bg-white p-4 transition hover:border-[#E5D4D9]">
+                {content}
+              </Link>
+            );
+          })}}
         </div>
       </div>
     </main>
