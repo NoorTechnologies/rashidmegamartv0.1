@@ -3,13 +3,8 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
-  CalendarDays,
-  Check,
-  CirclePlus,
   ClipboardList,
-  Heart,
   Minus,
-  PackagePlus,
   Plus,
   Search,
   ShoppingCart,
