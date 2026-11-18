@@ -259,7 +259,7 @@ export default function CartPage() {
               </div>
             </section>
 
-            <form onSubmit={handleCheckout} className="space-y-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 shadow-sm sm:p-5">
+            <form id="cart-checkout" onSubmit={handleCheckout} className="space-y-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 shadow-sm sm:p-5">
               <div>
                 <h2 className="text-lg font-black text-[#202124]">Place Your Order</h2>
                 <p className="mt-1 text-xs text-[#686868]">Bas naam aur mobile number bharein.</p>
@@ -290,7 +290,7 @@ export default function CartPage() {
         </div>
 
         <div className="fixed inset-x-0 bottom-[calc(66px+env(safe-area-inset-bottom))] z-30 border-t border-[#E8DFD1] bg-white/95 px-4 py-2.5 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
-          <button type="button" onClick={() => document.querySelector<HTMLFormElement>('form')?.requestSubmit()} className="flex min-h-11 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white">
+          <button type="button" onClick={() => document.querySelector<HTMLFormElement>("#cart-checkout")?.requestSubmit()} className="flex min-h-11 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white">
             <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Order on WhatsApp</span>
             <span className="tabular-nums">{formatPrice(subtotal)}</span>
           </button>
