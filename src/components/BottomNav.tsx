@@ -21,7 +21,7 @@ import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, useToggleSiteLanguage } from "@/components/LanguageProvider";
 
 const WHATSAPP_NUMBER = "918962531603";
-const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rashid Mega Mart! I need help with grocery kits and store information.")}`;
+const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Namaste Rashid Mega Mart! Mujhe grocery kits, store information aur ordering mein help chahiye. Please guide karein.")}`;
 
 const navItems = [
   { label: "Home", href: "/", icon: House },
