@@ -121,16 +121,28 @@ export default function CartPage() {
     const cleanAddress = address.trim();
     const cleanNote = orderNote.trim();
 
-    if (cleanName.length < 2) {
-      setFormError("Please enter your valid full name.");
+    if (cleanName.length < 2 || cleanName.length > 100) {
+      setFormError("Please enter a valid name (2–100 characters).");
       return;
     }
     if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
       setFormError("Please enter a valid 10-digit mobile number.");
       return;
     }
+    if (cleanAddress.length > 250 || cleanNote.length > 500) {
+      setFormError("Address must be under 250 characters and order note under 500 characters.");
+      return;
+    }
     if (items.length > 30) {
       setFormError("Please keep your order to 30 different items or fewer.");
+      return;
+    }
+
+    const customLines = items.flatMap((item) => [...(item.kitContents ?? []), ...(item.requestedItems ?? [])]);
+    if (customLines.length > 100 || customLines.some((line) =>
+      !line.name.trim() || line.name.length > 70 || !line.quantity.trim() || line.quantity.length > 24
+    )) {
+      setFormError("Customized items exceed the allowed limits. Please review your kit contents.");
       return;
     }
 
@@ -203,6 +215,10 @@ export default function CartPage() {
         "",
         "Please share your best possible final price for this order, confirm customized kit contents, extra-item prices, availability, delivery address, payment method and delivery charges.",
       ].filter(Boolean).join("\n");
+
+      if (message.length > 3500) {
+        throw new Error("Your order details are too long for WhatsApp. Please reduce customized items or notes.");
+      }
 
       const whatsappUrl =
         "https://wa.me/918962531603?text=" + encodeURIComponent(message);
