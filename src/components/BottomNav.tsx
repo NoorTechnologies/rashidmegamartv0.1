@@ -3,8 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { House, Package, ShoppingCart, Languages, Gift, MoreHorizontal, X } from "lucide-react";
-import { useState } from "react";
+import { House, Package, ShoppingCart, Languages, Gift } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, useToggleSiteLanguage } from "@/components/LanguageProvider";
 
@@ -29,7 +28,6 @@ export default function BottomNav() {
   const { totalItems } = useCart();
   const language = useSiteLanguage();
   const toggleLanguage = useToggleSiteLanguage();
-  const [moreOpen, setMoreOpen] = useState(false);
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
@@ -54,6 +52,9 @@ export default function BottomNav() {
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
+            <button type="button" data-no-translate onClick={toggleLanguage} aria-label={`Current language: ${languageLabel}. Switch language`} className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-[#E8DFD1] bg-white px-3 text-xs font-extrabold text-[#800020] transition hover:bg-[#F1EBDD]">
+              <Languages size={16} /> {languageLabel}
+            </button>
             <Link href="/cart" aria-label={`Open cart, ${totalItems} items`}
               className="relative inline-flex min-h-10 items-center gap-2 rounded-full bg-[#800020] px-4 text-sm font-extrabold text-white transition-colors hover:bg-[#650019] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#800020]">
               <ShoppingCart size={17} /> Cart
@@ -81,20 +82,12 @@ export default function BottomNav() {
               </Link>
             );
           })}
-          <button type="button" onClick={() => setMoreOpen((open) => !open)} aria-expanded={moreOpen} aria-label="More navigation options" className="mx-auto flex h-[54px] w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl text-[#800020] transition hover:bg-[#F1EBDD] active:scale-[0.97]">
-            <span className="flex size-7 items-center justify-center rounded-full bg-[#F1EBDD]">{moreOpen ? <X size={17} /> : <MoreHorizontal size={18} />}</span>
-            <span className="text-[9px] font-extrabold leading-none">More</span>
+          <button type="button" data-no-translate onClick={toggleLanguage} aria-label={`Current language: ${languageLabel}. Switch language`} className="mx-auto flex h-[54px] w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl text-[#800020] transition hover:bg-[#F1EBDD] active:scale-[0.97]">
+            <span className="flex size-7 items-center justify-center rounded-full bg-[#F1EBDD]"><Languages size={18} /></span>
+            <span className="max-w-full truncate px-0.5 text-[9px] font-extrabold leading-none">{languageLabel}</span>
           </button>
         </div>
       </nav>
-
-      {moreOpen && (
-        <div className="fixed inset-x-3 bottom-[calc(78px+env(safe-area-inset-bottom))] z-[60] mx-auto grid max-w-[460px] grid-cols-1 gap-2 rounded-2xl border border-[#E8DFD1] bg-[#FAF7EF]/98 p-3 shadow-[0_14px_40px_rgba(32,20,18,0.20)] backdrop-blur-xl lg:hidden">
-          <button type="button" data-no-translate onClick={toggleLanguage} aria-label={`Current language: ${languageLabel}. Switch language`} className="flex min-h-14 items-center justify-center gap-2 rounded-xl bg-white text-xs font-extrabold text-[#800020]">
-            <Languages size={19} /> {languageLabel}
-          </button>
-        </div>
-      )}
 
       <a href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Chat with Rashid Mega Mart on WhatsApp"
         className="fixed bottom-[calc(84px+env(safe-area-inset-bottom))] right-4 z-40 inline-flex size-14 items-center justify-center rounded-full bg-white shadow-[0_8px_24px_rgba(22,132,71,0.24)] ring-1 ring-[#168447]/15 transition-transform hover:scale-105 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#168447] lg:bottom-6 lg:right-6">
