@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2, Truck, ShieldCheck, ChevronDown } from "lucide-react";
 
 import { useCart } from "@/context/CartContext";
 import { kits } from "@/data/kits";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
 const WHATSAPP_NUMBER = "918962531603";
 
@@ -33,6 +34,77 @@ export default function CartPage() {
   const [address, setAddress] = useState("");
   const [specialInstructions, setSpecialInstructions] = useState("");
   const [formError, setFormError] = useState("");
+  const [accountDetailsLoaded, setAccountDetailsLoaded] = useState(false);
+  const [accountDetailsFound, setAccountDetailsFound] = useState(false);
+  const nameEdited = useRef(false);
+  const phoneEdited = useRef(false);
+  const addressEdited = useRef(false);
+
+  useEffect(() => {
+    let active = true;
+
+    const loadAccountDetails = async () => {
+      try {
+        const supabase = getSupabaseBrowserClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!active || !user) {
+          if (active) setAccountDetailsLoaded(true);
+          return;
+        }
+
+        const [profileResult, addressResult] = await Promise.all([
+          supabase
+            .from("customer_profiles")
+            .select("full_name,phone")
+            .eq("user_id", user.id)
+            .maybeSingle(),
+          supabase
+            .from("customer_addresses")
+            .select("recipient_name,phone,address_line1,address_line2,landmark,city,state,postal_code,is_default")
+            .eq("user_id", user.id)
+            .order("is_default", { ascending: false })
+            .order("created_at", { ascending: false })
+            .limit(1),
+        ]);
+
+        if (!active) return;
+        if (profileResult.error) throw profileResult.error;
+        if (addressResult.error) throw addressResult.error;
+
+        const profile = profileResult.data;
+        const savedAddress = addressResult.data?.[0];
+        const metadataName =
+          typeof user.user_metadata?.full_name === "string"
+            ? user.user_metadata.full_name
+            : "";
+        const accountName = profile?.full_name?.trim() || savedAddress?.recipient_name?.trim() || metadataName;
+        const accountPhone = profile?.phone?.trim() || savedAddress?.phone?.trim() || "";
+        const accountAddress = savedAddress
+          ? [
+              savedAddress.address_line1,
+              savedAddress.address_line2,
+              savedAddress.landmark ? "Near " + savedAddress.landmark : "",
+              [savedAddress.city, savedAddress.state].filter(Boolean).join(", "),
+              savedAddress.postal_code,
+            ].filter(Boolean).join(", ")
+          : "";
+
+        if (!nameEdited.current && accountName) setCustomerName(accountName);
+        if (!phoneEdited.current && accountPhone) setPhone(accountPhone.replace(/\\D/g, "").slice(-10));
+        if (!addressEdited.current && accountAddress) setAddress(accountAddress);
+        setAccountDetailsFound(Boolean(accountName || accountPhone || accountAddress));
+      } catch (cause) {
+        console.error("Unable to load saved checkout details:", cause);
+      } finally {
+        if (active) setAccountDetailsLoaded(true);
+      }
+    };
+
+    void loadAccountDetails();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   // Always use the current catalogue price, not a stale price stored in localStorage.
   // This value updates immediately whenever cart quantity or contents change.
@@ -266,10 +338,17 @@ export default function CartPage() {
               <div>
                 <h2 className="text-lg font-black text-[#202124]">Send WhatsApp Enquiry</h2>
                 <p className="mt-1 text-xs text-[#686868]">Bas naam aur mobile number bharein.</p>
+                {accountDetailsFound && accountDetailsLoaded ? (
+                  <p className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-[#EDF5E9] px-2.5 py-1.5 text-[10px] font-bold text-[#426B43]">
+                    <ShieldCheck size={12} /> Account details auto-filled
+                  </p>
+                ) : accountDetailsLoaded ? null : (
+                  <p className="mt-2 text-[10px] text-[#85857B]">Checking saved account details...</p>
+                )}
               </div>
               <label className="block text-xs font-bold text-[#202124]">
                 Your name *
-                <input required minLength={2} maxLength={70} autoComplete="name" value={customerName} onChange={(event) => setCustomerName(event.target.value)} placeholder="Enter your name" className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+                <input required minLength={2} maxLength={70} autoComplete="name" value={customerName} onChange={(event) => { nameEdited.current = true; setCustomerName(event.target.value); }} placeholder="Enter your name" className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
               </label>
               <label className="block text-xs font-bold text-[#202124]">
                 Mobile number *
@@ -277,7 +356,7 @@ export default function CartPage() {
               </label>
               <label className="block text-xs font-bold text-[#202124]">
                 Delivery address <span className="font-normal text-[#8A8175]">(optional)</span>
-                <textarea maxLength={250} rows={2} autoComplete="street-address" value={address} onChange={(event) => setAddress(event.target.value)} placeholder="House no., area, landmark" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+                <textarea maxLength={250} rows={2} autoComplete="street-address" value={address} onChange={(event) => { addressEdited.current = true; setAddress(event.target.value); }} placeholder="House no., area, landmark" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
               </label>
               <label className="block text-xs font-bold text-[#202124]">
                 Special instructions <span className="font-normal text-[#8A8175]">(optional)</span>
