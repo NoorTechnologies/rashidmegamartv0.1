@@ -31,13 +31,14 @@ export default function BottomNav() {
   const toggleLanguage = useToggleSiteLanguage();
   const [moreOpen, setMoreOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
+  const logoMenuRef = useRef<HTMLDivElement>(null);
   const isActive = (href: string) => href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
   const languageLabel = language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "हिंदी";
 
   useEffect(() => {
     if (!moreOpen) return;
     const close = (event: PointerEvent) => {
-      if (!moreRef.current?.contains(event.target as Node)) setMoreOpen(false);
+      if (!moreRef.current?.contains(event.target as Node) && !logoMenuRef.current?.contains(event.target as Node)) setMoreOpen(false);
     };
     const escape = (event: KeyboardEvent) => { if (event.key === "Escape") setMoreOpen(false); };
     document.addEventListener("pointerdown", close);
@@ -59,18 +60,6 @@ export default function BottomNav() {
 
   return (
     <>
-      <header className="pointer-events-none fixed inset-x-0 top-2 z-50 px-3 lg:hidden">
-        <div className="pointer-events-auto mx-auto flex h-14 max-w-[560px] items-center justify-between rounded-full border border-white/85 bg-[#FFFEFA]/90 px-3 shadow-[0_8px_28px_rgba(32,20,18,0.10)] backdrop-blur-2xl">
-          <Link href="/" aria-label="Rashid Mega Mart home" className="flex min-w-0 items-center gap-2">
-            <Image src="/images/logo2.png" alt="" width={36} height={36} priority className="size-8 shrink-0 object-contain" />
-            <span className="truncate text-sm font-black tracking-tight text-[#30251F]">Rashid Mega Mart</span>
-          </Link>
-          <button type="button" data-no-translate onClick={toggleLanguage} aria-label={`Current language: ${languageLabel}. Switch language`} className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full border border-[#E8E4DA] bg-white/80 px-3 text-xs font-bold text-[#315F35] transition hover:bg-[#EAF3E6] active:scale-95">
-            <Languages size={16} />{languageLabel}
-          </button>
-        </div>
-      </header>
-
       <header className="pointer-events-none fixed inset-x-0 top-3 z-50 hidden px-4 lg:block">
         <nav aria-label="Main navigation" className="pointer-events-auto mx-auto flex h-[64px] max-w-6xl items-center justify-between gap-3 rounded-full border border-white/80 bg-[#FFFEFA]/90 px-4 shadow-[0_12px_34px_rgba(32,20,18,0.12)] backdrop-blur-2xl backdrop-saturate-150 xl:px-6">
           <Link href="/" aria-label="Rashid Mega Mart home" className="flex shrink-0 items-center gap-2.5">
@@ -90,20 +79,32 @@ export default function BottomNav() {
       </header>
 
       <nav aria-label="Main navigation" className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(7px+env(safe-area-inset-bottom))] lg:hidden">
-        <div className="relative grid h-[62px] grid-cols-6 items-center rounded-full border border-white/90 bg-[#FFFEFA]/82 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[62px] grid-cols-5 items-center rounded-full border border-white/90 bg-[#FFFEFA]/82 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
           {navItems.map(({ label, href, icon: Icon }) => <Link key={href} href={href} aria-current={isActive(href) ? "page" : undefined} className={`mx-auto flex h-[52px] w-full max-w-[48px] flex-col items-center justify-center gap-1 rounded-2xl transition active:scale-95 ${isActive(href) ? "text-[#315F35]" : "text-[#625F56]"}`}><span className={`flex size-7 items-center justify-center rounded-full ${isActive(href) ? "bg-[#E7F0E2]" : ""}`}><Icon size={18} /></span><span className={`text-[8.5px] leading-none ${isActive(href) ? "font-extrabold" : "font-medium"}`}>{label}</span></Link>)}
           <Link href="/cart" aria-label={`Open cart, ${totalItems} items`} className={`mx-auto flex h-[52px] w-full max-w-[48px] flex-col items-center justify-center gap-1 rounded-2xl transition active:scale-95 ${isActive("/cart") ? "text-[#315F35]" : "text-[#625F56]"}`}><span className={`relative flex size-7 items-center justify-center rounded-full ${isActive("/cart") ? "bg-[#E7F0E2]" : ""}`}><ShoppingCart size={18} />{totalItems > 0 && <span className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C]">{totalItems > 99 ? "99+" : totalItems}</span>}</span><span className="text-[8.5px] leading-none">Cart</span></Link>
           <Link href="/profile" aria-label="Open profile" className={`mx-auto flex h-[52px] w-full max-w-[48px] flex-col items-center justify-center gap-1 rounded-2xl transition active:scale-95 ${isActive("/profile") ? "text-[#315F35]" : "text-[#625F56]"}`}><span className={`flex size-7 items-center justify-center rounded-full ${isActive("/profile") ? "bg-[#E7F0E2]" : ""}`}><UserRound size={18} /></span><span className="text-[8.5px] leading-none">Profile</span></Link>
-          <div ref={moreRef} className="relative mx-auto flex h-[52px] w-full max-w-[48px] items-center justify-center"><button type="button" aria-expanded={moreOpen} aria-haspopup="menu" onClick={() => setMoreOpen((v) => !v)} className={`flex h-[52px] w-full flex-col items-center justify-center gap-1 rounded-2xl transition active:scale-95 ${moreOpen ? "text-[#315F35]" : "text-[#625F56]"}`}><span className={`flex size-7 items-center justify-center rounded-full ${moreOpen ? "bg-[#E7F0E2]" : ""}`}>{moreOpen ? <X size={18} /> : <MoreHorizontal size={18} />}</span></button>{moreOpen && <MoreMenu mobile />}</div>
         </div>
       </nav>
 
       <a href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Chat with Rashid Mega Mart on WhatsApp" className="fixed bottom-[calc(82px+env(safe-area-inset-bottom))] right-4 z-40 flex size-[50px] items-center justify-center rounded-full border border-white/80 bg-white shadow-[0_8px_24px_rgba(25,65,39,0.2)] transition-transform hover:-translate-y-1 active:scale-95 lg:bottom-6 lg:right-6">
         <Image src="/Whatsapp-3d.svg" alt="" width={34} height={34} unoptimized className="size-8 object-contain" />
       </a>
-      <Link href="/" aria-label="Rashid Mega Mart home" className="fixed bottom-[calc(84px+env(safe-area-inset-bottom))] left-4 z-40 flex size-11 items-center justify-center rounded-full border border-white/90 bg-white shadow-[0_8px_24px_rgba(39,31,22,0.16)] transition-transform hover:-translate-y-1 active:scale-95 lg:hidden">
-        <Image src="/images/logo2.png" alt="" width={38} height={38} priority className="size-9 object-contain" />
-      </Link>
+      <div ref={logoMenuRef} className="fixed bottom-[calc(84px+env(safe-area-inset-bottom))] left-4 z-40 lg:hidden">
+        {moreOpen && <div className="absolute bottom-[calc(100%+10px)] left-0 w-[min(280px,calc(100vw-32px))] rounded-2xl border border-white/80 bg-[#FFFEFA]/95 p-2 shadow-[0_18px_55px_rgba(39,31,22,0.18)] backdrop-blur-2xl">
+          <div className="flex items-center justify-between gap-2 px-2 py-2">
+            <span className="text-xs font-extrabold text-[#30251F]">Rashid Mega Mart</span>
+            <button type="button" data-no-translate onClick={() => { toggleLanguage(); }} aria-label={`Current language: ${languageLabel}. Switch language`} className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-[#E8E4DA] bg-white px-3 text-xs font-bold text-[#315F35]"><Languages size={15} />{languageLabel}</button>
+          </div>
+          <div className="my-1 h-px bg-[#EEE8E1]" />
+          {moreItems.map(({ label, href, icon: Icon, external }) => {
+            const content = <><span className="flex size-9 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]"><Icon size={17} /></span><span className="text-[13px] font-bold text-[#30251F]">{label}</span></>;
+            return external ? <a key={label} href={href} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setMoreOpen(false)} className="flex min-h-11 items-center gap-3 rounded-xl px-2 hover:bg-[#F2F5EE]">{content}</a> : <Link key={href} href={href} role="menuitem" onClick={() => setMoreOpen(false)} className="flex min-h-11 items-center gap-3 rounded-xl px-2 hover:bg-[#F2F5EE]">{content}</Link>;
+          })}
+        </div>}
+        <button type="button" aria-label="Open Rashid Mega Mart menu" aria-expanded={moreOpen} aria-haspopup="menu" onClick={() => setMoreOpen((v) => !v)} className={`flex size-11 items-center justify-center rounded-full border border-white/90 bg-white shadow-[0_8px_24px_rgba(39,31,22,0.16)] transition-transform hover:-translate-y-1 active:scale-95 ${moreOpen ? "ring-2 ring-[#315F35]/20" : ""}`}>
+          {moreOpen ? <X size={19} className="text-[#315F35]" /> : <Image src="/images/logo2.png" alt="" width={38} height={38} priority className="size-9 object-contain" />}
+        </button>
+      </div>
     </>
   );
 }
