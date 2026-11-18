@@ -98,7 +98,7 @@ export default function BottomNav() {
           className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-white/90 bg-[#FFFEFA]/95 px-2.5 shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl transition active:scale-95"
         >
           <Languages size={13} className="text-[#315F35]" />
-          <span className="text-[10px]] font-extrabold tracking-wide text-[#315F35]">{language === "en" ? "EN" : language === "hinglish" ? "HING" : "हिंदी"}</span>
+          <span className="text-[10px] font-extrabold tracking-wide text-[#315F35]">{language === "en" ? "EN" : language === "hinglish" ? "HING" : "हिंदी"}</span>
           <span className="text-[9px] font-semibold text-[#82796D]">⌄</span>
         </button>
       </div>
