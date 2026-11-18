@@ -24,6 +24,26 @@ const moreItems = [
   { label: "Terms & Conditions", href: "/terms-and-conditions", icon: FileText },
 ];
 
+function MoreMenu({ onClose }: { onClose: () => void }) {
+  return (
+    <div role="menu" aria-label="More links" className="absolute right-0 top-[calc(100%+10px)] z-[70] w-[min(260px,calc(100vw-28px))] rounded-2xl border border-white/80 bg-[#FFFEFA]/95 p-2 shadow-[0_18px_55px_rgba(39,31,22,0.18)] backdrop-blur-2xl">
+      {moreItems.map(({ label, href, icon: Icon, external }) => {
+        const content = (
+          <>
+            <span className="flex size-9 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]"><Icon size={17}/></span>
+            <span className="text-[13px] font-bold text-[#30251F]">{label}</span>
+          </>
+        );
+        return external ? (
+          <a key={label} href={href} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={onClose} className="flex min-h-11 items-center gap-3 rounded-xl px-2 hover:bg-[#F2F5EE]">{content}</a>
+        ) : (
+          <Link key={href} href={href} role="menuitem" onClick={onClose} className="flex min-h-11 items-center gap-3 rounded-xl px-2 hover:bg-[#F2F5EE]">{content}</Link>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function BottomNav() {
   const pathname = usePathname();
   const { totalItems } = useCart();
@@ -49,15 +69,6 @@ export default function BottomNav() {
     };
   }, [moreOpen]);
 
-  const MoreMenu = ({ mobile = false }: { mobile?: boolean }) => (
-    <div role="menu" aria-label="More links" className={`absolute z-[70] w-[min(260px,calc(100vw-28px))] rounded-2xl border border-white/80 bg-[#FFFEFA]/95 p-2 shadow-[0_18px_55px_rgba(39,31,22,0.18)] backdrop-blur-2xl ${mobile ? "bottom-[calc(100%+10px)] right-0" : "right-0 top-[calc(100%+10px)]"}`}>
-      {moreItems.map(({ label, href, icon: Icon, external }) => {
-        const content = <><span className="flex size-9 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]"><Icon size={17} /></span><span className="text-[13px] font-bold text-[#30251F]">{label}</span></>;
-        return external ? <a key={label} href={href} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setMoreOpen(false)} className="flex min-h-11 items-center gap-3 rounded-xl px-2 hover:bg-[#F2F5EE]">{content}</a> : <Link key={href} href={href} role="menuitem" onClick={() => setMoreOpen(false)} className="flex min-h-11 items-center gap-3 rounded-xl px-2 hover:bg-[#F2F5EE]">{content}</Link>;
-      })}
-    </div>
-  );
-
   return (
     <>
       <header className="pointer-events-none fixed inset-x-0 top-3 z-50 hidden px-4 lg:block">
@@ -72,7 +83,7 @@ export default function BottomNav() {
           <div className="flex items-center gap-1">
             <button type="button" data-no-translate onClick={toggleLanguage} aria-label={`Current language: ${languageLabel}. Switch language`} className="inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-xs font-bold text-[#625F56] hover:bg-white/70"><Languages size={16} />{languageLabel}</button>
             <Link href="/profile" className={`inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 text-[13px] font-bold ${isActive("/profile") ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70"}`}><UserRound size={17} />Profile</Link>
-            <div ref={moreRef} className="relative"><button type="button" aria-expanded={moreOpen} aria-haspopup="menu" onClick={() => setMoreOpen((v) => !v)} className="inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 text-[13px] font-bold text-[#625F56] hover:bg-white/70">{moreOpen ? <X size={17} /> : <MoreHorizontal size={17} />}</button>{moreOpen && <MoreMenu />}</div>
+            <div ref={moreRef} className="relative"><button type="button" aria-expanded={moreOpen} aria-haspopup="menu" onClick={() => setMoreOpen((v) => !v)} className="inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 text-[13px] font-bold text-[#625F56] hover:bg-white/70">{moreOpen ? <X size={17} /> : <MoreHorizontal size={17} />}</button>{moreOpen && <MoreMenu onClose={() => setMoreOpen(false)} />}</div>
             <Link href="/cart" aria-label={`Open cart, ${totalItems} items`} className="relative inline-flex min-h-10 items-center gap-2 rounded-full bg-[#315F35] px-3.5 text-[13px] font-extrabold text-white shadow-sm transition hover:bg-[#254B29]"><ShoppingCart size={17} />Cart{totalItems > 0 && <span className="flex min-w-5 items-center justify-center rounded-full bg-[#F2D27B] px-1.5 py-0.5 text-[10px] font-black text-[#443719]">{totalItems > 99 ? "99+" : totalItems}</span>}</Link>
           </div>
         </nav>
