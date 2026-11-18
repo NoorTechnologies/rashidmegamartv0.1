@@ -31,7 +31,7 @@ export default function CartPage() {
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [specialInstructions, setOrderNote] = useState("");
+  const [specialInstructions, setSpecialInstructions] = useState("");
   const [formError, setFormError] = useState("");
 
   // Always use the current catalogue price, not a stale price stored in localStorage.
@@ -281,7 +281,7 @@ export default function CartPage() {
               </label>
               <label className="block text-xs font-bold text-[#202124]">
                 Special instructions <span className="font-normal text-[#8A8175]">(optional)</span>
-                <textarea maxLength={240} rows={2} value={specialInstructions} onChange={(event) => setOrderNote(event.target.value)} placeholder="Any special instructions?" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+                <textarea maxLength={240} rows={2} value={specialInstructions} onChange={(event) => setSpecialInstructions(event.target.value)} placeholder="Any special instructions?" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
               </label>
               {formError ? <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-700">{formError}</p> : null}
               <button type="submit" className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#168447] px-4 py-3 text-sm font-extrabold text-white shadow-md transition hover:bg-[#106B38] active:scale-[0.99]">
