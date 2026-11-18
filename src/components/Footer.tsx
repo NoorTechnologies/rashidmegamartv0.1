@@ -9,7 +9,6 @@ const STORE_MAP_URL = "https://maps.app.goo.gl/peGoceS36ZfBqKsdA";
 const quickLinks = [
   { label: "Home", href: "/" },
   { label: "Grocery Kits", href: "/kits" },
-  { label: "Rewards & Referral", href: "/rewards" },
   { label: "My Cart", href: "/cart" },
 ];
 
