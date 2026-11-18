@@ -108,8 +108,7 @@ export default function BottomNav() {
   const language = useSiteLanguage();
   const toggleLanguage = useToggleSiteLanguage();
   const [helpOpen, setHelpOpen] = useState(false);
-  const desktopHelpRef = useRef<HTMLDivElement>(null);
-  const mobileHelpRef = useRef<HTMLDivElement>(null);
+  const floatingHelpRef = useRef<HTMLDivElement>(null);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
@@ -123,8 +122,7 @@ export default function BottomNav() {
     const close = (event: PointerEvent) => {
       const target = event.target as Node;
       if (
-        !desktopHelpRef.current?.contains(target) &&
-        !mobileHelpRef.current?.contains(target)
+        !floatingHelpRef.current?.contains(target)
       ) {
         setHelpOpen(false);
       }
@@ -176,23 +174,6 @@ export default function BottomNav() {
           </div>
 
           <div className="flex items-center gap-1">
-            <div ref={desktopHelpRef} className="relative">
-              <button
-                type="button"
-                aria-expanded={helpOpen}
-                aria-haspopup="menu"
-                onClick={() => setHelpOpen((value) => !value)}
-                className={
-                  "inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " +
-                  (helpOpen ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70")
-                }
-              >
-                <LifeBuoy size={16} />
-                Help Centre
-              </button>
-              {helpOpen && <HelpCentreMenu onClose={() => setHelpOpen(false)} />}
-            </div>
-
             <button
               type="button"
               data-no-translate
@@ -247,12 +228,37 @@ export default function BottomNav() {
         <Globe2 size={17} />
       </button>
 
+      {/* Floating Help Centre */}
+      <div
+        ref={floatingHelpRef}
+        className="pointer-events-none fixed bottom-[calc(76px+env(safe-area-inset-bottom))] right-3 z-[80] lg:bottom-6 lg:right-6"
+      >
+        <div className="pointer-events-auto relative">
+          {helpOpen && (
+            <div className="absolute bottom-[calc(100%+10px)] right-0">
+              <HelpCentreMenu onClose={() => setHelpOpen(false)} />
+            </div>
+          )}
+          <button
+            type="button"
+            aria-label="Open Help Centre"
+            aria-expanded={helpOpen}
+            aria-haspopup="menu"
+            onClick={() => setHelpOpen((value) => !value)}
+            className="inline-flex h-12 items-center gap-2 rounded-full border border-white/80 bg-[#315F35] px-4 text-[13px] font-extrabold text-white shadow-[0_10px_30px_rgba(35,68,37,0.28)] transition hover:bg-[#254B29] active:scale-95"
+          >
+            {helpOpen ? <X size={17} /> : <LifeBuoy size={17} />}
+            Help
+          </button>
+        </div>
+      </div>
+
       {/* Mobile navigation */}
       <nav
         aria-label="Main navigation"
         className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(6px+env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="relative grid h-[58px] grid-cols-6 items-center rounded-full border border-white/90 bg-[#FFFEFA]/90 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[58px] grid-cols-5 items-center rounded-full border border-white/90 bg-[#FFFEFA]/90 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
           {navItems.map(({ label, href, icon: Icon }) => (
             <Link
               key={href}
@@ -271,26 +277,6 @@ export default function BottomNav() {
               </span>
             </Link>
           ))}
-
-          <div ref={mobileHelpRef} className="relative mx-auto flex h-12 w-full min-w-0 items-center justify-center">
-            <button
-              type="button"
-              aria-label="Open Help Centre"
-              aria-expanded={helpOpen}
-              aria-haspopup="menu"
-              onClick={() => setHelpOpen((value) => !value)}
-              className={
-                "flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
-                (helpOpen ? "text-[#315F35]" : "text-[#625F56]")
-              }
-            >
-              <span className={"flex size-6 items-center justify-center rounded-full " + (helpOpen ? "bg-[#E7F0E2]" : "")}>
-                {helpOpen ? <X size={17} /> : <LifeBuoy size={17} />}
-              </span>
-              <span className="text-[8px] font-semibold leading-none">Help</span>
-            </button>
-            {helpOpen && <HelpCentreMenu mobile onClose={() => setHelpOpen(false)} />}
-          </div>
 
           <Link
             href="/cart"
