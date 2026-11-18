@@ -594,3 +594,38 @@ video {
     transform: none !important;
   }
 }
+
+
+/* ========================================
+   RMM NAV FINISH — CLEAN GLASS, NO MAROON
+======================================== */
+.rmm-desktop-nav {
+  background: rgba(255, 254, 250, 0.82);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.88);
+  box-shadow: 0 8px 28px rgba(40, 36, 28, 0.075);
+  -webkit-backdrop-filter: blur(24px) saturate(155%);
+  backdrop-filter: blur(24px) saturate(155%);
+}
+.rmm-more-popover {
+  transform-origin: bottom right;
+  animation: rmm-menu-in 180ms cubic-bezier(.2,.8,.2,1) both;
+}
+.rmm-floating-whatsapp {
+  -webkit-tap-highlight-color: transparent;
+  animation: rmm-float-in 420ms cubic-bezier(.2,.8,.2,1) both;
+}
+.rmm-floating-whatsapp:hover {
+  box-shadow: 0 12px 30px rgba(22, 132, 71, 0.24);
+}
+@keyframes rmm-menu-in {
+  from { opacity: 0; transform: translateY(7px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rmm-float-in {
+  from { opacity: 0; transform: translateY(8px) scale(.92); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rmm-more-popover,
+  .rmm-floating-whatsapp { animation: none !important; }
+}
