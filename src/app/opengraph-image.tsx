@@ -16,15 +16,13 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "54px 64px",
-          background: "linear-gradient(135deg, #FFFCF5 0%, #F3E8D5 100%)",
+          background: "radial-gradient(circle at 85% 15%, rgba(232,238,219,0.88) 0%, rgba(232,238,219,0) 35%), radial-gradient(circle at 90% 85%, rgba(241,223,194,0.82) 0%, rgba(241,223,194,0) 32%), linear-gradient(135deg, #FFFCF5 0%, #F3E8D5 100%)",
           color: "#202124",
           fontFamily: "Arial, sans-serif",
           position: "relative",
         }}
       >
-        <div style={{ position: "absolute", right: -80, top: -130, width: 470, height: 470, borderRadius: 240, background: "#E8EEDB", opacity: 0.85 }} />
-        <div style={{ position: "absolute", right: 50, bottom: 50, width: 340, height: 340, borderRadius: 180, background: "#F1DFC2", opacity: 0.75 }} />
-        <div style={{ display: "flex", alignItems: "center", gap: 22, zIndex: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
           <div style={{ width: 82, height: 82, borderRadius: 24, background: "#800020", display: "flex", alignItems: "center", justifyContent: "center", color: "#F7C928", fontSize: 48, fontWeight: 900 }}>R</div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 48, fontWeight: 900, color: "#800020", lineHeight: 1.05 }}>Rashid</div>
@@ -32,7 +30,7 @@ export default function OpenGraphImage() {
           </div>
           <div style={{ marginLeft: "auto", background: "#800020", color: "white", borderRadius: 24, padding: "18px 28px", fontSize: 18, fontWeight: 800, letterSpacing: 1 }}>SMART SHOPPING • BETTER LIVING</div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", zIndex: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", flexDirection: "column", maxWidth: 610 }}>
             <div style={{ fontSize: 64, fontWeight: 900, color: "#800020", lineHeight: 1.08 }}>Your One-Stop</div>
             <div style={{ fontSize: 57, fontWeight: 900, color: "#168447", lineHeight: 1.12 }}>Grocery Destination</div>
@@ -49,7 +47,7 @@ export default function OpenGraphImage() {
             <div style={{ marginTop: 16, color: "#FFF4E4", fontSize: 19, fontWeight: 800, letterSpacing: 2 }}>FRESH • VALUE • TRUST</div>
           </div>
         </div>
-        <div style={{ zIndex: 1, background: "#168447", color: "white", borderRadius: 16, padding: "15px 24px", display: "flex", justifyContent: "center", fontSize: 19, fontWeight: 800, letterSpacing: 1.2 }}>QUALITY PRODUCTS  •  GREAT VALUE  •  TRUSTED SERVICE</div>
+        <div style={{ background: "#168447", color: "white", borderRadius: 16, padding: "15px 24px", display: "flex", justifyContent: "center", fontSize: 19, fontWeight: 800, letterSpacing: 1.2 }}>QUALITY PRODUCTS  •  GREAT VALUE  •  TRUSTED SERVICE</div>
       </div>
     ),
     { ...size },
