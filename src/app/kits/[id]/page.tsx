@@ -35,7 +35,7 @@ export default async function KitDetailPage({ params }: PageProps) {
       : 0;
 
   return (
-    <main className="min-h-screen bg-[#FAF7EF] pb-24">
+    <main className="min-h-screen bg-[#FAF7EF] pb-[calc(110px+env(safe-area-inset-bottom))] sm:pb-24">
       {/* Header */}
       <header className="sticky top-0 z-30 border-b border-[#E8DFD1] bg-[#FAF7EF]/95 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -62,7 +62,7 @@ export default async function KitDetailPage({ params }: PageProps) {
       </header>
 
       {/* Breadcrumb */}
-      <div className="mx-auto max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-3 pt-3 sm:px-6 sm:pt-5 lg:px-8">
         <nav
           aria-label="Breadcrumb"
           className="flex items-center gap-2 overflow-hidden text-xs text-[#686868]"
@@ -86,7 +86,7 @@ export default async function KitDetailPage({ params }: PageProps) {
         <div className="grid items-start gap-3 sm:gap-5 lg:grid-cols-2 lg:gap-8">
           {/* Product Image */}
           <div className="min-w-0">
-            <div className="group relative aspect-[1.08/1] overflow-hidden rounded-2xl sm:aspect-square sm:rounded-[28px] border border-[#E8DFD1] bg-white shadow-[0_12px_40px_rgba(70,40,30,0.06)]">
+            <div className="group relative aspect-[5/4] overflow-hidden rounded-2xl border border-[#E8DFD1] bg-white shadow-[0_5px_18px_rgba(70,40,30,0.05)] sm:aspect-square sm:rounded-[28px] sm:shadow-[0_12px_40px_rgba(70,40,30,0.06)]">
               {kit.image ? (
                 <Image
                   src={kit.image}
@@ -121,7 +121,7 @@ export default async function KitDetailPage({ params }: PageProps) {
             </div>
 
             {/* Image Information */}
-            <div className="mt-3 flex items-center justify-between rounded-xl border border-[#E8DFD1] bg-white px-3 py-3 shadow-sm">
+            <div className="mt-2 flex items-center justify-between rounded-xl border border-[#E8DFD1] bg-white px-2.5 py-2.5 sm:mt-3 sm:px-3 sm:py-3">
               <div className="flex items-center gap-3">
                 <div className="flex size-9 items-center justify-center rounded-lg bg-[#F1EBDD] text-[#168447]">
                   <Package size={20} />
@@ -157,7 +157,7 @@ export default async function KitDetailPage({ params }: PageProps) {
               )}
             </div>
 
-            <h1 className="mt-2 text-2xl font-black leading-tight tracking-tight text-[#202124] sm:mt-3 sm:text-3xl lg:text-[38px]">
+            <h1 className="mt-1.5 text-[23px] font-black leading-[1.12] tracking-tight text-[#202124] sm:mt-3 sm:text-3xl lg:text-[38px]">
               {kit.name}
             </h1>
 
@@ -172,13 +172,13 @@ export default async function KitDetailPage({ params }: PageProps) {
             </p>
 
             {/* Price Card */}
-            <div className="mt-3 rounded-xl border border-[#D8CBB8] bg-[linear-gradient(135deg,#F1EBDD_0%,#FAF0C8_100%)] p-3 shadow-sm sm:mt-4 sm:p-4">
+            <div className="mt-2.5 rounded-xl border border-[#D8CBB8] bg-[linear-gradient(135deg,#F1EBDD_0%,#FAF0C8_100%)] p-3 shadow-sm sm:mt-4 sm:p-4">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#686868]">
                 Special Kit Price
               </p>
 
               <div className="mt-2 flex flex-wrap items-center gap-2">
-                <span className="text-4xl font-black tracking-tight text-[#800020] drop-shadow-[0_2px_0_rgba(215,25,32,0.08)]">
+                <span className="text-3xl font-black tracking-tight text-[#800020] sm:text-4xl">
                   ₹{kit.price.toLocaleString("en-IN")}
                 </span>
 
@@ -204,7 +204,7 @@ export default async function KitDetailPage({ params }: PageProps) {
             </div>
 
             {/* Cart Action */}
-            <div className="mt-3">
+            <div className="mt-2.5 sm:mt-3">
               <KitCustomizer kit={kit} />
             </div>
 
@@ -214,6 +214,13 @@ export default async function KitDetailPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      <div className="fixed inset-x-0 bottom-[calc(68px+env(safe-area-inset-bottom))] z-40 border-t border-[#E8DFD1] bg-white/95 px-3 py-2 shadow-[0_-6px_20px_rgba(40,30,20,0.08)] backdrop-blur-lg sm:hidden">
+        <a href="#customize-kit-title" className="flex min-h-12 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white active:scale-[.99]">
+          <span>Customize this kit</span>
+          <span>₹{kit.price.toLocaleString("en-IN")} <ArrowRight size={16} className="ml-1 inline" /></span>
+        </a>
+      </div>
 
       {/* Explore More Kits */}
       <section data-reveal className="mx-auto max-w-7xl px-4 pb-7 sm:px-6 lg:px-8">
