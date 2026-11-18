@@ -89,9 +89,25 @@ export default function PlannerPage() {
             .eq("user_id", user.id)
             .order("updated_at", { ascending: false });
           if (queryError) setNotice(queryError.message);
-          else if (active) setSavedKits((rows ?? []).map((row) => ({
-            id: row.id, name: row.name, items: row.items as KitLine[], updatedAt: row.updated_at,
-          })));
+          else if (active) {
+            const saved = (rows ?? []).map((row) => ({
+              id: row.id, name: row.name, items: row.items as KitLine[], updatedAt: row.updated_at,
+            }));
+            setSavedKits(saved);
+            const requestedKitId = new URLSearchParams(window.location.search).get("kit");
+            const requestedKit = saved.find((kit) => kit.id === requestedKitId);
+            if (requestedKit) {
+              const next: Record<string, number> = {};
+              for (const line of requestedKit.items) {
+                const product = catalogProducts.find((item) => item.id === line.productId);
+                if (product?.isAvailable) next[product.id] = line.quantity;
+              }
+              setSelected(next);
+              setKitName(requestedKit.name);
+              setEditingKitId(requestedKit.id);
+              setActiveTab("create");
+            }
+          }
         }
         if (active) setIsLoaded(true);
       });
