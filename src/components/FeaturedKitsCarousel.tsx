@@ -48,7 +48,7 @@ export default function FeaturedKitsCarousel({ kits }: FeaturedKitsCarouselProps
           <div
             key={kit.id}
             data-kit-slide
-            className="w-[82vw] max-w-[310px] shrink-0 snap-start min-[420px]:w-[76vw] min-[480px]:w-[48vw] sm:w-[260px] lg:w-[260px]"
+            className="w-[76vw] max-w-[286px] shrink-0 snap-start sm:w-[280px] sm:max-w-[300px] min-[420px]:w-[76vw] min-[480px]:w-[48vw] sm:w-[260px] lg:w-[260px]"
           >
             <KitCard kit={kit} eagerImage={index === 0} />
           </div>
