@@ -21,7 +21,9 @@ export default function SiteMotion() {
       const lenis = new Lenis({
         autoRaf: false,
         smoothWheel: true,
-        syncTouch: false,
+        syncTouch: true,
+        syncTouchLerp: 0.075,
+        touchInertiaExponent: 1.7,
         anchors: true,
       });
 
