@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { House, Package, ShoppingCart, Languages, Gift } from "lucide-react";
+import { House, Package, ShoppingCart, Languages } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, useToggleSiteLanguage } from "@/components/LanguageProvider";
 
@@ -13,14 +13,12 @@ const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent
 const navigationItems = [
   { label: "Home", href: "/", icon: House },
   { label: "Kits", href: "/kits", icon: Package },
-  { label: "Rewards", href: "/rewards", icon: Gift },
 ];
 
 const mobileNavigationItems = [
   { label: "Home", href: "/", icon: House },
   { label: "Kits", href: "/kits", icon: Package },
   { label: "Cart", href: "/cart", icon: ShoppingCart },
-  { label: "Rewards", href: "/rewards", icon: Gift },
 ];
 
 export default function BottomNav() {
@@ -65,7 +63,7 @@ export default function BottomNav() {
       </header>
 
       <nav aria-label="Main navigation" className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full px-2 pb-[calc(8px+env(safe-area-inset-bottom))] sm:px-4 lg:hidden">
-        <div className="mx-auto grid h-[62px] w-full max-w-[460px] grid-cols-5 items-center rounded-[22px] border border-white/70 bg-[#FAF7EF]/96 px-1 shadow-[0_8px_28px_rgba(32,20,18,0.16)] backdrop-blur-xl">
+        <div className="mx-auto grid h-[62px] w-full max-w-[460px] grid-cols-4 items-center rounded-[22px] border border-white/70 bg-[#FAF7EF]/96 px-1 shadow-[0_8px_28px_rgba(32,20,18,0.16)] backdrop-blur-xl">
           {mobileNavigationItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
