@@ -9,7 +9,6 @@ import {
   FileText,
   Globe2,
   House,
-  Languages,
   LifeBuoy,
   Package,
   RotateCcw,
