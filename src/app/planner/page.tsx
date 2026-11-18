@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 import { useCart } from "@/context/CartContext";
-import { products, type Product } from "@/data/products";
+import { products as initialProducts, type Product } from "@/data/products";
 import { categories } from "@/data/categories";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
@@ -42,6 +42,8 @@ export default function PlannerPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [selected, setSelected] = useState<Record<string, number>>({});
+  const [catalogProducts, setCatalogProducts] = useState<Product[]>(initialProducts);
+  const [catalogCategories, setCatalogCategories] = useState<string[]>(categories.map((item) => item.name));
   const [savedKits, setSavedKits] = useState<SavedKit[]>([]);
   const [activeTab, setActiveTab] = useState<"create" | "saved">("create");
   const [notice, setNotice] = useState("");
@@ -60,6 +62,23 @@ export default function PlannerPage() {
       const supabase = getSupabaseBrowserClient();
       supabase.auth.getSession().then(async ({ data, error }) => {
         if (!active) return;
+        const [{ data: productRows, error: productError }, { data: categoryRows }] = await Promise.all([
+          supabase.from("products").select("id,name,brand,category_id,pack_size,price,old_price,image,description,is_featured,is_best_seller,is_available,stock").eq("is_available", true).order("name"),
+          supabase.from("categories").select("id,name").eq("is_active", true).order("sort_order"),
+        ]);
+        if (!productError && productRows) {
+          const categoryNames = new Map((categoryRows ?? []).map((row) => [row.id, row.name]));
+          setCatalogProducts(productRows.map((row) => ({
+            id: row.id, name: row.name, brand: row.brand ?? "", category: categoryNames.get(row.category_id ?? "") ?? "Other",
+            categoryId: row.category_id ?? "", packSize: row.pack_size ?? "", price: Number(row.price),
+            oldPrice: row.old_price == null ? undefined : Number(row.old_price), image: row.image ?? "",
+            description: row.description ?? "", isFeatured: row.is_featured, isBestSeller: row.is_best_seller,
+            isAvailable: row.is_available, stock: row.stock ?? undefined,
+          })));
+        } else if (productError) {
+          setNotice("Live catalogue could not load. Showing the saved catalogue copy. " + productError.message);
+        }
+        if (categoryRows?.length) setCatalogCategories(categoryRows.map((row) => row.name));
         if (error) setNotice(error.message);
         const user = data.session?.user;
         setCurrentUserId(user?.id ?? null);
@@ -88,10 +107,10 @@ export default function PlannerPage() {
 
   const selectedProducts = useMemo(
     () =>
-      products.filter(
+      catalogProducts.filter(
         (product) => (selected[product.id] ?? 0) > 0 && product.isAvailable
       ),
-    [selected]
+    [selected, catalogProducts]
   );
 
   const totalItems = selectedProducts.reduce(
@@ -105,7 +124,7 @@ export default function PlannerPage() {
 
   const filteredProducts = useMemo(() => {
     const term = search.trim().toLowerCase();
-    return products
+    return catalogProducts
       .filter((product) => product.isAvailable)
       .filter((product) => category === "All" || product.category === category)
       .filter(
@@ -157,7 +176,7 @@ export default function PlannerPage() {
   const loadKit = (kit: SavedKit) => {
     const next: Record<string, number> = {};
     for (const line of kit.items) {
-      const product = products.find((item) => item.id === line.productId);
+      const product = catalogProducts.find((item) => item.id === line.productId);
       if (product?.isAvailable) next[product.id] = line.quantity;
     }
     setSelected(next);
@@ -272,7 +291,7 @@ export default function PlannerPage() {
                   <h2 className="text-base font-black">Add products</h2>
                   <p className="mt-0.5 text-xs text-[#776B61]">Choose from the existing Rashid Mega Mart catalogue.</p>
                 </div>
-                <span className="rounded-full bg-[#EEF7E9] px-3 py-1.5 text-xs font-bold text-[#168447]">{products.length} catalogue products</span>
+                <span className="rounded-full bg-[#EEF7E9] px-3 py-1.5 text-xs font-bold text-[#168447]">{catalogProducts.length} catalogue products</span>
               </div>
               <div className="mt-4 flex min-h-11 items-center gap-2 rounded-xl border border-[#E7DED2] bg-white px-3 focus-within:border-[#168447]">
                 <Search size={17} className="shrink-0 text-[#8B7B70]" />
@@ -286,7 +305,7 @@ export default function PlannerPage() {
                 {search && <button type="button" onClick={() => setSearch("")} className="text-xs font-bold text-[#800020]">Clear</button>}
               </div>
               <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-2">
-                {["All", ...categories.map((item) => item.name)].map((item) => (
+                {["All", ...catalogCategories].map((item) => (
                   <button
                     key={item}
                     type="button"
