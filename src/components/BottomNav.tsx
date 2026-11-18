@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { House, Package, ShoppingCart, Languages, Ticket, MoreHorizontal, X } from "lucide-react";
+import { House, Package, ShoppingCart, Languages, Gift, MoreHorizontal, X } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, useToggleSiteLanguage } from "@/components/LanguageProvider";
@@ -14,14 +14,14 @@ const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent
 const navigationItems = [
   { label: "Home", href: "/", icon: House },
   { label: "Kits", href: "/kits", icon: Package },
-  { label: "Coupons", href: "/coupons", icon: Ticket },
+  { label: "Rewards", href: "/rewards", icon: Gift },
 ];
 
 const mobileNavigationItems = [
   { label: "Home", href: "/", icon: House },
   { label: "Kits", href: "/kits", icon: Package },
   { label: "Cart", href: "/cart", icon: ShoppingCart },
-  { label: "Coupons", href: "/coupons", icon: Ticket },
+  { label: "Rewards", href: "/rewards", icon: Gift },
 ];
 
 export default function BottomNav() {
