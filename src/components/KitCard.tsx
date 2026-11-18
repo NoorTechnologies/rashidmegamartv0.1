@@ -7,6 +7,7 @@ import { useState } from "react";
 import {
   Package,
   ArrowUpRight,
+  Tag,
   ShoppingCart,
   Check,
 } from "lucide-react";
