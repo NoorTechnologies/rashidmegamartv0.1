@@ -25,7 +25,9 @@ const navigationItems = [
 ];
 
 const mobileNavigationItems = [
-  ...navigationItems,
+  { label: "Home", href: "/", icon: House, external: false },
+  { label: "Shop", href: "/shop", icon: LayoutGrid, external: false },
+  { label: "Kits", href: "/kits", icon: Package, external: false },
   { label: "Cart", href: "/cart", icon: ShoppingCart, external: false },
   { label: "Profile", href: "/profile", icon: UserRound, external: false },
   { label: "More", href: "/more", icon: MoreHorizontal, external: false },
