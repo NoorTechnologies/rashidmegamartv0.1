@@ -10,8 +10,6 @@ import {
   SlidersHorizontal,
   RotateCcw,
   ShoppingBag,
-  Tag,
-  Ticket,
 } from "lucide-react";
 import KitCard from "@/components/KitCard";
 import { kits as allKits } from "@/data/kits";
@@ -169,13 +167,8 @@ export default function KitsPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-2.5 px-3 pt-4 sm:px-6 lg:px-8" data-reveal-group>
-        <a href="/deals" data-reveal-item className="flex min-h-16 items-center gap-2 rounded-xl border border-[#D8CBB8] bg-white p-3 transition hover:border-[#168447]"><span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#EAF3E9] text-[#168447]"><Tag size={17} /></span><span className="min-w-0"><strong className="block text-[11px] font-black text-[#202124] sm:text-sm">Top Deals</strong><span className="block text-[9px] text-[#686868] sm:text-xs">Browse kit offers</span></span></a>
-        <a href="/coupons" data-reveal-item className="flex min-h-16 items-center gap-2 rounded-xl border border-[#E8D99A] bg-[#FFF9E5] p-3 transition hover:border-[#D1A900]"><span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#F7C928]/25 text-[#806000]"><Ticket size={17} /></span><span className="min-w-0"><strong className="block text-[11px] font-black text-[#202124] sm:text-sm">Coupons</strong><span className="block text-[9px] text-[#686868] sm:text-xs">Check active offers</span></span></a>
-      </section>
-
       {/* KITS SECTION */}
-      <section className="mx-auto w-full max-w-7xl px-3 pb-8 pt-4 sm:px-6 sm:pb-12 sm:pt-7 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl px-3 pb-10 pt-4 sm:px-6 sm:pb-12 sm:pt-7 lg:px-8">
         {/* HEADING */}
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
@@ -219,7 +212,7 @@ export default function KitsPage() {
                 type="button"
                 onClick={() => setFilter(option.value)}
                 aria-pressed={filter === option.value}
-                className={`min-h-9 rounded-full border px-3.5 py-2 text-[10px] font-extrabold transition active:scale-95 sm:px-4 sm:text-xs ${
+                className={`min-h-10 shrink-0 rounded-full border px-4 py-2 text-[11px] font-extrabold transition active:scale-95 sm:px-4 sm:text-xs ${
                   filter === option.value
                     ? "border-[#106B38] bg-gradient-to-r from-[#168447] to-[#106B38] text-white shadow-[0_4px_14px_rgba(143,18,53,0.22)]"
                     : "border-[#F1EBDD] bg-white text-[#686868] hover:border-[#800020] hover:bg-[#F1EBDD]"
@@ -265,7 +258,7 @@ export default function KitsPage() {
 
         {/* KITS GRID */}
         {filteredKits.length > 0 ? (
-          <div data-reveal-group className="mt-4 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 min-[420px]:gap-3 sm:mt-6 sm:grid-cols-3 sm:gap-5 lg:grid-cols-3 2xl:grid-cols-4">
+          <div data-reveal-group className="mt-4 grid grid-cols-1 gap-3 min-[560px]:grid-cols-2 sm:mt-6 sm:grid-cols-3 sm:gap-5 lg:grid-cols-3 2xl:grid-cols-4">
             {filteredKits.map((kit, index) => (
               <div key={kit.id} data-reveal-item><KitCard kit={kit} eagerImage={index === 0} /></div>
             ))}

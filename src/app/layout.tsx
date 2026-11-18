@@ -12,7 +12,6 @@ import "./globals.css";
 const SITE_URL = "https://rashidmegamartv0-1.vercel.app";
 const SITE_NAME = "Rashid Mega Mart";
 const BRAND_LOGO = "/images/logo2.png";
-const SOCIAL_SHARE_IMAGE = "/og-rashid-mega-mart.svg";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -54,15 +53,6 @@ export const metadata: Metadata = {
     title: "Rashid Mega Mart | Online Grocery Shopping",
     description:
       "Your trusted destination for thoughtfully packed grocery kits.",
-    images: [
-      {
-        url: SOCIAL_SHARE_IMAGE,
-        width: 1200,
-        height: 630,
-        type: "image/svg+xml",
-        alt: "Rashid Mega Mart grocery shopping and grocery kits banner",
-      },
-    ],
   },
 
   twitter: {
@@ -70,12 +60,6 @@ export const metadata: Metadata = {
     title: "Rashid Mega Mart | Online Grocery Shopping",
     description:
       "Explore value-packed grocery kits at Rashid Mega Mart.",
-    images: [
-      {
-        url: SOCIAL_SHARE_IMAGE,
-        alt: "Rashid Mega Mart grocery shopping and grocery kits banner",
-      },
-    ],
   },
 
   formatDetection: {

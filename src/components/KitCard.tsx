@@ -8,7 +8,10 @@ import {
   Package,
   ArrowUpRight,
   Tag,
+  ShoppingCart,
+  Check,
 } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 import type { GroceryKit } from "@/data/kits";
 import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
@@ -28,6 +31,8 @@ const formatPrice = (price: number) =>
 
 export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
   const [imageError, setImageError] = useState(false);
+  const { addToCart, items } = useCart();
+  const isInCart = items.some((item) => item.id === kit.id);
   const language = useSiteLanguage();
   const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : language === "hinglish" ? toHinglishCatalogue(value) : value;
   const kitImage = kit.image;
@@ -51,7 +56,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         aria-label={`View ${kit.name} details`}
         className="block"
       >
-        <div className="relative aspect-[5/3] w-full overflow-hidden sm:aspect-[4/3] bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
+        <div className="relative aspect-[16/9] w-full overflow-hidden sm:aspect-[4/3] bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
           <span className="absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/30 bg-[#168447] px-2.5 py-1 text-[9px] font-black tracking-wide text-white shadow-lg shadow-[#800020]/25 sm:left-3 sm:top-3 sm:text-[10px]">
             <Tag size={11} />
             {savings > 0 ? `YOU SAVE ${formatPrice(savings)}` : "KIT DEAL"}
@@ -97,7 +102,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
       </Link>
 
       {/* KIT DETAILS */}
-      <div className="relative flex min-w-0 flex-1 flex-col p-2 sm:p-4">
+      <div className="relative flex min-w-0 flex-1 flex-col p-3 sm:p-4">
         <Link href={`/kits/${kit.id}`}>
           <h3 className="line-clamp-2 min-h-9 text-[12px] font-extrabold leading-[18px] text-[#202124] transition-colors group-hover:text-[#800020] sm:min-h-11 sm:text-[15px] sm:leading-5">
             {kit.name}
@@ -109,7 +114,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         </p>
 
         {/* INCLUDED ITEMS */}
-        <div className="mt-2 rounded-2xl border border-white/80 bg-white/45 p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-xl sm:mt-4 sm:p-3">
+        <div className="mt-2 rounded-xl border border-[#E8DFD1] bg-[#FFFEFC] p-2.5 sm:mt-4 sm:rounded-2xl sm:p-3">
           <div className="mb-2 flex items-center justify-between gap-1">
             <span className="text-[10px] font-extrabold text-[#202124] sm:text-xs">
               Products inside
@@ -150,7 +155,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
           {remainingItems > 0 && (
             <Link
               href={`/kits/${kit.id}`}
-              className="mt-2 inline-flex items-center gap-1 text-[9px] font-extrabold text-[#800020] transition hover:text-[#800020] sm:text-[10px]"
+              className="mt-2 inline-flex min-h-8 items-center gap-1 text-[10px] font-extrabold text-[#800020] transition hover:text-[#800020] sm:text-[10px]"
             >
               + {remainingItems} more items
               <ArrowUpRight size={11} />
@@ -179,14 +184,32 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         {/* ACTION BUTTONS */}
         <div className="mt-auto flex gap-1.5 pt-2 sm:gap-2 sm:pt-4">
           {kit.isAvailable ? (
-            <Link
-              href={`/kits/${kit.id}`}
-              aria-label={`Customize ${kit.name}`}
-              className="inline-flex min-h-8 min-w-0 flex-1 items-center justify-center gap-1 rounded-lg bg-[#168447] px-1.5 text-[10px] font-extrabold text-white transition hover:bg-[#106B38] sm:min-h-10 sm:rounded-xl sm:text-xs"
-            >
-              Customize
-              <ArrowUpRight size={12} />
-            </Link>
+            <>
+              <Link
+                href={`/kits/${kit.id}`}
+                aria-label={`Customize ${kit.name}`}
+                className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl border border-[#168447] bg-white px-2 text-[11px] font-extrabold text-[#168447] transition hover:bg-[#EAF3E9] active:scale-[.99] sm:text-xs"
+              >
+                Customize
+                <ArrowUpRight size={12} />
+              </Link>
+              {isInCart ? (
+                <Link
+                  href="/cart"
+                  className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl bg-[#800020] px-2 text-[11px] font-extrabold text-white transition hover:bg-[#650019] active:scale-[.99] sm:text-xs"
+                >
+                  <Check size={14} /> In Cart
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => addToCart({ id: kit.id, name: kit.name, price: kit.price, image: kit.image, brand: "Rashid Mega Mart", packSize: "Grocery Kit" })}
+                  className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl bg-[#800020] px-2 text-[11px] font-extrabold text-white transition hover:bg-[#650019] active:scale-[.99] sm:text-xs"
+                >
+                  <ShoppingCart size={14} /> Add to Cart
+                </button>
+              )}
+            </>
           ) : (
             <span className="inline-flex min-h-8 flex-1 items-center justify-center rounded-lg bg-[#FAF7EF] px-1.5 text-[10px] font-bold text-[#686868] sm:min-h-10 sm:rounded-xl sm:text-xs">
               Out of Stock

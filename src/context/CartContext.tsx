@@ -23,6 +23,9 @@ export interface CartItem {
   kitContents?: { name: string; quantity: string }[];
   requestedItems?: { name: string; quantity: string }[];
   isCustomized?: boolean;
+  catalogProductId?: string;
+  kitGroupId?: string;
+  kitGroupName?: string;
 }
 
 interface CartContextType {
@@ -31,6 +34,7 @@ interface CartContextType {
   subtotal: number;
   isLoaded: boolean;
   addToCart: (item: Omit<CartItem, "quantity">) => void;
+  addCustomKitToCart: (kit: { id: string; name: string; items: Array<{ product: Omit<CartItem, "quantity" | "catalogProductId" | "kitGroupId" | "kitGroupName">; quantity: number }> }) => void;
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
   removeFromCart: (id: string) => void;
@@ -89,12 +93,16 @@ function isValidCartItem(item: unknown): item is CartItem {
     (value.quantity as number) <= MAX_CART_QUANTITY &&
     (value.kitContents === undefined || isValidKitLines(value.kitContents)) &&
     (value.requestedItems === undefined || isValidKitLines(value.requestedItems, MAX_EXTRA_LINES)) &&
+    (value.catalogProductId === undefined || typeof value.catalogProductId === "string") &&
+    (value.kitGroupId === undefined || typeof value.kitGroupId === "string") &&
+    (value.kitGroupName === undefined || typeof value.kitGroupName === "string") &&
     ((value.kitContents === undefined ? 0 : (value.kitContents as KitLine[]).length) +
       (value.requestedItems === undefined ? 0 : (value.requestedItems as KitLine[]).length) <= MAX_CUSTOMIZED_LINES)
   );
 }
 
 function normalizeCartItem(item: CartItem): CartItem | null {
+  if (item.catalogProductId && item.kitGroupId && item.kitGroupName) return item;
   const kit = kits.find((entry) => entry.id === item.id && entry.isAvailable);
   if (!kit) return null;
 
@@ -229,18 +237,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
           (item) => item.id === product.id
         );
 
+        // Adding a kit that is already in the cart must not silently
+        // increase its quantity. Quantity changes belong to the explicit + control.
         if (existing) {
-          return currentItems.map((item) =>
-            item.id === product.id
-              ? {
-                  ...item,
-                  quantity: Math.min(
-                    item.quantity + 1,
-                    MAX_CART_QUANTITY
-                  ),
-                }
-              : item
-          );
+          return currentItems;
         }
 
         return currentItems.length >= MAX_CART_ITEMS
@@ -250,6 +250,32 @@ export function CartProvider({ children }: { children: ReactNode }) {
     },
     []
   );
+
+  const addCustomKitToCart = useCallback((kit: { id: string; name: string; items: Array<{ product: Omit<CartItem, "quantity" | "catalogProductId" | "kitGroupId" | "kitGroupName">; quantity: number }> }) => {
+    if (!kit.id.trim() || !kit.name.trim() || !kit.items.length) return;
+    updateCart((currentItems) => {
+      const next = [...currentItems];
+      for (const line of kit.items) {
+        if (!line.product.id.trim() || !Number.isSafeInteger(line.quantity) || line.quantity < 1 || line.quantity > MAX_CART_QUANTITY) continue;
+        const lineId = `${kit.id}::${line.product.id}`;
+        const existingIndex = next.findIndex((item) => item.id === lineId);
+        const row: CartItem = {
+          ...line.product,
+          id: lineId,
+          catalogProductId: line.product.id,
+          kitGroupId: kit.id,
+          kitGroupName: kit.name,
+          quantity: line.quantity,
+        };
+        if (existingIndex >= 0) {
+          next[existingIndex] = { ...next[existingIndex], quantity: Math.min(MAX_CART_QUANTITY, next[existingIndex].quantity + line.quantity), kitGroupName: kit.name };
+        } else if (next.length < MAX_CART_ITEMS) {
+          next.push(row);
+        }
+      }
+      return next;
+    });
+  }, []);
 
   const increaseQuantity = useCallback((id: string) => {
     updateCart((currentItems) =>
@@ -319,6 +345,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotal,
       isLoaded,
       addToCart,
+      addCustomKitToCart,
       increaseQuantity,
       decreaseQuantity,
       removeFromCart,
@@ -331,6 +358,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotal,
       isLoaded,
       addToCart,
+      addCustomKitToCart,
       increaseQuantity,
       decreaseQuantity,
       removeFromCart,
