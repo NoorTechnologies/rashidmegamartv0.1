@@ -438,3 +438,78 @@ video {
   .rmm-customizer a,
   .rmm-customizer input { transition: none !important; }
 }
+
+
+/* ========================================
+   RASHID MEGA MART - COMPACT MOBILE SYSTEM
+   More useful content per screen, while keeping
+   product names, prices and controls readable.
+======================================== */
+@media (max-width: 767px) {
+  :root {
+    --page-gutter: clamp(10px, 3vw, 13px);
+  }
+
+  body {
+    font-size: 13px;
+  }
+
+  main {
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  /* Tighten repeated card and form padding consistently. */
+  main [class~="p-4"] { padding: 0.75rem !important; }
+  main [class~="p-5"] { padding: 0.875rem !important; }
+  main [class~="p-6"] { padding: 0.95rem !important; }
+  main [class~="px-4"] { padding-inline: 0.75rem !important; }
+  main [class~="px-5"] { padding-inline: 0.875rem !important; }
+  main [class~="px-6"] { padding-inline: 1rem !important; }
+  main [class~="py-8"] { padding-block: 1.1rem !important; }
+  main [class~="py-10"] { padding-block: 1.25rem !important; }
+  main [class~="py-12"] { padding-block: 1.4rem !important; }
+
+  /* Keep vertical rhythm compact across every public page. */
+  main [class~="gap-4"] { gap: 0.75rem !important; }
+  main [class~="gap-5"] { gap: 0.875rem !important; }
+  main [class~="gap-6"] { gap: 1rem !important; }
+  main [class~="gap-8"] { gap: 1.25rem !important; }
+  main [class~="mt-5"] { margin-top: 0.9rem !important; }
+  main [class~="mt-6"] { margin-top: 1rem !important; }
+  main [class~="mt-8"] { margin-top: 1.25rem !important; }
+  main [class~="mb-5"] { margin-bottom: 0.9rem !important; }
+  main [class~="mb-6"] { margin-bottom: 1rem !important; }
+  main [class~="mb-8"] { margin-bottom: 1.25rem !important; }
+  main [class~="space-y-4"] > :not(:last-child) { margin-bottom: 0.75rem !important; }
+  main [class~="space-y-5"] > :not(:last-child) { margin-bottom: 0.875rem !important; }
+  main [class~="space-y-6"] > :not(:last-child) { margin-bottom: 1rem !important; }
+
+  /* Reduce oversized headings, but don't shrink body copy or form controls. */
+  main [class~="text-4xl"] { font-size: clamp(1.75rem, 7vw, 2.15rem) !important; line-height: 1.08 !important; }
+  main [class~="text-3xl"] { font-size: clamp(1.5rem, 6vw, 1.8rem) !important; line-height: 1.12 !important; }
+  main [class~="text-2xl"] { font-size: clamp(1.25rem, 5vw, 1.45rem) !important; line-height: 1.18 !important; }
+  main [class~="text-xl"] { font-size: 1.05rem !important; line-height: 1.25 !important; }
+  main [class~="text-lg"] { font-size: 0.98rem !important; line-height: 1.3 !important; }
+
+  /* Cards stay crisp with slightly tighter corners and internal spacing. */
+  main [class~="rounded-3xl"] { border-radius: 1.125rem !important; }
+  main [class~="rounded-2xl"] { border-radius: 0.95rem !important; }
+  main .rmm-product-card-body { padding: 0.65rem !important; }
+  main .rmm-customizer > div:last-child { padding: 0.75rem !important; }
+
+  /* Preserve room for the fixed six-item bottom navigation. */
+  main [class~="pb-28"] { padding-bottom: 5.5rem !important; }
+}
+
+@media (max-width: 359px) {
+  :root { --page-gutter: 10px; }
+
+  body { font-size: 12.5px; }
+
+  main [class~="p-5"],
+  main [class~="p-6"] { padding: 0.75rem !important; }
+
+  main [class~="text-3xl"] { font-size: 1.45rem !important; }
+  main [class~="text-2xl"] { font-size: 1.2rem !important; }
+}
