@@ -99,7 +99,9 @@ export default function CartPage() {
 
     const hasExtras = items.some((item) => (item.requestedItems?.length ?? 0) > 0);
     const message = [
-      "🛒 *Rashid Mega Mart — Shopping Enquiry*",\n      "",\n      "This is an enquiry only. Final availability, weight (where applicable), delivery charges and payable amount will be confirmed by the store.",
+      "🛒 *Rashid Mega Mart — Shopping Enquiry*",
+      "",
+      "This is an enquiry only. Final availability, weight (where applicable), delivery charges and payable amount will be confirmed by the store.",
       "",
       "*Customer*",
       "Name: " + cleanName,
