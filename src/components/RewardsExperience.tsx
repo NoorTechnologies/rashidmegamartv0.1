@@ -22,9 +22,6 @@ export default function RewardsExperience() {
   const claimMessage =
     "Hi Rashid Mega Mart! I came through a referral and would like to request the ₹50 referral benefit. My name: ________. My mobile: ________. Referred by: ________. Please verify my completed order.";
 
-  const repeatMessage =
-    "Hi Rashid Mega Mart! I am an existing customer and would like to ask about my ₹50 repeat-order reward. My name: ________. My mobile: ________. Previous order details: ________.";
-
   return (
     <main className="min-h-[calc(100dvh-76px)] bg-[radial-gradient(ellipse_at_10%_0%,rgba(22,132,71,.08),transparent_34%),#FAF7EF] px-3 pb-28 pt-3 text-[#202124] sm:px-6 sm:pb-16 sm:pt-7">
       <div className="mx-auto w-full max-w-4xl">
@@ -87,11 +84,6 @@ export default function RewardsExperience() {
               <Image src="/Whatsapp-3d.svg" alt="" width={22} height={22} unoptimized /> Message the store
             </a>
           </article>
-        </section>
-
-        <section className="mt-3 flex flex-col gap-3 rounded-[20px] border border-[#E8DFD1] bg-white p-4 shadow-[0_4px_16px_rgba(32,20,18,.04)] sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:rounded-3xl sm:p-6">
-          <div><p className="text-[9px] font-extrabold uppercase tracking-wider text-[#806000]">ALREADY SHOP WITH US?</p><h2 className="mt-1 text-base font-extrabold sm:text-lg">Ask about your repeat-order reward</h2><p className="mt-1 text-[11px] leading-5 text-[#686868] sm:text-xs">Send your previous order details to the store team.</p></div>
-          <a href={whatsappUrl(repeatMessage)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-[#800020] px-4 py-2.5 text-xs font-extrabold text-white transition hover:bg-[#650019] sm:w-auto sm:px-5"><Image src="/Whatsapp-3d.svg" alt="" width={21} height={21} unoptimized /> Ask for reward</a>
         </section>
 
         <p className="mx-auto mt-4 max-w-2xl text-center text-[10px] leading-[1.55] text-[#8A8178] sm:mt-5 sm:text-[11px] sm:leading-5">Rewards are manually checked and confirmed by the store team after order completion. No points, wallet or automatic tracking.</p>
