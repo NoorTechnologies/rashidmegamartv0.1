@@ -31,7 +31,8 @@ export default function BottomNav() {
   const pathname = usePathname();
   const { totalItems } = useCart();
   const [moreOpen, setMoreOpen] = useState(false);
-  const desktopMoreRef = useRef<HTMLDivElement>(null);\n  const mobileMoreRef = useRef<HTMLDivElement>(null);
+  const desktopMoreRef = useRef<HTMLDivElement>(null);
+  const mobileMoreRef = useRef<HTMLDivElement>(null);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
