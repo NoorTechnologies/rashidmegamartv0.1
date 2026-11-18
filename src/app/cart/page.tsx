@@ -46,7 +46,7 @@ export default function CartPage() {
           name: kit?.name ?? item.name,
           unitPrice,
           lineTotal: unitPrice * item.quantity,
-          available: Boolean(kit?.isAvailable),
+          available: item.catalogProductId ? true : Boolean(kit?.isAvailable),
         };
       }),
     [items]
@@ -90,7 +90,7 @@ export default function CartPage() {
           ...(item.requestedItems ?? []).map((line) => line.name + " (" + line.quantity + ")"),
         ];
         return [
-          (index + 1) + ". " + item.name,
+          (index + 1) + ". " + (item.kitGroupName ? item.kitGroupName + " — " : "") + item.name,
           "   " + item.quantity + " × " + formatPrice(item.unitPrice) + " = " + formatPrice(item.lineTotal),
           contents.length ? "   Kit changes / extra items: " + contents.join(", ") : "",
         ].filter(Boolean).join("\n");
@@ -198,6 +198,7 @@ export default function CartPage() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
+                      {item.kitGroupName ? <p className="mb-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#168447]">{item.kitGroupName}</p> : null}
                       <h3 className="break-words text-sm font-extrabold text-[#202124] sm:text-base">{item.name}</h3>
                       <p className="mt-1 text-xs text-[#686868]">{formatPrice(item.unitPrice)} per kit</p>
                     </div>
