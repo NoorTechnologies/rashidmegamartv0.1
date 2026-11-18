@@ -56,13 +56,29 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   const saveContents = (next: KitLine[], nextAdditions = additions) => {
     setContents(next);
     setAdditions(nextAdditions);
+
+    const allLines = [...next, ...nextAdditions];
+    const validLines = allLines.every((line) =>
+      line.name.trim().length > 0 &&
+      line.name.length <= 70 &&
+      line.quantity.trim().length > 0 &&
+      line.quantity.length <= 24
+    );
+
+    if (allLines.length > 50 || nextAdditions.length > 25 || !validLines) {
+      setError("Aap ek kit mein maximum 50 items (25 extra items) add kar sakte hain. Naam/quantity ki limit ka dhyan rakhein.");
+      return;
+    }
+
     updateKitCustomization(kit.id, next, nextAdditions);
+    setError("");
   };
 
   const handleAdd = () => {
     const name = newItem.trim();
     if (!name) return setError("Item ka naam likhein.");
     if (name.length > 70 || newQuantity.trim().length > 24) return setError("Item ya quantity bahut lambi hai.");
+    if (contents.length + additions.length >= 50 || additions.length >= 25) return setError("Ek kit mein maximum 50 items aur 25 extra items add kar sakte hain.");
     if (!isValidGroceryQuantity(newQuantity.trim())) return setError("Quantity sahi likhein, jaise 500g, 1kg, 2 litre ya 1 piece.");
     if ([...contents, ...additions].some((item) => item.name.toLowerCase() === name.toLowerCase())) return setError("Ye item pehle se add hai.");
     saveContents(contents, [...additions, { name, quantity: newQuantity.trim() || "1" }]);
