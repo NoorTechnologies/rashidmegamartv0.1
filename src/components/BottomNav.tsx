@@ -218,17 +218,14 @@ export default function BottomNav() {
       </header>
 
       {/* Mobile language switch: icon only, kept at the top */}
-      <button
-        type="button"
+      <div
         data-no-translate
-        onClick={toggleLanguage}
-        aria-label={`Current language: ${languageLabel}. Switch language`}
-        title={`Language: ${languageLabel}`}
-        className="fixed right-3 top-[calc(env(safe-area-inset-top)+10px)] z-[65] flex h-9 items-center justify-center gap-1.5 rounded-full border border-white/80 bg-[#FFFEFA]/95 px-3 text-[#315F35] shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl transition active:scale-95 lg:hidden"
+        aria-label={`Current language: ${languageLabel}`}
+        title={`Current language: ${languageLabel}`}
+        className="pointer-events-none fixed right-3 top-[calc(env(safe-area-inset-top)+10px)] z-[65] rounded-full border border-white/70 bg-[#FFFEFA]/80 px-2.5 py-1 text-[9px] font-bold text-[#65715D]/75 shadow-sm backdrop-blur-md lg:hidden"
       >
-        <Globe2 size={16} />
-        <span className="text-[10px] font-extrabold">{language === "hi" ? "हिन्दी" : language === "hinglish" ? "Hinglish" : "English"}</span>
-      </button>
+        {language === "hi" ? "हिन्दी" : language === "hinglish" ? "Hinglish" : "English"}
+      </div>
 
       {/* Floating Help Centre */}
       <div
