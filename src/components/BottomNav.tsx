@@ -4,12 +4,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { House, Package, ShoppingCart, CalendarDays, UserRound, MoreHorizontal, X, Languages, ShieldCheck, FileText, MessageCircle, RotateCcw } from "lucide-react";
+import {
+  CalendarDays,
+  FileText,
+  Globe2,
+  House,
+  Languages,
+  LifeBuoy,
+  Package,
+  RotateCcw,
+  ShieldCheck,
+  ShoppingCart,
+  UserRound,
+  X,
+} from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, useToggleSiteLanguage } from "@/components/LanguageProvider";
 
 const WHATSAPP_NUMBER = "918962531603";
-const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rashid Mega Mart! I want to know more about your grocery kits and best offers.")}`;
+const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rashid Mega Mart! I need help with grocery kits and store information.")}`;
 
 const navItems = [
   { label: "Home", href: "/", icon: House },
@@ -17,27 +30,73 @@ const navItems = [
   { label: "Planner", href: "/planner", icon: CalendarDays },
 ];
 
-const moreItems = [
-  { label: "Contact on WhatsApp", href: whatsappHref, icon: MessageCircle, external: true },
+const helpItems = [
+  { label: "Contact on WhatsApp", href: whatsappHref, external: true, whatsapp: true },
   { label: "Returns & Refunds", href: "/returns-refunds", icon: RotateCcw },
   { label: "Privacy Policy", href: "/privacy-policy", icon: ShieldCheck },
   { label: "Terms & Conditions", href: "/terms-and-conditions", icon: FileText },
 ];
 
-function MoreMenu({ onClose }: { onClose: () => void }) {
+function HelpCentreMenu({
+  onClose,
+  mobile = false,
+}: {
+  onClose: () => void;
+  mobile?: boolean;
+}) {
+  const placement = mobile
+    ? "bottom-[calc(100%+10px)] left-1/2 -translate-x-1/2"
+    : "right-0 top-[calc(100%+10px)]";
+
   return (
-    <div role="menu" aria-label="More links" className="absolute right-0 top-[calc(100%+10px)] z-[70] w-[min(260px,calc(100vw-28px))] rounded-2xl border border-white/80 bg-[#FFFEFA]/95 p-2 shadow-[0_18px_55px_rgba(39,31,22,0.18)] backdrop-blur-2xl">
-      {moreItems.map(({ label, href, icon: Icon, external }) => {
+    <div
+      role="menu"
+      aria-label="Help Centre"
+      className={`absolute z-[70] w-[min(270px,calc(100vw-24px))] rounded-2xl border border-white/80 bg-[#FFFEFA]/96 p-2 shadow-[0_18px_55px_rgba(39,31,22,0.18)] backdrop-blur-2xl ${placement}`}
+    >
+      <div className="px-2 pb-2 pt-1">
+        <p className="text-xs font-extrabold text-[#30251F]">How can we help?</p>
+        <p className="mt-0.5 text-[10px] text-[#81796F]">Support and store policies</p>
+      </div>
+      <div className="h-px bg-[#EEE8E1]" />
+      {helpItems.map(({ label, href, icon: Icon, external, whatsapp }) => {
         const content = (
           <>
-            <span className="flex size-9 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]"><Icon size={17}/></span>
-            <span className="text-[13px] font-bold text-[#30251F]">{label}</span>
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]">
+              {whatsapp ? (
+                <Image src="/Whatsapp-3d.svg" alt="" width={23} height={23} unoptimized />
+              ) : Icon ? (
+                <Icon size={17} />
+              ) : null}
+            </span>
+            <span className="min-w-0 flex-1 text-left text-[12px] font-bold text-[#30251F]">
+              {label}
+            </span>
           </>
         );
+
         return external ? (
-          <a key={label} href={href} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={onClose} className="flex min-h-11 items-center gap-3 rounded-xl px-2 hover:bg-[#F2F5EE]">{content}</a>
+          <a
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            role="menuitem"
+            onClick={onClose}
+            className="flex min-h-11 items-center gap-3 rounded-xl px-2 transition-colors hover:bg-[#F2F5EE]"
+          >
+            {content}
+          </a>
         ) : (
-          <Link key={href} href={href} role="menuitem" onClick={onClose} className="flex min-h-11 items-center gap-3 rounded-xl px-2 hover:bg-[#F2F5EE]">{content}</Link>
+          <Link
+            key={href}
+            href={href}
+            role="menuitem"
+            onClick={onClose}
+            className="flex min-h-11 items-center gap-3 rounded-xl px-2 transition-colors hover:bg-[#F2F5EE]"
+          >
+            {content}
+          </Link>
         );
       })}
     </div>
@@ -49,86 +108,226 @@ export default function BottomNav() {
   const { totalItems } = useCart();
   const language = useSiteLanguage();
   const toggleLanguage = useToggleSiteLanguage();
-  const [moreOpen, setMoreOpen] = useState(false);
-  const moreRef = useRef<HTMLDivElement>(null);
-  const logoMenuRef = useRef<HTMLDivElement>(null);
-  const isActive = (href: string) => href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
-  const languageLabel = language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "हिंदी";
+  const [helpOpen, setHelpOpen] = useState(false);
+  const desktopHelpRef = useRef<HTMLDivElement>(null);
+  const mobileHelpRef = useRef<HTMLDivElement>(null);
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+
+  const languageLabel =
+    language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "Hindi";
 
   useEffect(() => {
-    if (!moreOpen) return;
+    if (!helpOpen) return;
+
     const close = (event: PointerEvent) => {
-      if (!moreRef.current?.contains(event.target as Node) && !logoMenuRef.current?.contains(event.target as Node)) setMoreOpen(false);
+      const target = event.target as Node;
+      if (
+        !desktopHelpRef.current?.contains(target) &&
+        !mobileHelpRef.current?.contains(target)
+      ) {
+        setHelpOpen(false);
+      }
     };
-    const escape = (event: KeyboardEvent) => { if (event.key === "Escape") setMoreOpen(false); };
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setHelpOpen(false);
+    };
+
     document.addEventListener("pointerdown", close);
-    document.addEventListener("keydown", escape);
+    document.addEventListener("keydown", closeOnEscape);
+
     return () => {
       document.removeEventListener("pointerdown", close);
-      document.removeEventListener("keydown", escape);
+      document.removeEventListener("keydown", closeOnEscape);
     };
-  }, [moreOpen]);
+  }, [helpOpen]);
 
   return (
     <>
+      {/* Desktop navigation */}
       <header className="pointer-events-none fixed inset-x-0 top-3 z-50 hidden px-4 lg:block">
-        <nav aria-label="Main navigation" className="pointer-events-auto mx-auto flex h-[64px] max-w-6xl items-center justify-between gap-2 rounded-full border border-white/80 bg-[#FFFEFA]/90 px-4 shadow-[0_12px_34px_rgba(32,20,18,0.12)] backdrop-blur-2xl backdrop-saturate-150 xl:px-6">
+        <nav
+          aria-label="Main navigation"
+          className="pointer-events-auto mx-auto flex h-[62px] max-w-6xl items-center justify-between gap-2 rounded-full border border-white/80 bg-[#FFFEFA]/90 px-4 shadow-[0_12px_34px_rgba(32,20,18,0.12)] backdrop-blur-2xl backdrop-saturate-150 xl:px-6"
+        >
           <Link href="/" aria-label="Rashid Mega Mart home" className="flex shrink-0 items-center gap-2.5">
             <Image src="/images/logo2.png" alt="" width={42} height={42} priority className="size-9 object-contain" />
             <span className="text-base font-black tracking-tight text-[#30251F]">Rashid Mega Mart</span>
           </Link>
+
           <div className="flex items-center gap-0.5">
-            {navItems.map(({ label, href, icon: Icon }) => <Link key={href} href={href} aria-current={isActive(href) ? "page" : undefined} className={`inline-flex h-10 items-center gap-2 rounded-full px-2.5 text-[13px] font-bold transition-colors ${isActive(href) ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70 hover:text-[#315F35]"}`}><Icon size={16} />{label}</Link>)}
+            {navItems.map(({ label, href, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                aria-current={isActive(href) ? "page" : undefined}
+                className={
+                  "inline-flex h-10 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " +
+                  (isActive(href)
+                    ? "bg-[#EAF3E6] text-[#315F35]"
+                    : "text-[#625F56] hover:bg-white/70 hover:text-[#315F35]")
+                }
+              >
+                <Icon size={15} />
+                {label}
+              </Link>
+            ))}
           </div>
+
           <div className="flex items-center gap-1">
-            <button type="button" data-no-translate onClick={toggleLanguage} aria-label={`Current language: ${languageLabel}. Switch language`} className="inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-xs font-bold text-[#625F56] hover:bg-white/70"><Languages size={16} />{languageLabel}</button>
-            <Link href="/profile" className={`inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 text-[13px] font-bold ${isActive("/profile") ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70"}`}><UserRound size={17} />Profile</Link>
-            <div ref={moreRef} className="relative"><button type="button" aria-expanded={moreOpen} aria-haspopup="menu" onClick={() => setMoreOpen((v) => !v)} className="inline-flex min-h-9 items-center gap-1.5 rounded-full px-3 text-[13px] font-bold text-[#625F56] hover:bg-white/70">{moreOpen ? <X size={17} /> : <MoreHorizontal size={17} />}</button>{moreOpen && <MoreMenu onClose={() => setMoreOpen(false)} />}</div>
-            <Link href="/cart" aria-label={`Open cart, ${totalItems} items`} className="relative inline-flex min-h-10 items-center gap-2 rounded-full bg-[#315F35] px-3.5 text-[13px] font-extrabold text-white shadow-sm transition hover:bg-[#254B29]"><ShoppingCart size={17} />Cart{totalItems > 0 && <span className="flex min-w-5 items-center justify-center rounded-full bg-[#F2D27B] px-1.5 py-0.5 text-[10px] font-black text-[#443719]">{totalItems > 99 ? "99+" : totalItems}</span>}</Link>
+            <div ref={desktopHelpRef} className="relative">
+              <button
+                type="button"
+                aria-expanded={helpOpen}
+                aria-haspopup="menu"
+                onClick={() => setHelpOpen((value) => !value)}
+                className={
+                  "inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " +
+                  (helpOpen ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70")
+                }
+              >
+                <LifeBuoy size={16} />
+                Help Centre
+              </button>
+              {helpOpen && <HelpCentreMenu onClose={() => setHelpOpen(false)} />}
+            </div>
+
+            <button
+              type="button"
+              data-no-translate
+              onClick={toggleLanguage}
+              aria-label={`Current language: ${languageLabel}. Switch language`}
+              title={`Language: ${languageLabel}`}
+              className="inline-flex size-9 items-center justify-center rounded-full text-[#625F56] transition-colors hover:bg-white/70"
+            >
+              <Globe2 size={17} />
+            </button>
+
+            <Link
+              href="/profile"
+              aria-label="Open account"
+              className={
+                "inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold " +
+                (isActive("/profile")
+                  ? "bg-[#EAF3E6] text-[#315F35]"
+                  : "text-[#625F56] hover:bg-white/70")
+              }
+            >
+              <UserRound size={16} />
+              Account
+            </Link>
+
+            <Link
+              href="/cart"
+              aria-label={`Open cart, ${totalItems} items`}
+              className="relative inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[#315F35] px-3 text-[12px] font-extrabold text-white shadow-sm transition hover:bg-[#254B29]"
+            >
+              <ShoppingCart size={16} />
+              Cart
+              {totalItems > 0 && (
+                <span className="flex min-w-5 items-center justify-center rounded-full bg-[#F2D27B] px-1.5 py-0.5 text-[10px] font-black text-[#443719]">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </span>
+              )}
+            </Link>
           </div>
         </nav>
       </header>
 
-      <nav aria-label="Main navigation" className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[500px] px-3 pb-[calc(7px+env(safe-area-inset-bottom))] lg:hidden">
-        <div className="relative grid h-[60px] grid-cols-5 items-center rounded-full border border-white/90 bg-[#FFFEFA]/82 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
-          {navItems.map(({ label, href, icon: Icon }) => <Link key={href} href={href} aria-current={isActive(href) ? "page" : undefined} className={`mx-auto flex h-[52px] w-full max-w-[48px] flex-col items-center justify-center gap-1 rounded-2xl transition active:scale-95 ${isActive(href) ? "text-[#315F35]" : "text-[#625F56]"}`}><span className={`flex size-7 items-center justify-center rounded-full ${isActive(href) ? "bg-[#E7F0E2]" : ""}`}><Icon size={18} /></span><span className={`text-[8.5px] leading-none ${isActive(href) ? "font-extrabold" : "font-medium"}`}>{label}</span></Link>)}
-          <Link href="/cart" aria-label={`Open cart, ${totalItems} items`} className={`mx-auto flex h-[52px] w-full max-w-[48px] flex-col items-center justify-center gap-1 rounded-2xl transition active:scale-95 ${isActive("/cart") ? "text-[#315F35]" : "text-[#625F56]"}`}><span className={`relative flex size-7 items-center justify-center rounded-full ${isActive("/cart") ? "bg-[#E7F0E2]" : ""}`}><ShoppingCart size={18} />{totalItems > 0 && <span className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C]">{totalItems > 99 ? "99+" : totalItems}</span>}</span><span className="text-[8.5px] leading-none">Cart</span></Link>
-          <Link href="/profile" aria-label="Open profile" className={`mx-auto flex h-[52px] w-full max-w-[48px] flex-col items-center justify-center gap-1 rounded-2xl transition active:scale-95 ${isActive("/profile") ? "text-[#315F35]" : "text-[#625F56]"}`}><span className={`flex size-7 items-center justify-center rounded-full ${isActive("/profile") ? "bg-[#E7F0E2]" : ""}`}><UserRound size={18} /></span><span className="text-[8.5px] leading-none">Profile</span></Link>
+      {/* Mobile language switch: icon only, kept at the top */}
+      <button
+        type="button"
+        data-no-translate
+        onClick={toggleLanguage}
+        aria-label={`Current language: ${languageLabel}. Switch language`}
+        title={`Language: ${languageLabel}`}
+        className="fixed right-3 top-[calc(env(safe-area-inset-top)+10px)] z-[65] flex size-9 items-center justify-center rounded-full border border-white/80 bg-[#FFFEFA]/95 text-[#315F35] shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl transition active:scale-95 lg:hidden"
+      >
+        <Globe2 size={17} />
+      </button>
+
+      {/* Mobile navigation */}
+      <nav
+        aria-label="Main navigation"
+        className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(6px+env(safe-area-inset-bottom))] lg:hidden"
+      >
+        <div className="relative grid h-[58px] grid-cols-6 items-center rounded-full border border-white/90 bg-[#FFFEFA]/90 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
+          {navItems.map(({ label, href, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              aria-current={isActive(href) ? "page" : undefined}
+              className={
+                "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
+                (isActive(href) ? "text-[#315F35]" : "text-[#625F56]")
+              }
+            >
+              <span className={"flex size-6 items-center justify-center rounded-full " + (isActive(href) ? "bg-[#E7F0E2]" : "")}>
+                <Icon size={16} />
+              </span>
+              <span className={"text-[8px] leading-none " + (isActive(href) ? "font-extrabold" : "font-medium")}>
+                {label}
+              </span>
+            </Link>
+          ))}
+
+          <div ref={mobileHelpRef} className="relative mx-auto flex h-12 w-full min-w-0 items-center justify-center">
+            <button
+              type="button"
+              aria-label="Open Help Centre"
+              aria-expanded={helpOpen}
+              aria-haspopup="menu"
+              onClick={() => setHelpOpen((value) => !value)}
+              className={
+                "flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
+                (helpOpen ? "text-[#315F35]" : "text-[#625F56]")
+              }
+            >
+              <span className={"flex size-6 items-center justify-center rounded-full " + (helpOpen ? "bg-[#E7F0E2]" : "")}>
+                {helpOpen ? <X size={17} /> : <LifeBuoy size={17} />}
+              </span>
+              <span className="text-[8px] font-semibold leading-none">Help</span>
+            </button>
+            {helpOpen && <HelpCentreMenu mobile onClose={() => setHelpOpen(false)} />}
+          </div>
+
+          <Link
+            href="/cart"
+            aria-label={`Open cart, ${totalItems} items`}
+            className={
+              "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
+              (isActive("/cart") ? "text-[#315F35]" : "text-[#625F56]")
+            }
+          >
+            <span className={"relative flex size-6 items-center justify-center rounded-full " + (isActive("/cart") ? "bg-[#E7F0E2]" : "")}>
+              <ShoppingCart size={16} />
+              {totalItems > 0 && (
+                <span className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C]">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </span>
+              )}
+            </span>
+            <span className="text-[8px] leading-none">Cart</span>
+          </Link>
+
+          <Link
+            href="/profile"
+            aria-label="Open account"
+            aria-current={isActive("/profile") ? "page" : undefined}
+            className={
+              "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
+              (isActive("/profile") ? "text-[#315F35]" : "text-[#625F56]")
+            }
+          >
+            <span className={"flex size-6 items-center justify-center rounded-full " + (isActive("/profile") ? "bg-[#E7F0E2]" : "")}>
+              <UserRound size={16} />
+            </span>
+            <span className="text-[8px] leading-none">Account</span>
+          </Link>
         </div>
       </nav>
-
-      <a href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Chat with Rashid Mega Mart on WhatsApp" className="fixed bottom-[calc(82px+env(safe-area-inset-bottom))] right-4 z-40 flex size-[50px] items-center justify-center rounded-full border border-white/80 bg-white shadow-[0_8px_24px_rgba(25,65,39,0.2)] transition-transform hover:-translate-y-1 active:scale-95 lg:bottom-6 lg:right-6">
-        <Image src="/Whatsapp-3d.svg" alt="" width={34} height={34} unoptimized className="size-8 object-contain" />
-      </a>
-      <div className="fixed bottom-[calc(137px+env(safe-area-inset-bottom))] left-4 z-40 lg:hidden">
-        <button
-          type="button"
-          data-no-translate
-          onClick={toggleLanguage}
-          aria-label={`Current language: ${languageLabel}. Tap to change language`}
-          className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-white/90 bg-[#FFFEFA]/95 px-2.5 shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl transition active:scale-95"
-        >
-          <Languages size={13} className="text-[#315F35]" />
-          <span className="text-[10px] font-extrabold tracking-wide text-[#315F35]">{language === "en" ? "EN" : language === "hinglish" ? "HING" : "हिंदी"}</span>
-          <span className="text-[9px] font-semibold text-[#82796D]">⌄</span>
-        </button>
-      </div>
-      <div ref={logoMenuRef} className="fixed bottom-[calc(84px+env(safe-area-inset-bottom))] left-4 z-40 flex flex-col items-center gap-1 lg:hidden">
-        {moreOpen && <div className="absolute bottom-[calc(100%+10px)] left-0 w-[min(280px,calc(100vw-32px))] rounded-2xl border border-white/80 bg-[#FFFEFA]/95 p-2 shadow-[0_18px_55px_rgba(39,31,22,0.18)] backdrop-blur-2xl">
-          <div className="px-2 py-2">
-            <span className="text-xs font-extrabold text-[#30251F]">Rashid Mega Mart</span>
-          </div>
-          <div className="my-1 h-px bg-[#EEE8E1]" />
-          {moreItems.map(({ label, href, icon: Icon, external }) => {
-            const content = <><span className="flex size-9 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]"><Icon size={17} /></span><span className="text-[13px] font-bold text-[#30251F]">{label}</span></>;
-            return external ? <a key={label} href={href} target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setMoreOpen(false)} className="flex min-h-11 items-center gap-3 rounded-xl px-2 hover:bg-[#F2F5EE]">{content}</a> : <Link key={href} href={href} role="menuitem" onClick={() => setMoreOpen(false)} className="flex min-h-11 items-center gap-3 rounded-xl px-2 hover:bg-[#F2F5EE]">{content}</Link>;
-          })}
-        </div>}
-        <button type="button" aria-label={moreOpen ? "Close Help Centre" : "Open Help Centre"} aria-expanded={moreOpen} aria-haspopup="menu" onClick={() => setMoreOpen((v) => !v)} className={`flex size-11 items-center justify-center rounded-full border border-white/90 bg-white shadow-[0_8px_24px_rgba(39,31,22,0.16)] transition-transform hover:-translate-y-1 active:scale-95 ${moreOpen ? "ring-2 ring-[#315F35]/20" : ""}`}>
-          {moreOpen ? <X size={19} className="text-[#315F35]" /> : <Image src="/images/logo2.png" alt="" width={38} height={38} priority className="size-9 object-contain" />}
-        </button>
-        <span className="text-[9px] font-extrabold leading-none text-[#625F56]">Help Centre</span>
-      </div>
     </>
   );
 }
