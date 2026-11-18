@@ -104,7 +104,7 @@ export default function CartPage() {
           throw new Error("One of the cart quantities is invalid. Please update your cart.");
         }
 
-        const product = products.find((entry) => entry.id === cartItem.id);
+        const product = products.find((entry) => entry.id === (cartItem.catalogProductId ?? cartItem.id));
         const kit = kits.find((entry) => entry.id === cartItem.id);
 
         if (product && kit) {
@@ -124,6 +124,7 @@ export default function CartPage() {
           return {
             index: index + 1,
             type: "Product",
+            kitGroupName: cartItem.kitGroupName,
             name: product.name,
             detail: [product.brand, product.packSize].filter(Boolean).join(" · "),
             quantity: cartItem.quantity,
@@ -139,6 +140,7 @@ export default function CartPage() {
           return {
             index: index + 1,
             type: "Grocery Kit",
+            kitGroupName: cartItem.kitGroupName,
             name: kit.name,
             detail: kit.subtitle,
             quantity: cartItem.quantity,
@@ -163,6 +165,7 @@ export default function CartPage() {
         .map((line) =>
           line.index +
           ". " + line.name + " [" + line.type + "]" +
+          (line.kitGroupName ? "\n   Kit: " + line.kitGroupName : "") +
           (line.detail ? "\n   " + line.detail : "") +
           "\n   Qty: " + line.quantity +
           " × " + formatPrice(line.unitPrice) +
@@ -320,9 +323,15 @@ export default function CartPage() {
             </div>
 
             <div className="space-y-3">
-              {items.map((item) => (
+              {items.map((item, index) => (
+                <div key={item.id}>
+                {item.kitGroupId && (index === 0 || items[index - 1]?.kitGroupId !== item.kitGroupId) && (
+                  <div className="mb-2 mt-3 flex items-center justify-between rounded-xl bg-[#F8E8ED] px-3 py-2 text-xs font-extrabold text-[#800020]">
+                    <span>Custom Kit · {item.kitGroupName}</span>
+                    <span>{formatPrice(items.filter((line) => line.kitGroupId === item.kitGroupId).reduce((sum, line) => sum + line.price * line.quantity, 0))}</span>
+                  </div>
+                )}
                 <article
-                  key={item.id}
                   className="group flex min-w-0 gap-3 rounded-2xl border border-[#EEE8E1] bg-white p-3 shadow-[0_2px_12px_rgba(40,30,20,0.035)] transition hover:border-[#E5D4D9] hover:shadow-[0_5px_20px_rgba(40,30,20,0.06)] min-[430px]:gap-4 sm:p-4"
                 >
                   {/* Product Image */}
@@ -414,6 +423,7 @@ export default function CartPage() {
                     </div>
                   </div>
                 </article>
+                </div>
               ))}
             </div>
 
