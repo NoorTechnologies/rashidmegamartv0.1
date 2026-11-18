@@ -90,7 +90,7 @@ export default function CartPage() {
           : "";
 
         if (!nameEdited.current && accountName) setCustomerName(accountName);
-        if (!phoneEdited.current && accountPhone) setPhone(accountPhone.replace(/\\D/g, "").slice(-10));
+        if (!phoneEdited.current && accountPhone) setPhone(accountPhone.replace(/\D/g, "").slice(-10));
         if (!addressEdited.current && accountAddress) setAddress(accountAddress);
         setAccountDetailsFound(Boolean(accountName || accountPhone || accountAddress));
       } catch (cause) {
@@ -352,7 +352,7 @@ export default function CartPage() {
               </label>
               <label className="block text-xs font-bold text-[#202124]">
                 Mobile number *
-                <input required type="tel" inputMode="numeric" autoComplete="tel" pattern="[6-9][0-9]{9}" maxLength={10} value={phone} onChange={(event) => setPhone(event.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="10-digit mobile number" className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+                <input required type="tel" inputMode="numeric" autoComplete="tel" pattern="[6-9][0-9]{9}" maxLength={10} value={phone} onChange={(event) => { phoneEdited.current = true; setPhone(event.target.value.replace(/\D/g, "").slice(0, 10)); }} placeholder="10-digit mobile number" className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
               </label>
               <label className="block text-xs font-bold text-[#202124]">
                 Delivery address <span className="font-normal text-[#8A8175]">(optional)</span>
