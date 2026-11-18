@@ -66,24 +66,36 @@ export default function ProfilePage() {
       setKits((results[2].data ?? []) as SavedKit[]);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Account details could not be loaded."); }
     finally { setLoading(false); }
-  }, [session?.user.id]);
+  }, [session?.user.id, session?.user.user_metadata?.full_name]);
 
   useEffect(() => {
+    let active = true;
     try {
       const supabase = getSupabaseBrowserClient();
-      if (new URLSearchParams(window.location.search).get("mode") === "reset") setMode("reset");
-      supabase.auth.getSession().then(({ data }) => setSession(data.session));
-      const { data } = supabase.auth.onAuthStateChange((_event, next) => setSession(next));
-      return () => data.subscription.unsubscribe();
-    } catch { setConfigured(false); }
+      const { data } = supabase.auth.onAuthStateChange((_event, next) => {
+        if (active) setSession(next);
+      });
+      void supabase.auth.getSession().then(({ data: sessionData }) => {
+        if (!active) return;
+        setSession(sessionData.session);
+        if (new URLSearchParams(window.location.search).get("mode") === "reset") setMode("reset");
+      }).catch(() => {
+        if (active) setConfigured(false);
+      });
+      return () => {
+        active = false;
+        data.subscription.unsubscribe();
+      };
+    } catch {
+      queueMicrotask(() => { if (active) setConfigured(false); });
+      return () => { active = false; };
+    }
   }, []);
-  useEffect(() => { void loadData(); }, [loadData]);
+  useEffect(() => { void Promise.resolve().then(loadData); }, [loadData]);
 
   useEffect(() => {
     let cancelled = false;
     const loadCoupons = async () => {
-      setCouponsLoading(true);
-      setCouponError("");
       try {
         const now = new Date().toISOString();
         const { data, error: queryError } = await getSupabaseBrowserClient()
