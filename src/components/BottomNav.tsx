@@ -3,106 +3,230 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import {
+  CalendarDays,
+  FileText,
+  Globe2,
   House,
-  LayoutGrid,
+  LifeBuoy,
   Package,
+  RotateCcw,
+  ShieldCheck,
   ShoppingCart,
+  UserRound,
+  X,
 } from "lucide-react";
-
 import { useCart } from "@/context/CartContext";
+import { useSiteLanguage, useToggleSiteLanguage } from "@/components/LanguageProvider";
 
 const WHATSAPP_NUMBER = "918962531603";
+const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rashid Mega Mart! I need help with grocery kits and store information.")}`;
 
-const navigationItems = [
-  { label: "Home", href: "/", icon: House, external: false },
-  { label: "Shop", href: "/shop", icon: LayoutGrid, external: false },
-  { label: "Kits", href: "/kits", icon: Package, external: false },
+const navItems = [
+  { label: "Home", href: "/", icon: House },
+  { label: "Kits", href: "/kits", icon: Package },
+  { label: "Planner", href: "/planner", icon: CalendarDays },
 ];
 
-const mobileNavigationItems = [
-  ...navigationItems,
-  { label: "Cart", href: "/cart", icon: ShoppingCart, external: false },
-  { label: "WhatsApp", href: `https://wa.me/${WHATSAPP_NUMBER}`, icon: Package, external: true },
+const helpItems = [
+  { label: "Contact on WhatsApp", href: whatsappHref, external: true, whatsapp: true },
+  { label: "Returns & Refunds", href: "/returns-refunds", icon: RotateCcw },
+  { label: "Privacy Policy", href: "/privacy-policy", icon: ShieldCheck },
+  { label: "Terms & Conditions", href: "/terms-and-conditions", icon: FileText },
 ];
+
+function HelpCentreMenu({
+  onClose,
+  mobile = false,
+}: {
+  onClose: () => void;
+  mobile?: boolean;
+}) {
+  const placement = mobile
+    ? "bottom-[calc(100%+10px)] left-1/2 -translate-x-1/2"
+    : "right-0 top-[calc(100%+10px)]";
+
+  return (
+    <div
+      role="menu"
+      aria-label="Help Centre"
+      className={`absolute z-[70] w-[min(270px,calc(100vw-24px))] rounded-2xl border border-white/80 bg-[#FFFEFA]/96 p-2 shadow-[0_18px_55px_rgba(39,31,22,0.18)] backdrop-blur-2xl ${placement}`}
+    >
+      <div className="px-2 pb-2 pt-1">
+        <p className="text-xs font-extrabold text-[#30251F]">How can we help?</p>
+        <p className="mt-0.5 text-[10px] text-[#81796F]">Support and store policies</p>
+      </div>
+      <div className="h-px bg-[#EEE8E1]" />
+      {helpItems.map(({ label, href, icon: Icon, external, whatsapp }) => {
+        const content = (
+          <>
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]">
+              {whatsapp ? (
+                <Image src="/Whatsapp-3d.svg" alt="" width={23} height={23} unoptimized />
+              ) : Icon ? (
+                <Icon size={17} />
+              ) : null}
+            </span>
+            <span className="min-w-0 flex-1 text-left text-[12px] font-bold text-[#30251F]">
+              {label}
+            </span>
+          </>
+        );
+
+        return external ? (
+          <a
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            role="menuitem"
+            onClick={onClose}
+            className="flex min-h-11 items-center gap-3 rounded-xl px-2 transition-colors hover:bg-[#F2F5EE]"
+          >
+            {content}
+          </a>
+        ) : (
+          <Link
+            key={href}
+            href={href}
+            role="menuitem"
+            onClick={onClose}
+            className="flex min-h-11 items-center gap-3 rounded-xl px-2 transition-colors hover:bg-[#F2F5EE]"
+          >
+            {content}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function BottomNav() {
   const pathname = usePathname();
   const { totalItems } = useCart();
+  const language = useSiteLanguage();
+  const toggleLanguage = useToggleSiteLanguage();
+  const [helpOpen, setHelpOpen] = useState(false);
+  const desktopHelpRef = useRef<HTMLDivElement>(null);
+  const mobileHelpRef = useRef<HTMLDivElement>(null);
 
   const isActive = (href: string) =>
-    href === "/"
-      ? pathname === "/"
-      : pathname === href || pathname.startsWith(`${href}/`);
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+
+  const languageLabel =
+    language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "Hindi";
+
+  useEffect(() => {
+    if (!helpOpen) return;
+
+    const close = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (
+        !desktopHelpRef.current?.contains(target) &&
+        !mobileHelpRef.current?.contains(target)
+      ) {
+        setHelpOpen(false);
+      }
+    };
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setHelpOpen(false);
+    };
+
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [helpOpen]);
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 hidden border-b border-[#EDE4DC]/80 bg-[#FFFDF8]/90 shadow-[0_4px_24px_rgba(48,30,36,0.04)] backdrop-blur-2xl lg:block">
+      {/* Desktop navigation */}
+      <header className="pointer-events-none fixed inset-x-0 top-3 z-50 hidden px-4 lg:block">
         <nav
           aria-label="Main navigation"
-          className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-8 px-6 xl:px-8"
+          className="pointer-events-auto mx-auto flex h-[62px] max-w-6xl items-center justify-between gap-2 rounded-full border border-white/80 bg-[#FFFEFA]/90 px-4 shadow-[0_12px_34px_rgba(32,20,18,0.12)] backdrop-blur-2xl backdrop-saturate-150 xl:px-6"
         >
-          <Link
-            href="/"
-            aria-label="Rashid Mega Mart home"
-            className="flex shrink-0 items-center gap-3 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250]"
-          >
-            <Image
-              src="/images/logo2.png"
-              alt=""
-              width={48}
-              height={48}
-              priority
-              className="size-11 object-contain"
-            />
-            <span className="text-base font-black tracking-tight text-[#30251F]">
-              Rashid <span className="text-[#A83250]">Mega Mart</span>
-            </span>
+          <Link href="/" aria-label="Rashid Mega Mart home" className="flex shrink-0 items-center gap-2.5">
+            <Image src="/images/logo2.png" alt="" width={42} height={42} priority className="size-9 object-contain" />
+            <span className="text-base font-black tracking-tight text-[#30251F]">Rashid Mega Mart</span>
           </Link>
 
-          <div className="flex h-full items-center gap-2">
-            {navigationItems.map((item) => (
+          <div className="flex items-center gap-0.5">
+            {navItems.map(({ label, href, icon: Icon }) => (
               <Link
-                key={item.href}
-                href={item.href}
-                aria-current={isActive(item.href) ? "page" : undefined}
-                className={`inline-flex h-10 items-center rounded-full px-5 text-sm font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A83250] ${
-                  isActive(item.href)
-                    ? "bg-[#F8E8ED] text-[#A83250]"
-                    : "text-[#76665C] hover:bg-[#F8E8ED]/70 hover:text-[#87263F]"
-                }`}
+                key={href}
+                href={href}
+                aria-current={isActive(href) ? "page" : undefined}
+                className={
+                  "inline-flex h-10 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " +
+                  (isActive(href)
+                    ? "bg-[#EAF3E6] text-[#315F35]"
+                    : "text-[#625F56] hover:bg-white/70 hover:text-[#315F35]")
+                }
               >
-                {item.label}
+                <Icon size={15} />
+                {label}
               </Link>
             ))}
           </div>
 
-          <div className="flex shrink-0 items-center gap-3">
-            <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-sm font-bold text-[#138047] transition hover:bg-[#EAF6EE] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#138047]"
+          <div className="flex items-center gap-1">
+            <div ref={desktopHelpRef} className="relative">
+              <button
+                type="button"
+                aria-expanded={helpOpen}
+                aria-haspopup="menu"
+                onClick={() => setHelpOpen((value) => !value)}
+                className={
+                  "inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " +
+                  (helpOpen ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70")
+                }
+              >
+                <LifeBuoy size={16} />
+                Help Centre
+              </button>
+              {helpOpen && <HelpCentreMenu onClose={() => setHelpOpen(false)} />}
+            </div>
+
+            <button
+              type="button"
+              data-no-translate
+              onClick={toggleLanguage}
+              aria-label={`Current language: ${languageLabel}. Switch language`}
+              title={`Language: ${languageLabel}`}
+              className="inline-flex size-9 items-center justify-center rounded-full text-[#625F56] transition-colors hover:bg-white/70"
             >
-              <Image
-                src="/Whatsapp-3d.svg"
-                alt=""
-                width={21}
-                height={21}
-                unoptimized
-                className="size-5 object-contain"
-              />
-              Contact
-            </a>
+              <Globe2 size={17} />
+            </button>
+
+            <Link
+              href="/profile"
+              aria-label="Open account"
+              className={
+                "inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold " +
+                (isActive("/profile")
+                  ? "bg-[#EAF3E6] text-[#315F35]"
+                  : "text-[#625F56] hover:bg-white/70")
+              }
+            >
+              <UserRound size={16} />
+              Account
+            </Link>
+
             <Link
               href="/cart"
               aria-label={`Open cart, ${totalItems} items`}
-              className="relative inline-flex min-h-11 items-center gap-2 rounded-full bg-[#A83250] px-5 text-sm font-extrabold text-white shadow-[0_5px_16px_rgba(168,50,80,0.18)] transition hover:-translate-y-0.5 hover:bg-[#87263F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A83250]"
+              className="relative inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[#315F35] px-3 text-[12px] font-extrabold text-white shadow-sm transition hover:bg-[#254B29]"
             >
-              <ShoppingCart size={17} />
+              <ShoppingCart size={16} />
               Cart
               {totalItems > 0 && (
-                <span className="flex min-w-5 items-center justify-center rounded-full bg-white px-1.5 py-0.5 text-[10px] font-black text-[#A83250]">
+                <span className="flex min-w-5 items-center justify-center rounded-full bg-[#F2D27B] px-1.5 py-0.5 text-[10px] font-black text-[#443719]">
                   {totalItems > 99 ? "99+" : totalItems}
                 </span>
               )}
@@ -111,52 +235,96 @@ export default function BottomNav() {
         </nav>
       </header>
 
+      {/* Mobile language switch: icon only, kept at the top */}
+      <button
+        type="button"
+        data-no-translate
+        onClick={toggleLanguage}
+        aria-label={`Current language: ${languageLabel}. Switch language`}
+        title={`Language: ${languageLabel}`}
+        className="fixed right-3 top-[calc(env(safe-area-inset-top)+10px)] z-[65] flex size-9 items-center justify-center rounded-full border border-white/80 bg-[#FFFEFA]/95 text-[#315F35] shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl transition active:scale-95 lg:hidden"
+      >
+        <Globe2 size={17} />
+      </button>
+
+      {/* Mobile navigation */}
       <nav
         aria-label="Main navigation"
-        className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-3 pb-[calc(7px+env(safe-area-inset-bottom))] lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(6px+env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="relative grid h-[58px] grid-cols-5 items-center rounded-full border border-white/75 bg-white/60 px-2 shadow-[0_10px_36px_rgba(40,28,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95),inset_0_-1px_0_rgba(255,255,255,0.28)] backdrop-blur-2xl backdrop-saturate-150">
-          <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
+        <div className="relative grid h-[58px] grid-cols-6 items-center rounded-full border border-white/90 bg-[#FFFEFA]/90 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
+          {navItems.map(({ label, href, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              aria-current={isActive(href) ? "page" : undefined}
+              className={
+                "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
+                (isActive(href) ? "text-[#315F35]" : "text-[#625F56]")
+              }
+            >
+              <span className={"flex size-6 items-center justify-center rounded-full " + (isActive(href) ? "bg-[#E7F0E2]" : "")}>
+                <Icon size={16} />
+              </span>
+              <span className={"text-[8px] leading-none " + (isActive(href) ? "font-extrabold" : "font-medium")}>
+                {label}
+              </span>
+            </Link>
+          ))}
 
-          {mobileNavigationItems.map((item) => {
-            const Icon = item.icon;
-            const active = item.external ? false : isActive(item.href);
-            const className = `relative mx-auto flex h-12 w-[min(100%,76px)] flex-col items-center justify-center gap-1 rounded-full transition-all duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#A83250] ${
-              active
-                ? "bg-[#F8E8ED] text-[#A83250] shadow-[0_4px_14px_rgba(168,50,80,0.16)] ring-1 ring-[#A83250]/10"
-                : "text-[#766D72] hover:bg-white/45 hover:text-[#87263F]"
-            }`;
-            const content = (
-              <>
-                <span className={`relative flex size-8 items-center justify-center rounded-full transition-all duration-300 ${active ? "bg-[#A83250] text-white shadow-[0_4px_10px_rgba(168,50,80,0.24)]" : ""}`}>
-                  {item.external ? (
-                    <Image src="/Whatsapp-3d.svg" alt="" width={21} height={21} unoptimized className="size-5 object-contain" />
-                  ) : (
-                    <Icon size={18} strokeWidth={active ? 2.4 : 1.8} className={active ? "scale-105" : ""} />
-                  )}
-                </span>
-                {item.href === "/cart" && totalItems > 0 && (
-                  <span className="absolute right-[10px] top-[2px] flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-[#D4A84F] px-1 text-[8px] font-black leading-none text-[#5C1D30] ring-2 ring-white">
-                    {totalItems > 99 ? "99+" : totalItems}
-                  </span>
-                )}
-                <span className={`text-[10px] leading-none ${active ? "font-bold" : "font-medium"}`}>
-                  {item.label}
-                </span>
-                {active && <span className="absolute bottom-[5px] h-1 w-1 rounded-full bg-[#A83250]" />}
-              </>
-            );
+          <div ref={mobileHelpRef} className="relative mx-auto flex h-12 w-full min-w-0 items-center justify-center">
+            <button
+              type="button"
+              aria-label="Open Help Centre"
+              aria-expanded={helpOpen}
+              aria-haspopup="menu"
+              onClick={() => setHelpOpen((value) => !value)}
+              className={
+                "flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
+                (helpOpen ? "text-[#315F35]" : "text-[#625F56]")
+              }
+            >
+              <span className={"flex size-6 items-center justify-center rounded-full " + (helpOpen ? "bg-[#E7F0E2]" : "")}>
+                {helpOpen ? <X size={17} /> : <LifeBuoy size={17} />}
+              </span>
+              <span className="text-[8px] font-semibold leading-none">Help</span>
+            </button>
+            {helpOpen && <HelpCentreMenu mobile onClose={() => setHelpOpen(false)} />}
+          </div>
 
-            return item.external ? (
-              <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp" className={className}>
-                {content}
-              </a>
-            ) : (
-              <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={className}>
-                {content}
-              </Link>
-            );
-          })}
+          <Link
+            href="/cart"
+            aria-label={`Open cart, ${totalItems} items`}
+            className={
+              "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
+              (isActive("/cart") ? "text-[#315F35]" : "text-[#625F56]")
+            }
+          >
+            <span className={"relative flex size-6 items-center justify-center rounded-full " + (isActive("/cart") ? "bg-[#E7F0E2]" : "")}>
+              <ShoppingCart size={16} />
+              {totalItems > 0 && (
+                <span className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C]">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </span>
+              )}
+            </span>
+            <span className="text-[8px] leading-none">Cart</span>
+          </Link>
+
+          <Link
+            href="/profile"
+            aria-label="Open account"
+            aria-current={isActive("/profile") ? "page" : undefined}
+            className={
+              "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
+              (isActive("/profile") ? "text-[#315F35]" : "text-[#625F56]")
+            }
+          >
+            <span className={"flex size-6 items-center justify-center rounded-full " + (isActive("/profile") ? "bg-[#E7F0E2]" : "")}>
+              <UserRound size={16} />
+            </span>
+            <span className="text-[8px] leading-none">Account</span>
+          </Link>
         </div>
       </nav>
     </>

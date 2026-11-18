@@ -1,26 +1,14 @@
-
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  MapPin,
-  Minus,
-  Plus,
-  ShieldCheck,
-  ShoppingBag,
-  Trash2,
-  Truck,
-  PackageCheck,
-  Undo2,
-} from "lucide-react";
+import { useMemo, useState, type FormEvent } from "react";
+import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2, Truck, ShieldCheck, ChevronDown } from "lucide-react";
 
 import { useCart } from "@/context/CartContext";
 import { kits } from "@/data/kits";
-import { products } from "@/data/products";
+
+const WHATSAPP_NUMBER = "918962531603";
 
 const formatPrice = (amount: number) =>
   new Intl.NumberFormat("en-IN", {
@@ -33,696 +21,282 @@ export default function CartPage() {
   const {
     items,
     totalItems,
-    subtotal,
     isLoaded,
     increaseQuantity,
     decreaseQuantity,
     removeFromCart,
     clearCart,
-    addToCart,
   } = useCart();
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<"COD" | "UPI">("COD");
-  const [orderNote, setOrderNote] = useState("");
-  const [removedItem, setRemovedItem] = useState<(typeof items)[number] | null>(null);
+  const [specialInstructions, setSpecialInstructions] = useState("");
   const [formError, setFormError] = useState("");
 
-  const handleRemoveItem = (item: (typeof items)[number]) => {
-    setRemovedItem(item);
-    removeFromCart(item.id);
-  };
+  // Always use the current catalogue price, not a stale price stored in localStorage.
+  // This value updates immediately whenever cart quantity or contents change.
+  const pricedItems = useMemo(
+    () =>
+      items.map((item) => {
+        const kit = kits.find((entry) => entry.id === item.id);
+        const unitPrice = kit?.price ?? item.price;
+        return {
+          ...item,
+          name: kit?.name ?? item.name,
+          unitPrice,
+          lineTotal: unitPrice * item.quantity,
+          available: item.catalogProductId ? true : Boolean(kit?.isAvailable),
+        };
+      }),
+    [items]
+  );
 
-  const handleUndoRemove = () => {
-    if (!removedItem) return;
-    const { quantity, ...product } = removedItem;
-    addToCart(product);
-    for (let count = 1; count < quantity; count += 1) increaseQuantity(removedItem.id);
-    setRemovedItem(null);
-  };
+  const subtotal = useMemo(
+    () => pricedItems.reduce((sum, item) => sum + item.lineTotal, 0),
+    [pricedItems]
+  );
 
-  const handleCheckout = (event: FormEvent<HTMLFormElement>) => {
+  const handleWhatsAppEnquiry = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError("");
 
-    if (!items.length) {
-      setFormError("Your cart is empty. Please add products first.");
-      return;
-    }
-
     const cleanName = customerName.trim();
-    const cleanPhone = phone.trim();
+    const cleanPhone = phone.replace(/\D/g, "");
     const cleanAddress = address.trim();
-    const cleanNote = orderNote.trim();
+    const cleanInstructions = specialInstructions.trim();
 
     if (cleanName.length < 2) {
-      setFormError("Please enter your valid full name.");
+      setFormError("Please enter your name.");
       return;
     }
     if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
       setFormError("Please enter a valid 10-digit mobile number.");
       return;
     }
-    if (cleanAddress.length < 10) {
-      setFormError("Please enter a complete delivery address.");
+    if (!items.length) {
+      setFormError("Your cart is empty.");
       return;
     }
-    if (items.length > 30) {
-      setFormError("Please keep your order to 30 different items or fewer.");
+    if (pricedItems.some((item) => !item.available)) {
+      setFormError("A kit in your cart is unavailable. Please remove it and try again.");
       return;
     }
 
-    try {
-      const orderLines = items.map((cartItem, index) => {
-        if (
-          !Number.isSafeInteger(cartItem.quantity) ||
-          cartItem.quantity < 1 ||
-          cartItem.quantity > 99
-        ) {
-          throw new Error("One of the cart quantities is invalid. Please update your cart.");
-        }
+    const enquiryDetails = pricedItems
+      .map((item, index) => {
+        const contents = [
+          ...(item.kitContents ?? []).map((line) => line.name + " (" + line.quantity + ")"),
+          ...(item.requestedItems ?? []).map((line) => line.name + " (" + line.quantity + ")"),
+        ];
+        return [
+          (index + 1) + ". " + (item.kitGroupName ? item.kitGroupName + " — " : "") + item.name,
+          "   " + item.quantity + " × " + formatPrice(item.unitPrice) + " = " + formatPrice(item.lineTotal),
+          contents.length ? "   Kit changes / extra items: " + contents.join(", ") : "",
+        ].filter(Boolean).join("\n");
+      })
+      .join("\n\n");
 
-        const product = products.find((entry) => entry.id === cartItem.id);
-        const kit = kits.find((entry) => entry.id === cartItem.id);
+    const hasExtras = items.some((item) => (item.requestedItems?.length ?? 0) > 0);
+    const message = [
+      "🛒 *Rashid Mega Mart — Shopping Enquiry*",
+      "",
+      "This is an enquiry only. Final availability, weight (where applicable), delivery charges and payable amount will be confirmed by the store.",
+      "",
+      "*Customer*",
+      "Name: " + cleanName,
+      "Mobile: " + cleanPhone,
+      "Address: " + (cleanAddress || "Will confirm on WhatsApp"),
+      "",
+      "*Your Items*",
+      enquiryDetails,
+      "",
+      "*Subtotal: " + formatPrice(subtotal) + "*",
+      "Delivery: Confirm on WhatsApp",
+      hasExtras ? "Extra item prices: Owner will confirm separately." : "",
+      cleanInstructions ? "Note: " + cleanInstructions : "",
+      "",
+      "Please confirm availability, actual weights where applicable, delivery charges and final amount.",
+    ].filter(Boolean).join("\n");
 
-        if (product && kit) {
-          throw new Error("A catalogue item has a duplicate ID. Please contact the store.");
-        }
-
-        if (product) {
-          if (!product.isAvailable) {
-            throw new Error(product.name + " is currently unavailable.");
-          }
-          if (
-            typeof product.stock === "number" &&
-            product.stock < cartItem.quantity
-          ) {
-            throw new Error("Only " + product.stock + " unit(s) of " + product.name + " are listed in stock.");
-          }
-          return {
-            index: index + 1,
-            type: "Product",
-            name: product.name,
-            detail: [product.brand, product.packSize].filter(Boolean).join(" · "),
-            quantity: cartItem.quantity,
-            unitPrice: product.price,
-            lineTotal: product.price * cartItem.quantity,
-          };
-        }
-
-        if (kit) {
-          if (!kit.isAvailable) {
-            throw new Error(kit.name + " is currently unavailable.");
-          }
-          return {
-            index: index + 1,
-            type: "Grocery Kit",
-            name: kit.name,
-            detail: kit.subtitle,
-            quantity: cartItem.quantity,
-            unitPrice: kit.price,
-            lineTotal: kit.price * cartItem.quantity,
-          };
-        }
-
-        throw new Error("An item in your cart is no longer in the catalogue. Please remove it and try again.");
-      });
-
-      const orderSubtotal = orderLines.reduce(
-        (total, line) => total + line.lineTotal,
-        0
-      );
-
-      if (!Number.isFinite(orderSubtotal) || orderSubtotal < 0 || orderSubtotal > 10000000) {
-        throw new Error("The order total is outside the allowed range.");
-      }
-
-      const itemText = orderLines
-        .map((line) =>
-          line.index +
-          ". " + line.name + " [" + line.type + "]" +
-          (line.detail ? "\n   " + line.detail : "") +
-          "\n   Qty: " + line.quantity +
-          " × " + formatPrice(line.unitPrice) +
-          " = *" + formatPrice(line.lineTotal) + "*"
-        )
-        .join("\n\n");
-
-      const message = [
-        "🛒 *Rashid Mega Mart — New Order*",
-        "",
-        "*Customer Details*",
-        "Name: " + cleanName,
-        "Mobile: " + cleanPhone,
-        "Delivery Address: " + cleanAddress,
-        "",
-        "*Order Items*",
-        itemText,
-        "",
-        "*Product Total: " + formatPrice(orderSubtotal) + "*",
-        "Delivery charges: Please confirm",
-        "Payment preference: " + (paymentMethod === "COD" ? "Cash on Delivery" : "UPI (share verified details after confirmation)"),
-        cleanNote ? "Order note: " + cleanNote : "",
-        "",
-        "Please confirm item availability, delivery charges and final payable amount.",
-      ].filter(Boolean).join("\n");
-
-      const whatsappUrl =
-        "https://wa.me/918962531603?text=" + encodeURIComponent(message);
-
-      // Navigate in the same tab from the user's submit action; no popup or API call.
-      window.location.assign(whatsappUrl);
-    } catch (cause) {
-      setFormError(
-        cause instanceof Error
-          ? cause.message
-          : "Unable to prepare your WhatsApp order. Please try again."
-      );
+    if (message.length > 3500) {
+      setFormError("Enquiry details are too long. Please reduce the extra items.");
+      return;
     }
+
+    window.location.assign(
+      "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message)
+    );
   };
 
   if (!isLoaded) {
     return (
-      <main className="min-h-[65vh] bg-[#FAF8F5] px-4 py-8 pb-28">
-        <div className="mx-auto max-w-6xl animate-pulse space-y-5">
-          <div className="h-8 w-48 rounded-lg bg-gray-200" />
-          <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
-            <div className="space-y-3">
-              <div className="h-28 rounded-2xl bg-gray-200" />
-              <div className="h-28 rounded-2xl bg-gray-200" />
-            </div>
-            <div className="h-72 rounded-2xl bg-gray-200" />
-          </div>
+      <main className="min-h-[65vh] bg-[#FAF7EF] px-4 py-10">
+        <div className="mx-auto max-w-5xl animate-pulse space-y-4">
+          <div className="h-8 w-48 rounded-lg bg-[#E8DFD1]" />
+          <div className="h-28 rounded-2xl bg-white" />
+          <div className="h-28 rounded-2xl bg-white" />
         </div>
       </main>
     );
   }
 
-  if (items.length === 0) {
+  if (!items.length) {
     return (
-      <main className="flex min-h-[72vh] items-center justify-center bg-[#FAF8F5] px-4 py-12 pb-28">
+      <main className="flex min-h-[70vh] items-center justify-center bg-[#FAF7EF] px-4 py-12">
         <div className="w-full max-w-md text-center">
-          <div className="mx-auto mb-6 flex size-24 items-center justify-center rounded-[30px] bg-[#F8E8ED] text-[#A83250] shadow-sm">
-            <ShoppingBag size={42} strokeWidth={1.7} />
+          <div className="mx-auto mb-5 flex size-20 items-center justify-center rounded-3xl bg-[#F1EBDD] text-[#168447]">
+            <ShoppingBag size={36} />
           </div>
-
-          <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#A83250]">
-            Rashid Mega Mart
-          </p>
-
-          <h1 className="text-2xl font-black tracking-tight text-[#24201E] sm:text-3xl">
-            Your cart is empty
-          </h1>
-
-          <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-[#77716C]">
-            Abhi aapke cart mein koi product nahi hai. Apne favourite grocery
-            products explore karein aur shopping shuru karein.
-          </p>
-
-          <Link
-            href="/shop"
-            className="rmm-button-primary mt-7 min-h-12 rounded-xl px-7 py-3 text-sm"
-          >
-            <ShoppingBag size={18} />
-            Start Shopping
+          <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#168447]">Rashid Mega Mart</p>
+          <h1 className="mt-2 text-2xl font-black text-[#202124]">Your cart is empty</h1>
+          <p className="mt-2 text-sm text-[#686868]">Apni pasand ki grocery kit chunein aur shopping shuru karein.</p>
+          <Link href="/kits" className="rmm-button-primary mt-6 min-h-12 rounded-xl px-7 py-3 text-sm">
+            <ShoppingBag size={17} /> Browse Grocery Kits
           </Link>
-
-          <div className="mt-5">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-[#77716C] transition hover:text-[#A83250]"
-            >
-              <ArrowLeft size={16} />
-              Back to Home
-            </Link>
-          </div>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen overflow-x-clip bg-[#FAF8F5] px-3 py-4 pb-24 min-[375px]:px-4 sm:px-6 sm:py-9 sm:pb-14">
-      <div className="mx-auto w-full max-w-6xl">
-        {/* Page Header */}
-        <header className="mb-4 flex flex-col gap-3 min-[430px]:flex-row min-[430px]:items-center min-[430px]:justify-between sm:mb-8">
+    <main className="min-h-screen bg-[#FAF7EF] px-3 pt-4 pb-[calc(142px+env(safe-area-inset-bottom))] sm:px-6 sm:py-9 sm:pb-32">
+      <div className="mx-auto max-w-5xl">
+        <header className="mb-4 flex flex-wrap items-center justify-between gap-2 sm:mb-6 sm:gap-3">
           <div>
-            <p className="mb-1.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#A83250] sm:text-xs">
-              Rashid Mega Mart
-            </p>
-
-            <h1 className="text-2xl font-black tracking-tight text-[#24201E] sm:text-3xl">
-              My Shopping Cart
-            </h1>
-
-            <p className="mt-1.5 text-xs text-[#817A74] sm:text-sm">
-              {totalItems} {totalItems === 1 ? "item" : "items"} ready for
-              checkout
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#168447]">Rashid Mega Mart</p>
+            <h1 className="mt-1 text-2xl font-black tracking-tight text-[#202124] sm:text-3xl">Your Cart</h1>
+            <p className="mt-1 text-sm text-[#686868]">{totalItems} {totalItems === 1 ? "kit" : "kits"} selected</p>
           </div>
-
-          <Link
-            href="/shop"
-            className="rmm-button-secondary min-h-10 w-fit rounded-xl px-4 py-2 text-xs sm:min-h-11 sm:text-sm"
-          >
-            <ArrowLeft size={15} />
-            Continue Shopping
+          <Link href="/kits" className="rmm-button-secondary min-h-11 rounded-xl px-3 py-2 text-[11px] sm:px-4 sm:text-xs">
+            <ArrowLeft size={15} /> Continue Shopping
           </Link>
         </header>
 
-        <div className="grid min-w-0 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_370px] lg:gap-7">
-          {/* LEFT: CART ITEMS */}
-          <section className="min-w-0">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <div>
-                <h2 className="text-base font-extrabold text-[#24201E] sm:text-lg">
-                  Your Items
-                </h2>
-                <p className="mt-0.5 text-[11px] text-[#8A817A]">
-                  Review your selected products
-                </p>
-              </div>
-
+        <div className="grid items-start gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1fr)_350px]">
+          <section className="space-y-2.5 sm:space-y-3">
+            <div className="flex items-center justify-between px-1">
+              <h2 className="font-extrabold text-[#202124]">Selected Kits</h2>
               <button
                 type="button"
                 onClick={() => {
-                  if (window.confirm("Remove all items from your cart?")) {
-                    clearCart();
-                  }
+                  if (window.confirm("Remove all items from your cart?")) clearCart();
                 }}
-                className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-xs font-bold text-red-500 transition hover:bg-red-50 hover:text-red-700"
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-lg px-2 text-[11px] font-bold text-red-600 hover:bg-red-50 sm:text-xs"
               >
-                <Trash2 size={14} />
-                Clear Cart
+                <Trash2 size={14} /> Clear cart
               </button>
             </div>
 
-            <div className="space-y-3">
-              {items.map((item) => (
-                <article
-                  key={item.id}
-                  className="group flex min-w-0 gap-3 rounded-2xl border border-[#EEE8E1] bg-white p-3 shadow-[0_2px_12px_rgba(40,30,20,0.035)] transition hover:border-[#E5D4D9] hover:shadow-[0_5px_20px_rgba(40,30,20,0.06)] min-[430px]:gap-4 sm:p-4"
-                >
-                  {/* Product Image */}
-                  <div className="relative size-[78px] shrink-0 overflow-hidden rounded-xl bg-[#F8F6F2] min-[375px]:size-[88px] sm:size-24">
-                    {item.image || "/categories/cerels.webp" ? (
-                      <Image
-                        src={item.image || "/categories/cerels.webp"}
-                        alt={item.name}
-                        fill
-                        unoptimized
-                        sizes="(max-width: 374px) 78px, (max-width: 639px) 88px, 96px"
-                        className="object-contain p-2.5 transition duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center text-3xl">
-                        🛒
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Product Details */}
-                  <div className="flex min-w-0 flex-1 flex-col justify-between gap-3">
+            {pricedItems.map((item) => (
+              <article key={item.id} className="flex gap-2.5 rounded-2xl border border-[#E8DFD1] bg-white p-2.5 shadow-sm sm:gap-4 sm:p-4">
+                <div className="relative size-[76px] shrink-0 overflow-hidden rounded-xl bg-[#FAF7EF] min-[380px]:size-20 sm:size-24">
+                  {item.image ? (
+                    <Image src={item.image} alt={item.name} fill unoptimized sizes="96px" className="object-contain p-2" />
+                  ) : (
+                    <div className="flex h-full items-center justify-center"><ShoppingBag /></div>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h3 className="line-clamp-2 break-words text-xs font-extrabold leading-5 text-[#29231F] min-[375px]:text-sm sm:text-[15px]">
-                        {item.name}
-                      </h3>
-
-                      {item.brand && (
-                        <p className="mt-1 truncate text-[10px] font-medium text-[#8B827B] sm:text-xs">
-                          {item.brand}
-                        </p>
-                      )}
-
-                      {item.packSize && (
-                        <p className="mt-1 text-[10px] text-[#A49B94] sm:text-xs">
-                          {item.packSize}
-                        </p>
-                      )}
-
-                      <p className="mt-1.5 text-xs font-extrabold text-[#A83250] sm:text-sm">
-                        {formatPrice(item.price)}
-                      </p>
+                      {item.kitGroupName ? <p className="mb-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#168447]">{item.kitGroupName}</p> : null}
+                      <h3 className="break-words text-sm font-extrabold text-[#202124] sm:text-base">{item.name}</h3>
+                      <p className="mt-1 text-xs text-[#686868]">{formatPrice(item.unitPrice)} per kit</p>
                     </div>
-
-                    <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
-                      {/* Quantity Control */}
-                      <div className="inline-flex h-9 shrink-0 items-center rounded-lg border border-[#EAE4DE] bg-[#FCFBF9]">
-                        <button
-                          type="button"
-                          aria-label={`Decrease ${item.name} quantity`}
-                          onClick={() => decreaseQuantity(item.id)}
-                          className="rmm-quantity-button flex size-9 items-center justify-center rounded-l-lg"
-                        >
-                          <Minus size={14} />
-                        </button>
-
-                        <span
-                          aria-live="polite"
-                          className="min-w-7 text-center text-xs font-extrabold tabular-nums text-[#29231F]"
-                        >
-                          {item.quantity}
-                        </span>
-
-                        <button
-                          type="button"
-                          aria-label={`Increase ${item.name} quantity`}
-                          onClick={() => increaseQuantity(item.id)}
-                          className="rmm-quantity-button flex size-9 items-center justify-center rounded-r-lg"
-                        >
-                          <Plus size={14} />
-                        </button>
-                      </div>
-
-                      {/* Item Total & Remove */}
-                      <div className="flex min-w-0 items-center gap-1.5 min-[375px]:gap-2">
-                        <span className="truncate text-xs font-black text-[#29231F] min-[375px]:text-sm">
-                          {formatPrice(item.price * item.quantity)}
-                        </span>
-
-                        <button
-                          type="button"
-                          aria-label={`Remove ${item.name}`}
-                          onClick={() => handleRemoveItem(item)}
-                          className="flex size-9 shrink-0 items-center justify-center rounded-lg text-[#B5AAA3] transition hover:bg-red-50 hover:text-red-600 active:bg-red-100"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </div>
+                    <button type="button" aria-label={"Remove " + item.name} onClick={() => removeFromCart(item.id)} className="flex size-10 shrink-0 items-center justify-center rounded-xl text-[#9B8F80] hover:bg-red-50 hover:text-red-600">
+                      <Trash2 size={16} />
+                    </button>
                   </div>
-                </article>
-              ))}
-            </div>
 
-            {removedItem && (
-              <div role="status" className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[#E8D7DC] bg-[#FFF8FA] px-3 py-2.5 text-xs">
-                <span className="min-w-0 truncate text-[#6F3545]">Removed {removedItem.name}</span>
-                <button type="button" onClick={handleUndoRemove} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 font-extrabold text-[#A83250] hover:bg-[#F8E8ED]"><Undo2 size={14} /> Undo</button>
-              </div>
-            )}
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 sm:mt-4 sm:gap-3">
+                    <div className="inline-flex h-11 items-center rounded-xl border border-[#E8DFD1] bg-[#FAF7EF]">
+                      <button type="button" aria-label={"Decrease " + item.name} onClick={() => decreaseQuantity(item.id)} className="flex size-11 items-center justify-center rounded-l-xl text-[#800020] hover:bg-[#F1EBDD]"><Minus size={14} /></button>
+                      <span aria-live="polite" className="min-w-8 text-center text-sm font-black tabular-nums text-[#202124]">{item.quantity}</span>
+                      <button type="button" aria-label={"Increase " + item.name} onClick={() => increaseQuantity(item.id)} className="flex size-11 items-center justify-center rounded-r-xl text-[#168447] hover:bg-[#EAF3E9]"><Plus size={14} /></button>
+                    </div>
+                    <p className="text-base font-black tabular-nums text-[#168447]">{formatPrice(item.lineTotal)}</p>
+                  </div>
 
-            {/* Delivery Information */}
-            <div className="mt-4 flex gap-3 rounded-2xl border border-[#E9E0D6] bg-[#FFFDF8] p-3.5 sm:p-4">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#F5EAD6] text-[#A47A2C]">
-                <Truck size={19} />
-              </div>
+                  {(item.kitContents?.length || item.requestedItems?.length) ? (
+                    <details className="mt-2.5 rounded-xl bg-[#FAF7EF] px-3 py-2.5">
+                      <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-xs font-bold text-[#5E574E]">
+                        View kit items / changes <ChevronDown size={14} />
+                      </summary>
+                      <ul className="mt-2 space-y-1 border-t border-[#E8DFD1] pt-2 text-xs text-[#686868]">
+                        {(item.kitContents ?? []).map((line, index) => <li key={"kit-" + index}>{line.name} — {line.quantity}</li>)}
+                        {(item.requestedItems ?? []).map((line, index) => <li key={"extra-" + index}>Extra: {line.name} — {line.quantity} (price to confirm)</li>)}
+                      </ul>
+                    </details>
+                  ) : null}
+                </div>
+              </article>
+            ))}
 
-              <div className="min-w-0">
-                <p className="text-xs font-extrabold text-[#55432C] sm:text-sm">
-                  Delivery details
-                </p>
-
-                <p className="mt-1 text-[11px] leading-5 text-[#81715C] sm:text-xs">
-                  Delivery availability and charges will be confirmed by the
-                  store after receiving your order.
-                </p>
+            <div className="flex items-start gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-4">
+              <Truck size={19} className="mt-0.5 shrink-0 text-[#806000]" />
+              <div>
+                <p className="text-sm font-extrabold text-[#202124]">Delivery</p>
+                <p className="mt-1 text-xs leading-5 text-[#686868]">Delivery availability and charges will be confirmed by Rashid Mega Mart on WhatsApp.</p>
               </div>
             </div>
           </section>
 
-          {/* RIGHT: ORDER SUMMARY + CHECKOUT */}
-          <aside className="min-w-0 space-y-4 lg:sticky lg:top-5">
-            {/* Order Summary */}
-            <section className="rounded-2xl border border-[#EEE8E1] bg-white p-3.5 shadow-[0_3px_18px_rgba(40,30,20,0.04)] sm:p-5">
-              <div className="flex items-center justify-between">
-                <h2 className="text-base font-extrabold text-[#29231F] sm:text-lg">
-                  Order Summary
-                </h2>
-
-                <span className="rounded-full bg-[#F8E8ED] px-2.5 py-1 text-[10px] font-extrabold text-[#A83250]">
-                  {totalItems} ITEMS
-                </span>
-              </div>
-
-              <div className="mt-5 space-y-3.5 text-xs sm:text-sm">
-                <div className="flex items-center justify-between gap-3 text-[#817A74]">
-                  <span>Product Subtotal</span>
-                  <span className="font-bold text-[#29231F]">
-                    {formatPrice(subtotal)}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between gap-3 text-[#817A74]">
-                  <span>Delivery Charge</span>
-                  <span className="text-right font-bold text-[#A47A2C]">
-                    To be confirmed
-                  </span>
-                </div>
-
-                <div className="border-t border-dashed border-[#E9E2DB] pt-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-extrabold text-[#29231F]">
-                        Product Total
-                      </p>
-                      <p className="mt-1 text-[10px] text-[#999087]">
-                        Before delivery charges
-                      </p>
-                    </div>
-
-                    <span className="text-xl font-black tracking-tight text-[#A83250]">
-                      {formatPrice(subtotal)}
-                    </span>
+          <aside className="space-y-4 lg:sticky lg:top-5">
+            <section className="rounded-2xl border border-[#BBDCC5] bg-white p-4 shadow-sm sm:p-5">
+              <h2 className="text-lg font-black text-[#202124]">Cart Summary</h2>
+              <div className="mt-4 space-y-3">
+                {pricedItems.map((item) => (
+                  <div key={item.id} className="flex items-start justify-between gap-3 text-sm">
+                    <span className="min-w-0 text-[#686868]">{item.name} × {item.quantity}</span>
+                    <span className="shrink-0 font-bold tabular-nums text-[#202124]">{formatPrice(item.lineTotal)}</span>
                   </div>
-
-                  <p className="mt-3 rounded-lg bg-[#FAF7F2] p-2.5 text-[10px] leading-5 text-[#817A74]">
-                    Final payable amount will be confirmed by the store after
-                    checking product availability and delivery charges.
-                  </p>
+                ))}
+              </div>
+              <div className="mt-4 border-t border-dashed border-[#D8CBB8] pt-4">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-sm font-bold text-[#5E574E]">Subtotal</span>
+                  <span aria-live="polite" className="text-2xl font-black tabular-nums text-[#168447]">{formatPrice(subtotal)}</span>
                 </div>
+                <p className="mt-2 text-[11px] leading-5 text-[#686868]">Quantity badalte hi subtotal apne aap update hota hai. Delivery charges WhatsApp par confirm honge.</p>
               </div>
             </section>
 
-            {/* Checkout Form */}
-            <form id="checkout-form"
-              onSubmit={handleCheckout}
-              className="min-w-0 space-y-4 rounded-2xl border border-[#EEE8E1] bg-white p-4 shadow-[0_3px_18px_rgba(40,30,20,0.04)] sm:space-y-5 sm:p-5"
-            >
+            <form id="cart-checkout" onSubmit={handleWhatsAppEnquiry} className="space-y-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 shadow-sm sm:p-5">
               <div>
-                <div className="flex items-center gap-2">
-                  <div className="flex size-8 items-center justify-center rounded-lg bg-[#F8E8ED] text-[#A83250]">
-                    <ShoppingBag size={16} />
-                  </div>
-
-                  <h2 className="text-base font-extrabold text-[#29231F] sm:text-lg">
-                    Checkout Details
-                  </h2>
-                </div>
-
-                <p className="mt-2 text-[11px] leading-5 text-[#8A817A] sm:text-xs">
-                  Apni details fill karein. Order WhatsApp par store ko bheja
-                  jayega.
-                </p>
+                <h2 className="text-lg font-black text-[#202124]">Send WhatsApp Enquiry</h2>
+                <p className="mt-1 text-xs text-[#686868]">Bas naam aur mobile number bharein.</p>
               </div>
-
-              <div className="space-y-3.5 sm:space-y-4">
-                {/* Name */}
-                <div>
-                  <label
-                    htmlFor="customerName"
-                    className="mb-1.5 block text-xs font-bold text-[#554D47]"
-                  >
-                    Full Name *
-                  </label>
-
-                  <input
-                    id="customerName"
-                    type="text"
-                    required
-                    minLength={2}
-                    maxLength={70}
-                    autoComplete="name"
-                    value={customerName}
-                    onChange={(event) => {
-                      setCustomerName(event.target.value);
-                      setFormError("");
-                    }}
-                    placeholder="Enter your full name"
-                    className="min-h-12 w-full rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm"
-                  />
-                </div>
-
-                {/* Phone */}
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="mb-1.5 block text-xs font-bold text-[#554D47]"
-                  >
-                    Mobile Number *
-                  </label>
-
-                  <input
-                    id="phone"
-                    type="tel"
-                    required
-                    inputMode="numeric"
-                    autoComplete="tel"
-                    pattern="[6-9][0-9]{9}"
-                    maxLength={10}
-                    value={phone}
-                    onChange={(event) => {
-                      setPhone(
-                        event.target.value.replace(/\D/g, "").slice(0, 10)
-                      );
-                      setFormError("");
-                    }}
-                    placeholder="10-digit mobile number"
-                    className="min-h-12 w-full rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm"
-                  />
-                </div>
-
-                {/* Address */}
-                <div>
-                  <label
-                    htmlFor="address"
-                    className="mb-1.5 block text-xs font-bold text-[#554D47]"
-                  >
-                    Delivery Address *
-                  </label>
-
-                  <textarea
-                    id="address"
-                    required
-                    minLength={10}
-                    maxLength={300}
-                    rows={3}
-                    autoComplete="street-address"
-                    value={address}
-                    onChange={(event) => {
-                      setAddress(event.target.value);
-                      setFormError("");
-                    }}
-                    placeholder="House no., street, area and landmark"
-                    className="min-h-24 w-full resize-y rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm"
-                  />
-                </div>
-              </div>
-
-              {/* Optional delivery note */}
-              <div>
-                <label htmlFor="orderNote" className="mb-1.5 block text-xs font-bold text-[#554D47]">Order Note (Optional)</label>
-                <textarea id="orderNote" value={orderNote} onChange={(event) => setOrderNote(event.target.value.slice(0, 240))} maxLength={240} rows={2} placeholder="Any delivery instructions? (e.g. call before arrival)" className="min-h-20 w-full resize-y rounded-xl border border-[#EAE4DE] bg-[#FCFBF9] px-3.5 py-3 text-base text-[#29231F] outline-none transition placeholder:text-sm placeholder:text-[#B0A69F] focus:border-[#A83250] focus:ring-2 focus:ring-[#A83250]/10 sm:px-4 sm:text-sm" />
-                <p className="mt-1 text-right text-[10px] text-[#A09890]">{orderNote.length}/240</p>
-              </div>
-
-              {/* Payment Preference */}
-              <div>
-                <p className="mb-2.5 text-xs font-bold text-[#554D47]">
-                  Payment Preference
-                </p>
-
-                <div className="grid grid-cols-2 gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("COD")}
-                    aria-pressed={paymentMethod === "COD"}
-                    className={`min-h-[76px] rounded-xl border p-3 text-left transition active:scale-[0.99] ${
-                      paymentMethod === "COD"
-                        ? "border-[#A83250] bg-[#FDF6F8] ring-1 ring-[#A83250]/10"
-                        : "border-[#EAE4DE] bg-white hover:border-[#D8C6CB]"
-                    }`}
-                  >
-                    <span className="block text-xs font-extrabold text-[#29231F]">
-                      Cash on Delivery
-                    </span>
-
-                    <span className="mt-1 block text-[10px] leading-4 text-[#8A817A]">
-                      Pay when delivered
-                    </span>
-
-                    {paymentMethod === "COD" && (
-                      <span className="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-[#A83250]">
-                        <CheckCircle2 size={12} />
-                        Selected
-                      </span>
-                    )}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setPaymentMethod("UPI")}
-                    aria-pressed={paymentMethod === "UPI"}
-                    className={`min-h-[76px] rounded-xl border p-3 text-left transition active:scale-[0.99] ${
-                      paymentMethod === "UPI"
-                        ? "border-[#A83250] bg-[#FDF6F8] ring-1 ring-[#A83250]/10"
-                        : "border-[#EAE4DE] bg-white hover:border-[#D8C6CB]"
-                    }`}
-                  >
-                    <span className="block text-xs font-extrabold text-[#29231F]">
-                      UPI Payment
-                    </span>
-
-                    <span className="mt-1 block text-[10px] leading-4 text-[#8A817A]">
-                      Details after confirmation
-                    </span>
-
-                    {paymentMethod === "UPI" && (
-                      <span className="mt-2 inline-flex items-center gap-1 text-[9px] font-bold text-[#A83250]">
-                        <CheckCircle2 size={12} />
-                        Selected
-                      </span>
-                    )}
-                  </button>
-                </div>
-
-                {paymentMethod === "UPI" && (
-                  <p className="mt-2.5 rounded-xl border border-[#F1E1BC] bg-[#FFFBF0] p-3 text-[11px] leading-5 text-[#80612C]">
-                    Store order confirm karne ke baad verified UPI details
-                    share karega. Abhi payment mat karein.
-                  </p>
-                )}
-              </div>
-
-              {/* Validation Message */}
-              {formError && (
-                <p
-                  role="alert"
-                  className="rounded-xl border border-red-100 bg-red-50 px-3 py-2.5 text-xs font-medium leading-5 text-red-600"
-                >
-                  {formError}
-                </p>
-              )}
-
-              {/* WhatsApp Checkout */}
-              <button
-                type="submit"
-                className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#138047] px-3 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-green-900/10 transition hover:bg-[#0E6B3A] active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#138047]"
-              >
-                <Image
-                  src="/Whatsapp-3d.svg"
-                  alt=""
-                  width={23}
-                  height={23}
-                  unoptimized
-                  className="shrink-0"
-                />
-                Place Order on WhatsApp
+              <label className="block text-xs font-bold text-[#202124]">
+                Your name *
+                <input required minLength={2} maxLength={70} autoComplete="name" value={customerName} onChange={(event) => setCustomerName(event.target.value)} placeholder="Enter your name" className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+              </label>
+              <label className="block text-xs font-bold text-[#202124]">
+                Mobile number *
+                <input required type="tel" inputMode="numeric" autoComplete="tel" pattern="[6-9][0-9]{9}" maxLength={10} value={phone} onChange={(event) => setPhone(event.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="10-digit mobile number" className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+              </label>
+              <label className="block text-xs font-bold text-[#202124]">
+                Delivery address <span className="font-normal text-[#8A8175]">(optional)</span>
+                <textarea maxLength={250} rows={2} autoComplete="street-address" value={address} onChange={(event) => setAddress(event.target.value)} placeholder="House no., area, landmark" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+              </label>
+              <label className="block text-xs font-bold text-[#202124]">
+                Special instructions <span className="font-normal text-[#8A8175]">(optional)</span>
+                <textarea maxLength={240} rows={2} value={specialInstructions} onChange={(event) => setSpecialInstructions(event.target.value)} placeholder="Any special instructions?" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+              </label>
+              {formError ? <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-700">{formError}</p> : null}
+              <button type="submit" className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#168447] px-4 py-3 text-sm font-extrabold text-white shadow-md transition hover:bg-[#106B38] active:scale-[0.99]">
+                <Image src="/Whatsapp-3d.svg" alt="" width={22} height={22} unoptimized /> Send Enquiry
               </button>
-
-              <p className="flex items-center justify-center gap-1.5 text-center text-[10px] leading-5 text-[#A09890]">
-                <ShieldCheck size={13} className="shrink-0" />
-                Your details will be shared with the store for this order.
-              </p>
+              <p className="flex items-center justify-center gap-1.5 text-center text-[10px] leading-4 text-[#777064]"><ShieldCheck size={13} /> Details will be shared with the store.</p>
             </form>
           </aside>
         </div>
 
-        <div className="fixed inset-x-0 bottom-[calc(66px+env(safe-area-inset-bottom))] z-30 border-t border-[#E9E0D6] bg-white/95 px-4 py-2.5 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
-          <button type="submit" form="checkout-form" className="flex min-h-11 w-full items-center justify-between rounded-xl bg-[#138047] px-4 text-sm font-extrabold text-white shadow-md shadow-green-900/10 transition hover:bg-[#0E6B3A] active:scale-[0.99]">
-            <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Order on WhatsApp</span>
-            <span>{formatPrice(subtotal)}</span>
+        <div className="fixed inset-x-0 bottom-[calc(70px+env(safe-area-inset-bottom))] z-40 border-t border-[#E8DFD1] bg-white/98 px-3 py-2 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
+          <button type="button" onClick={() => document.querySelector<HTMLFormElement>("#cart-checkout")?.requestSubmit()} className="flex min-h-12 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white shadow-sm active:scale-[.99]">
+            <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Send Enquiry</span>
+            <span className="tabular-nums">{formatPrice(subtotal)}</span>
           </button>
-        </div>
-
-        {/* Bottom Information */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-2 px-1 text-center text-[10px] leading-5 text-[#A09890] sm:mt-8 sm:text-xs">
-          <PackageCheck size={14} className="shrink-0 text-[#A47A2C]" />
-          <span>Order confirmation and final charges will be shared by the store.</span>
-          <MapPin size={14} className="shrink-0" />
-          <span>Delivery details are subject to store confirmation.</span>
         </div>
       </div>
     </main>

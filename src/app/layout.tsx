@@ -2,13 +2,16 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
 import BottomNav from "@/components/BottomNav";
+import SiteMotion from "@/components/SiteMotion";
+import { LanguageProvider } from "@/components/LanguageProvider";
 import { CartProvider } from "@/context/CartContext";
 
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const SITE_URL = "https://rashidmegamartv0-1.vercel.app";
 const SITE_NAME = "Rashid Mega Mart";
-const SOCIAL_SHARE_IMAGE = "/images/logo2.png";
+const BRAND_LOGO = "/images/logo2.png";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -20,12 +23,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
   title: {
-    default: "Rashid Mega Mart | Online Grocery Shopping",
+    default: "Rashid Mega Mart | Grocery Kits",
     template: "%s | Rashid Mega Mart",
   },
 
   description:
-    "Shop groceries, daily essentials and affordable grocery kits at Rashid Mega Mart. Order conveniently through WhatsApp and confirm delivery availability with our store.",
+    "Explore value-packed grocery kits at Rashid Mega Mart. Browse kits and place your enquiry conveniently through WhatsApp.",
 
   applicationName: SITE_NAME,
   category: "shopping",
@@ -49,28 +52,14 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: "Rashid Mega Mart | Online Grocery Shopping",
     description:
-      "Your trusted destination for everyday groceries, daily essentials and affordable grocery kits.",
-    images: [
-      {
-        url: SOCIAL_SHARE_IMAGE,
-        width: 1254,
-        height: 1254,
-        alt: "Rashid Mega Mart Logo",
-      },
-    ],
+      "Your trusted destination for thoughtfully packed grocery kits.",
   },
 
   twitter: {
     card: "summary_large_image",
     title: "Rashid Mega Mart | Online Grocery Shopping",
     description:
-      "Shop groceries, daily essentials and affordable grocery kits at Rashid Mega Mart.",
-    images: [
-      {
-        url: SOCIAL_SHARE_IMAGE,
-        alt: "Rashid Mega Mart Logo",
-      },
-    ],
+      "Explore value-packed grocery kits at Rashid Mega Mart.",
   },
 
   formatDetection: {
@@ -84,7 +73,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#A83250",
+  themeColor: "#800020",
 };
 
 const structuredData = {
@@ -92,7 +81,7 @@ const structuredData = {
   "@type": "Organization",
   name: SITE_NAME,
   url: SITE_URL,
-  logo: `${SITE_URL}${SOCIAL_SHARE_IMAGE}`,
+  logo: `${SITE_URL}${BRAND_LOGO}`,
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+918962531603",
@@ -110,7 +99,7 @@ export default function RootLayout({
   children,
 }: Readonly<RootLayoutProps>) {
   return (
-    <html lang="en-IN" className={plusJakartaSans.variable} data-scroll-behavior="smooth">
+    <html lang="en-IN" className={plusJakartaSans.variable}>
       <body className="flex min-h-dvh flex-col antialiased">
         <script
           type="application/ld+json"
@@ -120,11 +109,14 @@ export default function RootLayout({
         />
 
         <CartProvider>
-          <div className="min-w-0 w-full flex-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0 lg:pt-[76px]">
-            {children}
-          </div>
+          <LanguageProvider>
+            <div className="min-w-0 w-full flex-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0 lg:pt-[76px]">
+              {children}
+            </div>
 
-          <BottomNav />
+            <SiteMotion />
+            <BottomNav />
+          </LanguageProvider>
         </CartProvider>
       </body>
     </html>

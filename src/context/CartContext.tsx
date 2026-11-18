@@ -1,6 +1,8 @@
 
 "use client";
 
+import { kits } from "@/data/kits";
+
 import {
   createContext,
   useCallback,
@@ -18,6 +20,12 @@ export interface CartItem {
   quantity: number;
   brand?: string;
   packSize?: string;
+  kitContents?: { name: string; quantity: string }[];
+  requestedItems?: { name: string; quantity: string }[];
+  isCustomized?: boolean;
+  catalogProductId?: string;
+  kitGroupId?: string;
+  kitGroupName?: string;
 }
 
 interface CartContextType {
@@ -26,10 +34,12 @@ interface CartContextType {
   subtotal: number;
   isLoaded: boolean;
   addToCart: (item: Omit<CartItem, "quantity">) => void;
+  addCustomKitToCart: (kit: { id: string; name: string; items: Array<{ product: Omit<CartItem, "quantity" | "catalogProductId" | "kitGroupId" | "kitGroupName">; quantity: number }> }) => void;
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
+  updateKitCustomization: (id: string, kitContents: { name: string; quantity: string }[], requestedItems: { name: string; quantity: string }[]) => void;
 }
 
 const STORAGE_KEY = "rashid-mega-mart-cart";
@@ -44,26 +54,70 @@ let cachedRaw: string | null | undefined;
 let cachedItems: CartItem[] = EMPTY_CART;
 let storageFailed = false;
 
+const MAX_CART_ITEMS = 30;
+const MAX_CUSTOMIZED_LINES = 50;
+const MAX_EXTRA_LINES = 25;
+const MAX_CUSTOMIZED_NAME_LENGTH = 70;
+const MAX_CUSTOMIZED_QUANTITY_LENGTH = 24;
+
+type KitLine = { name: string; quantity: string };
+
+function isValidKitLines(value: unknown, maxItems = MAX_CUSTOMIZED_LINES): value is KitLine[] {
+  return Array.isArray(value) &&
+    value.length <= maxItems &&
+    value.every((entry) =>
+      !!entry &&
+      typeof entry === "object" &&
+      typeof entry.name === "string" &&
+      entry.name.trim().length > 0 &&
+      entry.name.length <= MAX_CUSTOMIZED_NAME_LENGTH &&
+      typeof entry.quantity === "string" &&
+      entry.quantity.trim().length > 0 &&
+      entry.quantity.length <= MAX_CUSTOMIZED_QUANTITY_LENGTH
+    );
+}
+
 function isValidCartItem(item: unknown): item is CartItem {
   if (!item || typeof item !== "object") return false;
-
   const value = item as Record<string, unknown>;
 
   return (
     typeof value.id === "string" &&
     value.id.trim().length > 0 &&
     typeof value.name === "string" &&
-    value.name.trim().length > 0 &&
     typeof value.price === "number" &&
     Number.isFinite(value.price) &&
-    value.price >= 0 &&
     typeof value.image === "string" &&
     Number.isSafeInteger(value.quantity) &&
     (value.quantity as number) > 0 &&
     (value.quantity as number) <= MAX_CART_QUANTITY &&
-    (value.brand === undefined || typeof value.brand === "string") &&
-    (value.packSize === undefined || typeof value.packSize === "string")
+    (value.kitContents === undefined || isValidKitLines(value.kitContents)) &&
+    (value.requestedItems === undefined || isValidKitLines(value.requestedItems, MAX_EXTRA_LINES)) &&
+    (value.catalogProductId === undefined || typeof value.catalogProductId === "string") &&
+    (value.kitGroupId === undefined || typeof value.kitGroupId === "string") &&
+    (value.kitGroupName === undefined || typeof value.kitGroupName === "string") &&
+    ((value.kitContents === undefined ? 0 : (value.kitContents as KitLine[]).length) +
+      (value.requestedItems === undefined ? 0 : (value.requestedItems as KitLine[]).length) <= MAX_CUSTOMIZED_LINES)
   );
+}
+
+function normalizeCartItem(item: CartItem): CartItem | null {
+  if (item.catalogProductId && item.kitGroupId && item.kitGroupName) return item;
+  const kit = kits.find((entry) => entry.id === item.id && entry.isAvailable);
+  if (!kit) return null;
+
+  return {
+    id: kit.id,
+    name: kit.name,
+    price: kit.price,
+    image: kit.image,
+    quantity: item.quantity,
+    brand: "Rashid Mega Mart",
+    packSize: "Grocery Kit",
+    ...(item.kitContents ? { kitContents: item.kitContents } : {}),
+    ...(item.requestedItems ? { requestedItems: item.requestedItems } : {}),
+    ...(item.isCustomized === true ? { isCustomized: true } : {}),
+  };
 }
 
 function parseCart(raw: string | null): CartItem[] {
@@ -71,10 +125,14 @@ function parseCart(raw: string | null): CartItem[] {
 
   try {
     const parsed: unknown = JSON.parse(raw);
-
     if (!Array.isArray(parsed)) return EMPTY_CART;
 
-    return parsed.filter(isValidCartItem);
+    const normalized = parsed
+      .filter(isValidCartItem)
+      .map(normalizeCartItem)
+      .filter((item): item is CartItem => item !== null);
+    const unique = new Map(normalized.map((item) => [item.id, item]));
+    return Array.from(unique.values()).slice(0, MAX_CART_ITEMS);
   } catch {
     return EMPTY_CART;
   }
@@ -171,39 +229,53 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addToCart = useCallback(
     (product: Omit<CartItem, "quantity">) => {
-      if (
-        !product.id.trim() ||
-        !product.name.trim() ||
-        !Number.isFinite(product.price) ||
-        product.price < 0
-      ) {
-        return;
-      }
+      const kit = kits.find((entry) => entry.id === product.id && entry.isAvailable);
+      if (!kit) return;
 
       updateCart((currentItems) => {
         const existing = currentItems.find(
           (item) => item.id === product.id
         );
 
+        // Adding a kit that is already in the cart must not silently
+        // increase its quantity. Quantity changes belong to the explicit + control.
         if (existing) {
-          return currentItems.map((item) =>
-            item.id === product.id
-              ? {
-                  ...item,
-                  quantity: Math.min(
-                    item.quantity + 1,
-                    MAX_CART_QUANTITY
-                  ),
-                }
-              : item
-          );
+          return currentItems;
         }
 
-        return [...currentItems, { ...product, quantity: 1 }];
+        return currentItems.length >= MAX_CART_ITEMS
+          ? currentItems
+          : [...currentItems, { id: kit.id, name: kit.name, price: kit.price, image: kit.image, brand: "Rashid Mega Mart", packSize: "Grocery Kit", quantity: 1 }];
       });
     },
     []
   );
+
+  const addCustomKitToCart = useCallback((kit: { id: string; name: string; items: Array<{ product: Omit<CartItem, "quantity" | "catalogProductId" | "kitGroupId" | "kitGroupName">; quantity: number }> }) => {
+    if (!kit.id.trim() || !kit.name.trim() || !kit.items.length) return;
+    updateCart((currentItems) => {
+      const next = [...currentItems];
+      for (const line of kit.items) {
+        if (!line.product.id.trim() || !Number.isSafeInteger(line.quantity) || line.quantity < 1 || line.quantity > MAX_CART_QUANTITY) continue;
+        const lineId = `${kit.id}::${line.product.id}`;
+        const existingIndex = next.findIndex((item) => item.id === lineId);
+        const row: CartItem = {
+          ...line.product,
+          id: lineId,
+          catalogProductId: line.product.id,
+          kitGroupId: kit.id,
+          kitGroupName: kit.name,
+          quantity: line.quantity,
+        };
+        if (existingIndex >= 0) {
+          next[existingIndex] = { ...next[existingIndex], quantity: Math.min(MAX_CART_QUANTITY, next[existingIndex].quantity + line.quantity), kitGroupName: kit.name };
+        } else if (next.length < MAX_CART_ITEMS) {
+          next.push(row);
+        }
+      }
+      return next;
+    });
+  }, []);
 
   const increaseQuantity = useCallback((id: string) => {
     updateCart((currentItems) =>
@@ -243,6 +315,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     updateCart(() => EMPTY_CART);
   }, []);
 
+  const updateKitCustomization = useCallback((id: string, kitContents: { name: string; quantity: string }[], requestedItems: { name: string; quantity: string }[]) => {
+    const kitExists = kits.some((kit) => kit.id === id && kit.isAvailable);
+    if (!kitExists || !isValidKitLines(kitContents) || !isValidKitLines(requestedItems, MAX_EXTRA_LINES) || kitContents.length + requestedItems.length > MAX_CUSTOMIZED_LINES) return;
+
+    updateCart((currentItems) => currentItems.map((item) =>
+      item.id === id ? { ...item, kitContents, requestedItems, isCustomized: true } : item
+    ));
+  }, []);
+
   const totalItems = useMemo(
     () => items.reduce((total, item) => total + item.quantity, 0),
     [items]
@@ -264,10 +345,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotal,
       isLoaded,
       addToCart,
+      addCustomKitToCart,
       increaseQuantity,
       decreaseQuantity,
       removeFromCart,
       clearCart,
+      updateKitCustomization,
     }),
     [
       items,
@@ -275,10 +358,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotal,
       isLoaded,
       addToCart,
+      addCustomKitToCart,
       increaseQuantity,
       decreaseQuantity,
       removeFromCart,
       clearCart,
+      updateKitCustomization,
     ]
   );
 

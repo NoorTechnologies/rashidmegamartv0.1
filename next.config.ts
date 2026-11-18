@@ -1,5 +1,20 @@
 import type { NextConfig } from "next";
 
+// Allow only the configured Supabase project origin for browser Auth and data requests.
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+let supabaseConnectSources: string[] = [];
+
+if (supabaseUrl) {
+  try {
+    const parsedSupabaseUrl = new URL(supabaseUrl);
+    if (parsedSupabaseUrl.protocol === "https:") {
+      supabaseConnectSources = [parsedSupabaseUrl.origin, "wss://" + parsedSupabaseUrl.host];
+    }
+  } catch {
+    // Keep the policy self-only if the configured URL is invalid.
+  }
+}
+
 const securityHeaders = [
   {
     key: "X-Content-Type-Options",
@@ -20,6 +35,26 @@ const securityHeaders = [
   {
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains",
+  },
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self'",
+      "base-uri 'self'",
+      "object-src 'none'",
+      "frame-ancestors 'none'",
+      "form-action 'self' https://wa.me https://api.whatsapp.com",
+      "script-src " + [
+        "'self'",
+        "'unsafe-inline'",
+        ...(process.env.NODE_ENV === "development" ? ["'unsafe-eval'"] : []),
+      ].join(" "),
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob:",
+      "font-src 'self' data:",
+      "connect-src 'self' " + supabaseConnectSources.join(" "),
+      "upgrade-insecure-requests",
+    ].join("; "),
   },
 ];
 
