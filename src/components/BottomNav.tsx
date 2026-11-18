@@ -9,6 +9,8 @@ import {
   Package,
   ShoppingCart,
   CalendarCheck,
+  UserRound,
+  MoreHorizontal,
 } from "lucide-react";
 
 import { useCart } from "@/context/CartContext";
@@ -25,7 +27,8 @@ const navigationItems = [
 const mobileNavigationItems = [
   ...navigationItems,
   { label: "Cart", href: "/cart", icon: ShoppingCart, external: false },
-  { label: "WhatsApp", href: `https://wa.me/${WHATSAPP_NUMBER}`, icon: Package, external: true },
+  { label: "Profile", href: "/profile", icon: UserRound, external: false },
+  { label: "More", href: "/more", icon: MoreHorizontal, external: false },
 ];
 
 export default function BottomNav() {
@@ -96,6 +99,14 @@ export default function BottomNav() {
               />
               Contact
             </a>
+            <Link
+              href="/profile"
+              aria-label="Open profile"
+              className={`inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-sm font-bold transition ${isActive("/profile") ? "bg-[#F8E8ED] text-[#A83250]" : "text-[#76665C] hover:bg-[#F8E8ED]/70 hover:text-[#87263F]"}`}
+            >
+              <UserRound size={17} />
+              Profile
+            </Link>
             <Link
               href="/cart"
               aria-label={`Open cart, ${totalItems} items`}
