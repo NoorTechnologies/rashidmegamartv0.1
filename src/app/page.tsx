@@ -20,7 +20,7 @@ export default function HomePage() {
         <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#168447]/[0.07] blur-[90px]" />
         <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
           <span data-reveal-item className="inline-flex items-center gap-2 rounded-full border border-[#F7C928]/40 bg-white/90 px-4 py-2 text-[10px] font-bold tracking-wide text-[#168447] shadow-sm sm:text-xs">
-            <Package size={15} /> MERI JAAN SPECIAL • BEST OFFERS
+            <Package size={15} /> GROCERY KITS FOR EVERYDAY NEEDS
           </span>
           <div className="mt-5 flex flex-col items-center">
             <Image data-reveal-item src="/images/logo2.png" alt="Rashid Mega Mart Logo" width={110} height={110} priority className="h-20 w-20 object-contain sm:h-24 sm:w-24" />
@@ -79,7 +79,7 @@ export default function HomePage() {
                 <Package size={16} />
               </span>
               <span className="min-w-0">
-                <span className="block truncate text-[10px] font-black uppercase tracking-wide text-[#106B38] sm:text-xs">BEST OFFER · KITS STARTING AT</span>
+                <span className="block truncate text-[10px] font-black uppercase tracking-wide text-[#106B38] sm:text-xs">GROCERY KITS STARTING AT</span>
                 <span className="block text-lg font-black leading-tight text-[#800020] sm:text-2xl">₹{startingPrice.toLocaleString("en-IN")} <span className="text-[10px] font-bold text-[#686868] sm:text-xs">· {availableKits.length} kits to explore</span></span>
               </span>
             </span>
