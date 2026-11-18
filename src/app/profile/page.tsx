@@ -108,7 +108,7 @@ export default function ProfilePage() {
           <div className="mt-6 rounded-2xl border border-[#E8D7DC] bg-white p-5 text-sm text-[#6F3545]">
             Supabase configuration missing hai. Project root ki .env.local file mein Supabase URL aur publishable key add karein.
           </div>
-        ) : session ? (
+        ) : session && mode !== "reset" ? (
           <section className="mt-6 rounded-2xl border border-[#EEE8E1] bg-white p-5">
             <div className="flex items-center gap-3">
               <span className="flex size-12 items-center justify-center rounded-full bg-[#F8E8ED] text-[#A83250]"><UserRound size={22} /></span>
