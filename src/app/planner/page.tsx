@@ -113,7 +113,10 @@ export default function PlannerPage() {
         if (active) setIsLoaded(true);
       });
       const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-        if (active) setCurrentUserId(session?.user.id ?? null);
+        if (active) {
+          setCurrentUserId(session?.user.id ?? null);
+          if (!session) setSavedKits([]);
+        }
       });
       return () => { active = false; listener.subscription.unsubscribe(); };
     } catch (cause) {
