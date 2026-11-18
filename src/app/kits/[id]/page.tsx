@@ -21,7 +21,7 @@ interface PageProps {
 export default async function KitDetailPage({ params }: PageProps) {
   const { id } = await params;
   const kit = getKitById(id);
-  if (!kit || !kit.isAvailable) notFound();
+  if (!kit) notFound();
 
 
   const discount =
@@ -205,21 +205,34 @@ export default async function KitDetailPage({ params }: PageProps) {
 
             {/* Cart Action */}
             <div className="mt-2.5 sm:mt-3">
-              <KitCustomizer kit={kit} />
+              {kit.isAvailable ? (
+                <KitCustomizer kit={kit} />
+              ) : (
+                <div className="rounded-xl border border-[#E8DFD1] bg-[#FAFAF6] px-4 py-5 text-center">
+                  <p className="text-sm font-extrabold text-[#55564E]">This kit is currently unavailable</p>
+                  <p className="mt-1 text-xs leading-5 text-[#85857B]">Please check back later or contact our store team for availability.</p>
+                </div>
+              )}
             </div>
 
             <p className="mt-3 text-center text-xs text-[#686868]">
-              Add this kit to your cart to continue shopping.
+              {kit.isAvailable ? "Add this kit to your cart to continue shopping." : "This kit cannot be added to your cart while unavailable."}
             </p>
           </div>
         </div>
       </section>
 
       <div className="fixed inset-x-0 bottom-[calc(68px+env(safe-area-inset-bottom))] z-40 border-t border-[#E8DFD1] bg-white/95 px-3 py-2 shadow-[0_-6px_20px_rgba(40,30,20,0.08)] backdrop-blur-lg sm:hidden">
-        <a href="#customize-kit-title" className="flex min-h-12 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white active:scale-[.99]">
-          <span>Customize this kit</span>
-          <span>₹{kit.price.toLocaleString("en-IN")} <ArrowRight size={16} className="ml-1 inline" /></span>
-        </a>
+        {kit.isAvailable ? (
+          <a href="#customize-kit-title" className="flex min-h-12 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white active:scale-[.99]">
+            <span>Customize this kit</span>
+            <span>₹{kit.price.toLocaleString("en-IN")} <ArrowRight size={16} className="ml-1 inline" /></span>
+          </a>
+        ) : (
+          <div aria-disabled="true" className="flex min-h-12 w-full items-center justify-center rounded-xl bg-[#EAE8E1] px-4 text-sm font-extrabold text-[#77776E]">
+            Currently Unavailable
+          </div>
+        )}
       </div>
 
       {/* Explore More Kits */}
