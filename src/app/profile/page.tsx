@@ -61,7 +61,11 @@ export default function ProfilePage() {
         });
         if (authError) throw authError;
         if (!data.session) setMessage("Account created. Email inbox mein verification link check karein, phir login karein.");
-        else setMessage("Account successfully created.");
+        else {
+          setMessage("Account successfully created.");
+          const next = new URLSearchParams(window.location.search).get("next");
+          if (next?.startsWith("/")) window.location.assign(next);
+        }
       } else if (mode === "forgot") {
         const { error: authError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
           redirectTo: window.location.origin + "/profile?mode=reset",
