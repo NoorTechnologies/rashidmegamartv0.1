@@ -257,7 +257,7 @@ export default function ReturnsRefundsPage() {
               id="faq-title"
               className="text-lg font-black tracking-tight text-[#29231F] sm:text-2xl"
             >
-              Refunds & exchange questions
+              Returns & refunds questions
             </h2>
           </div>
           <div className="overflow-hidden rounded-2xl border border-[#EAE5DC] bg-white">
