@@ -1,20 +1,26 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { ArrowRight, Check, KeyRound, LogOut, Mail, MapPin, Package, Pencil, Plus, Trash2, UserRound, X, Home, BriefcaseBusiness } from "lucide-react";
+import { ArrowRight, Check, Copy, Gift, KeyRound, LogOut, Mail, MapPin, Package, Pencil, Plus, ShoppingCart, Trash2, UserRound, X, Home, BriefcaseBusiness } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { useCart } from "@/context/CartContext";
 
 type SavedKit = { id: string; name: string; items: { productId: string; quantity: number }[]; updated_at: string };
 type Profile = { full_name: string; phone: string };
 type Address = { id: string; label: string; recipient_name: string; phone: string; address_line1: string; address_line2: string; landmark: string; city: string; state: string; postal_code: string; is_default: boolean };
 type AddressDraft = Omit<Address, "id">;
+type Coupon = { id: string; code: string; title: string; description: string; discount_type: "percentage" | "fixed"; discount_value: number | string; minimum_order: number | string; valid_from: string; expires_at: string | null };
+const WHATSAPP_CONTACT_URL = "https://wa.me/918962531603?text=" + encodeURIComponent("Hello Rashid Mega Mart! I need help with my account.");
+const formatCurrency = (value: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value);
 const blankAddress: AddressDraft = { label: "Home", recipient_name: "", phone: "", address_line1: "", address_line2: "", landmark: "", city: "", state: "", postal_code: "", is_default: false };
 const input = "min-h-11 w-full rounded-xl border border-[#E8E4DA] bg-white px-3 text-sm text-[#292B25] outline-none transition focus:border-[#78956E] focus:ring-2 focus:ring-[#78956E]/15 placeholder:text-[#AAA69B]";
 const label = "mb-1.5 block text-xs font-bold text-[#625F56]";
 
 export default function ProfilePage() {
+  const { subtotal } = useCart();
   const [session, setSession] = useState<Session | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,6 +45,9 @@ export default function ProfilePage() {
   const [deleteConfirmed, setDeleteConfirmed] = useState(false);
   const [pendingVerificationEmail, setPendingVerificationEmail] = useState("");
   const [resendCooldown, setResendCooldown] = useState(0);
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
+  const [couponsLoading, setCouponsLoading] = useState(true);
+  const [couponError, setCouponError] = useState("");
 
   const loadData = useCallback(async () => {
     if (!session?.user.id) { setKits([]); setAddresses([]); setProfile({ full_name: "", phone: "" }); return; }
@@ -69,6 +78,34 @@ export default function ProfilePage() {
     } catch { setConfigured(false); }
   }, []);
   useEffect(() => { void loadData(); }, [loadData]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadCoupons = async () => {
+      setCouponsLoading(true);
+      setCouponError("");
+      try {
+        const now = new Date().toISOString();
+        const { data, error: queryError } = await getSupabaseBrowserClient()
+          .from("coupons")
+          .select("id,code,title,description,discount_type,discount_value,minimum_order,valid_from,expires_at")
+          .eq("is_active", true)
+          .lte("valid_from", now)
+          .order("expires_at", { ascending: true, nullsFirst: false });
+        if (queryError) throw queryError;
+        const activeCoupons = ((data ?? []) as Coupon[]).filter(
+          (coupon) => !coupon.expires_at || Date.parse(coupon.expires_at) >= Date.now()
+        );
+        if (!cancelled) setCoupons(activeCoupons);
+      } catch (cause) {
+        if (!cancelled) setCouponError(cause instanceof Error ? cause.message : "Coupons could not be loaded.");
+      } finally {
+        if (!cancelled) setCouponsLoading(false);
+      }
+    };
+    void loadCoupons();
+    return () => { cancelled = true; };
+  }, []);
   useEffect(() => {
     if (resendCooldown <= 0) return;
     const timer = window.setTimeout(() => setResendCooldown((seconds) => Math.max(0, seconds - 1)), 1000);
@@ -212,6 +249,15 @@ export default function ProfilePage() {
     finally { setBusy(false); }
   };
 
+  const copyCouponCode = async (code: string) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setMessage(`${code} copied. Share it with the store when enquiring on WhatsApp.`);
+    } catch {
+      setMessage(`Coupon code: ${code}. You can copy it manually.`);
+    }
+  };
+
   const deleteAccount = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!session?.user.email || !deleteConfirmed) return;
@@ -245,6 +291,86 @@ export default function ProfilePage() {
       <div className="mx-auto max-w-3xl">
         <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#71866A]">Rashid Mega Mart</p>
         <div className="mt-1 flex items-end justify-between gap-3"><div><h1 className="text-2xl font-black tracking-tight text-[#292B25]">My Account</h1><p className="mt-1 text-sm text-[#77776E]">Profile details and saved addresses.</p></div>{session && <button type="button" disabled={busy} onClick={signOut} className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-[#E8E4DA] bg-white px-3 text-xs font-bold text-[#6A6B62] hover:bg-[#F4F3ED] disabled:opacity-50"><LogOut size={14}/> Logout</button>}</div>
+
+        <section className="mt-5 rounded-2xl border border-[#E9E7DE] bg-white p-4 shadow-[0_8px_30px_rgba(44,48,37,0.035)] sm:p-5">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-extrabold text-[#292B25]">Quick Actions</h2>
+              <p className="mt-1 text-xs text-[#85857B]">Your everyday store shortcuts.</p>
+            </div>
+          </div>
+          <div className="mt-3 grid grid-cols-3 gap-2 sm:gap-3">
+            <Link href="/cart" className="group flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-xl border border-[#EEEDE6] bg-[#FAFAF6] px-2 py-3 text-center transition hover:border-[#D9E4D2] hover:bg-[#F3F7EF]">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]"><ShoppingCart size={18}/></span>
+              <span className="text-xs font-extrabold text-[#3B4937]">Cart</span>
+            </Link>
+            <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noopener noreferrer" className="group flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-xl border border-[#EEEDE6] bg-[#FAFAF6] px-2 py-3 text-center transition hover:border-[#D9E4D2] hover:bg-[#F3F7EF]">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-[#EAF3E6]"><Image src="/Whatsapp-3d.svg" alt="" width={24} height={24} unoptimized className="size-6 object-contain"/></span>
+              <span className="text-xs font-extrabold text-[#3B4937]">WhatsApp</span>
+            </a>
+            <Link href="/rewards" className="group flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-xl border border-[#EEEDE6] bg-[#FAFAF6] px-2 py-3 text-center transition hover:border-[#D9E4D2] hover:bg-[#F3F7EF]">
+              <span className="flex size-9 items-center justify-center rounded-xl bg-[#F8F1DE] text-[#8A6A22]"><Gift size={18}/></span>
+              <span className="text-xs font-extrabold text-[#3B4937]">Rewards</span>
+            </Link>
+          </div>
+        </section>
+
+        <section className="mt-4 overflow-hidden rounded-2xl border border-[#E9E7DE] bg-white shadow-[0_8px_30px_rgba(44,48,37,0.035)]">
+          <div className="flex items-center justify-between gap-3 border-b border-[#F0EFE9] px-4 py-4 sm:px-5">
+            <div>
+              <h2 className="text-sm font-extrabold text-[#292B25]">Available Coupons</h2>
+              <p className="mt-1 text-xs text-[#85857B]">Offers currently active at Rashid Mega Mart.</p>
+            </div>
+            <span className="rounded-full bg-[#F1F3EC] px-2.5 py-1 text-[10px] font-bold text-[#58744F]">{coupons.length} active</span>
+          </div>
+          <div className="space-y-2.5 p-3.5 sm:p-4">
+            {couponsLoading ? (
+              <p className="py-5 text-center text-xs text-[#85857B]">Checking available coupons...</p>
+            ) : couponError ? (
+              <p role="status" className="rounded-xl bg-[#FAFAF6] px-3 py-4 text-center text-xs leading-5 text-[#85857B]">Coupons are temporarily unavailable. Please try again later.</p>
+            ) : coupons.length === 0 ? (
+              <div className="rounded-xl bg-[#FAFAF6] px-3 py-6 text-center">
+                <Gift size={22} className="mx-auto text-[#9AA18F]"/>
+                <p className="mt-2 text-sm font-bold text-[#55564E]">No active coupons right now</p>
+                <p className="mt-1 text-xs text-[#929187]">New store offers will appear here when available.</p>
+              </div>
+            ) : coupons.map((coupon) => {
+              const minimumOrder = Number(coupon.minimum_order);
+              const remaining = Math.max(0, minimumOrder - subtotal);
+              const discountValue = Number(coupon.discount_value);
+              const discountLabel = coupon.discount_type === "percentage" ? `${discountValue}% OFF` : `${formatCurrency(discountValue)} OFF`;
+              const expiryLabel = coupon.expires_at
+                ? `Valid till ${new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric" }).format(new Date(coupon.expires_at))}`
+                : "No expiry date";
+              return (
+                <article key={coupon.id} className="rounded-xl border border-[#EEEDE6] bg-[#FFFEFC] p-3.5">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-sm font-extrabold text-[#303129]">{coupon.title}</p>
+                      {coupon.description && <p className="mt-1 text-xs leading-5 text-[#77776E]">{coupon.description}</p>}
+                    </div>
+                    <span className="shrink-0 rounded-full bg-[#EAF3E6] px-2.5 py-1 text-[10px] font-black text-[#315F35]">{discountLabel}</span>
+                  </div>
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-extrabold tracking-[0.08em] text-[#315F35]">{coupon.code}</p>
+                      <p className="mt-1 text-[10px] text-[#85857B]">{minimumOrder > 0 ? `Minimum cart ${formatCurrency(minimumOrder)}` : "No minimum cart value"} · {expiryLabel}</p>
+                    </div>
+                    <div className="flex shrink-0 flex-col items-end gap-1.5">
+                      <span className={`rounded-full px-2 py-1 text-[9px] font-extrabold ${remaining === 0 ? "bg-[#EAF3E6] text-[#315F35]" : "bg-[#F8F1DE] text-[#8A6A22]"}`}>
+                        {remaining === 0 ? "Available" : `Add ${formatCurrency(remaining)} more`}
+                      </span>
+                      <button type="button" onClick={() => void copyCouponCode(coupon.code)} className="inline-flex min-h-8 items-center gap-1 rounded-lg border border-[#E8E4DA] bg-white px-2.5 text-[10px] font-bold text-[#5F6257] transition hover:bg-[#F4F3ED]">
+                        <Copy size={12}/> Copy code
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+            <p className="px-1 text-[10px] leading-4 text-[#929187]">Coupon discounts are not automatically deducted from the cart. Share the code with the store team on WhatsApp to confirm eligibility and the final price.</p>
+          </div>
+        </section>
 
         {!configured ? <div className="mt-6 rounded-2xl border border-[#E8D7DC] bg-white p-5 text-sm text-[#6F3545]">Supabase configuration missing hai. Project root ki .env.local file mein Supabase URL aur publishable key add karein.</div> :
         session && mode !== "reset" ? <div className="mt-6 space-y-4">
