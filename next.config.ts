@@ -44,7 +44,11 @@ const securityHeaders = [
       "object-src 'none'",
       "frame-ancestors 'none'",
       "form-action 'self' https://wa.me https://api.whatsapp.com",
-      "script-src 'self' 'unsafe-inline'",
+      "script-src " + [
+        "'self'",
+        "'unsafe-inline'",
+        ...(process.env.NODE_ENV === "development" ? ["'unsafe-eval'"] : []),
+      ].join(" "),
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",
       "font-src 'self' data:",
