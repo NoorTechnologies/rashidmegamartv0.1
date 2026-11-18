@@ -4,6 +4,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 export default function PromoBanner() {
   return (
     <section
+      data-reveal
       aria-label="Grocery planner promotion"
       className="mx-auto w-full max-w-7xl px-3 pt-4 min-[480px]:px-5 sm:pt-5 md:px-6 lg:px-8"
     >
