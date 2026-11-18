@@ -8,7 +8,10 @@ import {
   Package,
   ArrowUpRight,
   Tag,
+  ShoppingCart,
+  Check,
 } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 import type { GroceryKit } from "@/data/kits";
 import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
@@ -28,6 +31,8 @@ const formatPrice = (price: number) =>
 
 export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
   const [imageError, setImageError] = useState(false);
+  const { addToCart, items } = useCart();
+  const isInCart = items.some((item) => item.id === kit.id);
   const language = useSiteLanguage();
   const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : language === "hinglish" ? toHinglishCatalogue(value) : value;
   const kitImage = kit.image;
@@ -179,14 +184,32 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         {/* ACTION BUTTONS */}
         <div className="mt-auto flex gap-1.5 pt-2 sm:gap-2 sm:pt-4">
           {kit.isAvailable ? (
-            <Link
-              href={`/kits/${kit.id}`}
-              aria-label={`Customize ${kit.name}`}
-              className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#168447] px-3 text-xs font-extrabold text-white transition hover:bg-[#106B38] active:scale-[.99] sm:min-h-11 sm:text-xs"
-            >
-              Customize
-              <ArrowUpRight size={12} />
-            </Link>
+            <>
+              <Link
+                href={`/kits/${kit.id}`}
+                aria-label={`Customize ${kit.name}`}
+                className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl border border-[#168447] bg-white px-2 text-[11px] font-extrabold text-[#168447] transition hover:bg-[#EAF3E9] active:scale-[.99] sm:text-xs"
+              >
+                Customize
+                <ArrowUpRight size={12} />
+              </Link>
+              {isInCart ? (
+                <Link
+                  href="/cart"
+                  className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl bg-[#800020] px-2 text-[11px] font-extrabold text-white transition hover:bg-[#650019] active:scale-[.99] sm:text-xs"
+                >
+                  <Check size={14} /> In Cart
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => addToCart({ id: kit.id, name: kit.name, price: kit.price, image: kit.image, brand: "Rashid Mega Mart", packSize: "Grocery Kit" })}
+                  className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl bg-[#800020] px-2 text-[11px] font-extrabold text-white transition hover:bg-[#650019] active:scale-[.99] sm:text-xs"
+                >
+                  <ShoppingCart size={14} /> Add to Cart
+                </button>
+              )}
+            </>
           ) : (
             <span className="inline-flex min-h-8 flex-1 items-center justify-center rounded-lg bg-[#FAF7EF] px-1.5 text-[10px] font-bold text-[#686868] sm:min-h-10 sm:rounded-xl sm:text-xs">
               Out of Stock
