@@ -125,7 +125,7 @@ export default function BottomNav() {
               </Link>
             );
           })}
-          <Link href="/cart" aria-label={`Open cart, ${totalItems} items`} className={`relative mx-auto flex h-[50px] w-full max-w-[48px] flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-300 active:scale-95 ${isActive("/cart") ? "text-[#315F35]" : "text-[#625F56]"}`}>
+          <Link href="/cart" aria-label={`Open cart, ${totalItems} items`} className={`rmm-mobile-cart relative mx-auto flex h-[50px] w-full max-w-[48px] flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-300 active:scale-95 ${isActive("/cart") ? "text-[#315F35]" : "text-[#625F56]"}`}>
             <span className={`flex size-[29px] items-center justify-center rounded-full ${isActive("/cart") ? "bg-[#E7F0E2] text-[#315F35]" : ""}`}><ShoppingCart size={18} strokeWidth={isActive("/cart") ? 2.3 : 1.8} /></span>
             <span className="text-[8.5px] leading-none">Cart</span>
             {totalItems > 0 && <span className="absolute right-[1px] top-[1px] flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C] ring-2 ring-[#FFFEFA]">{totalItems > 99 ? "99+" : totalItems}</span>}
