@@ -8,7 +8,6 @@ import {
   LayoutGrid,
   Package,
   ShoppingCart,
-  CalendarCheck,
   UserRound,
   MoreHorizontal,
 } from "lucide-react";
@@ -21,7 +20,6 @@ const navigationItems = [
   { label: "Home", href: "/", icon: House, external: false },
   { label: "Shop", href: "/shop", icon: LayoutGrid, external: false },
   { label: "Kits", href: "/kits", icon: Package, external: false },
-  { label: "Planner", href: "/planner", icon: CalendarCheck, external: false },
 ];
 
 const mobileNavigationItems = [
@@ -44,15 +42,15 @@ export default function BottomNav() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 hidden border-b border-[#EDE4DC]/80 bg-[#FFFDF8]/90 shadow-[0_4px_24px_rgba(48,30,36,0.04)] backdrop-blur-2xl lg:block">
+      <header className="rmm-desktop-nav fixed inset-x-0 top-0 z-50 hidden border-b border-white/70 bg-[#FFFCF8]/75 shadow-[0_8px_28px_rgba(48,30,36,0.07)] backdrop-blur-2xl backdrop-saturate-150 lg:block">
         <nav
           aria-label="Main navigation"
-          className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-8 px-6 xl:px-8"
+          className="mx-auto flex h-[66px] max-w-7xl items-center justify-between gap-6 px-6 xl:px-8"
         >
           <Link
             href="/"
             aria-label="Rashid Mega Mart home"
-            className="flex shrink-0 items-center gap-3 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250]"
+            className="rmm-nav-brand flex shrink-0 items-center gap-2.5 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#A83250]"
           >
             <Image
               src="/images/logo2.png"
@@ -73,7 +71,7 @@ export default function BottomNav() {
                 key={item.href}
                 href={item.href}
                 aria-current={isActive(item.href) ? "page" : undefined}
-                className={`inline-flex h-10 items-center rounded-full px-5 text-sm font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A83250] ${
+                className={`rmm-nav-link relative inline-flex h-9 items-center rounded-full px-4 text-[13px] font-bold transition-all duration-300 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A83250] ${
                   isActive(item.href)
                     ? "bg-[#F8E8ED] text-[#A83250]"
                     : "text-[#76665C] hover:bg-[#F8E8ED]/70 hover:text-[#87263F]"
@@ -89,7 +87,7 @@ export default function BottomNav() {
               href={`https://wa.me/${WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-sm font-bold text-[#138047] transition hover:bg-[#EAF6EE] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#138047]"
+              className="rmm-nav-action inline-flex min-h-9 items-center gap-2 rounded-full px-3 text-[13px] font-bold text-[#138047] transition-all duration-300 hover:bg-[#EAF6EE] hover:-translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#138047]"
             >
               <Image
                 src="/Whatsapp-3d.svg"
@@ -104,15 +102,23 @@ export default function BottomNav() {
             <Link
               href="/profile"
               aria-label="Open profile"
-              className={`inline-flex min-h-10 items-center gap-2 rounded-full px-4 text-sm font-bold transition ${isActive("/profile") ? "bg-[#F8E8ED] text-[#A83250]" : "text-[#76665C] hover:bg-[#F8E8ED]/70 hover:text-[#87263F]"}`}
+              className={`rmm-nav-action inline-flex min-h-9 items-center gap-2 rounded-full px-3 text-[13px] font-bold transition-all duration-300 hover:-translate-y-px ${isActive("/profile") ? "bg-[#F8E8ED] text-[#A83250]" : "text-[#76665C] hover:bg-[#F8E8ED]/70 hover:text-[#87263F]"}`}
             >
               <UserRound size={17} />
               Profile
             </Link>
             <Link
+              href="/more"
+              aria-label="Open more links"
+              className="rmm-nav-action inline-flex min-h-9 items-center gap-2 rounded-full px-3 text-[13px] font-bold text-[#76665C] transition-all duration-300 hover:-translate-y-px hover:bg-[#F8E8ED]/70 hover:text-[#87263F]"
+            >
+              <MoreHorizontal size={17} />
+              More
+            </Link>
+            <Link
               href="/cart"
               aria-label={`Open cart, ${totalItems} items`}
-              className="relative inline-flex min-h-11 items-center gap-2 rounded-full bg-[#A83250] px-5 text-sm font-extrabold text-white shadow-[0_5px_16px_rgba(168,50,80,0.18)] transition hover:-translate-y-0.5 hover:bg-[#87263F] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A83250]"
+              className="rmm-nav-cart relative inline-flex min-h-10 items-center gap-2 rounded-full bg-[#A83250] px-4 text-[13px] font-extrabold text-white shadow-[0_5px_16px_rgba(168,50,80,0.18)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#87263F] hover:shadow-[0_8px_22px_rgba(168,50,80,0.24)] active:translate-y-0 active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#A83250]"
             >
               <ShoppingCart size={17} />
               Cart
