@@ -41,7 +41,7 @@ export default function MorePage() {
                 {content}
               </Link>
             );
-          })}}
+          })}
         </div>
       </div>
     </main>
