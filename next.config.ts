@@ -1,5 +1,20 @@
 import type { NextConfig } from "next";
 
+// Allow only the configured Supabase project origin for browser Auth and data requests.
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+let supabaseConnectSources: string[] = [];
+
+if (supabaseUrl) {
+  try {
+    const parsedSupabaseUrl = new URL(supabaseUrl);
+    if (parsedSupabaseUrl.protocol === "https:") {
+      supabaseConnectSources = [parsedSupabaseUrl.origin, "wss://" + parsedSupabaseUrl.host];
+    }
+  } catch {
+    // Keep the policy self-only if the configured URL is invalid.
+  }
+}
+
 const securityHeaders = [
   {
     key: "X-Content-Type-Options",
@@ -33,7 +48,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",
       "font-src 'self' data:",
-      "connect-src 'self'",
+      "connect-src 'self' " + supabaseConnectSources.join(" "),
       "upgrade-insecure-requests",
     ].join("; "),
   },
