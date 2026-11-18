@@ -133,6 +133,19 @@ export default function CartPage() {
           };
         }
 
+        if (!product && cartItem.catalogProductId) {
+          return {
+            index: index + 1,
+            type: "Product",
+            kitGroupName: cartItem.kitGroupName,
+            name: cartItem.name,
+            detail: [cartItem.brand, cartItem.packSize].filter(Boolean).join(" · "),
+            quantity: cartItem.quantity,
+            unitPrice: cartItem.price,
+            lineTotal: cartItem.price * cartItem.quantity,
+          };
+        }
+
         if (kit) {
           if (!kit.isAvailable) {
             throw new Error(kit.name + " is currently unavailable.");
