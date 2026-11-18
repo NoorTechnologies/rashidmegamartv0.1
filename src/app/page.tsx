@@ -123,7 +123,7 @@ export default function HomePage() {
           <p className="text-base font-black text-[#202124] sm:text-lg">Apni Zaroorat Ki Kit Khud Banayein</p>
           <p className="mx-auto mt-1.5 max-w-lg text-xs leading-5 text-[#686868] sm:text-sm">Ready-made kit ke items badlein, quantity set karein aur apni pasand ke grocery items add karein.</p>
           <div className="mt-4 flex flex-col justify-center gap-2 min-[420px]:flex-row">
-            <a href="https://wa.me/918962531603?text=Namaste%2C%20mujhe%20apni%20grocery%20kit%20customize%20karni%20hai." target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#106B38] sm:text-sm">
+            <a href={"https://wa.me/918962531603?text=" + encodeURIComponent("Namaste Rashid Mega Mart! Main apni grocery kit customize karna chahta/chahti hoon. Kripya available products aur pricing batayein.")} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#106B38] sm:text-sm">
               <Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} className="h-5 w-5 object-contain" /> WhatsApp Par Poochhein
             </a>
             <Link href="/kits" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D8CBB8] bg-white px-5 py-3 text-xs font-bold text-[#168447] transition hover:border-[#168447] sm:text-sm">
