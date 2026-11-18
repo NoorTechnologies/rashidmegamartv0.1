@@ -124,10 +124,10 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           <span className="rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[10px] font-black text-[#806000]">{contents.length} included</span>
         </div>
 
-        <div className="grid gap-1.5 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-2">
           {contents.map((line, index) => (
-            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="rounded-xl border border-[#E8DFD1] bg-white p-2.5">
-              <div className="flex min-w-0 items-center gap-2">
+            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="rounded-xl border border-[#E8DFD1] bg-white p-2 sm:flex sm:items-center sm:gap-3">
+              <div className="flex min-w-0 items-center gap-2 sm:flex-1">
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E9] text-[#168447]"><Package size={16} /></span>
                 <div className="min-w-0 flex-1">
                   <p className="break-words text-xs font-extrabold leading-4 text-[#202124]">{displayCatalogue(line.name)}</p>
@@ -135,12 +135,12 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
                 </div>
                 <button type="button" aria-label={`Remove ${line.name}`} onClick={() => saveContents(contents.filter((_, i) => i !== index))} className="flex size-8 shrink-0 items-center justify-center rounded-lg text-[#8A8178] transition hover:bg-red-50 hover:text-red-600"><Trash2 size={14} /></button>
               </div>
-              <div className="mt-2 flex items-center justify-between gap-2 rounded-lg bg-[#FAF7EF] p-1">
+              <div className="mt-2 flex items-center justify-between gap-2 rounded-lg bg-[#FAF7EF] p-1 sm:mt-0 sm:w-[210px] sm:shrink-0">
                 <span className="pl-2 text-[10px] font-bold text-[#686868]">Quantity</span>
                 <div className="flex items-center gap-1">
-                  <button type="button" aria-label={`Decrease ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="flex size-10 items-center justify-center rounded-lg bg-white text-[#800020] shadow-sm hover:bg-[#F1EBDD] disabled:opacity-35"><Minus size={13} /></button>
+                  <button type="button" aria-label={`Decrease ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="flex size-9 items-center justify-center rounded-lg bg-white text-[#800020] shadow-sm hover:bg-[#F1EBDD] disabled:opacity-35"><Minus size={13} /></button>
                   <input aria-label={`${line.name} quantity`} value={displayCatalogue(line.quantity)} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: event.target.value.slice(0, 24) } : entry))} className="min-h-10 w-[76px] rounded-lg border border-[#E8DFD1] bg-white px-1 py-2 text-center text-[12px] font-extrabold text-[#202124] outline-none focus:border-[#168447]" />
-                  <button type="button" aria-label={`Increase ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="flex size-10 items-center justify-center rounded-lg bg-white text-[#168447] shadow-sm hover:bg-[#EAF3E9] disabled:opacity-35"><Plus size={13} /></button>
+                  <button type="button" aria-label={`Increase ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="flex size-9 items-center justify-center rounded-lg bg-white text-[#168447] shadow-sm hover:bg-[#EAF3E9] disabled:opacity-35"><Plus size={13} /></button>
                 </div>
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           )}
         </div>
 
-        <div className="mt-4 overflow-hidden rounded-2xl border border-[#BBDCC5] bg-[linear-gradient(135deg,#F0F8F1_0%,#E2F2E6_100%)]">
+        <div className="mt-3 overflow-hidden rounded-xl border border-[#BBDCC5] bg-[#F0F8F1]">
           <div className="flex items-center justify-between gap-3 border-b border-[#CDE5D2] px-3 py-2.5">
             <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#106B38]"><BadgeCheck size={14} /> Smart Kit Deal</span>
             <span className="rounded-full bg-[#168447] px-2.5 py-1 text-[9px] font-black text-white">STORE PRICE</span>
@@ -226,7 +226,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           </div>
         </div>
 
-        <button type="button" onClick={handleAddToCart} disabled={!isLoaded || !kit.isAvailable} className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[linear-gradient(100deg,#168447_0%,#106B38_100%)] px-4 py-3 text-xs font-black text-white shadow-[0_7px_18px_rgba(22,132,71,0.22)] transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(22,132,71,0.28)] active:scale-[0.99] disabled:opacity-50 sm:text-sm">
+        <button type="button" onClick={handleAddToCart} disabled={!isLoaded || !kit.isAvailable} className="sticky bottom-[76px] z-30 mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/70 bg-[#168447] px-4 py-3 text-xs font-black text-white shadow-[0_8px_24px_rgba(22,132,71,0.28)] transition active:scale-[0.99] disabled:opacity-50 sm:static sm:min-h-11 sm:text-sm">
           <ShoppingCart size={17} /> {cartItem ? "Update My Customized Kit" : "Add Customized Kit to Cart"}
         </button>
       </div>
