@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, FileText } from "lucide-react";
 
@@ -55,8 +56,8 @@ export default function TermsAndConditionsPage() {
           <div className="mt-8 rounded-2xl bg-[#FAF0C8]/70 p-5">
             <h2 className="text-sm font-extrabold text-[#202124]">Need help with an order?</h2>
             <p className="mt-2 text-sm leading-6 text-[#686868]">Talk to our team before confirming your purchase.</p>
-            <a href="https://wa.me/918962531603" target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex min-h-10 items-center justify-center rounded-xl bg-[#168447] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#168447]">
-              WhatsApp: +91 89625 31603
+            <a href={"https://wa.me/918962531603?text=" + encodeURIComponent("Namaste Rashid Mega Mart! Mujhe order, delivery ya Terms & Conditions ke baare mein clarification chahiye.")} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex min-h-10 items-center justify-center rounded-xl bg-[#168447] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#168447]">
+              <Image src="/Whatsapp-3d.svg" alt="" width={19} height={19} unoptimized /> WhatsApp: +91 89625 31603
             </a>
           </div>
         </div>
