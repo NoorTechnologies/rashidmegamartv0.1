@@ -59,6 +59,18 @@ export default function BottomNav() {
 
   return (
     <>
+      <header className="pointer-events-none fixed inset-x-0 top-2 z-50 px-3 lg:hidden">
+        <div className="pointer-events-auto mx-auto flex h-14 max-w-[560px] items-center justify-between rounded-full border border-white/85 bg-[#FFFEFA]/90 px-3 shadow-[0_8px_28px_rgba(32,20,18,0.10)] backdrop-blur-2xl">
+          <Link href="/" aria-label="Rashid Mega Mart home" className="flex min-w-0 items-center gap-2">
+            <Image src="/images/logo2.png" alt="" width={36} height={36} priority className="size-8 shrink-0 object-contain" />
+            <span className="truncate text-sm font-black tracking-tight text-[#30251F]">Rashid Mega Mart</span>
+          </Link>
+          <button type="button" data-no-translate onClick={toggleLanguage} aria-label={`Current language: ${languageLabel}. Switch language`} className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full border border-[#E8E4DA] bg-white/80 px-3 text-xs font-bold text-[#315F35] transition hover:bg-[#EAF3E6] active:scale-95">
+            <Languages size={16} />{languageLabel}
+          </button>
+        </div>
+      </header>
+
       <header className="pointer-events-none fixed inset-x-0 top-3 z-50 hidden px-4 lg:block">
         <nav aria-label="Main navigation" className="pointer-events-auto mx-auto flex h-[64px] max-w-6xl items-center justify-between gap-3 rounded-full border border-white/80 bg-[#FFFEFA]/90 px-4 shadow-[0_12px_34px_rgba(32,20,18,0.12)] backdrop-blur-2xl backdrop-saturate-150 xl:px-6">
           <Link href="/" aria-label="Rashid Mega Mart home" className="flex shrink-0 items-center gap-2.5">
