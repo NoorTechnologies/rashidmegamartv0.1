@@ -66,7 +66,7 @@ export default function ProfilePage() {
       setKits((results[2].data ?? []) as SavedKit[]);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Account details could not be loaded."); }
     finally { setLoading(false); }
-  }, [session?.user.id, session?.user.user_metadata?.full_name]);
+  }, [session]);
 
   useEffect(() => {
     let active = true;
