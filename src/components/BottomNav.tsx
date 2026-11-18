@@ -89,11 +89,23 @@ export default function BottomNav() {
       <a href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Chat with Rashid Mega Mart on WhatsApp" className="fixed bottom-[calc(82px+env(safe-area-inset-bottom))] right-4 z-40 flex size-[50px] items-center justify-center rounded-full border border-white/80 bg-white shadow-[0_8px_24px_rgba(25,65,39,0.2)] transition-transform hover:-translate-y-1 active:scale-95 lg:bottom-6 lg:right-6">
         <Image src="/Whatsapp-3d.svg" alt="" width={34} height={34} unoptimized className="size-8 object-contain" />
       </a>
+      <div className="fixed bottom-[calc(137px+env(safe-area-inset-bottom))] left-4 z-40 lg:hidden">
+        <button
+          type="button"
+          data-no-translate
+          onClick={toggleLanguage}
+          aria-label={`Current language: ${languageLabel}. Tap to change language`}
+          className="inline-flex min-h-10 items-center gap-2 rounded-full border border-white/90 bg-[#FFFEFA]/95 px-3.5 shadow-[0_8px_24px_rgba(39,31,22,0.14)] backdrop-blur-xl transition active:scale-95"
+        >
+          <Languages size={16} className="text-[#315F35]" />
+          <span className="text-[11px] font-extrabold tracking-wide text-[#315F35]">{language === "en" ? "ENGLISH" : language === "hinglish" ? "HINGLISH" : "हिंदी"}</span>
+          <span className="text-[10px] font-semibold text-[#82796D]">CHANGE</span>
+        </button>
+      </div>
       <div ref={logoMenuRef} className="fixed bottom-[calc(84px+env(safe-area-inset-bottom))] left-4 z-40 lg:hidden">
         {moreOpen && <div className="absolute bottom-[calc(100%+10px)] left-0 w-[min(280px,calc(100vw-32px))] rounded-2xl border border-white/80 bg-[#FFFEFA]/95 p-2 shadow-[0_18px_55px_rgba(39,31,22,0.18)] backdrop-blur-2xl">
-          <div className="flex items-center justify-between gap-2 px-2 py-2">
+          <div className="px-2 py-2">
             <span className="text-xs font-extrabold text-[#30251F]">Rashid Mega Mart</span>
-            <button type="button" data-no-translate onClick={() => { toggleLanguage(); }} aria-label={`Current language: ${languageLabel}. Switch language`} className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-[#E8E4DA] bg-white px-3 text-xs font-bold text-[#315F35]"><Languages size={15} />{languageLabel}</button>
           </div>
           <div className="my-1 h-px bg-[#EEE8E1]" />
           {moreItems.map(({ label, href, icon: Icon, external }) => {
