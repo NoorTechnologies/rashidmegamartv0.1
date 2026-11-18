@@ -37,6 +37,8 @@ export default function ProfilePage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteConfirmed, setDeleteConfirmed] = useState(false);
+  const [pendingVerificationEmail, setPendingVerificationEmail] = useState("");
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   const loadData = useCallback(async () => {
     if (!session?.user.id) { setKits([]); setAddresses([]); setProfile({ full_name: "", phone: "" }); return; }
@@ -67,6 +69,11 @@ export default function ProfilePage() {
     } catch { setConfigured(false); }
   }, []);
   useEffect(() => { void loadData(); }, [loadData]);
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const timer = window.setTimeout(() => setResendCooldown((seconds) => Math.max(0, seconds - 1)), 1000);
+    return () => window.clearTimeout(timer);
+  }, [resendCooldown]);
 
   const submitAuth = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault(); setBusy(true); setError(""); setMessage("");
@@ -75,7 +82,13 @@ export default function ProfilePage() {
       if (mode === "signup") {
         const { data, error: e } = await supabase.auth.signUp({ email: email.trim(), password, options: { emailRedirectTo: window.location.origin + "/profile", data: { full_name: signupName.trim() } } });
         if (e) throw e;
-        setMessage(data.session ? "Account successfully created." : "Account created. Email inbox mein verification link check karein, phir login karein.");
+        if (data.session) {
+          setPendingVerificationEmail("");
+          setMessage("Account successfully created.");
+        } else {
+          setPendingVerificationEmail(email.trim());
+          setMessage("Account ban gaya hai. Inbox ya spam folder mein verification email check karein. Link verify hone ke baad login karein.");
+        }
       } else if (mode === "forgot") {
         const { error: e } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: window.location.origin + "/profile?mode=reset" });
         if (e) throw e;
@@ -91,8 +104,40 @@ export default function ProfilePage() {
         const next = new URLSearchParams(window.location.search).get("next");
         if (next?.startsWith("/") && !next.startsWith("//")) window.location.assign(next);
       }
-    } catch (cause) { setError(cause instanceof Error ? cause.message : "Something went wrong."); }
-    finally { setBusy(false); }
+    } catch (cause) {
+      const rawMessage = cause instanceof Error ? cause.message : "Something went wrong.";
+      if (/rate.?limit|too many requests|email rate limit/i.test(rawMessage)) {
+        setResendCooldown(60);
+        setError("Email abhi bahut baar bhejne ki wajah se temporarily limit ho gaya hai. 1 minute baad ek baar try karein. Agar issue rahe, shop team ko contact karein.");
+      } else if (/user already registered|already been registered|already exists/i.test(rawMessage)) {
+        setError("Is email se account pehle se bana hua hai. Login karein ya Forgot password use karein.");
+      } else {
+        setError(rawMessage);
+      }
+    } finally { setBusy(false); }
+  };
+
+  const resendVerificationEmail = async () => {
+    if (!pendingVerificationEmail || busy || resendCooldown > 0) return;
+    setBusy(true); setError(""); setMessage("");
+    try {
+      const { error: resendError } = await getSupabaseBrowserClient().auth.resend({
+        type: "signup",
+        email: pendingVerificationEmail,
+        options: { emailRedirectTo: window.location.origin + "/profile" },
+      });
+      if (resendError) throw resendError;
+      setResendCooldown(60);
+      setMessage("Verification email dobara bhej diya gaya hai. Inbox aur spam folder check karein.");
+    } catch (cause) {
+      const rawMessage = cause instanceof Error ? cause.message : "Email dobara nahi bheja ja saka.";
+      if (/rate.?limit|too many requests|email rate limit/i.test(rawMessage)) {
+        setResendCooldown(60);
+        setError("Email sending limit abhi lagi hui hai. Thodi der baad dobara try karein.");
+      } else {
+        setError(rawMessage);
+      }
+    } finally { setBusy(false); }
   };
 
   const saveProfile = async (event: FormEvent<HTMLFormElement>) => {
@@ -265,6 +310,8 @@ export default function ProfilePage() {
             {mode==="reset"&&<label className="block"><span className={label}>New password</span><input required minLength={8} type="password" autoComplete="new-password" value={newPassword} onChange={e=>setNewPassword(e.target.value)} placeholder="At least 8 characters" className={input}/></label>}
             <button disabled={busy} type="submit" className="min-h-11 w-full rounded-xl bg-[#426B43] px-4 text-sm font-extrabold text-white hover:bg-[#345A36] disabled:opacity-50">{busy?"Please wait...":mode==="signup"?"Create Account":mode==="forgot"?"Send Reset Link":mode==="reset"?"Update Password":"Login"}</button>
           </form>
+          {pendingVerificationEmail && mode === "login" && <div className="mt-4 rounded-xl border border-[#E8E9D9] bg-[#F7F8F0] p-3"><p className="text-xs leading-5 text-[#5F6257]">Verification pending for <strong>{pendingVerificationEmail}</strong>. Email inbox aur spam folder check karein.</p><button type="button" onClick={() => { setMode("signup"); setEmail(pendingVerificationEmail); }} className="mt-2 text-xs font-bold text-[#426B43]">Back to signup details</button></div>}
+          {pendingVerificationEmail && mode === "signup" && <div className="mt-4 rounded-xl border border-[#E8E9D9] bg-[#F7F8F0] p-3"><p className="text-xs leading-5 text-[#5F6257]">Verification email <strong>{pendingVerificationEmail}</strong> par bheja gaya hai. Inbox ke saath spam folder bhi check karein.</p><button type="button" disabled={busy || resendCooldown > 0} onClick={() => void resendVerificationEmail()} className="mt-3 min-h-9 rounded-lg border border-[#D7E1CE] bg-white px-3 text-xs font-bold text-[#426B43] disabled:cursor-not-allowed disabled:opacity-50">{busy ? "Please wait..." : resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend verification email"}</button></div>}
           <div className="mt-4 flex flex-wrap justify-between gap-2 text-xs font-bold text-[#4D7046]">{mode==="login"?<><button type="button" onClick={()=>setMode("signup")}>Create account</button><button type="button" onClick={()=>setMode("forgot")}>Forgot password?</button></>:<button type="button" onClick={()=>setMode("login")}>Back to login</button>}</div>
           <p className="mt-4 text-[11px] leading-5 text-[#929187]">Password securely Supabase Auth handle karta hai. Hum plain-text password store nahi karte. Signup ke baad email verification required ho sakti hai.</p>
         </section>}
