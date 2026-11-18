@@ -629,3 +629,13 @@ video {
   .rmm-more-popover,
   .rmm-floating-whatsapp { animation: none !important; }
 }
+
+
+@media (max-width: 639px) {
+  nav[aria-label="Main navigation"] .rmm-mobile-cart {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    min-height: 0;
+  }
+}
