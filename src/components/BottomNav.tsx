@@ -31,7 +31,7 @@ export default function BottomNav() {
   const pathname = usePathname();
   const { totalItems } = useCart();
   const [moreOpen, setMoreOpen] = useState(false);
-  const moreRef = useRef<HTMLDivElement>(null);
+  const desktopMoreRef = useRef<HTMLDivElement>(null);\n  const mobileMoreRef = useRef<HTMLDivElement>(null);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
@@ -39,7 +39,7 @@ export default function BottomNav() {
   useEffect(() => {
     if (!moreOpen) return;
     const closeOnOutside = (event: PointerEvent) => {
-      if (moreRef.current && !moreRef.current.contains(event.target as Node)) setMoreOpen(false);
+      if (!desktopMoreRef.current?.contains(event.target as Node) && !mobileMoreRef.current?.contains(event.target as Node)) setMoreOpen(false);
     };
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setMoreOpen(false);
@@ -98,7 +98,7 @@ export default function BottomNav() {
               <Image src="/Whatsapp-3d.svg" alt="" width={21} height={21} unoptimized className="size-5 object-contain" />Contact
             </a>
             <Link href="/profile" className={`inline-flex min-h-9 items-center gap-2 rounded-full px-3 text-[13px] font-bold transition hover:bg-white/70 ${isActive("/profile") ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56]"}`}><UserRound size={17} />Profile</Link>
-            <div ref={moreRef} className="relative">
+            <div ref={desktopMoreRef} className="relative">
               <button type="button" aria-expanded={moreOpen} aria-haspopup="menu" onClick={() => setMoreOpen((open) => !open)} className="inline-flex min-h-9 items-center gap-2 rounded-full px-3 text-[13px] font-bold text-[#625F56] transition hover:bg-white/70 hover:text-[#315F35]">
                 {moreOpen ? <X size={17} /> : <MoreHorizontal size={17} />}More
               </button>
@@ -134,7 +134,7 @@ export default function BottomNav() {
             <span className={`flex size-[29px] items-center justify-center rounded-full ${isActive("/profile") ? "bg-[#E7F0E2] text-[#315F35]" : ""}`}><UserRound size={18} /></span>
             <span className="text-[8.5px] leading-none">Profile</span>
           </Link>
-          <div ref={moreRef} className="relative mx-auto flex h-[50px] w-full max-w-[48px] items-center justify-center">
+          <div ref={mobileMoreRef} className="relative mx-auto flex h-[50px] w-full max-w-[48px] items-center justify-center">
             <button type="button" aria-expanded={moreOpen} aria-haspopup="menu" onClick={() => setMoreOpen((open) => !open)} className={`flex h-[50px] w-full flex-col items-center justify-center gap-1 rounded-2xl text-[#625F56] transition-all duration-300 active:scale-95 ${moreOpen ? "text-[#315F35]" : ""}`}>
               <span className={`flex size-[29px] items-center justify-center rounded-full ${moreOpen ? "bg-[#E7F0E2] text-[#315F35]" : ""}`}>{moreOpen ? <X size={18} /> : <MoreHorizontal size={18} />}</span>
               <span className="text-[8.5px] leading-none">More</span>
