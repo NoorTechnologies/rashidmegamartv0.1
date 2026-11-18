@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Truck, Package, Wallet, ClipboardList } from "lucide-react";
+import { ArrowRight, ShieldCheck, Truck, Package, Wallet, ClipboardList, Gift } from "lucide-react";
 import Footer from "@/components/Footer";
 import FeaturedKitsCarousel from "@/components/FeaturedKitsCarousel";
 import { kits } from "@/data/kits";
@@ -47,7 +47,28 @@ export default function HomePage() {
         </div>
       </section>
 
-{startingPrice !== null && (
+<section data-reveal className="mx-auto w-full max-w-7xl px-3 pt-4 min-[480px]:px-5 sm:pt-6 md:px-6 lg:px-8" aria-label="Rewards and referral">
+        <Link
+          href="/rewards"
+          className="group flex min-h-20 items-center justify-between gap-3 rounded-2xl border border-[#E8D7A8] bg-[#FFF9E8] px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:border-[#800020]/40 hover:shadow-md sm:px-6 sm:py-4"
+        >
+          <span className="flex min-w-0 items-center gap-3">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#F7C928]/25 text-[#800020] sm:size-12">
+              <Gift size={22} />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#806000] sm:text-xs">Refer & Earn</span>
+              <span className="mt-0.5 block text-sm font-black text-[#202124] sm:text-base">Get ₹50 · Your friend saves ₹50</span>
+              <span className="mt-0.5 block text-[10px] leading-4 text-[#686868] sm:text-xs">Invite friends and request rewards on WhatsApp.</span>
+            </span>
+          </span>
+          <span className="inline-flex shrink-0 items-center gap-1 text-xs font-extrabold text-[#800020] transition group-hover:gap-2">
+            Explore <ArrowRight size={16} />
+          </span>
+        </Link>
+      </section>
+
+      {startingPrice !== null && (
         <section data-reveal className="mx-auto w-full max-w-7xl px-3 pt-3 min-[480px]:px-5 sm:pt-4 md:px-6 lg:px-8" aria-label="Grocery kit starting price">
           <Link
             href="/kits"
