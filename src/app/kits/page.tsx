@@ -258,7 +258,7 @@ export default function KitsPage() {
 
         {/* KITS GRID */}
         {filteredKits.length > 0 ? (
-          <div data-reveal-group className="mt-4 grid grid-cols-1 gap-3 min-[560px]:grid-cols-2 sm:mt-6 sm:grid-cols-3 sm:gap-5 lg:grid-cols-3 2xl:grid-cols-4">
+          <div data-reveal-group className="mt-3 grid grid-cols-1 gap-2.5 min-[360px]:grid-cols-2 sm:mt-5 sm:grid-cols-3 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-4">
             {filteredKits.map((kit, index) => (
               <div key={kit.id} data-reveal-item><KitCard kit={kit} eagerImage={index === 0} /></div>
             ))}
