@@ -95,11 +95,11 @@ export default function BottomNav() {
           data-no-translate
           onClick={toggleLanguage}
           aria-label={`Current language: ${languageLabel}. Tap to change language`}
-          className="inline-flex min-h-10 items-center gap-2 rounded-full border border-white/90 bg-[#FFFEFA]/95 px-3.5 shadow-[0_8px_24px_rgba(39,31,22,0.14)] backdrop-blur-xl transition active:scale-95"
+          className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-white/90 bg-[#FFFEFA]/95 px-2.5 shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl transition active:scale-95"
         >
-          <Languages size={16} className="text-[#315F35]" />
-          <span className="text-[11px] font-extrabold tracking-wide text-[#315F35]">{language === "en" ? "ENGLISH" : language === "hinglish" ? "HINGLISH" : "हिंदी"}</span>
-          <span className="text-[10px] font-semibold text-[#82796D]">CHANGE</span>
+          <Languages size={13} className="text-[#315F35]" />
+          <span className="text-[10px]] font-extrabold tracking-wide text-[#315F35]">{language === "en" ? "EN" : language === "hinglish" ? "HING" : "हिंदी"}</span>
+          <span className="text-[9px] font-semibold text-[#82796D]">⌄</span>
         </button>
       </div>
       <div ref={logoMenuRef} className="fixed bottom-[calc(84px+env(safe-area-inset-bottom))] left-4 z-40 lg:hidden">
