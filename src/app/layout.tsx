@@ -12,7 +12,6 @@ import "./globals.css";
 const SITE_URL = "https://rashidmegamartv0-1.vercel.app";
 const SITE_NAME = "Rashid Mega Mart";
 const BRAND_LOGO = "/images/logo2.png";
-const SOCIAL_SHARE_IMAGE = "/og-rashid-mega-mart.svg";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
