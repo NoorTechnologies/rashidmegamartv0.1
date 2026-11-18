@@ -48,7 +48,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
 
 
   return (
-    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#E8DFD1] bg-white shadow-[0_3px_14px_rgba(74,34,22,0.05)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#B8D2B2] hover:shadow-[0_16px_34px_rgba(35,88,48,0.14)] motion-reduce:transform-none sm:rounded-[24px]">
+    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#E8DFD1] bg-white shadow-[0_3px_14px_rgba(74,34,22,0.05)] transition-shadow duration-200 hover:shadow-md sm:rounded-[24px]">
 
       {/* KIT IMAGE */}
       <Link
@@ -56,7 +56,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         aria-label={`View ${kit.name} details`}
         className="block"
       >
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(240,248,235,0.88)_48%,rgba(226,239,220,0.78)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.78),transparent_48%,rgba(212,168,79,0.12))] sm:aspect-[4/3]">
+        <div className="relative aspect-[16/9] w-full overflow-hidden sm:aspect-[4/3] bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
           <span className="absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/30 bg-[#168447] px-2.5 py-1 text-[9px] font-black tracking-wide text-white shadow-lg shadow-[#800020]/25 sm:left-3 sm:top-3 sm:text-[10px]">
             <Tag size={11} />
             {savings > 0 ? `YOU SAVE ${formatPrice(savings)}` : "KIT DEAL"}
@@ -75,7 +75,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
               loading={eagerImage ? "eager" : "lazy"}
               sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 240px"
               onError={() => setImageError(true)}
-              className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-[1.08] group-hover:-rotate-2 motion-reduce:transform-none sm:p-5"
+              className="object-contain p-3 transition-transform duration-500 ease-out group-hover:scale-105 sm:p-5"
             />
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-2 text-[#168447]">
@@ -188,7 +188,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
               <Link
                 href={`/kits/${kit.id}`}
                 aria-label={`Customize ${kit.name}`}
-                className="rmm-button-secondary min-h-11 min-w-0 flex-1 rounded-xl px-2 text-[11px] sm:text-xs"
+                className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl border border-[#168447] bg-white px-2 text-[11px] font-extrabold text-[#168447] transition hover:bg-[#EAF3E9] active:scale-[.99] sm:text-xs"
               >
                 Customize
                 <ArrowUpRight size={12} />
@@ -196,7 +196,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
               {isInCart ? (
                 <Link
                   href="/cart"
-                  className="rmm-button-primary min-h-11 min-w-0 flex-1 rounded-xl border-0 bg-[#168447] px-2 text-[11px] shadow-[0_5px_14px_rgba(22,132,71,0.2)] sm:text-xs"
+                  className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl bg-[#800020] px-2 text-[11px] font-extrabold text-white transition hover:bg-[#650019] active:scale-[.99] sm:text-xs"
                 >
                   <Check size={14} /> In Cart
                 </Link>
