@@ -180,9 +180,10 @@ export default function BottomNav() {
               onClick={toggleLanguage}
               aria-label={`Current language: ${languageLabel}. Switch language`}
               title={`Language: ${languageLabel}`}
-              className="inline-flex size-9 items-center justify-center rounded-full text-[#625F56] transition-colors hover:bg-white/70"
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full px-3 text-[#625F56] transition-colors hover:bg-white/70"
             >
-              <Globe2 size={17} />
+              <Globe2 size={16} />
+              <span className="text-[11px] font-extrabold">{language === "hi" ? "हिन्दी" : language === "hinglish" ? "Hinglish" : "English"}</span>
             </button>
 
             <Link
@@ -223,9 +224,10 @@ export default function BottomNav() {
         onClick={toggleLanguage}
         aria-label={`Current language: ${languageLabel}. Switch language`}
         title={`Language: ${languageLabel}`}
-        className="fixed right-3 top-[calc(env(safe-area-inset-top)+10px)] z-[65] flex size-9 items-center justify-center rounded-full border border-white/80 bg-[#FFFEFA]/95 text-[#315F35] shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl transition active:scale-95 lg:hidden"
+        className="fixed right-3 top-[calc(env(safe-area-inset-top)+10px)] z-[65] flex h-9 items-center justify-center gap-1.5 rounded-full border border-white/80 bg-[#FFFEFA]/95 px-3 text-[#315F35] shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl transition active:scale-95 lg:hidden"
       >
-        <Globe2 size={17} />
+        <Globe2 size={16} />
+        <span className="text-[10px] font-extrabold">{language === "hi" ? "हिन्दी" : language === "hinglish" ? "Hinglish" : "English"}</span>
       </button>
 
       {/* Floating Help Centre */}
@@ -241,10 +243,13 @@ export default function BottomNav() {
             aria-expanded={helpOpen}
             aria-haspopup="menu"
             onClick={() => setHelpOpen((value) => !value)}
-            className="inline-flex h-12 items-center gap-2 rounded-full border border-white/80 bg-[#315F35] px-4 text-[13px] font-extrabold text-white shadow-[0_10px_30px_rgba(35,68,37,0.28)] transition hover:bg-[#254B29] active:scale-95"
+            className="relative inline-flex h-12 items-center gap-2 overflow-visible rounded-full border border-white/80 bg-[#315F35] px-4 text-[13px] font-extrabold text-white shadow-[0_10px_30px_rgba(35,68,37,0.28)] transition hover:bg-[#254B29] active:scale-95 motion-reduce:transform-none"
           >
-            {helpOpen ? <X size={17} /> : <LifeBuoy size={17} />}
-            Help
+            {!helpOpen && <span aria-hidden="true" className="pointer-events-none absolute -inset-1 rounded-full border-2 border-[#6F9B69]/70 motion-safe:animate-ping" />}
+            <span className="relative inline-flex items-center gap-2">
+              {helpOpen ? <X size={17} /> : <LifeBuoy size={17} className="motion-safe:animate-[spin_8s_linear_infinite]" />}
+              Help
+            </span>
           </button>
         </div>
       </div>
