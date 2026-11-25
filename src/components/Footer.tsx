@@ -1,4 +1,5 @@
 import Image from "next/image";
+import NoorPromoBanner from "@/components/NoorPromoBanner";
 import Link from "next/link";
 import { MapPin, Phone, Clock, ArrowUpRight, ShoppingBag, ShieldCheck, FileText } from "lucide-react";
 
@@ -19,7 +20,11 @@ const policyLinks = [
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-[#800020]/10 bg-[#FAF7EF] text-center text-[#202124]">
+    <>
+      <div className="mx-auto w-full max-w-[1600px] px-3 pt-8 sm:px-5 sm:pt-10 md:px-6 lg:px-8">
+        <NoorPromoBanner />
+      </div>
+      <footer className="relative overflow-hidden border-t border-[#800020]/10 bg-[#FAF7EF] text-center text-[#202124]">
       <div className="h-1 bg-gradient-to-r from-[#800020] via-[#F7C928] to-[#800020]" />
 
       <div className="mx-auto max-w-7xl px-4 pb-5 pt-8 sm:px-6 sm:pb-7 sm:pt-10">
@@ -123,6 +128,7 @@ export default function Footer() {
           <span className="text-[10px] font-semibold text-[#806000]">Made for your everyday needs</span>
         </div>
       </div>
-    </footer>
+      </footer>
+    </>
   );
 }
