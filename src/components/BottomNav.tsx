@@ -114,9 +114,6 @@ export default function BottomNav() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
-  const languageLabel =
-    language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "Hindi";
-
   useEffect(() => {
     if (!helpOpen) return;
 
