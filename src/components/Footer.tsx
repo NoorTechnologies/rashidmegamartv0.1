@@ -21,9 +21,6 @@ const policyLinks = [
 export default function Footer() {
   return (
     <>
-      <div className="mx-auto w-full max-w-[1600px] px-3 pt-8 sm:px-5 sm:pt-10 md:px-6 lg:px-8">
-        <NoorPromoBanner />
-      </div>
       <footer className="relative overflow-hidden border-t border-[#800020]/10 bg-[#FAF7EF] text-center text-[#202124]">
       <div className="h-1 bg-gradient-to-r from-[#800020] via-[#F7C928] to-[#800020]" />
 
@@ -129,6 +126,9 @@ export default function Footer() {
         </div>
       </div>
       </footer>
+      <div className="mx-auto w-full max-w-[1600px] px-3 pb-5 pt-5 sm:px-5 sm:pb-8 sm:pt-8 md:px-6 lg:px-8">
+        <NoorPromoBanner />
+      </div>
     </>
   );
 }
