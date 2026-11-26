@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowRight, ShieldCheck, Truck, Package, Wallet, ClipboardList } from "lucide-react";
 import Footer from "@/components/Footer";
 import FeaturedKitsCarousel from "@/components/FeaturedKitsCarousel";
-import PromoBanner from "@/components/PromoBanner";
 import { kits } from "@/data/kits";
 
 export default function HomePage() {
@@ -48,7 +47,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <PromoBanner />
 
       {startingPrice !== null && (
         <section data-reveal className="mx-auto w-full max-w-7xl px-3 pt-3 min-[480px]:px-5 sm:pt-4 md:px-6 lg:px-8" aria-label="Grocery kit starting price">
