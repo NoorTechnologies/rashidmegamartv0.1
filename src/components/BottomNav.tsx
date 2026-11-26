@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 import {
   FileText,
   Globe2,
@@ -107,9 +108,33 @@ export default function BottomNav() {
   const [helpOpen, setHelpOpen] = useState(false);
   const desktopHelpRef = useRef<HTMLDivElement>(null);
   const mobileHelpRef = useRef<HTMLDivElement>(null);
+  const mobileNavRef = useRef<HTMLElement>(null);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+
+  useEffect(() => {
+    const nav = mobileNavRef.current;
+    if (!nav) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) return;
+
+    const context = gsap.context(() => {
+      gsap.fromTo(
+        nav,
+        { y: 22, autoAlpha: 0, scale: 0.97 },
+        { y: 0, autoAlpha: 1, scale: 1, duration: 0.7, ease: "power3.out" },
+      );
+      gsap.fromTo(
+        nav.querySelectorAll("[data-nav-item]"),
+        { y: 10, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.42, stagger: 0.055, delay: 0.12, ease: "power2.out" },
+      );
+    }, nav);
+
+    return () => context.revert();
+  }, []);
 
   useEffect(() => {
     if (!helpOpen) return;
@@ -212,28 +237,21 @@ export default function BottomNav() {
         </nav>
       </header>
 
-      {/* Direct language choices: one tap, no cycling */}
-      <div data-no-translate role="group" aria-label="Choose language" className="fixed right-3 top-[calc(env(safe-area-inset-top)+10px)] z-[65] inline-flex h-9 items-center rounded-full border border-white/90 bg-[#FFFEFA]/95 p-0.5 shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl lg:hidden">
-        {([{ value: "en", label: "EN" }, { value: "hinglish", label: "HI-EN" }, { value: "hi", label: "हिंदी" }] as const).map((option) => (
-          <button key={option.value} type="button" aria-pressed={language === option.value} onClick={() => setLanguage(option.value)} className={"h-8 rounded-full px-2.5 text-[10px] font-extrabold transition-colors active:scale-95 " + (language === option.value ? "bg-[#315F35] text-white shadow-sm" : "text-[#625F56]")}>
-            {option.label}
-          </button>
-        ))}
-      </div>
-
       {/* Mobile navigation */}
       <nav
+        ref={mobileNavRef}
         aria-label="Main navigation"
-        className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(6px+env(safe-area-inset-bottom))] lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(8px+env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="relative grid h-[58px] grid-cols-4 items-center rounded-full border border-white/90 bg-[#FFFEFA]/90 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[70px] grid-cols-5 items-center rounded-[28px] border border-white/80 bg-white/65 px-1.5 shadow-[0_18px_48px_rgba(35,48,32,0.16),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
           {navItems.map(({ label, href, icon: Icon }) => (
             <Link
               key={href}
+              data-nav-item
               href={href}
               aria-current={isActive(href) ? "page" : undefined}
               className={
-                "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
+                "mx-auto flex h-14 w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-300 active:scale-90 " +
                 (isActive(href) ? "text-[#315F35]" : "text-[#625F56]")
               }
             >
@@ -249,9 +267,9 @@ export default function BottomNav() {
           <Link
             href="/cart"
             aria-label={`Open cart, ${totalItems} items`}
-            className="mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95"
+            data-nav-item className="mx-auto flex h-14 w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-300 active:scale-90"
           >
-            <span className="relative flex size-8 items-center justify-center rounded-full bg-[#315F35] text-white shadow-[0_4px_10px_rgba(49,95,53,0.24)]">
+            <span className="relative flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-[#3F7844] to-[#244D2B] text-white shadow-[0_5px_14px_rgba(49,95,53,0.32)] ring-4 ring-[#E8F1E4]/80">
               <ShoppingCart size={18} />
               {totalItems > 0 && (
                 <span className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C]">
@@ -259,10 +277,28 @@ export default function BottomNav() {
                 </span>
               )}
             </span>
-            <span className="text-[8px] font-extrabold leading-none text-[#315F35]">Cart</span>
+            <span className="text-[9px] font-extrabold leading-none text-[#315F35]">Cart</span>
           </Link>
 
-          <div ref={mobileHelpRef} className="relative mx-auto flex h-12 w-full min-w-0 items-center justify-center">
+          <div data-nav-item data-no-translate role="group" aria-label="Choose language" className="mx-auto flex h-14 w-full min-w-0 flex-col items-center justify-center gap-1">
+            <Globe2 size={16} className="text-[#315F35]" aria-hidden="true" />
+            <div className="flex items-center justify-center gap-0.5 rounded-full border border-white/90 bg-white/65 p-0.5 shadow-[inset_0_1px_2px_rgba(35,48,32,0.06)]">
+              {([{ value: "en", label: "EN" }, { value: "hinglish", label: "HI" }, { value: "hi", label: "हि" }] as const).map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  aria-label={option.value === "en" ? "English" : option.value === "hinglish" ? "Hinglish" : "Hindi"}
+                  aria-pressed={language === option.value}
+                  onClick={() => setLanguage(option.value)}
+                  className={"h-6 min-w-6 rounded-full px-1 text-[8px] font-extrabold transition-all duration-200 active:scale-90 " + (language === option.value ? "bg-[#315F35] text-white shadow-sm" : "text-[#625F56] hover:bg-[#EAF3E6]")}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div ref={mobileHelpRef} data-nav-item className="relative mx-auto flex h-14 w-full min-w-0 items-center justify-center">
             <button
               type="button"
               aria-label="Open Help Centre"
@@ -270,14 +306,14 @@ export default function BottomNav() {
               aria-haspopup="menu"
               onClick={() => setHelpOpen((value) => !value)}
               className={
-                "flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
+                "flex h-14 w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-300 active:scale-90 " +
                 (helpOpen ? "text-[#315F35]" : "text-[#625F56]")
               }
             >
               <span className={"flex size-6 items-center justify-center rounded-full " + (helpOpen ? "bg-[#E7F0E2]" : "")}>
                 {helpOpen ? <X size={17} /> : <LifeBuoy size={17} />}
               </span>
-              <span className="text-[8px] font-semibold leading-none">Help</span>
+              <span className="text-[9px] font-semibold leading-none">Help</span>
             </button>
             {helpOpen && <HelpCentreMenu mobile onClose={() => setHelpOpen(false)} />}
           </div>
