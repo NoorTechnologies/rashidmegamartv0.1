@@ -13,7 +13,6 @@ import {
   RotateCcw,
   ShieldCheck,
   ShoppingCart,
-  UserRound,
   X,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
@@ -198,20 +197,6 @@ export default function BottomNav() {
             </div>
 
             <Link
-              href="/profile"
-              aria-label="Open account"
-              className={
-                "inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold " +
-                (isActive("/profile")
-                  ? "bg-[#EAF3E6] text-[#315F35]"
-                  : "text-[#625F56] hover:bg-white/70")
-              }
-            >
-              <UserRound size={16} />
-              Account
-            </Link>
-
-            <Link
               href="/cart"
               aria-label={`Open cart, ${totalItems} items`}
               className="relative inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[#315F35] px-3 text-[12px] font-extrabold text-white shadow-sm transition hover:bg-[#254B29]"
@@ -242,7 +227,7 @@ export default function BottomNav() {
         aria-label="Main navigation"
         className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(6px+env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="relative grid h-[58px] grid-cols-5 items-center rounded-full border border-white/90 bg-[#FFFEFA]/90 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[58px] grid-cols-4 items-center rounded-full border border-white/90 bg-[#FFFEFA]/90 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
           {navItems.map(({ label, href, icon: Icon }) => (
             <Link
               key={href}
@@ -304,20 +289,6 @@ export default function BottomNav() {
             {helpOpen && <HelpCentreMenu mobile onClose={() => setHelpOpen(false)} />}
           </div>
 
-          <Link
-            href="/profile"
-            aria-label="Open account"
-            aria-current={isActive("/profile") ? "page" : undefined}
-            className={
-              "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
-              (isActive("/profile") ? "text-[#315F35]" : "text-[#625F56]")
-            }
-          >
-            <span className={"flex size-6 items-center justify-center rounded-full " + (isActive("/profile") ? "bg-[#E7F0E2]" : "")}>
-              <UserRound size={16} />
-            </span>
-            <span className="text-[8px] leading-none">Account</span>
-          </Link>
         </div>
       </nav>
     </>
