@@ -270,6 +270,28 @@ export default function BottomNav() {
             </Link>
           ))}
 
+          <Link
+            href="/cart"
+            aria-label={`Open cart, ${totalItems} items`}
+            aria-current={isActive("/cart") ? "page" : undefined}
+            className={
+              "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-200 active:scale-95 " +
+              (isActive("/cart") ? "text-[#168447]" : "text-[#625F56]")
+            }
+          >
+            <span
+              className="relative flex size-9 items-center justify-center rounded-full bg-[#315F35] text-white shadow-md shadow-[#315F35]/20"
+            >
+              <ShoppingCart size={20} strokeWidth={isActive("/cart") ? 2.5 : 2} />
+              {totalItems > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-[17px] min-w-[17px] items-center justify-center rounded-full border-2 border-[#FFFEFA] bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C]">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </span>
+              )}
+            </span>
+            <span className="text-[9px] leading-none font-bold">Cart</span>
+          </Link>
+
           <div ref={mobileHelpRef} className="relative mx-auto flex h-12 w-full min-w-0 items-center justify-center">
             <button
               type="button"
@@ -289,31 +311,6 @@ export default function BottomNav() {
             </button>
             {helpOpen && <HelpCentreMenu mobile onClose={() => setHelpOpen(false)} />}
           </div>
-
-          <Link
-            href="/cart"
-            aria-label={`Open cart, ${totalItems} items`}
-            aria-current={isActive("/cart") ? "page" : undefined}
-            className={
-              "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-200 active:scale-95 " +
-              (isActive("/cart") ? "text-[#168447]" : "text-[#625F56]")
-            }
-          >
-            <span
-              className={
-                "relative flex size-8 items-center justify-center rounded-full transition-all duration-200 " +
-                (isActive("/cart") ? "bg-[#E7F0E2] shadow-inner" : "bg-transparent")
-              }
-            >
-              <ShoppingCart size={19} strokeWidth={isActive("/cart") ? 2.5 : 2} />
-              {totalItems > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-[17px] min-w-[17px] items-center justify-center rounded-full border-2 border-[#FFFEFA] bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C]">
-                  {totalItems > 99 ? "99+" : totalItems}
-                </span>
-              )}
-            </span>
-            <span className="text-[9px] leading-none font-bold">Cart</span>
-          </Link>
 
           <Link
             href="/profile"
