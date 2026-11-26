@@ -17,7 +17,7 @@ import {
   X,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import { useSiteLanguage, useToggleSiteLanguage } from "@/components/LanguageProvider";
+import { useSiteLanguage, useSetSiteLanguage } from "@/components/LanguageProvider";
 
 const WHATSAPP_NUMBER = "918962531603";
 const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rashid Mega Mart! I need help with grocery kits and store information.")}`;
@@ -104,7 +104,7 @@ export default function BottomNav() {
   const pathname = usePathname();
   const { totalItems } = useCart();
   const language = useSiteLanguage();
-  const toggleLanguage = useToggleSiteLanguage();
+  const setLanguage = useSetSiteLanguage();
   const [helpOpen, setHelpOpen] = useState(false);
   const desktopHelpRef = useRef<HTMLDivElement>(null);
   const mobileHelpRef = useRef<HTMLDivElement>(null);
@@ -112,8 +112,6 @@ export default function BottomNav() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
-  const languageLabel =
-    language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "Hindi";
 
   useEffect(() => {
     if (!helpOpen) return;
@@ -191,16 +189,13 @@ export default function BottomNav() {
               {helpOpen && <HelpCentreMenu onClose={() => setHelpOpen(false)} />}
             </div>
 
-            <button
-              type="button"
-              data-no-translate
-              onClick={toggleLanguage}
-              aria-label={`Current language: ${languageLabel}. Switch language`}
-              title={`Language: ${languageLabel}`}
-              className="inline-flex size-9 items-center justify-center rounded-full text-[#625F56] transition-colors hover:bg-white/70"
-            >
-              <Globe2 size={17} />
-            </button>
+            <div data-no-translate role="group" aria-label="Choose language" className="inline-flex h-8 items-center rounded-full border border-[#E8E4DC] bg-white/80 p-0.5">
+              {([{ value: "en", label: "EN" }, { value: "hinglish", label: "Hinglish" }, { value: "hi", label: "à¤¹à¤¿à¤‚à¤¦à¥€" }] as const).map((option) => (
+                <button key={option.value} type="button" aria-pressed={language === option.value} onClick={() => setLanguage(option.value)} className={"h-7 rounded-full px-2 text-[10px] font-extrabold transition-colors " + (language === option.value ? "bg-[#315F35] text-white shadow-sm" : "text-[#625F56] hover:bg-[#F2F5EE]")}>
+                  {option.label}
+                </button>
+              ))}
+            </div>
 
             <Link
               href="/profile"
@@ -234,16 +229,13 @@ export default function BottomNav() {
       </header>
 
       {/* Mobile language switch: icon only, kept at the top */}
-      <button
-        type="button"
-        data-no-translate
-        onClick={toggleLanguage}
-        aria-label={`Current language: ${languageLabel}. Switch language`}
-        title={`Language: ${languageLabel}`}
-        className="fixed right-3 top-[calc(env(safe-area-inset-top)+10px)] z-[65] flex size-9 items-center justify-center rounded-full border border-white/80 bg-[#FFFEFA]/95 text-[#315F35] shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl transition active:scale-95 lg:hidden"
-      >
-        <Globe2 size={17} />
-      </button>
+      <div data-no-translate role="group" aria-label="Choose language" className="fixed right-3 top-[calc(env(safe-area-inset-top)+10px)] z-[65] inline-flex h-9 items-center rounded-full border border-white/90 bg-[#FFFEFA]/95 p-0.5 shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl lg:hidden">
+        {([{ value: "en", label: "EN" }, { value: "hinglish", label: "HI-EN" }, { value: "hi", label: "à¤¹à¤¿à¤‚à¤¦à¥€" }] as const).map((option) => (
+          <button key={option.value} type="button" aria-pressed={language === option.value} onClick={() => setLanguage(option.value)} className={"h-8 rounded-full px-2.5 text-[10px] font-extrabold transition-colors active:scale-95 " + (language === option.value ? "bg-[#315F35] text-white shadow-sm" : "text-[#625F56]")}>
+            {option.label}
+          </button>
+        ))}
+      </div>
 
       {/* Mobile navigation */}
       <nav
