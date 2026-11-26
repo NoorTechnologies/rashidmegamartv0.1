@@ -16,6 +16,28 @@ export interface GroceryKit {
 
 export const kits: GroceryKit[] = [
   {
+    id: "ghar-bhar-rashan-combo",
+    name: "Ghar Bhar Rashan Combo",
+    subtitle: "Har roz ke ghar ke rashan ka smart family pack",
+    category: "Family Packs",
+    image: "/kits/1149.png",
+    price: 1149,
+    oldPrice: 1299,
+    discount: "12% OFF",
+    items: [
+      "Rice - 2 kg",
+      "Atta - 5 kg",
+      "Toor Dal - 1 kg",
+      "Sugar - 1 kg",
+      "Cooking Oil - 1 L",
+      "Salt - 1 kg",
+      "Tea - 250 g",
+    ],
+    description: "Ghar ki rozmarra grocery ke liye value-packed combo, ek convenient price mein.",
+    isFeatured: true,
+    isAvailable: true,
+  },
+  {
     id: "basic-kitchen",
     name: "Basic Kitchen Kit",
     subtitle: "Kitchen ki basic zarooratein",
