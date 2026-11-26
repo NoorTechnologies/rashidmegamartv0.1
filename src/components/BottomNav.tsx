@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
-  CalendarDays,
   FileText,
   Globe2,
   House,
@@ -26,7 +25,6 @@ const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent
 const navItems = [
   { label: "Home", href: "/", icon: House },
   { label: "Kits", href: "/kits", icon: Package },
-  { label: "Planner", href: "/planner", icon: CalendarDays },
 ];
 
 const helpItems = [
@@ -252,7 +250,7 @@ export default function BottomNav() {
         aria-label="Main navigation"
         className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(6px+env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="relative grid h-[58px] grid-cols-6 items-center rounded-full border border-white/90 bg-[#FFFEFA]/90 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[58px] grid-cols-5 items-center rounded-full border border-white/90 bg-[#FFFEFA]/90 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
           {navItems.map(({ label, href, icon: Icon }) => (
             <Link
               key={href}
@@ -295,20 +293,26 @@ export default function BottomNav() {
           <Link
             href="/cart"
             aria-label={`Open cart, ${totalItems} items`}
+            aria-current={isActive("/cart") ? "page" : undefined}
             className={
-              "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
-              (isActive("/cart") ? "text-[#315F35]" : "text-[#625F56]")
+              "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-200 active:scale-95 " +
+              (isActive("/cart") ? "text-[#168447]" : "text-[#625F56]")
             }
           >
-            <span className={"relative flex size-6 items-center justify-center rounded-full " + (isActive("/cart") ? "bg-[#E7F0E2]" : "")}>
-              <ShoppingCart size={16} />
+            <span
+              className={
+                "relative flex size-8 items-center justify-center rounded-full transition-all duration-200 " +
+                (isActive("/cart") ? "bg-[#E7F0E2] shadow-inner" : "bg-transparent")
+              }
+            >
+              <ShoppingCart size={19} strokeWidth={isActive("/cart") ? 2.5 : 2} />
               {totalItems > 0 && (
-                <span className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C]">
+                <span className="absolute -right-1 -top-1 flex h-[17px] min-w-[17px] items-center justify-center rounded-full border-2 border-[#FFFEFA] bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C]">
                   {totalItems > 99 ? "99+" : totalItems}
                 </span>
               )}
             </span>
-            <span className="text-[8px] leading-none">Cart</span>
+            <span className="text-[9px] leading-none font-bold">Cart</span>
           </Link>
 
           <Link
