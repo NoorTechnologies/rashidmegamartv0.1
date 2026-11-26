@@ -213,21 +213,12 @@ export default function BottomNav() {
         </nav>
       </header>
 
-      {/* Mobile language switch: icon only, kept at the top */}
-      <div data-no-translate role="group" aria-label="Choose language" className="fixed right-3 top-[calc(env(safe-area-inset-top)+10px)] z-[65] inline-flex h-9 items-center rounded-full border border-white/90 bg-[#FFFEFA]/95 p-0.5 shadow-[0_4px_14px_rgba(39,31,22,0.12)] backdrop-blur-xl lg:hidden">
-        {([{ value: "en", label: "EN" }, { value: "hinglish", label: "HI-EN" }, { value: "hi", label: "à¤¹à¤¿à¤‚à¤¦à¥€" }] as const).map((option) => (
-          <button key={option.value} type="button" aria-pressed={language === option.value} onClick={() => setLanguage(option.value)} className={"h-8 rounded-full px-2.5 text-[10px] font-extrabold transition-colors active:scale-95 " + (language === option.value ? "bg-[#315F35] text-white shadow-sm" : "text-[#625F56]")}>
-            {option.label}
-          </button>
-        ))}
-      </div>
-
       {/* Mobile navigation */}
       <nav
         aria-label="Main navigation"
         className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(6px+env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="relative grid h-[58px] grid-cols-4 items-center rounded-full border border-white/90 bg-[#FFFEFA]/90 px-1 shadow-[0_10px_36px_rgba(40,36,28,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[70px] grid-cols-5 items-center rounded-[28px] border border-white/80 bg-white/70 px-1.5 shadow-[0_18px_48px_rgba(35,48,32,0.16),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
           {navItems.map(({ label, href, icon: Icon }) => (
             <Link
               key={href}
@@ -268,6 +259,24 @@ export default function BottomNav() {
             </span>
             <span className="text-[9px] leading-none font-bold">Cart</span>
           </Link>
+
+          <div data-no-translate role="group" aria-label="Choose language" className="mx-auto flex h-14 w-full min-w-0 flex-col items-center justify-center gap-1">
+            <Globe2 size={16} className="text-[#315F35]" aria-hidden="true" />
+            <div className="flex items-center justify-center gap-0.5 rounded-full border border-white/90 bg-white/70 p-0.5 shadow-[inset_0_1px_2px_rgba(35,48,32,0.06)]">
+              {([{ value: "en", label: "EN" }, { value: "hinglish", label: "HI-EN" }, { value: "hi", label: "हिंदी" }] as const).map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  aria-label={option.value === "en" ? "English" : option.value === "hinglish" ? "Hinglish" : "Hindi"}
+                  aria-pressed={language === option.value}
+                  onClick={() => setLanguage(option.value)}
+                  className={"h-7 min-w-7 rounded-full px-1.5 text-[9px] font-extrabold transition-all duration-200 active:scale-90 " + (language === option.value ? "bg-[#315F35] text-white shadow-sm" : "text-[#625F56] hover:bg-[#EAF3E6]")}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div ref={mobileHelpRef} className="relative mx-auto flex h-12 w-full min-w-0 items-center justify-center">
             <button
