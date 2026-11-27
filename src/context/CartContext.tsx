@@ -2,7 +2,7 @@
 "use client";
 
 import { kits } from "@/data/kits";
-import type { GroceryUnit } from "@/data/grocery-rates";
+import { estimateGroceryLines, type GroceryUnit } from "@/data/grocery-rates";
 
 import {
   createContext,
@@ -334,10 +334,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const subtotal = useMemo(
     () =>
-      items.reduce(
-        (total, item) => total + item.price * item.quantity,
-        0
-      ),
+      items.reduce((total, item) => {
+        const hasItemBreakdown = Array.isArray(item.kitContents) || Array.isArray(item.requestedItems);
+        if (!hasItemBreakdown) return total + item.price * item.quantity;
+        const estimate = estimateGroceryLines([...(item.kitContents ?? []), ...(item.requestedItems ?? [])]);
+        return total + (estimate.total ?? 0) * item.quantity;
+      }, 0),
     [items]
   );
 
