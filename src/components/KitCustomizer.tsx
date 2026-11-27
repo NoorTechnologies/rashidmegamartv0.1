@@ -159,14 +159,12 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
                   <button type="button" aria-label={`Increase ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="flex size-9 items-center justify-center rounded-lg bg-white text-[#168447] shadow-sm hover:bg-[#EAF3E9] disabled:opacity-35"><Plus size={13} /></button>
                 </div>
               </div>
-              <div className="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 sm:w-[250px] sm:shrink-0">
-                <label className="min-w-0 text-[9px] font-bold text-[#686868]">Demo rate / {line.rateUnit}
-                  <span className="mt-1 flex h-9 items-center rounded-lg border border-[#E8DFD1] bg-white px-2">
-                    <span className="mr-1 text-[10px] text-[#8A8178]">₹</span>
-                    <input type="number" min="0" step="0.01" inputMode="decimal" aria-label={line.name + " rate per " + line.rateUnit} value={line.rate} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, rate: Math.max(0, Number(event.target.value) || 0) } : entry))} className="w-full bg-transparent text-xs font-extrabold text-[#202124] outline-none" />
-                  </span>
-                </label>
-                <div className="pb-1 text-right">
+              <div className="mt-2 flex items-end justify-between gap-3 sm:w-[250px] sm:shrink-0">
+                <div>
+                  <p className="text-[9px] font-bold text-[#8A8178]">Demo rate / {line.rateUnit}</p>
+                  <p className="mt-1 text-xs font-extrabold tabular-nums text-[#202124]">₹{line.rate.toLocaleString("en-IN")} / {line.rateUnit}</p>
+                </div>
+                <div className="text-right">
                   <p className="text-[9px] font-bold text-[#8A8178]">Item total</p>
                   <p className="text-sm font-black tabular-nums text-[#168447]">{formatEstimate(getLineAmount(line))}</p>
                 </div>
@@ -209,12 +207,9 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
                           <button type="button" aria-label={`Increase ${item.name}`} onClick={() => saveContents(contents, additions.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="flex size-8 shrink-0 items-center justify-center text-[#168447]"><Plus size={12} /></button>
                         </span>
                       </label>
-                      <label className="text-[9px] font-bold text-[#686868]">Rate / {item.rateUnit}
-                        <span className="mt-1 flex h-8 items-center rounded-lg border border-[#E8DFD1] bg-white px-2">
-                          <span className="mr-1 text-[10px] text-[#8A8178]">₹</span>
-                          <input type="number" min="0" step="0.01" inputMode="decimal" value={item.rate} onChange={(event) => saveContents(contents, additions.map((entry, i) => i === index ? { ...entry, rate: Math.max(0, Number(event.target.value) || 0) } : entry))} className="w-full bg-transparent text-[11px] font-extrabold outline-none" />
-                        </span>
-                      </label>
+                      <div className="text-[9px] font-bold text-[#686868]">Demo rate / {item.rateUnit}
+                        <p className="mt-1 text-xs font-extrabold text-[#202124]">₹{item.rate.toLocaleString("en-IN")} / {item.rateUnit}</p>
+                      </div>
                     </div>
                     <p className="mt-2 text-right text-[11px] font-black text-[#168447]">Item total: {formatEstimate(getLineAmount(item))}</p>
                   </div>
