@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Minus, Plus, ShoppingCart, Trash2, PlusCircle, BadgeCheck, Package } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Trash2, PlusCircle, Package } from "lucide-react";
 import type { GroceryKit } from "@/data/kits";
 import { kits } from "@/data/kits";
 import { estimateGroceryLines, getGroceryRate, isValidGroceryQuantity, type GroceryUnit } from "@/data/grocery-rates";
