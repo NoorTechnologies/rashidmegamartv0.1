@@ -22,7 +22,7 @@ function withDemoRate(line: StoredKitLine): KitLine {
 }
 
 function splitKitLine(value: string): KitLine {
-  const match = value.match(/^(.+?)\\s*[-–]\\s*(.+)$/);
+  const match = value.match(/^(.+?)\s*[-–]\s*(.+)$/);
   return withDemoRate(
     match
       ? { name: match[1].trim(), quantity: match[2].trim() }
