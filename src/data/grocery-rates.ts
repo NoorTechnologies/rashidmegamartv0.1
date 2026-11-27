@@ -52,7 +52,7 @@ const UNIT_TO_BASE: Record<GroceryUnit, { family: "mass" | "volume" | "pieces" |
 };
 
 function parseQuantity(value: string) {
-  const match = value.trim().toLowerCase().match(/^(\d+(?:\\.\d+)?)\s*([a-zA-Z]+|किलो|ग्राम|लीटर|मिलीलीटर|नग|पीस|बोरी|पैकेट|पाउच|सेट|पत्ता)?$/);
+  const match = value.trim().toLowerCase().match(/^(\d+(?:\.\d+)?)\s*([a-zA-Z]+|किलो|ग्राम|लीटर|मिलीलीटर|नग|पीस|बोरी|पैकेट|पाउच|सेट|पत्ता)?$/);
   if (!match) return null;
   const amount = Number(match[1]);
   const unit = UNIT_ALIASES[match[2] ?? "pcs"];
