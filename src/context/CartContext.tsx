@@ -20,8 +20,8 @@ export interface CartItem {
   quantity: number;
   brand?: string;
   packSize?: string;
-  kitContents?: { name: string; quantity: string }[];
-  requestedItems?: { name: string; quantity: string }[];
+  kitContents?: { name: string; quantity: string; rate?: number; rateUnit?: string }[];
+  requestedItems?: { name: string; quantity: string; rate?: number; rateUnit?: string }[];
   isCustomized?: boolean;
   catalogProductId?: string;
   kitGroupId?: string;
@@ -39,7 +39,7 @@ interface CartContextType {
   decreaseQuantity: (id: string) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
-  updateKitCustomization: (id: string, kitContents: { name: string; quantity: string }[], requestedItems: { name: string; quantity: string }[]) => void;
+  updateKitCustomization: (id: string, kitContents: { name: string; quantity: string; rate?: number; rateUnit?: string }[], requestedItems: { name: string; quantity: string; rate?: number; rateUnit?: string }[]) => void;
 }
 
 const STORAGE_KEY = "rashid-mega-mart-cart";
@@ -60,7 +60,7 @@ const MAX_EXTRA_LINES = 25;
 const MAX_CUSTOMIZED_NAME_LENGTH = 70;
 const MAX_CUSTOMIZED_QUANTITY_LENGTH = 24;
 
-type KitLine = { name: string; quantity: string };
+type KitLine = { name: string; quantity: string; rate?: number; rateUnit?: string };
 
 function isValidKitLines(value: unknown, maxItems = MAX_CUSTOMIZED_LINES): value is KitLine[] {
   return Array.isArray(value) &&
@@ -73,7 +73,9 @@ function isValidKitLines(value: unknown, maxItems = MAX_CUSTOMIZED_LINES): value
       entry.name.length <= MAX_CUSTOMIZED_NAME_LENGTH &&
       typeof entry.quantity === "string" &&
       entry.quantity.trim().length > 0 &&
-      entry.quantity.length <= MAX_CUSTOMIZED_QUANTITY_LENGTH
+      entry.quantity.length <= MAX_CUSTOMIZED_QUANTITY_LENGTH &&
+      (entry.rate === undefined || (typeof entry.rate === "number" && Number.isFinite(entry.rate) && entry.rate >= 0)) &&
+      (entry.rateUnit === undefined || ["kg", "g", "l", "ml", "pcs", "pack", "pouch", "sack", "set"].includes(String(entry.rateUnit)))
     );
 }
 
@@ -315,7 +317,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     updateCart(() => EMPTY_CART);
   }, []);
 
-  const updateKitCustomization = useCallback((id: string, kitContents: { name: string; quantity: string }[], requestedItems: { name: string; quantity: string }[]) => {
+  const updateKitCustomization = useCallback((id: string, kitContents: { name: string; quantity: string; rate?: number; rateUnit?: string }[], requestedItems: { name: string; quantity: string; rate?: number; rateUnit?: string }[]) => {
     const kitExists = kits.some((kit) => kit.id === id && kit.isAvailable);
     if (!kitExists || !isValidKitLines(kitContents) || !isValidKitLines(requestedItems, MAX_EXTRA_LINES) || kitContents.length + requestedItems.length > MAX_CUSTOMIZED_LINES) return;
 
