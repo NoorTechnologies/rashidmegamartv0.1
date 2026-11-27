@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Minus, Plus, ShoppingCart, Trash2, PlusCircle, BadgeCheck, Package } from "lucide-react";
 import type { GroceryKit } from "@/data/kits";
 import { kits } from "@/data/kits";
-import { estimateGroceryLines, isValidGroceryQuantity } from "@/data/grocery-rates";
+import { estimateGroceryLines, getGroceryRate, isValidGroceryQuantity, type GroceryUnit } from "@/data/grocery-rates";
 import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
 
@@ -30,14 +30,14 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   const language = useSiteLanguage();
   const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : language === "hinglish" ? toHinglishCatalogue(value) : value;
   const existingCartItem = items.find((item) => item.id === kit.id);
-  const [contents, setContents] = useState<KitLine[]>(() => existingCartItem?.kitContents ?? kit.items.map(splitKitLine));
-  const [additions, setAdditions] = useState<KitLine[]>(() => existingCartItem?.requestedItems ?? []);
+  const [contents, setContents] = useState<KitLine[]>(() => existingCartItem?.kitContents?.map(withDemoRate) ?? kit.items.map(splitKitLine));
+  const [additions, setAdditions] = useState<KitLine[]>(() => existingCartItem?.requestedItems?.map(withDemoRate) ?? []);
   const [previousCartItem, setPreviousCartItem] = useState(existingCartItem);
 
   if (isLoaded && existingCartItem !== previousCartItem) {
     setPreviousCartItem(existingCartItem);
-    setContents(existingCartItem?.kitContents ?? kit.items.map(splitKitLine));
-    setAdditions(existingCartItem?.requestedItems ?? []);
+    setContents(existingCartItem?.kitContents?.map(withDemoRate) ?? kit.items.map(splitKitLine));
+    setAdditions(existingCartItem?.requestedItems?.map(withDemoRate) ?? []);
   }
   const [newItem, setNewItem] = useState("");
   const [newQuantity, setNewQuantity] = useState("1");
@@ -52,6 +52,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
     [contents, additions],
   );
   const formatEstimate = (amount: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 }).format(amount);
+  const getLineAmount = (line: KitLine) => estimateGroceryLines([line]).total ?? 0;
 
   const saveContents = (next: KitLine[], nextAdditions = additions) => {
     setContents(next);
@@ -81,7 +82,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
     if (contents.length + additions.length >= 50 || additions.length >= 25) return setError("Ek kit mein maximum 50 items aur 25 extra items add kar sakte hain.");
     if (!isValidGroceryQuantity(newQuantity.trim())) return setError("Quantity sahi likhein, jaise 500g, 1kg, 2 litre ya 1 piece.");
     if ([...contents, ...additions].some((item) => item.name.toLowerCase() === name.toLowerCase())) return setError("Ye item pehle se add hai.");
-    saveContents(contents, [...additions, { name, quantity: newQuantity.trim() || "1" }]);
+    saveContents(contents, [...additions, { ...withDemoRate({ name, quantity: newQuantity.trim() || "1" }) }]);
     setNewItem("");
     setNewQuantity("1");
     setError("");
@@ -143,6 +144,18 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
                   <button type="button" aria-label={`Increase ${line.name}`} disabled={!isValidGroceryQuantity(line.quantity)} onClick={() => saveContents(contents.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="flex size-9 items-center justify-center rounded-lg bg-white text-[#168447] shadow-sm hover:bg-[#EAF3E9] disabled:opacity-35"><Plus size={13} /></button>
                 </div>
               </div>
+              <div className="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 sm:w-[250px] sm:shrink-0">
+                <label className="min-w-0 text-[9px] font-bold text-[#686868]">Demo rate / {line.rateUnit}
+                  <span className="mt-1 flex h-9 items-center rounded-lg border border-[#E8DFD1] bg-white px-2">
+                    <span className="mr-1 text-[10px] text-[#8A8178]">₹</span>
+                    <input type="number" min="0" step="0.01" inputMode="decimal" aria-label={line.name + " rate per " + line.rateUnit} value={line.rate} onChange={(event) => saveContents(contents.map((entry, i) => i === index ? { ...entry, rate: Math.max(0, Number(event.target.value) || 0) } : entry))} className="w-full bg-transparent text-xs font-extrabold text-[#202124] outline-none" />
+                  </span>
+                </label>
+                <div className="pb-1 text-right">
+                  <p className="text-[9px] font-bold text-[#8A8178]">Item total</p>
+                  <p className="text-sm font-black tabular-nums text-[#168447]">{formatEstimate(getLineAmount(line))}</p>
+                </div>
+              </div>
             </div>
           ))}
           {contents.length === 0 && <p className="rounded-2xl border border-dashed border-[#D8CBB8] bg-[#FAF7EF] px-4 py-6 text-center text-xs font-semibold text-[#686868] sm:col-span-2">No original items left. Add the groceries you want below.</p>}
@@ -165,12 +178,30 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           {error && <p role="alert" className="mt-2 text-[10px] font-bold text-[#800020]">{error}</p>}
           {additions.length > 0 && (
             <div className="mt-3 rounded-xl border border-[#F7C928] bg-[#FAF0C8] p-3">
-              <p className="text-[10px] font-black uppercase tracking-wide text-[#806000]">Your extra items · price to be confirmed</p>
-              <div className="mt-2 space-y-2">
+              <p className="text-[10px] font-black uppercase tracking-wide text-[#806000]">Extra items · demo rates</p>
+              <div className="mt-2 space-y-3">
                 {additions.map((item, index) => (
-                  <div key={`${displayCatalogue(item.name)}-${index}`} className="flex items-center justify-between gap-2 text-[11px]">
-                    <span className="min-w-0 flex-1 font-bold text-[#202124]">{displayCatalogue(item.name)} <span className="font-semibold text-[#686868]">· {displayCatalogue(item.quantity)}</span></span>
-                    <button type="button" onClick={() => saveContents(contents, additions.filter((_, i) => i !== index))} className="rounded-lg px-2 py-1 font-extrabold text-[#800020] hover:bg-white">Remove</button>
+                  <div key={`${displayCatalogue(item.name)}-${index}`} className="rounded-xl bg-white/70 p-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="min-w-0 flex-1 text-[11px] font-bold text-[#202124]">{displayCatalogue(item.name)}</span>
+                      <button type="button" onClick={() => saveContents(contents, additions.filter((_, i) => i !== index))} className="rounded-lg px-2 py-1 text-[10px] font-extrabold text-[#800020] hover:bg-white">Remove</button>
+                    </div>
+                    <div className="mt-2 grid grid-cols-2 gap-2">
+                      <label className="text-[9px] font-bold text-[#686868]">Quantity
+                        <span className="mt-1 flex items-center rounded-lg border border-[#E8DFD1] bg-white">
+                          <button type="button" aria-label={`Decrease ${item.name}`} onClick={() => saveContents(contents, additions.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, -1) } : entry))} className="flex size-8 shrink-0 items-center justify-center text-[#800020]"><Minus size={12} /></button>
+                          <input value={displayCatalogue(item.quantity)} aria-label={item.name + " quantity"} onChange={(event) => saveContents(contents, additions.map((entry, i) => i === index ? { ...entry, quantity: event.target.value.slice(0, 24) } : entry))} className="min-w-0 w-full bg-transparent text-center text-[11px] font-extrabold outline-none" />
+                          <button type="button" aria-label={`Increase ${item.name}`} onClick={() => saveContents(contents, additions.map((entry, i) => i === index ? { ...entry, quantity: adjustQuantity(entry.quantity, 1) } : entry))} className="flex size-8 shrink-0 items-center justify-center text-[#168447]"><Plus size={12} /></button>
+                        </span>
+                      </label>
+                      <label className="text-[9px] font-bold text-[#686868]">Rate / {item.rateUnit}
+                        <span className="mt-1 flex h-8 items-center rounded-lg border border-[#E8DFD1] bg-white px-2">
+                          <span className="mr-1 text-[10px] text-[#8A8178]">₹</span>
+                          <input type="number" min="0" step="0.01" inputMode="decimal" value={item.rate} onChange={(event) => saveContents(contents, additions.map((entry, i) => i === index ? { ...entry, rate: Math.max(0, Number(event.target.value) || 0) } : entry))} className="w-full bg-transparent text-[11px] font-extrabold outline-none" />
+                        </span>
+                      </label>
+                    </div>
+                    <p className="mt-2 text-right text-[11px] font-black text-[#168447]">Item total: {formatEstimate(getLineAmount(item))}</p>
                   </div>
                 ))}
               </div>
@@ -178,40 +209,20 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           )}
         </div>
 
-        <div className="mt-4 overflow-hidden rounded-2xl border border-[#DCEBDD] bg-white/65 backdrop-blur-xl">
-          <div className="flex items-center justify-between gap-3 border-b border-[#CDE5D2] px-3 py-2.5">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#106B38]"><BadgeCheck size={14} /> Smart Kit Deal</span>
-            <span className="rounded-full bg-[#168447] px-2.5 py-1 text-[9px] font-black text-white">STORE PRICE</span>
-          </div>
-          <div className="grid grid-cols-[1fr_auto] items-center gap-3 p-3">
-            <div className="min-w-0">
-              <p className="text-xs font-black text-[#174D2B]">Compare the full basket before you buy.</p>
-              <p className="mt-1 text-[10px] leading-4 text-[#42664B]">Ready-made kit pricing keeps everyday essentials together. Ask us on WhatsApp for your best customized final quote.</p>
-            </div>
-            <div className="text-right">
-              <p className="text-[9px] font-bold uppercase tracking-wide text-[#42664B]">Kit base price</p>
-              <p className="text-xl font-black leading-tight text-[#106B38]">₹{kit.price.toLocaleString("en-IN")}</p>
-              <p className="text-[8px] font-semibold text-[#42664B]">per kit</p>
-            </div>
-          </div>
-          <p className="border-t border-[#CDE5D2] bg-white/55 px-3 py-2 text-[9px] leading-4 text-[#42664B]">Changing quantities inside the kit updates your request. The base kit price stays fixed; extra-item rates and final amount are confirmed by the owner on WhatsApp.</p>
-        </div>
-
-
         <div data-reveal className="mt-4 overflow-hidden rounded-2xl border border-white/90 bg-white/70 shadow-sm backdrop-blur-xl">
           <div className="flex items-center justify-between gap-3 border-b border-[#E8DFD1] bg-[#FAF7EF] px-3 py-3">
             <div>
               <h3 className="text-xs font-black text-[#202124] sm:text-sm">Grocery Quantity Calculator</h3>
-              <p className="mt-0.5 text-[9px] font-medium text-[#686868]">Item rates will be added after owner confirmation.</p>
+              <p className="mt-0.5 text-[9px] font-medium text-[#686868]">Placeholder rates are editable and are not final store prices.</p>
             </div>
-            <span className="rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[9px] font-black text-[#806000]">{groceryEstimate.pendingCount} rates pending</span>
+            <span className="rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[9px] font-black text-[#806000]">DEMO RATES</span>
           </div>
           <div className="space-y-0 px-3">
             {groceryEstimate.lines.map((line, index) => (
               <div key={`${line.name}-${index}`} className="flex items-center justify-between gap-3 border-b border-[#F1EBDD] py-2 last:border-0">
                 <div className="min-w-0">
                   <p className="truncate text-[10px] font-bold text-[#202124]">{displayCatalogue(line.name)}</p>
-                  <p className="text-[9px] font-medium text-[#686868]">{displayCatalogue(line.quantity)}</p>
+                  <p className="text-[9px] font-medium text-[#686868]">{displayCatalogue(line.quantity)} · ₹{line.rate.toLocaleString("en-IN")}/{line.rateUnit}</p>
                 </div>
                 <span className="shrink-0 text-[10px] font-extrabold tabular-nums text-[#806000]">{line.amount === null ? "Rate pending" : formatEstimate(line.amount)}</span>
               </div>
@@ -219,10 +230,10 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           </div>
           <div className="flex items-center justify-between gap-3 border-t border-[#E8DFD1] bg-[#F0F8F1] px-3 py-3">
             <div>
-              <p className="text-xs font-black text-[#174D2B]">Customized item total</p>
-              <p className="text-[9px] text-[#42664B]">{groceryEstimate.pendingCount ? "Final calculation appears when all item rates are set." : "Calculated from confirmed store rates."}</p>
+              <p className="text-xs font-black text-[#174D2B]">Estimated item total</p>
+              <p className="text-[9px] text-[#42664B]">{groceryEstimate.pendingCount ? "Check the item quantity and rate units." : "Quantity × per-unit demo rate. Change any rate above."}</p>
             </div>
-            <p className="text-base font-black tabular-nums text-[#106B38]">{groceryEstimate.total === null ? "Pending" : formatEstimate(groceryEstimate.total)}</p>
+            <p className="text-base font-black tabular-nums text-[#106B38]">{groceryEstimate.total === null ? "Check quantity" : formatEstimate(groceryEstimate.total)}</p>
           </div>
         </div>
 
