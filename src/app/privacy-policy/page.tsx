@@ -82,25 +82,6 @@ export default function PrivacyPolicyPage() {
         </div>
       </article>
 
-      <style jsx>{`
-        .privacy-enter {
-          animation: privacy-enter 650ms cubic-bezier(.2,.75,.25,1) both;
-        }
-        .privacy-section {
-          animation: privacy-section 550ms cubic-bezier(.2,.75,.25,1) both;
-        }
-        @keyframes privacy-enter {
-          from { opacity: 0; transform: translateY(14px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes privacy-section {
-          from { opacity: 0; transform: translateY(9px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .privacy-enter, .privacy-section { animation: none; }
-        }
-      `}</style>
     </main>
   );
 }
