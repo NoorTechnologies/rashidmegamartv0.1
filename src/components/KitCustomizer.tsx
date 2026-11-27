@@ -8,11 +8,26 @@ import { estimateGroceryLines, getGroceryRate, isValidGroceryQuantity, type Groc
 import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
 
-type KitLine = { name: string; quantity: string };
+type KitLine = { name: string; quantity: string; rate: number; rateUnit: GroceryUnit };
+type StoredKitLine = { name: string; quantity: string; rate?: number; rateUnit?: GroceryUnit };
+
+function withDemoRate(line: StoredKitLine): KitLine {
+  const fallback = getGroceryRate(line.name, line.quantity);
+  return {
+    name: line.name,
+    quantity: line.quantity,
+    rate: Number.isFinite(line.rate) ? Number(line.rate) : fallback.price,
+    rateUnit: line.rateUnit ?? fallback.baseUnit,
+  };
+}
 
 function splitKitLine(value: string): KitLine {
-  const match = value.match(/^(.+?)\s*[-–]\s*(.+)$/);
-  return match ? { name: match[1].trim(), quantity: match[2].trim() } : { name: value.trim(), quantity: "1" };
+  const match = value.match(/^(.+?)\\s*[-–]\\s*(.+)$/);
+  return withDemoRate(
+    match
+      ? { name: match[1].trim(), quantity: match[2].trim() }
+      : { name: value.trim(), quantity: "1" },
+  );
 }
 
 function adjustQuantity(value: string, delta: number) {
