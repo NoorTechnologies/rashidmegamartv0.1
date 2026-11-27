@@ -2,6 +2,7 @@
 "use client";
 
 import { kits } from "@/data/kits";
+import type { GroceryUnit } from "@/data/grocery-rates";
 
 import {
   createContext,
@@ -20,8 +21,8 @@ export interface CartItem {
   quantity: number;
   brand?: string;
   packSize?: string;
-  kitContents?: { name: string; quantity: string; rate?: number; rateUnit?: string }[];
-  requestedItems?: { name: string; quantity: string; rate?: number; rateUnit?: string }[];
+  kitContents?: { name: string; quantity: string; rate?: number; rateUnit?: GroceryUnit }[];
+  requestedItems?: { name: string; quantity: string; rate?: number; rateUnit?: GroceryUnit }[];
   isCustomized?: boolean;
   catalogProductId?: string;
   kitGroupId?: string;
@@ -39,7 +40,7 @@ interface CartContextType {
   decreaseQuantity: (id: string) => void;
   removeFromCart: (id: string) => void;
   clearCart: () => void;
-  updateKitCustomization: (id: string, kitContents: { name: string; quantity: string; rate?: number; rateUnit?: string }[], requestedItems: { name: string; quantity: string; rate?: number; rateUnit?: string }[]) => void;
+  updateKitCustomization: (id: string, kitContents: { name: string; quantity: string; rate?: number; rateUnit?: GroceryUnit }[], requestedItems: { name: string; quantity: string; rate?: number; rateUnit?: GroceryUnit }[]) => void;
 }
 
 const STORAGE_KEY = "rashid-mega-mart-cart";
@@ -60,7 +61,7 @@ const MAX_EXTRA_LINES = 25;
 const MAX_CUSTOMIZED_NAME_LENGTH = 70;
 const MAX_CUSTOMIZED_QUANTITY_LENGTH = 24;
 
-type KitLine = { name: string; quantity: string; rate?: number; rateUnit?: string };
+type KitLine = { name: string; quantity: string; rate?: number; rateUnit?: GroceryUnit };
 
 function isValidKitLines(value: unknown, maxItems = MAX_CUSTOMIZED_LINES): value is KitLine[] {
   return Array.isArray(value) &&
@@ -317,7 +318,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     updateCart(() => EMPTY_CART);
   }, []);
 
-  const updateKitCustomization = useCallback((id: string, kitContents: { name: string; quantity: string; rate?: number; rateUnit?: string }[], requestedItems: { name: string; quantity: string; rate?: number; rateUnit?: string }[]) => {
+  const updateKitCustomization = useCallback((id: string, kitContents: { name: string; quantity: string; rate?: number; rateUnit?: GroceryUnit }[], requestedItems: { name: string; quantity: string; rate?: number; rateUnit?: GroceryUnit }[]) => {
     const kitExists = kits.some((kit) => kit.id === id && kit.isAvailable);
     if (!kitExists || !isValidKitLines(kitContents) || !isValidKitLines(requestedItems, MAX_EXTRA_LINES) || kitContents.length + requestedItems.length > MAX_CUSTOMIZED_LINES) return;
 
