@@ -175,7 +175,7 @@ export default function BottomNav() {
       <header className="pointer-events-none fixed inset-x-0 top-3 z-50 hidden px-4 lg:block">
         <nav
           aria-label="Main navigation"
-          className="pointer-events-auto mx-auto flex h-[62px] max-w-6xl items-center justify-between gap-2 rounded-full border border-white/80 bg-[#FFFEFA]/90 px-4 shadow-[0_12px_34px_rgba(32,20,18,0.12)] backdrop-blur-2xl backdrop-saturate-150 xl:px-6"
+          className="pointer-events-auto mx-auto flex h-[62px] max-w-6xl items-center justify-between gap-2 rounded-full border border-[#800020]/15 bg-[#FFFEFA]/68 px-4 shadow-[0_10px_30px_rgba(64,24,32,0.10)] backdrop-blur-2xl backdrop-saturate-150 xl:px-6"
         >
           <Link href="/" aria-label="Rashid Mega Mart home" className="flex shrink-0 items-center gap-2.5">
             <Image src="/images/logo2.png" alt="" width={42} height={42} priority className="size-9 object-contain" />
@@ -195,7 +195,7 @@ export default function BottomNav() {
                     : "text-[#625F56] hover:bg-white/70 hover:text-[#315F35]")
                 }
               >
-                <Icon size={15} />
+                <Icon size={15} strokeWidth={2.2} className="text-[#800020]" />
                 {label}
               </Link>
             ))}
@@ -213,7 +213,7 @@ export default function BottomNav() {
                   (helpOpen ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70")
                 }
               >
-                <LifeBuoy size={16} />
+                <LifeBuoy size={16} strokeWidth={2.2} className="text-[#800020]" />
                 Help Centre
               </button>
               {helpOpen && <HelpCentreMenu onClose={() => setHelpOpen(false)} />}
@@ -221,7 +221,7 @@ export default function BottomNav() {
 
             <div ref={desktopLanguageRef} className="relative">
               <button type="button" aria-expanded={languageOpen} aria-haspopup="menu" onClick={() => setLanguageOpen((value) => !value)} className={"inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " + (languageOpen ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70")}>
-                <Globe2 size={16} /> Language
+                <Globe2 size={16} strokeWidth={2.2} className="text-[#800020]" /> Language
               </button>
               {languageOpen && <LanguageMenu language={language} setLanguage={setLanguage} onClose={() => setLanguageOpen(false)} />}
             </div>
@@ -231,7 +231,7 @@ export default function BottomNav() {
               aria-label={`Open cart, ${totalItems} items`}
               className="relative inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[#315F35] px-3 text-[12px] font-extrabold text-white shadow-sm transition hover:bg-[#254B29]"
             >
-              <ShoppingCart size={16} />
+              <ShoppingCart size={16} strokeWidth={2.2} className="text-[#800020]" />
               Cart
               {totalItems > 0 && (
                 <span className="flex min-w-5 items-center justify-center rounded-full bg-[#F2D27B] px-1.5 py-0.5 text-[10px] font-black text-[#443719]">
@@ -248,7 +248,7 @@ export default function BottomNav() {
         aria-label="Main navigation"
         className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(6px+env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="relative grid h-[66px] grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_88px_minmax(0,1fr)] items-center rounded-[24px] border border-white/80 bg-white/75 px-1.5 shadow-[0_12px_34px_rgba(35,48,32,0.13),inset_0_1px_0_rgba(255,255,255,0.98)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[66px] grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_88px_minmax(0,1fr)] items-center rounded-[24px] border border-[#800020]/15 bg-white/58 px-1.5 shadow-[0_9px_26px_rgba(64,24,32,0.10),inset_0_1px_0_rgba(255,255,255,0.82)] backdrop-blur-2xl backdrop-saturate-150">
           {navItems.map(({ label, href, icon: Icon }) => (
             <Link
               key={href}
@@ -260,7 +260,7 @@ export default function BottomNav() {
               }
             >
               <span className={"flex size-6 items-center justify-center rounded-full " + (isActive(href) ? "bg-[#E7F0E2]" : "")}>
-                <Icon size={16} />
+                <Icon size={16} strokeWidth={2.2} className="text-[#800020]" />
               </span>
               <span className={"text-[8px] leading-none " + (isActive(href) ? "font-extrabold" : "font-medium")}>
                 {label}
@@ -280,7 +280,7 @@ export default function BottomNav() {
             <span
               className="relative flex size-9 items-center justify-center rounded-full bg-[#315F35] text-white shadow-md shadow-[#315F35]/20"
             >
-              <ShoppingCart size={20} strokeWidth={isActive("/cart") ? 2.5 : 2} />
+              <ShoppingCart size={20} strokeWidth={2.2} />
               {totalItems > 0 && (
                 <span className="absolute -right-1 -top-1 flex h-[17px] min-w-[17px] items-center justify-center rounded-full border-2 border-[#FFFEFA] bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C]">
                   {totalItems > 99 ? "99+" : totalItems}
@@ -292,7 +292,7 @@ export default function BottomNav() {
 
           <div ref={mobileLanguageRef} data-no-translate className="relative mx-auto flex h-12 w-full min-w-0 items-center justify-center">
             <button type="button" aria-label="Choose language" aria-expanded={languageOpen} aria-haspopup="menu" onClick={() => setLanguageOpen((value) => !value)} className={"flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " + (languageOpen ? "text-[#315F35]" : "text-[#625F56]")}>
-              <span className={"flex size-6 items-center justify-center rounded-full " + (languageOpen ? "bg-[#E7F0E2]" : "")}><Globe2 size={17} /></span>
+              <span className={"flex size-6 items-center justify-center rounded-full " + (languageOpen ? "bg-[#E7F0E2]" : "")}><Globe2 size={17} strokeWidth={2.2} className="text-[#800020]" /></span>
               <span className="text-[8px] font-semibold leading-none">Language</span>
             </button>
             {languageOpen && <LanguageMenu mobile language={language} setLanguage={setLanguage} onClose={() => setLanguageOpen(false)} />}
@@ -311,7 +311,7 @@ export default function BottomNav() {
               }
             >
               <span className={"flex size-6 items-center justify-center rounded-full " + (helpOpen ? "bg-[#E7F0E2]" : "")}>
-                {helpOpen ? <X size={17} /> : <LifeBuoy size={17} />}
+                {helpOpen ? <X size={17} strokeWidth={2.2} className="text-[#800020]" /> : <LifeBuoy size={17} strokeWidth={2.2} className="text-[#800020]" />}
               </span>
               <span className="text-[8px] font-semibold leading-none">Help</span>
             </button>
