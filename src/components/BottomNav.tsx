@@ -21,7 +21,7 @@ import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, useSetSiteLanguage } from "@/components/LanguageProvider";
 
 const WHATSAPP_NUMBER = "918962531603";
-const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rashid Mega Mart! I need help with grocery kits and store information.")}`;
+const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rashid Mega Mart Support, I need help with my order / grocery purchase.\\n\\nOrder ID (if available): \\nMy issue / question: \\n\\nPlease guide me with the next steps. Thank you.")}`;
 
 const navItems = [
   { label: "Home", href: "/", icon: House },
@@ -29,7 +29,7 @@ const navItems = [
 ];
 
 const helpItems = [
-  { label: "Contact on WhatsApp", href: whatsappHref, external: true, whatsapp: true },
+  { label: "Contact Support on WhatsApp", href: whatsappHref, external: true, whatsapp: true },
   { label: "Returns & Refunds", href: "/returns-refunds", icon: RotateCcw },
   { label: "Privacy Policy", href: "/privacy-policy", icon: ShieldCheck },
   { label: "Terms & Conditions", href: "/terms-and-conditions", icon: FileText },
