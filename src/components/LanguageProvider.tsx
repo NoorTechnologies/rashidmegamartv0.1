@@ -5,8 +5,10 @@ type Language = "en" | "hinglish" | "hi";
 
 const LanguageContext = createContext<Language>("en");
 const LanguageToggleContext = createContext<() => void>(() => {});
+const LanguageSetContext = createContext<(language: Language) => void>(() => {});
 export const useSiteLanguage = () => useContext(LanguageContext);
 export const useToggleSiteLanguage = () => useContext(LanguageToggleContext);
+export const useSetSiteLanguage = () => useContext(LanguageSetContext);
 
 const hindiCatalogueWords: Record<string, string> = {
   "बोरी किंकी चावल": "Kinki rice sack", "किनकी चावल": "Kinki rice", "चावल": "Rice", "सरसों तेल": "Mustard oil", "रिफाइंड तेल": "Refined oil", "तेल": "Oil", "टाटा नमक": "Tata salt", "नमक": "Salt", "ताज़ा मिर्च": "Fresh chilli", "मिर्च": "Chilli", "ताज़ा धनिया": "Fresh coriander", "धनिया": "Coriander", "ताज़ा हल्दी": "Fresh turmeric", "हल्दी": "Turmeric", "आटा": "Wheat flour", "दाल": "Lentils", "मिक्स दाल": "Mixed lentils", "जीरा": "Cumin", "कोलगेट मंजन": "Colgate toothpaste", "मंजन बड़ा": "Large toothpaste", "सर्फ एक्सेल / निरमा": "Surf Excel / Nirma detergent", "कपड़े वाली साबुन": "Laundry soap", "रिन साबुन": "Rin soap", "नहाने वाला साबुन लक्स": "Lux bathing soap", "नहाने वाला साबुन": "Bathing soap", "बर्तन वाला लिक्विड": "Dishwashing liquid", "बर्तन वाला विम जेल": "Vim dishwashing gel", "बर्तन वाला साबुन": "Dishwashing soap", "डेटॉल लिक्विड": "Dettol liquid", "डेटॉल हैंडवॉश": "Dettol handwash", "पास्ता मसाला": "Pasta masala", "पास्ता": "Pasta", "बेसन": "Gram flour", "पोहा": "Flattened rice", "काली मिर्च": "Black pepper", "शैम्पू": "Shampoo", "शक्कर": "Sugar", "चायपत्ती": "Tea leaves", "मैजिक मसाला": "Magic masala", "लौंग": "Cloves", "विनेगर": "Vinegar", "मखाना": "Fox nuts", "काजू": "Cashews", "बादाम": "Almonds", "सूजी": "Semolina", "देसी घी": "Desi ghee", "आंवला हेयर ऑयल": "Amla hair oil", "ऑल आउट मशीन सेट": "All Out machine set", "मैगी फैमिली पैक": "Maggi family pack", "मैगी मसाला": "Maggi masala", "मैगी": "Maggi", "सौंफ": "Fennel seeds", "छोटी इलायची": "Green cardamom", "जायफल": "Nutmeg", "मूंगफली": "Peanuts", "अगरबत्ती": "Incense sticks", "दालचीनी": "Cinnamon", "पत्ता": "Leaf", "वाघ बकरी चाय": "Wagh Bakri tea", "किराना": "Grocery", "रोज़मर्रा के सामान": "daily essentials", "ज़रूरी सामान": "essential items", "एक ही किट में": "in one kit", "रोज़मर्रा के उपयोग के": "everyday use"
@@ -706,8 +708,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     return () => observer.disconnect();
   }, [language, applyLanguage]);
 
-  const toggleLanguage = () => {
-    const next: Language = language === "en" ? "hinglish" : language === "hinglish" ? "hi" : "en";
+  const setLanguage = (next: Language) => {
     currentLanguage = next;
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
@@ -717,10 +718,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     window.dispatchEvent(new Event("rmm-language-change"));
   };
 
+  const toggleLanguage = () => {
+    const next: Language = language === "en" ? "hinglish" : language === "hinglish" ? "hi" : "en";
+    setLanguage(next);
+  };
+
   return (
     <LanguageContext.Provider value={language}>
       <LanguageToggleContext.Provider value={toggleLanguage}>
-        {children}
+        <LanguageSetContext.Provider value={setLanguage}>
+          {children}
+        </LanguageSetContext.Provider>
       </LanguageToggleContext.Provider>
     </LanguageContext.Provider>
   );
