@@ -206,7 +206,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
                   onClick={() => addToCart({ id: kit.id, name: kit.name, price: kit.price, image: kit.image, brand: "Rashid Mega Mart", packSize: "Grocery Kit" })}
                   className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl bg-[#800020] px-2 text-[11px] font-extrabold text-white transition hover:bg-[#650019] active:scale-[.99] sm:text-xs"
                 >
-                  <ShoppingCart size={13} className="shrink-0" /><span className="min-[400px]:hidden min-[640px]:inline">Add to Cart</span><span className="hidden min-[400px]:inline min-[640px]:hidden">Add</span>
+                  <ShoppingCart size={13} className="shrink-0" /><span className="min-[400px]:hidden">Add to Cart</span><span className="hidden min-[400px]:inline min-[640px]:hidden">Add</span><span className="hidden min-[640px]:inline">Add to Cart</span>
                 </button>
               )}
             </>
