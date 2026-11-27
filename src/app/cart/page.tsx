@@ -49,6 +49,7 @@ export default function CartPage() {
           name: kit?.name ?? item.name,
           unitPrice,
           itemBreakdown,
+          ratesValid: itemBreakdown.pendingCount === 0,
           lineTotal: unitPrice * item.quantity,
           available: item.catalogProductId ? true : Boolean(kit?.isAvailable),
         };
@@ -84,6 +85,10 @@ export default function CartPage() {
     }
     if (pricedItems.some((item) => !item.available)) {
       setFormError("A kit in your cart is unavailable. Please remove it and try again.");
+      return;
+    }
+    if (pricedItems.some((item) => !item.ratesValid)) {
+      setFormError("Please correct the quantity of each kit item before sending the enquiry.");
       return;
     }
 
@@ -219,7 +224,7 @@ export default function CartPage() {
                       <span aria-live="polite" className="min-w-8 text-center text-sm font-black tabular-nums text-[#202124]">{item.quantity}</span>
                       <button type="button" aria-label={"Increase " + item.name} onClick={() => increaseQuantity(item.id)} className="flex size-11 items-center justify-center rounded-r-xl text-[#168447] hover:bg-[#EAF3E9]"><Plus size={14} /></button>
                     </div>
-                    <p className="text-base font-black tabular-nums text-[#168447]">{formatPrice(item.lineTotal)}</p>
+                    <p className="text-base font-black tabular-nums text-[#168447]">{item.ratesValid ? formatPrice(item.lineTotal) : "Check quantity"}</p>
                   </div>
 
                   {(item.kitContents?.length || item.requestedItems?.length) ? (
@@ -252,14 +257,14 @@ export default function CartPage() {
                 {pricedItems.map((item) => (
                   <div key={item.id} className="flex items-start justify-between gap-3 text-sm">
                     <span className="min-w-0 text-[#686868]">{item.name} × {item.quantity}</span>
-                    <span className="shrink-0 font-bold tabular-nums text-[#202124]">{formatPrice(item.lineTotal)}</span>
+                    <span className="shrink-0 font-bold tabular-nums text-[#202124]">{item.ratesValid ? formatPrice(item.lineTotal) : "Check quantity"}</span>
                   </div>
                 ))}
               </div>
               <div className="mt-4 border-t border-dashed border-[#D8CBB8] pt-4">
                 <div className="flex items-center justify-between gap-3">
                   <span className="text-sm font-bold text-[#5E574E]">Subtotal</span>
-                  <span aria-live="polite" className="text-2xl font-black tabular-nums text-[#168447]">{formatPrice(subtotal)}</span>
+                  <span aria-live="polite" className="text-2xl font-black tabular-nums text-[#168447]">{pricedItems.some((item) => !item.ratesValid) ? "Check quantity" : formatPrice(subtotal)}</span>
                 </div>
                 <p className="mt-2 text-[11px] leading-5 text-[#686868]">Kit ke item-wise demo rates aur quantities se subtotal calculate hota hai. Final store rates aur delivery WhatsApp par confirm honge.</p>
               </div>
@@ -298,7 +303,7 @@ export default function CartPage() {
         <div className="fixed inset-x-0 bottom-[calc(70px+env(safe-area-inset-bottom))] z-40 border-t border-[#E8DFD1] bg-white/98 px-3 py-2 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
           <button type="button" onClick={() => document.querySelector<HTMLFormElement>("#cart-checkout")?.requestSubmit()} className="flex min-h-12 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white shadow-sm active:scale-[.99]">
             <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Send Enquiry</span>
-            <span className="tabular-nums">{formatPrice(subtotal)}</span>
+            <span className="tabular-nums">{pricedItems.some((item) => !item.ratesValid) ? "Check quantity" : formatPrice(subtotal)}</span>
           </button>
         </div>
       </div>
