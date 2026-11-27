@@ -23,7 +23,14 @@ export default function KitsPage() {
   const kits = allKits;
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "available" | "unavailable">("all");
+  const [priceRange, setPriceRange] = useState("all");
+  const [category, setCategory] = useState("all");
   const [sortBy, setSortBy] = useState<SortOption>("featured");
+  const categories = useMemo(() => Array.from(new Set(kits.map((kit) => kit.category))).sort((a, b) => a.localeCompare(b)), [kits]);
+  const prices = kits.map((kit) => kit.price);
+  const minKitPrice = Math.min(...prices);
+  const maxKitPrice = Math.max(...prices);
+  const formatFilterPrice = (price: number) => "₹" + price.toLocaleString("en-IN");
   const [suggestion, setSuggestion] = useState("");
   const [suggestionName, setSuggestionName] = useState("");
 
@@ -37,7 +44,13 @@ export default function KitsPage() {
         filter === "all" ||
         (filter === "available" && kit.isAvailable) ||
         (filter === "unavailable" && !kit.isAvailable);
-      return matchesSearch && matchesAvailability;
+      const matchesCategory = category === "all" || kit.category === category;
+      const matchesPrice = priceRange === "all" ||
+        (priceRange === "under-1000" && kit.price < 1000) ||
+        (priceRange === "1000-2499" && kit.price >= 1000 && kit.price <= 2499) ||
+        (priceRange === "2500-4999" && kit.price >= 2500 && kit.price <= 4999) ||
+        (priceRange === "5000-plus" && kit.price >= 5000);
+      return matchesSearch && matchesAvailability && matchesCategory && matchesPrice;
     });
 
     return [...result].sort((a, b) => {
@@ -48,15 +61,17 @@ export default function KitsPage() {
       if (availabilityPriority !== 0) return availabilityPriority;
       return Number(Boolean(b.isFeatured)) - Number(Boolean(a.isFeatured));
     });
-  }, [kits, search, filter, sortBy]);
+  }, [kits, search, filter, priceRange, category, sortBy]);
 
   const clearFilters = () => {
     setSearch("");
     setFilter("all");
+    setPriceRange("all");
+    setCategory("all");
     setSortBy("featured");
   };
 
-  const hasActiveFilters = search.trim() !== "" || filter !== "all" || sortBy !== "featured";
+  const hasActiveFilters = search.trim() !== "" || filter !== "all" || priceRange !== "all" || category !== "all" || sortBy !== "featured";
   const availableCount = kits.filter((kit) => kit.isAvailable).length;
 
   return (
@@ -159,6 +174,40 @@ export default function KitsPage() {
                   <span className={`rounded-full px-2 py-0.5 text-[9px] ${filter === value ? "bg-white/20 text-white" : "bg-[#F3EFE6] text-[#70695E]"}`}>{count}</span>
                 </button>
               ))}
+            </div>
+          </div>
+
+          <div className="grid gap-3 rounded-2xl border border-[#E8DEC9] bg-white/85 p-3 shadow-[0_5px_18px_rgba(64,47,24,.045)] sm:grid-cols-[1fr_1fr] sm:gap-4 sm:p-4">
+            <div className="min-w-0">
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <p className="text-[10px] font-black uppercase tracking-[.13em] text-[#6D7568]">Price range</p>
+                <span className="text-[10px] font-extrabold text-[#800020]">{formatFilterPrice(minKitPrice)} – {formatFilterPrice(maxKitPrice)}</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { value: "all", label: "Any price" },
+                  { value: "under-1000", label: "Under ₹1,000" },
+                  { value: "1000-2499", label: "₹1k – ₹2.5k" },
+                  { value: "2500-4999", label: "₹2.5k – ₹5k" },
+                  { value: "5000-plus", label: "₹5k+" },
+                ].map((option) => (
+                  <button key={option.value} type="button" onClick={() => setPriceRange(option.value)} aria-pressed={priceRange === option.value}
+                    className={`min-h-8 rounded-full border px-3 text-[9px] font-extrabold transition-all duration-200 active:scale-95 ${priceRange === option.value ? "border-[#800020] bg-[#800020] text-white shadow-sm" : "border-[#E8E0D3] bg-[#FFFEFA] text-[#625D54] hover:border-[#C9AAB2] hover:text-[#800020]"}`}>
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="min-w-0 border-t border-[#EEE8DD] pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0">
+              <p className="mb-2 text-[10px] font-black uppercase tracking-[.13em] text-[#6D7568]">Browse by category</p>
+              <div className="flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <button type="button" onClick={() => setCategory("all")} aria-pressed={category === "all"}
+                  className={`min-h-8 shrink-0 rounded-full border px-3 text-[9px] font-extrabold transition ${category === "all" ? "border-[#168447] bg-[#168447] text-white" : "border-[#E8E0D3] bg-[#FFFEFA] text-[#625D54] hover:border-[#A9C9A7]"}`}>All categories</button>
+                {categories.map((item) => (
+                  <button key={item} type="button" onClick={() => setCategory(item)} aria-pressed={category === item}
+                    className={`min-h-8 shrink-0 rounded-full border px-3 text-[9px] font-extrabold transition ${category === item ? "border-[#168447] bg-[#168447] text-white" : "border-[#E8E0D3] bg-[#FFFEFA] text-[#625D54] hover:border-[#A9C9A7]"}`}>{item}</button>
+                ))}
+              </div>
             </div>
           </div>
 
