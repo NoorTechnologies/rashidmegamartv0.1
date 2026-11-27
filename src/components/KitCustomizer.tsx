@@ -223,7 +223,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           <div className="flex items-center justify-between gap-3 border-b border-[#E8DFD1] bg-[#FAF7EF] px-3 py-3">
             <div>
               <h3 className="text-xs font-black text-[#202124] sm:text-sm">Grocery Quantity Calculator</h3>
-              <p className="mt-0.5 text-[9px] font-medium text-[#686868]">Placeholder rates are editable and are not final store prices.</p>
+              <p className="mt-0.5 text-[9px] font-medium text-[#686868]">Demo rates are shown for calculation; the store will set final prices.</p>
             </div>
             <span className="rounded-full bg-[#FAF0C8] px-2.5 py-1 text-[9px] font-black text-[#806000]">DEMO RATES</span>
           </div>
@@ -241,7 +241,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           <div className="flex items-center justify-between gap-3 border-t border-[#E8DFD1] bg-[#F0F8F1] px-3 py-3">
             <div>
               <p className="text-xs font-black text-[#174D2B]">Estimated item total</p>
-              <p className="text-[9px] text-[#42664B]">{groceryEstimate.pendingCount ? "Check the item quantity and rate units." : "Quantity × per-unit demo rate. Change any rate above."}</p>
+              <p className="text-[9px] text-[#42664B]">{groceryEstimate.pendingCount ? "Check the item quantity and rate units." : "Quantity × per-unit demo rate. Actual rates will be confirmed by the store."}</p>
             </div>
             <p className="text-base font-black tabular-nums text-[#106B38]">{groceryEstimate.total === null ? "Check quantity" : formatEstimate(groceryEstimate.total)}</p>
           </div>
