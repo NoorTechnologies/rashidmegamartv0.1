@@ -56,7 +56,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         aria-label={`View ${kit.name} details`}
         className="block shrink-0"
       >
-        <div className="relative aspect-[16/9] min-[400px]:aspect-[4/3] w-full overflow-hidden bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
           <span className="absolute left-2 top-2 z-10 inline-flex max-w-[58%] items-center gap-1 rounded-full border border-white/40 bg-[#168447] px-2 py-1 text-[8px] font-black tracking-[0.02em] text-white shadow-md shadow-[#800020]/20 sm:left-3 sm:top-3 sm:max-w-none sm:px-2.5 sm:text-[10px]">
             <Tag size={11} />
             {savings > 0 ? `SAVE ${formatPrice(savings)}` : "KIT DEAL"}
@@ -73,7 +73,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
               alt={kit.name}
               fill
               loading={eagerImage ? "eager" : "lazy"}
-              sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 240px"
+              sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, (max-width: 1535px) 33vw, 25vw"
               onError={() => setImageError(true)}
               className="object-contain p-3 min-[400px]:p-2.5 sm:p-5 transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             />
