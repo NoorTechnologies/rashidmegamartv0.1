@@ -43,14 +43,14 @@ function HelpCentreMenu({
   mobile?: boolean;
 }) {
   const placement = mobile
-    ? "bottom-[calc(100%+10px)] left-1/2 -translate-x-1/2"
+    ? "bottom-[calc(100%+10px)] right-0"
     : "right-0 top-[calc(100%+10px)]";
 
   return (
     <div
       role="menu"
       aria-label="Help Centre"
-      className={`absolute z-[70] w-[min(270px,calc(100vw-24px))] rounded-2xl border border-white/80 bg-[#FFFEFA]/96 p-2 shadow-[0_18px_55px_rgba(39,31,22,0.18)] backdrop-blur-2xl ${placement}`}
+      className={`absolute z-[70] max-h-[min(65dvh,360px)] w-[min(270px,calc(100vw-24px))] overflow-y-auto overscroll-contain rounded-2xl border border-[#E8DFD1] bg-[#FFFEFA] p-2 shadow-[0_18px_55px_rgba(39,31,22,0.22)] ${placement}`}
     >
       <div className="px-2 pb-2 pt-1">
         <p className="text-xs font-extrabold text-[#30251F]">How can we help?</p>
