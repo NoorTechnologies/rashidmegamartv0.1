@@ -113,7 +113,7 @@ function LanguageMenu({
   mobile?: boolean;
 }) {
   const placement = mobile
-    ? "bottom-[calc(100%+14px)] left-1/2 -translate-x-1/2"
+    ? "bottom-[calc(100%+12px)] right-0"
     : "right-0 top-[calc(100%+12px)]";
   const options = [
     {
@@ -144,7 +144,7 @@ function LanguageMenu({
       role="menu"
       aria-label="Choose language"
       className={
-        "absolute z-[70] w-[min(278px,calc(100vw-24px))] overflow-hidden rounded-[24px] border border-[#800020]/10 bg-[#FFFEFA]/95 p-2.5 shadow-[0_22px_65px_rgba(45,20,26,0.20),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-2xl backdrop-saturate-150 " +
+        "rmm-language-menu absolute z-[70] max-h-[min(68dvh,390px)] w-[min(278px,calc(100vw-24px))] overflow-y-auto overscroll-contain rounded-[22px] border border-[#E8DFD1] bg-[#FFFEFA] p-2.5 shadow-[0_22px_65px_rgba(45,20,26,0.22)] " +
         placement
       }
     >
@@ -176,7 +176,7 @@ function LanguageMenu({
                 onClose();
               }}
               className={
-                "group flex min-h-[58px] w-full items-center gap-3 rounded-[17px] border px-2.5 py-2 text-left transition-all duration-200 active:scale-[0.985] " +
+                "rmm-language-option group flex min-h-[58px] w-full items-center gap-3 rounded-[16px] border px-2.5 py-2 text-left transition-[background-color,border-color,transform,box-shadow] duration-300 ease-out active:scale-[0.985] " +
                 (selected
                   ? "border-[#800020]/15 bg-[#800020]/[0.055] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]"
                   : "border-transparent hover:border-[#800020]/[0.08] hover:bg-[#F7F3EF]")
@@ -184,7 +184,7 @@ function LanguageMenu({
             >
               <span
                 className={
-                  "flex size-10 shrink-0 items-center justify-center rounded-[13px] text-[10px] font-black tracking-wide transition-colors " +
+                  "flex size-10 shrink-0 items-center justify-center rounded-[13px] text-[10px] font-black tracking-wide transition-[background-color,color,transform] duration-300 " +
                   (selected
                     ? "bg-[#800020] text-white shadow-sm shadow-[#800020]/20"
                     : "bg-[#F0ECE7] text-[#675B55] group-hover:bg-white")
@@ -207,7 +207,7 @@ function LanguageMenu({
               </span>
               <span
                 className={
-                  "flex size-[22px] shrink-0 items-center justify-center rounded-full border transition-all " +
+                  "flex size-[22px] shrink-0 items-center justify-center rounded-full border transition-[background-color,border-color,color,transform] duration-300 " +
                   (selected
                     ? "border-[#800020] bg-[#800020] text-white"
                     : "border-[#D8D0C8] text-transparent group-hover:border-[#B9A9A0]")
@@ -392,7 +392,7 @@ export default function BottomNav() {
 
           <div ref={mobileLanguageRef} data-no-translate className="relative mx-auto flex h-12 w-full min-w-0 items-center justify-center">
             <button type="button" aria-label="Choose language" aria-expanded={languageOpen} aria-haspopup="menu" onClick={() => setLanguageOpen((value) => !value)} className={"flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " + (languageOpen ? "text-[#315F35]" : "text-[#625F56]")}>
-              <span className={"flex size-6 items-center justify-center rounded-full " + (languageOpen ? "bg-[#E7F0E2]" : "")}><Globe2 size={17} strokeWidth={2.2} className="text-[#800020]" /></span>
+              <span className={"flex size-6 items-center justify-center rounded-full " + (languageOpen ? "bg-[#E7F0E2]" : "")}><Globe2 size={17} strokeWidth={2.2} className={"text-[#800020] transition-transform duration-300 " + (languageOpen ? "rotate-12 scale-110" : "")} /></span>
               <span className="text-[8px] font-bold leading-none">{language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "हिन्दी"}</span>
             </button>
             {languageOpen && <LanguageMenu mobile language={language} setLanguage={setLanguage} onClose={() => setLanguageOpen(false)} />}
