@@ -48,7 +48,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
 
 
   return (
-    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[20px] border border-[#E8DFD1] bg-white shadow-[0_4px_18px_rgba(74,34,22,0.06)] transition-[box-shadow,transform,border-color] duration-300 hover:-translate-y-0.5 hover:border-[#D8CBB8] hover:shadow-[0_12px_30px_rgba(74,34,22,0.10)] sm:rounded-[24px]">
+    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[22px] border border-[#E8DFD1] bg-white shadow-[0_8px_28px_rgba(74,34,22,0.08)] transition-[box-shadow,transform,border-color] duration-300 hover:-translate-y-0.5 hover:border-[#D8CBB8] hover:shadow-[0_16px_38px_rgba(74,34,22,0.12)] sm:rounded-[26px]">
 
       {/* KIT IMAGE */}
       <Link
@@ -56,7 +56,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
         aria-label={`View ${kit.name} details`}
         className="block shrink-0"
       >
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
+        <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.99)_0%,rgba(255,248,231,0.88)_48%,rgba(242,229,211,0.76)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.76),transparent_48%,rgba(212,168,79,0.12))]">
           <span className="absolute left-2 top-2 z-10 inline-flex max-w-[58%] items-center gap-1 rounded-full border border-white/40 bg-[#168447] px-2 py-1 text-[8px] font-black tracking-[0.02em] text-white shadow-md shadow-[#800020]/20 sm:left-3 sm:top-3 sm:max-w-none sm:px-2.5 sm:text-[10px]">
             <Tag size={11} />
             {savings > 0 ? `SAVE ${formatPrice(savings)}` : "KIT DEAL"}
@@ -73,7 +73,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
               alt={kit.name}
               fill
               loading={eagerImage ? "eager" : "lazy"}
-              sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, (max-width: 1535px) 33vw, 25vw"
+              sizes="(max-width: 704px) calc(100vw - 24px), 680px"
               onError={() => setImageError(true)}
               className="object-contain p-3 min-[400px]:p-2.5 sm:p-5 transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             />
@@ -102,7 +102,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
       </Link>
 
       {/* KIT DETAILS */}
-      <div className="relative flex min-h-0 min-w-0 flex-1 flex-col p-3 sm:p-4">
+      <div className="relative flex min-h-0 min-w-0 flex-1 flex-col p-4 sm:p-5">
         <Link href={`/kits/${kit.id}`}>
           <h3 className="line-clamp-2 min-h-[2.5rem] text-[13px] font-extrabold leading-[1.25rem] text-[#202124] transition-colors group-hover:text-[#800020] sm:min-h-11 sm:text-[15px] sm:leading-5">
             {kit.name}
@@ -125,7 +125,7 @@ export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 gap-y-1.5 min-[640px]:grid-cols-2 min-[640px]:gap-x-2 min-[640px]:gap-y-2">
+          <div className="grid grid-cols-1 gap-y-2 min-[768px]:grid-cols-2 min-[768px]:gap-x-4 min-[768px]:gap-y-3">
             {visibleItems.map((item, index) => {
               const parts = item.match(/^(.+?)\s*[-–]\s*(.+)$/);
               const name = parts ? parts[1].trim() : item;
