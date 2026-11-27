@@ -15,34 +15,46 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen w-full overflow-x-clip bg-[#FAF7EF]">
-      <section data-reveal-group className="relative overflow-hidden bg-gradient-to-b from-[#F1EBDD] via-white to-[#FAF7EF] px-3 pb-7 pt-4 text-[#202124] sm:px-5 sm:pb-12 sm:pt-10">
-        <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#F7C928]/15 blur-[90px]" />
-        <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#168447]/[0.07] blur-[90px]" />
-        <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
-          <span data-reveal-item className="inline-flex items-center gap-2 rounded-full border border-[#F7C928]/40 bg-white/90 px-4 py-2 text-[10px] font-bold tracking-wide text-[#168447] shadow-sm sm:text-xs">
-            <Package size={15} /> GROCERY KITS FOR EVERYDAY NEEDS
-          </span>
-          <div className="mt-3 flex flex-col items-center sm:mt-5">
-            <Image data-reveal-item src="/images/logo2.png" alt="Rashid Mega Mart Logo" width={110} height={110} priority className="h-16 w-16 object-contain sm:h-24 sm:w-24" />
-            <h1 data-reveal-item className="mt-2 max-w-2xl text-[25px] font-black leading-[1.08] tracking-tight text-[#202124] sm:mt-3 sm:text-4xl md:text-5xl">
-              Welcome to <span className="mt-1 block text-[#168447]">Rashid Mega Mart</span>
-            </h1>
-            <p data-reveal-item className="mt-2 max-w-md text-xs leading-5 text-[#686868] sm:mt-3 sm:text-sm sm:leading-6">
-              Thoughtfully packed grocery kits for your home, at great value.
-            </p>
-          </div>
-          <div data-reveal-item className="relative mt-1 w-full max-w-[560px] sm:mt-3">
-            <div className="pointer-events-none absolute inset-x-8 bottom-2 h-10 rounded-full bg-[#F7C928]/20 blur-2xl" />
-            <div className="relative mx-auto h-[148px] w-full overflow-hidden rounded-2xl min-[390px]:h-[164px] sm:h-[340px] sm:rounded-3xl">
-              <Image src="/hero.png" alt="Rashid Mega Mart grocery kits" fill priority sizes="(max-width: 640px) 100vw, 560px" className="object-contain drop-shadow-[0_12px_22px_rgba(0,0,0,0.12)]" />
+      <section data-reveal-group className="rmm-home-hero relative isolate overflow-hidden px-3 pb-7 pt-5 text-[#202124] sm:px-6 sm:pb-12 sm:pt-10 lg:px-8">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_12%_8%,rgba(247,201,40,0.20),transparent_34%),radial-gradient(ellipse_at_88%_72%,rgba(22,132,71,0.12),transparent_38%),linear-gradient(145deg,#F5EEDF_0%,#FFFEFA_48%,#F2F6EE_100%)]" />
+        <div aria-hidden="true" className="pointer-events-none absolute -right-24 top-8 -z-10 size-72 rounded-full border border-[#168447]/[0.08] sm:size-[26rem]" />
+        <div className="relative mx-auto grid w-full max-w-6xl items-center gap-5 sm:gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-10">
+          <div className="flex min-w-0 flex-col items-center text-center lg:items-start lg:text-left">
+            <span data-reveal-item className="inline-flex items-center gap-2 rounded-full border border-[#DCCB9E] bg-white/85 px-3.5 py-2 text-[9px] font-extrabold tracking-[0.12em] text-[#315F35] shadow-[0_5px_18px_rgba(71,55,24,0.06)] sm:text-[10px]">
+              <Package size={14} /> GROCERY KITS FOR EVERYDAY NEEDS
+            </span>
+            <div className="mt-4 flex flex-col items-center lg:items-start">
+              <Image data-reveal-item src="/images/logo2.png" alt="Rashid Mega Mart Logo" width={88} height={88} priority className="h-11 w-11 object-contain sm:h-14 sm:w-14" />
+              <h1 data-reveal-item className="mt-2 max-w-[620px] text-[clamp(1.85rem,7vw,3.65rem)] font-black leading-[1.02] tracking-[-0.055em] text-[#25221E] sm:mt-3">
+                Your daily needs,
+                <span className="mt-1 block bg-gradient-to-r from-[#168447] via-[#267A3D] to-[#800020] bg-clip-text text-transparent">all in one place.</span>
+              </h1>
+              <p data-reveal-item className="mt-3 max-w-[440px] text-[12px] leading-[1.65] text-[#71685E] sm:mt-4 sm:text-sm">
+                Thoughtfully packed grocery kits for your home — quality essentials, great value, and easy ordering.
+              </p>
+            </div>
+            <Link data-reveal-item href="/kits" className="rmm-button-primary group mt-5 inline-flex min-h-12 w-full max-w-[330px] items-center justify-center gap-2 rounded-2xl px-7 py-3.5 text-[13px] font-extrabold shadow-[0_10px_24px_rgba(22,132,71,0.20)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(22,132,71,0.26)] active:scale-[0.98] sm:w-auto sm:min-w-[230px]">
+              Explore Grocery Kits <ArrowRight size={17} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+            <div data-reveal-item className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[10px] font-bold text-[#625F56] lg:justify-start sm:text-[11px]">
+              <span className="inline-flex items-center gap-1.5"><ShieldCheck size={15} className="text-[#168447]" /> Value-packed combos</span>
+              <span className="inline-flex items-center gap-1.5"><Truck size={15} className="text-[#168447]" /> Delivery on confirmation</span>
             </div>
           </div>
-          <Link data-reveal-item href="/kits" className="rmm-button-primary mt-3 inline-flex min-h-12 w-full max-w-[320px] items-center justify-center gap-2 rounded-xl px-7 py-3 text-sm shadow-sm sm:mt-5 sm:w-auto">
-            Explore Grocery Kits <ArrowRight size={18} />
-          </Link>
-          <div data-reveal-item className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[10px] font-semibold text-[#686868] sm:mt-5 sm:gap-x-5 sm:text-xs">
-            <span className="flex items-center gap-2"><ShieldCheck size={16} className="text-[#168447]" /> Value-packed combos</span>
-            <span className="flex items-center gap-2"><Truck size={16} className="text-[#168447]" /> Delivery on confirmation</span>
+
+          <div data-reveal-item className="relative mx-auto w-full max-w-[620px] lg:max-w-none">
+            <div aria-hidden="true" className="absolute inset-[8%] rounded-[34px] bg-[#E8D8AD]/55 blur-2xl" />
+            <div className="relative flex h-[220px] items-center justify-center overflow-hidden rounded-[28px] border border-white/90 bg-[linear-gradient(145deg,rgba(255,255,255,0.92),rgba(246,239,220,0.88))] shadow-[0_22px_60px_rgba(72,55,28,0.10),inset_0_1px_0_rgba(255,255,255,0.95)] sm:h-[340px] sm:rounded-[36px] lg:h-[430px]">
+              <div aria-hidden="true" className="absolute left-1/2 top-1/2 aspect-square w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#D9C99F]/60 bg-[radial-gradient(circle,rgba(247,201,40,0.17),rgba(247,201,40,0.04)_58%,transparent_70%)]" />
+              <div aria-hidden="true" className="absolute bottom-8 left-1/2 h-7 w-[58%] -translate-x-1/2 rounded-[50%] bg-[#315F35]/15 blur-xl" />
+              <Image src="/hero.png" alt="Rashid Mega Mart grocery storefront" fill priority sizes="(max-width: 1023px) 100vw, 55vw" className="relative z-10 object-contain p-2 drop-shadow-[0_18px_24px_rgba(40,30,12,0.16)] sm:p-4" />
+              <span className="absolute left-3 top-3 z-20 inline-flex items-center gap-1.5 rounded-full border border-white/90 bg-white/90 px-3 py-2 text-[9px] font-extrabold text-[#315F35] shadow-md sm:left-5 sm:top-5 sm:text-[10px]">
+                <span className="size-1.5 rounded-full bg-[#168447]" /> Everyday essentials
+              </span>
+              <span className="absolute bottom-3 right-3 z-20 rounded-full border border-white/90 bg-[#800020] px-3 py-2 text-[9px] font-extrabold tracking-wide text-white shadow-lg sm:bottom-5 sm:right-5 sm:px-4 sm:text-[10px]">
+                VALUE · QUALITY · CONVENIENCE
+              </span>
+            </div>
           </div>
         </div>
       </section>
