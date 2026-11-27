@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
+  Check,
+  ChevronDown,
   FileText,
   House,
   LifeBuoy,
@@ -99,29 +101,127 @@ function HelpCentreMenu({
   );
 }
 
-function LanguageMenu({ language, setLanguage, onClose, mobile = false }: {
+function LanguageMenu({
+  language,
+  setLanguage,
+  onClose,
+  mobile = false,
+}: {
   language: "en" | "hinglish" | "hi";
   setLanguage: (value: "en" | "hinglish" | "hi") => void;
   onClose: () => void;
   mobile?: boolean;
 }) {
-  const placement = mobile ? "bottom-[calc(100%+10px)] left-1/2 -translate-x-1/2" : "right-0 top-[calc(100%+10px)]";
+  const placement = mobile
+    ? "bottom-[calc(100%+14px)] left-1/2 -translate-x-1/2"
+    : "right-0 top-[calc(100%+12px)]";
   const options = [
-    { value: "en", label: "English", detail: "EN" },
-    { value: "hinglish", label: "Hinglish", detail: "HI-EN" },
-    { value: "hi", label: "Hindi", detail: "हिंदी" },
+    {
+      value: "en",
+      label: "English",
+      native: "English",
+      detail: "EN",
+      description: "Simple and familiar",
+    },
+    {
+      value: "hinglish",
+      label: "Hinglish",
+      native: "हिंग्लिश",
+      detail: "HI·EN",
+      description: "Hindi in English letters",
+    },
+    {
+      value: "hi",
+      label: "Hindi",
+      native: "हिन्दी",
+      detail: "अ",
+      description: "पूरी वेबसाइट हिन्दी में",
+    },
   ] as const;
+
   return (
-    <div role="menu" aria-label="Choose language" className={"absolute z-[70] w-[min(220px,calc(100vw-24px))] rounded-2xl border border-white/80 bg-[#FFFEFA]/96 p-2 shadow-[0_18px_55px_rgba(39,31,22,0.18)] backdrop-blur-2xl " + placement}>
-      <div className="px-2 pb-2 pt-1"><p className="text-xs font-extrabold text-[#30251F]">Choose language</p><p className="mt-0.5 text-[10px] text-[#81796F]">Select your preferred language</p></div>
-      <div className="h-px bg-[#EEE8E1]" />
-      {options.map((option) => (
-        <button key={option.value} type="button" role="menuitemradio" aria-checked={language === option.value} onClick={() => { setLanguage(option.value); onClose(); }} className="flex min-h-11 w-full items-center gap-3 rounded-xl px-2 text-left transition-colors hover:bg-[#F2F5EE]">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E6] text-[11px] font-extrabold text-[#315F35]">{option.detail}</span>
-          <span className="min-w-0 flex-1 text-[12px] font-bold text-[#30251F]">{option.label}</span>
-          {language === option.value && <span className="text-xs font-black text-[#315F35]">✓</span>}
-        </button>
-      ))}
+    <div
+      role="menu"
+      aria-label="Choose language"
+      className={
+        "absolute z-[70] w-[min(278px,calc(100vw-24px))] overflow-hidden rounded-[24px] border border-[#800020]/10 bg-[#FFFEFA]/95 p-2.5 shadow-[0_22px_65px_rgba(45,20,26,0.20),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-2xl backdrop-saturate-150 " +
+        placement
+      }
+    >
+      <div className="flex items-center gap-3 px-2.5 pb-3 pt-2">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#800020]/[0.07] text-[#800020]">
+          <Globe2 size={19} strokeWidth={2} />
+        </span>
+        <span className="min-w-0">
+          <span className="block text-[13px] font-extrabold tracking-[-0.02em] text-[#30251F]">
+            Choose your language
+          </span>
+          <span className="mt-0.5 block text-[10px] font-medium text-[#81796F]">
+            Your preference is saved automatically
+          </span>
+        </span>
+      </div>
+      <div className="mx-1 h-px bg-gradient-to-r from-transparent via-[#800020]/15 to-transparent" />
+      <div className="space-y-1.5 pt-2">
+        {options.map((option) => {
+          const selected = language === option.value;
+          return (
+            <button
+              key={option.value}
+              type="button"
+              role="menuitemradio"
+              aria-checked={selected}
+              onClick={() => {
+                setLanguage(option.value);
+                onClose();
+              }}
+              className={
+                "group flex min-h-[58px] w-full items-center gap-3 rounded-[17px] border px-2.5 py-2 text-left transition-all duration-200 active:scale-[0.985] " +
+                (selected
+                  ? "border-[#800020]/15 bg-[#800020]/[0.055] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]"
+                  : "border-transparent hover:border-[#800020]/[0.08] hover:bg-[#F7F3EF]")
+              }
+            >
+              <span
+                className={
+                  "flex size-10 shrink-0 items-center justify-center rounded-[13px] text-[10px] font-black tracking-wide transition-colors " +
+                  (selected
+                    ? "bg-[#800020] text-white shadow-sm shadow-[#800020]/20"
+                    : "bg-[#F0ECE7] text-[#675B55] group-hover:bg-white")
+                }
+              >
+                {option.detail}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="flex items-center gap-2">
+                  <span className="text-[12px] font-extrabold text-[#30251F]">
+                    {option.label}
+                  </span>
+                  <span className="text-[10px] font-semibold text-[#91867D]">
+                    {option.native}
+                  </span>
+                </span>
+                <span className="mt-0.5 block text-[10px] font-medium text-[#81796F]">
+                  {option.description}
+                </span>
+              </span>
+              <span
+                className={
+                  "flex size-[22px] shrink-0 items-center justify-center rounded-full border transition-all " +
+                  (selected
+                    ? "border-[#800020] bg-[#800020] text-white"
+                    : "border-[#D8D0C8] text-transparent group-hover:border-[#B9A9A0]")
+                }
+              >
+                <Check size={12} strokeWidth={3} />
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      <p className="px-2.5 pb-1 pt-2 text-center text-[9px] font-medium tracking-wide text-[#A0968D]">
+        RASHID MEGA MART · LANGUAGE PREFERENCE
+      </p>
     </div>
   );
 }
@@ -175,7 +275,7 @@ export default function BottomNav() {
       <header className="pointer-events-none fixed inset-x-0 top-3 z-50 hidden px-4 lg:block">
         <nav
           aria-label="Main navigation"
-          className="pointer-events-auto mx-auto flex h-[62px] max-w-6xl items-center justify-between gap-2 rounded-full border border-[#800020]/15 bg-[#FFFEFA]/68 px-4 shadow-[0_10px_30px_rgba(64,24,32,0.10)] backdrop-blur-2xl backdrop-saturate-150 xl:px-6"
+          className="pointer-events-auto mx-auto flex h-[62px] max-w-6xl items-center justify-between gap-2 rounded-full border border-white/75 bg-[#FFFEFA]/82 px-4 shadow-[0_12px_36px_rgba(64,24,32,0.12),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-2xl backdrop-saturate-150 xl:px-6"
         >
           <Link href="/" aria-label="Rashid Mega Mart home" className="flex shrink-0 items-center gap-2.5">
             <Image src="/images/logo2.png" alt="" width={42} height={42} priority className="size-9 object-contain" />
@@ -221,7 +321,7 @@ export default function BottomNav() {
 
             <div ref={desktopLanguageRef} className="relative">
               <button type="button" aria-expanded={languageOpen} aria-haspopup="menu" onClick={() => setLanguageOpen((value) => !value)} className={"inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " + (languageOpen ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70")}>
-                <Globe2 size={16} strokeWidth={2.2} className="text-[#800020]" /> Language
+                <Globe2 size={16} strokeWidth={2.2} className="text-[#800020]" />\n                Language\n                <span className="rounded-full bg-[#800020]/[0.07] px-1.5 py-0.5 text-[9px] font-black tracking-wide text-[#800020]">{language === "en" ? "EN" : language === "hinglish" ? "HI·EN" : "हिंदी"}</span>\n                <ChevronDown size={13} strokeWidth={2.2} className={"text-[#8C7772] transition-transform " + (languageOpen ? "rotate-180" : "")} />
               </button>
               {languageOpen && <LanguageMenu language={language} setLanguage={setLanguage} onClose={() => setLanguageOpen(false)} />}
             </div>
@@ -231,7 +331,7 @@ export default function BottomNav() {
               aria-label={`Open cart, ${totalItems} items`}
               className="relative inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[#315F35] px-3 text-[12px] font-extrabold text-white shadow-sm transition hover:bg-[#254B29]"
             >
-              <ShoppingCart size={16} strokeWidth={2.2} className="text-[#800020]" />
+              <ShoppingCart size={16} strokeWidth={2.2} className="text-white" />
               Cart
               {totalItems > 0 && (
                 <span className="flex min-w-5 items-center justify-center rounded-full bg-[#F2D27B] px-1.5 py-0.5 text-[10px] font-black text-[#443719]">
@@ -248,7 +348,7 @@ export default function BottomNav() {
         aria-label="Main navigation"
         className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(6px+env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="relative grid h-[66px] grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_88px_minmax(0,1fr)] items-center rounded-[24px] border border-[#800020]/15 bg-white/58 px-1.5 shadow-[0_9px_26px_rgba(64,24,32,0.10),inset_0_1px_0_rgba(255,255,255,0.82)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[66px] grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_88px_minmax(0,1fr)] items-center rounded-[24px] border border-white/80 bg-[#FFFEFA]/78 px-1.5 shadow-[0_12px_34px_rgba(64,24,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-2xl backdrop-saturate-150">
           {navItems.map(({ label, href, icon: Icon }) => (
             <Link
               key={href}
@@ -293,7 +393,7 @@ export default function BottomNav() {
           <div ref={mobileLanguageRef} data-no-translate className="relative mx-auto flex h-12 w-full min-w-0 items-center justify-center">
             <button type="button" aria-label="Choose language" aria-expanded={languageOpen} aria-haspopup="menu" onClick={() => setLanguageOpen((value) => !value)} className={"flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " + (languageOpen ? "text-[#315F35]" : "text-[#625F56]")}>
               <span className={"flex size-6 items-center justify-center rounded-full " + (languageOpen ? "bg-[#E7F0E2]" : "")}><Globe2 size={17} strokeWidth={2.2} className="text-[#800020]" /></span>
-              <span className="text-[8px] font-semibold leading-none">Language</span>
+              <span className="text-[8px] font-bold leading-none">{language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "हिन्दी"}</span>
             </button>
             {languageOpen && <LanguageMenu mobile language={language} setLanguage={setLanguage} onClose={() => setLanguageOpen(false)} />}
           </div>
