@@ -67,7 +67,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
     [contents, additions],
   );
   const formatEstimate = (amount: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 }).format(amount);
-  const getLineAmount = (line: KitLine) => estimateGroceryLines([line]).total ?? 0;
+  const getLineAmount = (line: KitLine) => estimateGroceryLines([line]).total;
 
   const saveContents = (next: KitLine[], nextAdditions = additions) => {
     setContents(next);
@@ -166,7 +166,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
                 </div>
                 <div className="text-right">
                   <p className="text-[9px] font-bold text-[#8A8178]">Item total</p>
-                  <p className="text-sm font-black tabular-nums text-[#168447]">{formatEstimate(getLineAmount(line))}</p>
+                  <p className="text-sm font-black tabular-nums text-[#168447]">{getLineAmount(line) === null ? "Check quantity" : formatEstimate(getLineAmount(line) ?? 0)}</p>
                 </div>
               </div>
             </div>
@@ -211,7 +211,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
                         <p className="mt-1 text-xs font-extrabold text-[#202124]">₹{item.rate.toLocaleString("en-IN")} / {item.rateUnit}</p>
                       </div>
                     </div>
-                    <p className="mt-2 text-right text-[11px] font-black text-[#168447]">Item total: {formatEstimate(getLineAmount(item))}</p>
+                    <p className="mt-2 text-right text-[11px] font-black text-[#168447]">Item total: {getLineAmount(item) === null ? "Check quantity" : formatEstimate(getLineAmount(item) ?? 0)}</p>
                   </div>
                 ))}
               </div>
@@ -234,7 +234,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
                   <p className="truncate text-[10px] font-bold text-[#202124]">{displayCatalogue(line.name)}</p>
                   <p className="text-[9px] font-medium text-[#686868]">{displayCatalogue(line.quantity)} · ₹{line.rate.toLocaleString("en-IN")}/{line.rateUnit}</p>
                 </div>
-                <span className="shrink-0 text-[10px] font-extrabold tabular-nums text-[#806000]">{line.amount === null ? "Rate pending" : formatEstimate(line.amount)}</span>
+                <span className="shrink-0 text-[10px] font-extrabold tabular-nums text-[#806000]">{line.amount === null ? "Check quantity" : formatEstimate(line.amount)}</span>
               </div>
             ))}
           </div>
