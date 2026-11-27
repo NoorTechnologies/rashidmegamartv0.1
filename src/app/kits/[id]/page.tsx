@@ -83,7 +83,7 @@ export default async function KitDetailPage({ params }: PageProps) {
               <p className="mt-3 text-sm leading-6 text-[#687469] sm:text-[15px] sm:leading-7"><LocalizedKitCopy value={kit.description}/></p>
 
               <div className="mt-6 rounded-[22px] border border-[#DCEBDD] bg-[linear-gradient(135deg,rgba(239,248,238,.92),rgba(255,255,255,.82)_58%,rgba(250,244,220,.8))] p-4 sm:p-5">
-                <p className="text-[10px] font-black uppercase tracking-[.18em] text-[#718171]">Your special kit price</p>
+                <p className="text-[10px] font-black uppercase tracking-[.18em] text-[#718171]">Ready-made kit price</p>
                 <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                   <span className="text-[38px] font-black leading-none tracking-[-.05em] text-[#800020] sm:text-[44px]">₹{kit.price.toLocaleString("en-IN")}</span>
                   {kit.oldPrice && kit.oldPrice > kit.price && <span className="text-base font-semibold text-[#899189] line-through">₹{kit.oldPrice.toLocaleString("en-IN")}</span>}
