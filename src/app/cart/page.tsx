@@ -7,6 +7,7 @@ import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2, Truck, ShieldCheck, Chevro
 
 import { useCart } from "@/context/CartContext";
 import { kits } from "@/data/kits";
+import { estimateGroceryLines } from "@/data/grocery-rates";
 
 const WHATSAPP_NUMBER = "918962531603";
 
@@ -40,11 +41,14 @@ export default function CartPage() {
     () =>
       items.map((item) => {
         const kit = kits.find((entry) => entry.id === item.id);
-        const unitPrice = kit?.price ?? item.price;
+        const hasItemBreakdown = Array.isArray(item.kitContents) || Array.isArray(item.requestedItems);
+        const itemBreakdown = estimateGroceryLines([...(item.kitContents ?? []), ...(item.requestedItems ?? [])]);
+        const unitPrice = hasItemBreakdown ? (itemBreakdown.total ?? 0) : (kit?.price ?? item.price);
         return {
           ...item,
           name: kit?.name ?? item.name,
           unitPrice,
+          itemBreakdown,
           lineTotal: unitPrice * item.quantity,
           available: item.catalogProductId ? true : Boolean(kit?.isAvailable),
         };
@@ -85,10 +89,10 @@ export default function CartPage() {
 
     const enquiryDetails = pricedItems
       .map((item, index) => {
-        const contents = [
-          ...(item.kitContents ?? []).map((line) => line.name + " (" + line.quantity + ")"),
-          ...(item.requestedItems ?? []).map((line) => line.name + " (" + line.quantity + ")"),
-        ];
+        const contents = [...(item.kitContents ?? []), ...(item.requestedItems ?? [])].map((line) => {
+          const estimate = estimateGroceryLines([line]).lines[0];
+          return line.name + " (" + line.quantity + ") — " + formatPrice(estimate.amount ?? 0) + " [₹" + estimate.rate + "/" + estimate.rateUnit + "]";
+        });
         return [
           (index + 1) + ". " + (item.kitGroupName ? item.kitGroupName + " — " : "") + item.name,
           "   " + item.quantity + " × " + formatPrice(item.unitPrice) + " = " + formatPrice(item.lineTotal),
@@ -101,7 +105,7 @@ export default function CartPage() {
     const message = [
       "🛒 *Rashid Mega Mart — Shopping Enquiry*",
       "",
-      "This is an enquiry only. Final availability, weight (where applicable), delivery charges and payable amount will be confirmed by the store.",
+      "This is an enquiry only. Item rates are DEMO placeholders, not confirmed store prices. Final rates, availability, weights and delivery charges will be confirmed by the store.",
       "",
       "*Customer*",
       "Name: " + cleanName,
@@ -202,7 +206,7 @@ export default function CartPage() {
                     <div className="min-w-0">
                       {item.kitGroupName ? <p className="mb-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#168447]">{item.kitGroupName}</p> : null}
                       <h3 className="break-words text-sm font-extrabold text-[#202124] sm:text-base">{item.name}</h3>
-                      <p className="mt-1 text-xs text-[#686868]">{formatPrice(item.unitPrice)} per kit</p>
+                      <p className="mt-1 text-xs text-[#686868]">{formatPrice(item.unitPrice)} item-wise total / kit</p>
                     </div>
                     <button type="button" aria-label={"Remove " + item.name} onClick={() => removeFromCart(item.id)} className="flex size-10 shrink-0 items-center justify-center rounded-xl text-[#9B8F80] hover:bg-red-50 hover:text-red-600">
                       <Trash2 size={16} />
@@ -224,8 +228,7 @@ export default function CartPage() {
                         View kit items / changes <ChevronDown size={14} />
                       </summary>
                       <ul className="mt-2 space-y-1 border-t border-[#E8DFD1] pt-2 text-xs text-[#686868]">
-                        {(item.kitContents ?? []).map((line, index) => <li key={"kit-" + index}>{line.name} — {line.quantity}</li>)}
-                        {(item.requestedItems ?? []).map((line, index) => <li key={"extra-" + index}>Extra: {line.name} — {line.quantity} (price to confirm)</li>)}
+                        {[...(item.kitContents ?? []), ...(item.requestedItems ?? [])].map((line, index) => { const estimate = estimateGroceryLines([line]).lines[0]; return <li key={"kit-line-" + index}>{line.name} — {line.quantity} · ₹{estimate.rate}/{estimate.rateUnit} = {estimate.amount === null ? "Check quantity" : formatPrice(estimate.amount)}</li>; })}
                       </ul>
                     </details>
                   ) : null}
@@ -258,7 +261,7 @@ export default function CartPage() {
                   <span className="text-sm font-bold text-[#5E574E]">Subtotal</span>
                   <span aria-live="polite" className="text-2xl font-black tabular-nums text-[#168447]">{formatPrice(subtotal)}</span>
                 </div>
-                <p className="mt-2 text-[11px] leading-5 text-[#686868]">Quantity badalte hi subtotal apne aap update hota hai. Delivery charges WhatsApp par confirm honge.</p>
+                <p className="mt-2 text-[11px] leading-5 text-[#686868]">Kit ke item-wise demo rates aur quantities se subtotal calculate hota hai. Final store rates aur delivery WhatsApp par confirm honge.</p>
               </div>
             </section>
 
