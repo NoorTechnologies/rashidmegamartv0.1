@@ -104,8 +104,8 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
   };
 
   return (
-    <section data-reveal className="rmm-customizer mt-4 overflow-hidden rounded-2xl border border-[#D8CBB8] bg-white shadow-[0_5px_18px_rgba(32,33,36,0.06)] sm:mt-5" aria-labelledby="customize-kit-title">
-      <div className="flex items-center justify-between gap-3 bg-[#168447] px-3 py-3 text-white sm:px-4">
+    <section data-reveal className="rmm-customizer mt-4 overflow-hidden rounded-[24px] border border-white/90 bg-white/60 shadow-[0_14px_42px_rgba(42,75,46,.08)] backdrop-blur-2xl sm:mt-5 sm:rounded-[28px]" aria-labelledby="customize-kit-title">
+      <div className="flex items-center justify-between gap-3 border-b border-white/15 bg-[linear-gradient(110deg,#176B3A,#2E8050)] px-4 py-4 text-white sm:px-5 sm:py-5">
         <div className="min-w-0">
           <h2 id="customize-kit-title" className="text-base font-black leading-tight sm:text-lg">Customize your kit</h2>
           <p className="mt-0.5 text-[10px] font-medium text-white/85 sm:text-xs">Edit quantities, remove or add groceries.</p>
@@ -115,7 +115,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
         </span>
       </div>
 
-      <div className="p-3 sm:p-4">
+      <div className="p-3.5 sm:p-5">
         <div className="mb-2 flex items-center justify-between gap-2">
           <div>
             <h3 className="text-sm font-black text-[#202124] sm:text-base">Your kit items</h3>
@@ -126,7 +126,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
 
         <div className="grid grid-cols-1 gap-2">
           {contents.map((line, index) => (
-            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="rounded-xl border border-[#E8DFD1] bg-white p-2 sm:flex sm:items-center sm:gap-3">
+            <div key={`${kit.id}-${index}-${displayCatalogue(line.name)}`} className="rounded-2xl border border-white/90 bg-white/75 p-3 shadow-[0_5px_18px_rgba(42,75,46,.045)] backdrop-blur-xl transition-colors hover:bg-white sm:flex sm:items-center sm:gap-3">
               <div className="flex min-w-0 items-center gap-2 sm:flex-1">
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E9] text-[#168447]"><Package size={16} /></span>
                 <div className="min-w-0 flex-1">
@@ -148,7 +148,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           {contents.length === 0 && <p className="rounded-2xl border border-dashed border-[#D8CBB8] bg-[#FAF7EF] px-4 py-6 text-center text-xs font-semibold text-[#686868] sm:col-span-2">No original items left. Add the groceries you want below.</p>}
         </div>
 
-        <div className="mt-3 rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] p-3">
+        <div className="mt-4 rounded-2xl border border-white/90 bg-[#F5F8F2]/85 p-3.5 backdrop-blur-xl sm:p-4">
           <div className="flex items-center gap-2">
             <span className="flex size-9 items-center justify-center rounded-xl bg-[#168447] text-white shadow-sm"><PlusCircle size={18} /></span>
             <div>
@@ -178,7 +178,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           )}
         </div>
 
-        <div className="mt-3 overflow-hidden rounded-xl border border-[#BBDCC5] bg-[#F0F8F1]">
+        <div className="mt-4 overflow-hidden rounded-2xl border border-[#DCEBDD] bg-white/65 backdrop-blur-xl">
           <div className="flex items-center justify-between gap-3 border-b border-[#CDE5D2] px-3 py-2.5">
             <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#106B38]"><BadgeCheck size={14} /> Smart Kit Deal</span>
             <span className="rounded-full bg-[#168447] px-2.5 py-1 text-[9px] font-black text-white">STORE PRICE</span>
@@ -198,7 +198,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
         </div>
 
 
-        <div data-reveal className="mt-3 overflow-hidden rounded-xl border border-[#D8CBB8] bg-white">
+        <div data-reveal className="mt-4 overflow-hidden rounded-2xl border border-white/90 bg-white/70 shadow-sm backdrop-blur-xl">
           <div className="flex items-center justify-between gap-3 border-b border-[#E8DFD1] bg-[#FAF7EF] px-3 py-3">
             <div>
               <h3 className="text-xs font-black text-[#202124] sm:text-sm">Grocery Quantity Calculator</h3>
@@ -226,7 +226,7 @@ export default function KitCustomizer({ kit }: { kit: GroceryKit }) {
           </div>
         </div>
 
-        <button type="button" onClick={handleAddToCart} disabled={!isLoaded || !kit.isAvailable} className="sticky bottom-[76px] z-30 mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/70 bg-[#168447] px-4 py-3 text-xs font-black text-white shadow-[0_8px_24px_rgba(22,132,71,0.28)] transition active:scale-[0.99] disabled:opacity-50 sm:static sm:min-h-11 sm:text-sm">
+        <button type="button" onClick={handleAddToCart} disabled={!isLoaded || !kit.isAvailable} className="sticky bottom-[76px] z-30 mt-4 flex min-h-13 w-full items-center justify-center gap-2 rounded-full border border-white/70 bg-[linear-gradient(110deg,#176B3A,#2E8050)] px-4 py-3 text-sm font-black text-white shadow-[0_10px_28px_rgba(22,107,58,.25)] transition hover:-translate-y-0.5 active:scale-[0.99] disabled:opacity-50 sm:static sm:min-h-12">
           <ShoppingCart size={17} /> {cartItem ? "Update My Customized Kit" : "Add Customized Kit to Cart"}
         </button>
       </div>
