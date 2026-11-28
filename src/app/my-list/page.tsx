@@ -8,6 +8,12 @@ type GroceryLine = { id: string; name: string; quantity: string };
 const STORAGE_KEY = "rashid-mega-mart-my-grocery-list";
 const WHATSAPP_NUMBER = "918962531603";
 
+function isGroceryLine(value: unknown): value is GroceryLine {
+  if (!value || typeof value !== "object") return false;
+  const line = value as Record<string, unknown>;
+  return typeof line.id === "string" && typeof line.name === "string" && typeof line.quantity === "string";
+}
+
 function makeId() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -25,12 +31,7 @@ export default function MyGroceryListPage() {
       if (raw) {
         const parsed: unknown = JSON.parse(raw);
         if (Array.isArray(parsed)) {
-          setLines(parsed.filter((line): line is GroceryLine =>
-            !!line && typeof line === "object" &&
-            typeof line.id === "string" &&
-            typeof line.name === "string" &&
-            typeof line.quantity === "string"
-          ).slice(0, 100));
+          setLines(parsed.filter(isGroceryLine).slice(0, 100));
         }
       }
     } catch {
