@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
-  ArrowRight, BadgeCheck, ChevronRight, CircleHelp, LogOut,
+  ArrowRight, BadgeCheck, ChevronRight, CircleHelp, LifeBuoy, LogOut,
   MapPin, Package, Plus, ShieldCheck, UserRound, X,
 } from "lucide-react";
 import {
@@ -214,6 +215,10 @@ export default function AccountPage() {
           {notice && <p role="status" className="mt-4 rounded-xl bg-[#EAF3E6] p-3 text-xs font-semibold text-[#315F35]">{notice}</p>}
           <p className="mt-6 text-[10px] leading-5 text-[#A0968D]">By continuing, you agree to our <Link className="font-bold underline" href="/terms-and-conditions">Terms</Link> and <Link className="font-bold underline" href="/privacy-policy">Privacy Policy</Link>.</p>
           <Link href="/" className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-[#625F56]"><ChevronRight className="rotate-180" size={15}/> Back to shopping</Link>
+          <div className="mt-6 rounded-2xl border border-[#E8DFD1] bg-[#FAF7EF] p-4">
+            <div className="flex items-center gap-2 text-sm font-black text-[#30251F]"><LifeBuoy size={17} className="text-[#315F35]"/> Need help?</div>
+            <a href={`https://wa.me/918962531603?text=${encodeURIComponent("Hello Rashid Mega Mart! I need help with my account.")}`} target="_blank" rel="noopener noreferrer" className="mt-3 flex min-h-11 items-center gap-2 rounded-xl bg-white px-3 text-xs font-extrabold text-[#315F35]"><Image src="/Whatsapp-3d.svg" alt="" width={22} height={22} unoptimized/> Contact Rashid Mega Mart on WhatsApp <ArrowRight size={14} className="ml-auto"/></a>
+          </div>
         </div>
       </div>
     </main>
@@ -281,6 +286,22 @@ export default function AccountPage() {
           {orders.length === 0 && <div className="rounded-2xl border border-dashed border-[#D8CBB8] bg-white px-4 py-10 text-center"><Package className="mx-auto text-[#168447]" size={27}/><p className="mt-3 text-sm font-extrabold text-[#30251F]">No orders yet</p><p className="mt-1 text-xs text-[#81796F]">Your signed-in orders will appear here.</p><Link href="/kits" className="mt-4 inline-flex h-10 items-center gap-2 rounded-xl bg-[#168447] px-4 text-xs font-extrabold text-white">Explore grocery kits <ArrowRight size={14}/></Link></div>}
           {orders.map((order) => <article key={order.id} className="rounded-2xl border border-[#E8DFD1] bg-white p-4"><div className="flex flex-wrap items-center justify-between gap-2"><div><p className="text-[10px] font-bold text-[#81796F]">ORDER · {order.id.slice(0,8).toUpperCase()}</p><p className="mt-1 text-xs font-semibold text-[#625F56]">{new Date(order.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}</p></div><span className="rounded-full bg-[#FAF0C8] px-3 py-1.5 text-[10px] font-extrabold text-[#806000]">{statusLabel(order.status)}</span></div><div className="mt-3 space-y-1 border-t border-[#EEE8E1] pt-3">{order.items.map((item,index)=><div key={index} className="flex justify-between gap-3 text-xs"><span className="text-[#625F56]">{item.name} × {item.quantity}</span><span className="font-bold text-[#30251F]">{money(item.line_total)}</span></div>)}</div><div className="mt-3 flex items-center justify-between border-t border-[#EEE8E1] pt-3"><span className="text-xs font-bold text-[#81796F]">Subtotal · {order.payment_preference.toUpperCase()}</span><span className="text-sm font-black text-[#168447]">{money(Number(order.subtotal))}</span></div></article>)}
         </section>}
+
+
+        <section className="mt-5 rounded-2xl border border-[#E8DFD1] bg-white p-4 sm:p-5">
+          <div className="flex items-start gap-3">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]"><LifeBuoy size={19}/></span>
+            <div><h2 className="text-sm font-black text-[#30251F]">Help & Support</h2><p className="mt-1 text-xs leading-5 text-[#81796F]">Need help with an order, delivery or store policy? We’re here to help.</p></div>
+          </div>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            <a href={`https://wa.me/918962531603?text=${encodeURIComponent("Hello Rashid Mega Mart! I need help with my order.")}`} target="_blank" rel="noopener noreferrer" className="flex min-h-12 items-center gap-3 rounded-xl bg-[#EAF3E6] px-3 text-xs font-extrabold text-[#315F35] transition hover:bg-[#DFEED8]">
+              <Image src="/Whatsapp-3d.svg" alt="" width={24} height={24} unoptimized/> Contact on WhatsApp <ArrowRight size={14} className="ml-auto"/>
+            </a>
+            <Link href="/returns-refunds" className="flex min-h-12 items-center gap-3 rounded-xl border border-[#EEE8E1] px-3 text-xs font-bold text-[#625F56] transition hover:bg-[#FAF7EF]"><Package size={17} className="text-[#800020]"/> Returns & Refunds <ChevronRight size={15} className="ml-auto"/></Link>
+            <Link href="/privacy-policy" className="flex min-h-12 items-center gap-3 rounded-xl border border-[#EEE8E1] px-3 text-xs font-bold text-[#625F56] transition hover:bg-[#FAF7EF]"><ShieldCheck size={17} className="text-[#800020]"/> Privacy Policy <ChevronRight size={15} className="ml-auto"/></Link>
+            <Link href="/terms-and-conditions" className="flex min-h-12 items-center gap-3 rounded-xl border border-[#EEE8E1] px-3 text-xs font-bold text-[#625F56] transition hover:bg-[#FAF7EF]"><CircleHelp size={17} className="text-[#800020]"/> Terms & Conditions <ChevronRight size={15} className="ml-auto"/></Link>
+          </div>
+        </section>
 
         <div className="mt-5 flex items-start gap-2 rounded-xl bg-[#FAF0C8]/65 p-3 text-[10px] leading-5 text-[#66521B]"><CircleHelp size={15} className="mt-0.5 shrink-0"/> Orders remain pending until Rashid Mega Mart confirms availability, delivery and final amount. Cash on Delivery and UPI on Delivery are confirmed with the store.</div>
       </div>
