@@ -10,7 +10,6 @@ import {
   FileText,
   House,
   LifeBuoy,
-  ClipboardList,
   Globe2,
   Package,
   RotateCcw,
@@ -27,7 +26,6 @@ const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent
 const navItems = [
   { label: "Home", href: "/", icon: House },
   { label: "Kits", href: "/kits", icon: Package },
-  { label: "My List", href: "/my-list", icon: ClipboardList },
 ];
 
 const helpItems = [
@@ -353,7 +351,7 @@ export default function BottomNav() {
         aria-label="Main navigation"
         className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(6px+env(safe-area-inset-bottom))] lg:hidden"
       >
-        <div className="relative grid h-[66px] grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_76px_minmax(0,1fr)_minmax(0,1fr)] items-center rounded-[24px] border border-white/80 bg-[#FFFEFA]/78 px-1.5 shadow-[0_12px_34px_rgba(64,24,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-2xl backdrop-saturate-150">
+        <div className="relative grid h-[66px] grid-cols-[minmax(0,1fr)_minmax(0,1fr)_76px_minmax(0,1fr)_minmax(0,1fr)] items-center rounded-[24px] border border-white/80 bg-[#FFFEFA]/78 px-1.5 shadow-[0_12px_34px_rgba(64,24,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-2xl backdrop-saturate-150">
           {navItems.map(({ label, href, icon: Icon }) => (
             <Link
               key={href}
