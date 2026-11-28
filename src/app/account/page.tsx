@@ -86,10 +86,19 @@ export default function AccountPage() {
   const handleSendOtp = async (event: FormEvent) => {
     event.preventDefault();
     setError(""); setNotice("");
-    if (!/^[6-9]\d{9}$/.test(phone)) { setError("Valid 10-digit Indian mobile number enter karein."); return; }
+
+    // Normalize pasted numbers too: spaces, +91 and punctuation must not
+    // cause a valid Indian 10-digit mobile number to fail validation.
+    const cleanPhone = phone.replace(/\D/g, "").slice(-10);
+    if (!/^[6-9][0-9]{9}$/.test(cleanPhone)) {
+      setError("Valid 10-digit Indian mobile number enter karein.");
+      return;
+    }
+
+    setPhone(cleanPhone);
     setBusy(true);
     try {
-      await sendPhoneOtp(phone);
+      await sendPhoneOtp(cleanPhone);
       setOtpSent(true);
       setNotice("OTP bhejne ki request successful rahi. SMS mein aaya 6-digit code enter karein.");
     } catch (reason) {
