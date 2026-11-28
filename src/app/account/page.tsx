@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import {
-  ArrowRight, BadgeCheck, ChevronRight, CircleHelp, Clock3, LogOut,
+  ArrowRight, BadgeCheck, ChevronRight, CircleHelp, LogOut,
   MapPin, Package, Plus, ShieldCheck, UserRound, X,
 } from "lucide-react";
 import {
