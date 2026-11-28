@@ -131,7 +131,7 @@ export default function CartPage() {
 
   if (!isLoaded) {
     return (
-      <main className="min-h-[65vh] bg-[#FAF7EF] px-4 py-10">
+      <main className="min-h-[65vh] bg-[#F8FAF7] px-4 py-10">
         <div className="mx-auto max-w-5xl animate-pulse space-y-4">
           <div className="h-8 w-48 rounded-lg bg-[#E8DFD1]" />
           <div className="h-28 rounded-2xl bg-white" />
@@ -143,9 +143,9 @@ export default function CartPage() {
 
   if (!items.length) {
     return (
-      <main className="flex min-h-[70vh] items-center justify-center bg-[#FAF7EF] px-4 py-12">
+      <main className="flex min-h-[70vh] items-center justify-center bg-[#F8FAF7] px-4 py-12">
         <div className="w-full max-w-md text-center">
-          <div className="mx-auto mb-5 flex size-20 items-center justify-center rounded-3xl bg-[#F1EBDD] text-[#168447]">
+          <div className="mx-auto mb-5 flex size-20 items-center justify-center rounded-3xl bg-[#EAF5ED] text-[#168447]">
             <ShoppingBag size={36} />
           </div>
           <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#168447]">Rashid Mega Mart</p>
@@ -160,7 +160,7 @@ export default function CartPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FAF7EF] px-3 pt-4 pb-[calc(142px+env(safe-area-inset-bottom))] sm:px-6 sm:py-9 sm:pb-32">
+    <main className="min-h-screen bg-[#F8FAF7] px-3 pt-4 pb-[calc(142px+env(safe-area-inset-bottom))] sm:px-6 sm:py-9 sm:pb-32">
       <div className="mx-auto max-w-5xl">
         <header className="mb-4 flex flex-wrap items-center justify-between gap-2 sm:mb-6 sm:gap-3">
           <div>
@@ -190,7 +190,7 @@ export default function CartPage() {
 
             {pricedItems.map((item) => (
               <article key={item.id} className="flex gap-2.5 rounded-2xl border border-[#E8DFD1] bg-white p-2.5 shadow-sm sm:gap-4 sm:p-4">
-                <div className="relative size-[76px] shrink-0 overflow-hidden rounded-xl bg-[#FAF7EF] min-[380px]:size-20 sm:size-24">
+                <div className="relative size-[76px] shrink-0 overflow-hidden rounded-xl bg-[#F8FAF7] min-[380px]:size-20 sm:size-24">
                   {item.image ? (
                     <Image src={item.image} alt={item.name} fill unoptimized sizes="96px" className="object-contain p-2" />
                   ) : (
@@ -210,16 +210,16 @@ export default function CartPage() {
                   </div>
 
                   <div className="mt-3 flex flex-wrap items-center justify-between gap-2 sm:mt-4 sm:gap-3">
-                    <div className="inline-flex h-11 items-center rounded-xl border border-[#E8DFD1] bg-[#FAF7EF]">
-                      <button type="button" aria-label={"Decrease " + item.name} onClick={() => decreaseQuantity(item.id)} className="flex size-11 items-center justify-center rounded-l-xl text-[#800020] hover:bg-[#F1EBDD]"><Minus size={14} /></button>
+                    <div className="inline-flex h-11 items-center rounded-xl border border-[#E8DFD1] bg-[#F8FAF7]">
+                      <button type="button" aria-label={"Decrease " + item.name} onClick={() => decreaseQuantity(item.id)} className="flex size-11 items-center justify-center rounded-l-xl text-[#168447] hover:bg-[#EAF5ED]"><Minus size={14} /></button>
                       <span aria-live="polite" className="min-w-8 text-center text-sm font-black tabular-nums text-[#202124]">{item.quantity}</span>
-                      <button type="button" aria-label={"Increase " + item.name} onClick={() => increaseQuantity(item.id)} className="flex size-11 items-center justify-center rounded-r-xl text-[#168447] hover:bg-[#EAF3E9]"><Plus size={14} /></button>
+                      <button type="button" aria-label={"Increase " + item.name} onClick={() => increaseQuantity(item.id)} className="flex size-11 items-center justify-center rounded-r-xl text-[#168447] hover:bg-[#EAF5ED]"><Plus size={14} /></button>
                     </div>
                     <p className="text-base font-black tabular-nums text-[#168447]">{formatPrice(item.lineTotal)}</p>
                   </div>
 
                   {(item.kitContents?.length || item.requestedItems?.length) ? (
-                    <details className="mt-2.5 rounded-xl bg-[#FAF7EF] px-3 py-2.5">
+                    <details className="mt-2.5 rounded-xl bg-[#F8FAF7] px-3 py-2.5">
                       <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-xs font-bold text-[#5E574E]">
                         View kit items / changes <ChevronDown size={14} />
                       </summary>
@@ -234,7 +234,7 @@ export default function CartPage() {
             ))}
 
             <div className="flex items-start gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-4">
-              <Truck size={19} className="mt-0.5 shrink-0 text-[#806000]" />
+              <Truck size={19} className="mt-0.5 shrink-0 text-[#A27A2A]" />
               <div>
                 <p className="text-sm font-extrabold text-[#202124]">Delivery</p>
                 <p className="mt-1 text-xs leading-5 text-[#686868]">Delivery availability and charges will be confirmed by Rashid Mega Mart on WhatsApp.</p>
@@ -253,7 +253,7 @@ export default function CartPage() {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 border-t border-dashed border-[#D8CBB8] pt-4">
+              <div className="mt-4 border-t border-dashed border-[#D8E7DB] pt-4">
                 <div className="flex items-center justify-between gap-3">
                   <span className="text-sm font-bold text-[#5E574E]">Subtotal</span>
                   <span aria-live="polite" className="text-2xl font-black tabular-nums text-[#168447]">{formatPrice(subtotal)}</span>
@@ -269,19 +269,19 @@ export default function CartPage() {
               </div>
               <label className="block text-xs font-bold text-[#202124]">
                 Your name *
-                <input required minLength={2} maxLength={70} autoComplete="name" value={customerName} onChange={(event) => setCustomerName(event.target.value)} placeholder="Enter your name" className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+                <input required minLength={2} maxLength={70} autoComplete="name" value={customerName} onChange={(event) => setCustomerName(event.target.value)} placeholder="Enter your name" className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#F8FAF7] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
               </label>
               <label className="block text-xs font-bold text-[#202124]">
                 Mobile number *
-                <input required type="tel" inputMode="numeric" autoComplete="tel" pattern="[6-9][0-9]{9}" maxLength={10} value={phone} onChange={(event) => setPhone(event.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="10-digit mobile number" className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+                <input required type="tel" inputMode="numeric" autoComplete="tel" pattern="[6-9][0-9]{9}" maxLength={10} value={phone} onChange={(event) => setPhone(event.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="10-digit mobile number" className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#F8FAF7] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
               </label>
               <label className="block text-xs font-bold text-[#202124]">
                 Delivery address <span className="font-normal text-[#8A8175]">(optional)</span>
-                <textarea maxLength={250} rows={2} autoComplete="street-address" value={address} onChange={(event) => setAddress(event.target.value)} placeholder="House no., area, landmark" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+                <textarea maxLength={250} rows={2} autoComplete="street-address" value={address} onChange={(event) => setAddress(event.target.value)} placeholder="House no., area, landmark" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#F8FAF7] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
               </label>
               <label className="block text-xs font-bold text-[#202124]">
                 Special instructions <span className="font-normal text-[#8A8175]">(optional)</span>
-                <textarea maxLength={240} rows={2} value={specialInstructions} onChange={(event) => setSpecialInstructions(event.target.value)} placeholder="Any special instructions?" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+                <textarea maxLength={240} rows={2} value={specialInstructions} onChange={(event) => setSpecialInstructions(event.target.value)} placeholder="Any special instructions?" className="mt-1.5 w-full resize-y rounded-xl border border-[#E8DFD1] bg-[#F8FAF7] px-3 py-2.5 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
               </label>
               {formError ? <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-700">{formError}</p> : null}
               <button type="submit" className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#168447] px-4 py-3 text-sm font-extrabold text-white shadow-md transition hover:bg-[#106B38] active:scale-[0.99]">
