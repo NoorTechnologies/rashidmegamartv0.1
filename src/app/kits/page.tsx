@@ -4,12 +4,12 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import {
+  ArrowLeft,
   Search,
   Package,
   X,
   SlidersHorizontal,
   RotateCcw,
-  ShoppingBag,
 } from "lucide-react";
 import KitCard from "@/components/KitCard";
 import { kits as allKits } from "@/data/kits";
