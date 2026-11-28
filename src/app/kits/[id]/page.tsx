@@ -174,7 +174,7 @@ export default async function KitDetailPage({ params }: PageProps) {
             {/* Price Card */}
             <div className="mt-2.5 rounded-xl border border-[#D8CBB8] bg-[linear-gradient(135deg,#F1EBDD_0%,#FAF0C8_100%)] p-3 shadow-sm sm:mt-4 sm:p-4">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#686868]">
-                Special Kit Price
+                Ready-made kit price
               </p>
 
               <div className="mt-2 flex flex-wrap items-center gap-2">
