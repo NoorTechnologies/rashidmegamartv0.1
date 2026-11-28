@@ -179,18 +179,18 @@ export default function AccountPage() {
   if (booting) return <main className="min-h-[70vh] bg-[#FAF7EF] p-6"><div className="mx-auto h-48 max-w-3xl animate-pulse rounded-3xl bg-white" /></main>;
 
   if (!session) return (
-    <main className="min-h-[75vh] bg-[#FAF7EF] px-4 py-8 sm:py-14">
-      <div className="mx-auto grid max-w-4xl overflow-hidden rounded-[28px] border border-[#E8DFD1] bg-white shadow-[0_18px_55px_rgba(70,40,30,0.08)] md:grid-cols-[0.9fr_1.1fr]">
-        <div className="flex flex-col justify-between bg-[#315F35] p-6 text-white sm:p-9">
+    <main className="min-h-[75vh] w-full min-w-0 bg-[#FAF7EF] px-3 py-6 sm:px-4 sm:py-10">
+      <div className="mx-auto grid w-full min-w-0 max-w-4xl grid-cols-1 overflow-hidden rounded-2xl border border-[#E8DFD1] bg-white shadow-[0_18px_55px_rgba(70,40,30,0.08)] sm:rounded-[28px] lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="flex min-w-0 flex-col justify-between bg-[#315F35] p-4 text-white sm:p-7 lg:p-9">
           <div>
             <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-white/12"><UserRound size={24}/></span>
             <p className="mt-7 text-[10px] font-extrabold uppercase tracking-[.22em] text-white/65">Rashid Mega Mart</p>
-            <h1 className="mt-2 text-3xl font-black leading-tight sm:text-4xl">Your grocery account, all in one place.</h1>
+            <h1 className="mt-2 min-w-0 break-words text-3xl font-black leading-tight sm:text-4xl">Your grocery account, all in one place.</h1>
             <p className="mt-3 max-w-sm text-sm leading-6 text-white/75">Orders dekhein, delivery addresses save karein aur apni profile manage karein.</p>
           </div>
           <div className="mt-10 flex items-center gap-2 text-xs font-semibold text-white/75"><ShieldCheck size={16}/> Secure mobile verification</div>
         </div>
-        <div className="p-5 sm:p-9">
+        <div className="min-w-0 p-4 sm:p-7 lg:p-9">
           <p className="text-xs font-extrabold uppercase tracking-[.18em] text-[#168447]">Customer sign in</p>
           <h2 className="mt-2 text-2xl font-black text-[#30251F]">{otpSent ? "Verify your number" : "Continue with mobile"}</h2>
           <p className="mt-2 text-sm leading-6 text-[#81796F]">{otpSent ? `We sent a one-time code to +91 ${phone}. Enter it below.` : "Password ki zaroorat nahi. Aapke mobile par one-time password aayega."}</p>
