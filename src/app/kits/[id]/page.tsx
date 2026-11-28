@@ -35,9 +35,9 @@ export default async function KitDetailPage({ params }: PageProps) {
       : 0;
 
   return (
-    <main className="min-h-screen bg-[#FAF7EF] pb-[calc(110px+env(safe-area-inset-bottom))] sm:pb-24">
+    <main className="min-h-screen bg-[#F8FAF7] pb-[calc(110px+env(safe-area-inset-bottom))] sm:pb-24">
       {/* Header */}
-      <header className="sticky top-0 z-30 border-b border-[#E8DFD1] bg-[#FAF7EF]/95 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-[#E8DFD1] bg-[#F8FAF7]/95 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
             href="/kits"
@@ -54,7 +54,7 @@ export default async function KitDetailPage({ params }: PageProps) {
           <Link
             href="/cart"
             aria-label="Open cart"
-            className="flex size-9 items-center justify-center rounded-full bg-[#F1EBDD] text-[#168447] transition hover:bg-[#F1EBDD]"
+            className="flex size-9 items-center justify-center rounded-full bg-[#EAF5ED] text-[#168447] transition hover:bg-[#EAF5ED]"
           >
             <ShoppingBag size={18} />
           </Link>
@@ -123,7 +123,7 @@ export default async function KitDetailPage({ params }: PageProps) {
             {/* Image Information */}
             <div className="mt-2 flex items-center justify-between rounded-xl border border-[#E8DFD1] bg-white px-2.5 py-2.5 sm:mt-3 sm:px-3 sm:py-3">
               <div className="flex items-center gap-3">
-                <div className="flex size-9 items-center justify-center rounded-lg bg-[#F1EBDD] text-[#168447]">
+                <div className="flex size-9 items-center justify-center rounded-lg bg-[#EAF5ED] text-[#168447]">
                   <Package size={20} />
                 </div>
                 <div>
@@ -136,7 +136,7 @@ export default async function KitDetailPage({ params }: PageProps) {
                 </div>
               </div>
 
-              <span className="rounded-full bg-[#FAF0C8] px-3 py-1.5 text-xs font-black text-[#806000]">
+              <span className="rounded-full bg-[#FAF0C8] px-3 py-1.5 text-xs font-black text-[#A27A2A]">
                 {kit.items.length} Items
               </span>
             </div>
@@ -146,7 +146,7 @@ export default async function KitDetailPage({ params }: PageProps) {
           <div className="flex min-w-0 flex-col pt-1">
             <div className="flex flex-wrap items-center gap-2">
               {kit.isAvailable ? (
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAF3E9] px-3 py-1.5 text-[11px] font-bold text-[#168447]">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EAF5ED] px-3 py-1.5 text-[11px] font-bold text-[#168447]">
                   <Check size={13} />
                   In Stock
                 </span>
@@ -172,13 +172,13 @@ export default async function KitDetailPage({ params }: PageProps) {
             </p>
 
             {/* Price Card */}
-            <div className="mt-2.5 rounded-xl border border-[#D8CBB8] bg-[linear-gradient(135deg,#F1EBDD_0%,#FAF0C8_100%)] p-3 shadow-sm sm:mt-4 sm:p-4">
+            <div className="mt-2.5 rounded-xl border border-[#D8E7DB] bg-[linear-gradient(135deg,#EAF5ED_0%,#FAF0C8_100%)] p-3 shadow-sm sm:mt-4 sm:p-4">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#686868]">
                 Special Kit Price
               </p>
 
               <div className="mt-2 flex flex-wrap items-center gap-2">
-                <span className="text-3xl font-black tracking-tight text-[#800020] sm:text-4xl">
+                <span className="text-3xl font-black tracking-tight text-[#168447] sm:text-4xl">
                   ₹{kit.price.toLocaleString("en-IN")}
                 </span>
 
@@ -189,14 +189,14 @@ export default async function KitDetailPage({ params }: PageProps) {
                 )}
 
                 {discount > 0 && (
-                  <span className="rounded-lg bg-[#FAF0C8] px-3 py-1.5 text-xs font-extrabold text-[#806000]">
+                  <span className="rounded-lg bg-[#FAF0C8] px-3 py-1.5 text-xs font-extrabold text-[#A27A2A]">
                     {discount}% OFF
                   </span>
                 )}
               </div>
 
               {savings > 0 && (
-                <div className="mt-2 inline-flex items-center gap-2 rounded-lg bg-[#EAF3E9] px-3 py-1.5 text-xs font-bold text-[#168447]">
+                <div className="mt-2 inline-flex items-center gap-2 rounded-lg bg-[#EAF5ED] px-3 py-1.5 text-xs font-bold text-[#168447]">
                   <Tag size={15} />
                   You save ₹{savings.toLocaleString("en-IN")}
                 </div>
