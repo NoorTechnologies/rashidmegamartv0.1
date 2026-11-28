@@ -201,6 +201,7 @@ export default function KitsPage() {
         <div className="mt-4 sm:mt-5">
           <p className="mb-2 text-[10px] font-extrabold uppercase tracking-wider text-[#686868] sm:text-xs">Shop by category</p>
           <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label="Filter kits by category">
+            <button type="button" onClick={() => setCategoryFilter("all")} aria-pressed={categoryFilter === "all"} className={"min-h-9 shrink-0 rounded-full border px-3.5 py-2 text-[10px] font-extrabold transition active:scale-95 sm:text-xs " + (categoryFilter === "all" ? "border-[#106B38] bg-[#168447] text-white shadow-sm" : "border-[#E8DFD1] bg-white text-[#686868] hover:border-[#168447] hover:text-[#168447]")}>All categories</button>
             {[...new Set(kits.map((kit) => kit.category))].sort((a, b) => a.localeCompare(b)).map((category) => (
               <button key={category} type="button" onClick={() => setCategoryFilter(categoryFilter === category ? "all" : category)} aria-pressed={categoryFilter === category} className={"min-h-9 shrink-0 rounded-full border px-3.5 py-2 text-[10px] font-extrabold transition active:scale-95 sm:text-xs " + (categoryFilter === category ? "border-[#106B38] bg-[#168447] text-white shadow-sm" : "border-[#E8DFD1] bg-white text-[#686868] hover:border-[#168447] hover:text-[#168447]")}>
                 {category}
