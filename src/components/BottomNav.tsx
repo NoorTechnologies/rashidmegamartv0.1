@@ -183,32 +183,32 @@ export default function BottomNav() {
       <header className="pointer-events-none fixed inset-x-0 top-3 z-50 hidden px-4 lg:block">
         <nav
           aria-label="Main navigation"
-          className="pointer-events-auto mx-auto flex h-[62px] max-w-6xl items-center justify-between gap-2 rounded-full border border-white/75 bg-[#FFFEFA]/82 px-4 shadow-[0_12px_36px_rgba(64,24,32,0.12),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-2xl backdrop-saturate-150 xl:px-6"
+          className="pointer-events-auto relative mx-auto flex h-[68px] max-w-6xl items-center justify-between gap-3 rounded-full border border-white/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.88),rgba(255,254,250,0.62))] px-5 shadow-[0_18px_55px_rgba(64,24,32,0.13),inset_0_1px_0_rgba(255,255,255,0.98),inset_0_-1px_0_rgba(255,255,255,0.35)] backdrop-blur-[28px] backdrop-saturate-[180%] xl:px-7"
         >
           <Link href="/" aria-label="Rashid Mega Mart home" className="flex shrink-0 items-center gap-2.5">
             <Image src="/images/logo2.png" alt="" width={42} height={42} priority className="size-9 object-contain" />
             <span className="text-base font-black tracking-tight text-[#30251F]">Rashid Mega Mart</span>
           </Link>
 
-          <div className="flex items-center gap-0.5">
-            {navItems.map(({ label, href, icon: Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                aria-current={isActive(href) ? "page" : undefined}
-                className={
-                  "inline-flex h-10 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " +
-                  (isActive(href)
-                    ? "bg-[#EAF3E6] text-[#315F35]"
-                    : "text-[#625F56] hover:bg-white/70 hover:text-[#315F35]")
-                }
-              >
-                <Icon size={15} strokeWidth={2.2} className="text-[#800020]" />
-                {label}
+          <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full border border-white/55 bg-white/35 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+            {navItems.slice(0, 2).map(({ label, href, icon: Icon }) => (
+              <Link key={href} href={href} aria-current={isActive(href) ? "page" : undefined}
+                className={"inline-flex h-10 items-center gap-2 rounded-full px-4 text-[12px] font-bold transition-all duration-200 " + (isActive(href) ? "bg-white/90 text-[#315F35] shadow-[0_3px_12px_rgba(49,95,53,0.12)]" : "text-[#625F56] hover:bg-white/65 hover:text-[#315F35]")}>
+                <Icon size={15} strokeWidth={2.2} />{label}
+              </Link>
+            ))}
+            <Link href="/cart" aria-label={`Open cart, ${totalItems} items`} aria-current={isActive("/cart") ? "page" : undefined}
+              className={"relative inline-flex h-10 items-center gap-2 rounded-full px-4 text-[12px] font-extrabold transition-all duration-200 " + (isActive("/cart") ? "bg-[#315F35] text-white shadow-lg shadow-[#315F35]/25" : "bg-white/75 text-[#315F35] hover:bg-white")}>
+              <ShoppingCart size={16} strokeWidth={2.3}/>Cart
+              {totalItems > 0 && <span className="flex min-w-5 items-center justify-center rounded-full bg-[#F2D27B] px-1.5 py-0.5 text-[10px] font-black text-[#443719]">{totalItems > 99 ? "99+" : totalItems}</span>}
+            </Link>
+            {navItems.slice(2).map(({ label, href, icon: Icon }) => (
+              <Link key={href} href={href} aria-current={isActive(href) ? "page" : undefined}
+                className={"inline-flex h-10 items-center gap-2 rounded-full px-4 text-[12px] font-bold transition-all duration-200 " + (isActive(href) ? "bg-white/90 text-[#315F35] shadow-[0_3px_12px_rgba(49,95,53,0.12)]" : "text-[#625F56] hover:bg-white/65 hover:text-[#315F35]")}>
+                <Icon size={15} strokeWidth={2.2} />{label}
               </Link>
             ))}
           </div>
-
           <div className="flex items-center gap-1">
             <div ref={desktopLanguageRef} className="relative">
               <button type="button" aria-expanded={languageOpen} aria-haspopup="menu" onClick={() => setLanguageOpen((value) => !value)} className={"inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " + (languageOpen ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70")}>
@@ -220,78 +220,45 @@ export default function BottomNav() {
               {languageOpen && <LanguageMenu language={language} setLanguage={setLanguage} onClose={() => setLanguageOpen(false)} />}
             </div>
 
-            <Link
-              href="/cart"
-              aria-label={`Open cart, ${totalItems} items`}
-              className="relative inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[#315F35] px-3 text-[12px] font-extrabold text-white shadow-sm transition hover:bg-[#254B29]"
-            >
-              <ShoppingCart size={16} strokeWidth={2.2} className="text-white" />
-              Cart
-              {totalItems > 0 && (
-                <span className="flex min-w-5 items-center justify-center rounded-full bg-[#F2D27B] px-1.5 py-0.5 text-[10px] font-black text-[#443719]">
-                  {totalItems > 99 ? "99+" : totalItems}
-                </span>
-              )}
-            </Link>
+
           </div>
         </nav>
       </header>
 
-      {/* Mobile navigation */}
-      <nav
-        aria-label="Main navigation"
-        className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-2 pb-[calc(6px+env(safe-area-inset-bottom))] lg:hidden"
-      >
-        <div className="relative grid h-[66px] grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_76px_minmax(0,1fr)_minmax(0,1fr)] items-center rounded-[24px] border border-white/80 bg-[#FFFEFA]/78 px-1.5 shadow-[0_12px_34px_rgba(64,24,32,0.14),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-2xl backdrop-saturate-150">
-          {navItems.map(({ label, href, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              aria-current={isActive(href) ? "page" : undefined}
-              className={
-                "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
-                (isActive(href) ? "text-[#315F35]" : "text-[#625F56]")
-              }
-            >
-              <span className={"flex size-6 items-center justify-center rounded-full " + (isActive(href) ? "bg-[#E7F0E2]" : "")}>
-                <Icon size={16} strokeWidth={2.2} className="text-[#800020]" />
-              </span>
-              <span className={"text-[8px] leading-none " + (isActive(href) ? "font-extrabold" : "font-medium")}>
-                {label}
-              </span>
+      {/* Mobile liquid-glass navigation */}
+      <nav aria-label="Main navigation" className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[520px] px-3 pb-[calc(9px+env(safe-area-inset-bottom))] lg:hidden">
+        <div className="relative grid h-[76px] grid-cols-5 items-center rounded-[27px] border border-white/85 bg-[linear-gradient(145deg,rgba(255,255,255,0.88),rgba(255,254,250,0.64))] px-2 shadow-[0_16px_48px_rgba(48,37,31,0.16),inset_0_1px_0_rgba(255,255,255,0.98),inset_0_-1px_0_rgba(255,255,255,0.4)] backdrop-blur-[30px] backdrop-saturate-[185%]">
+          {navItems.slice(0, 2).map(({ label, href, icon: Icon }) => (
+            <Link key={href} href={href} aria-current={isActive(href) ? "page" : undefined}
+              className={"mx-auto flex h-14 w-full flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-200 active:scale-90 " + (isActive(href) ? "text-[#315F35]" : "text-[#81796F]")}>
+              <span className={"flex size-8 items-center justify-center rounded-full transition-colors " + (isActive(href) ? "bg-[#E5F0E1] shadow-inner" : "")}><Icon size={19} strokeWidth={2.05}/></span>
+              <span className={"text-[10px] leading-none " + (isActive(href) ? "font-extrabold" : "font-semibold")}>{label}</span>
             </Link>
           ))}
 
-          <Link
-            href="/cart"
-            aria-label={`Open cart, ${totalItems} items`}
-            aria-current={isActive("/cart") ? "page" : undefined}
-            className={
-              "mx-auto flex h-12 w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-200 active:scale-95 " +
-              (isActive("/cart") ? "text-[#168447]" : "text-[#625F56]")
-            }
-          >
-            <span
-              className="relative flex size-9 items-center justify-center rounded-full bg-[#315F35] text-white shadow-md shadow-[#315F35]/20"
-            >
-              <ShoppingCart size={20} strokeWidth={2.2} />
-              {totalItems > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-[17px] min-w-[17px] items-center justify-center rounded-full border-2 border-[#FFFEFA] bg-[#E4BD59] px-1 text-[8px] font-black text-[#493B1C]">
-                  {totalItems > 99 ? "99+" : totalItems}
-                </span>
-              )}
-            </span>
-            <span className="text-[9px] leading-none font-bold">Cart</span>
+          <Link href="/cart" aria-label={`Open cart, ${totalItems} items`} aria-current={isActive("/cart") ? "page" : undefined}
+            className="relative mx-auto -mt-5 flex size-[58px] flex-col items-center justify-center rounded-[21px] border border-white/90 bg-[linear-gradient(145deg,#3E7946,#24542D)] text-white shadow-[0_10px_24px_rgba(36,84,45,0.34),inset_0_1px_0_rgba(255,255,255,0.38)] ring-[5px] ring-[#FFFEFA]/75 transition-all duration-200 active:scale-90">
+            <ShoppingCart size={23} strokeWidth={2.15}/>
+            <span className="mt-0.5 text-[9px] font-extrabold leading-none">Cart</span>
+            {totalItems > 0 && <span className="absolute -right-2 -top-2 flex h-[19px] min-w-[19px] items-center justify-center rounded-full border-2 border-[#FFFEFA] bg-[#E4BD59] px-1 text-[9px] font-black text-[#493B1C] shadow-sm">{totalItems > 99 ? "99+" : totalItems}</span>}
           </Link>
 
-          <div ref={mobileLanguageRef} data-no-translate className="relative mx-auto flex h-12 w-full min-w-0 items-center justify-center">
-            <button type="button" aria-label="Choose language" aria-expanded={languageOpen} aria-haspopup="menu" onClick={() => setLanguageOpen((value) => !value)} className={"flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " + (languageOpen ? "text-[#315F35]" : "text-[#625F56]")}>
-              <span className={"flex size-6 items-center justify-center rounded-full " + (languageOpen ? "bg-[#E7F0E2]" : "")}><Globe2 size={17} strokeWidth={2.2} className="text-[#800020]" /></span>
-              <span className="text-[8px] font-bold leading-none">{language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "हिन्दी"}</span>
-            </button>
-            {languageOpen && <LanguageMenu mobile language={language} setLanguage={setLanguage} onClose={() => setLanguageOpen(false)} />}
-          </div>
+          {navItems.slice(2).map(({ label, href, icon: Icon }) => (
+            <Link key={href} href={href} aria-current={isActive(href) ? "page" : undefined}
+              className={"mx-auto flex h-14 w-full flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-200 active:scale-90 " + (isActive(href) ? "text-[#315F35]" : "text-[#81796F]")}>
+              <span className={"flex size-8 items-center justify-center rounded-full transition-colors " + (isActive(href) ? "bg-[#E5F0E1] shadow-inner" : "")}><Icon size={19} strokeWidth={2.05}/></span>
+              <span className={"text-[10px] leading-none " + (isActive(href) ? "font-extrabold" : "font-semibold")}>{label}</span>
+            </Link>
+          ))}
 
+          <div ref={mobileLanguageRef} data-no-translate className="relative mx-auto flex h-14 w-full items-center justify-center">
+            <button type="button" aria-label="Choose language" aria-expanded={languageOpen} aria-haspopup="menu" onClick={() => setLanguageOpen((value) => !value)}
+              className={"flex h-14 w-full flex-col items-center justify-center gap-1 rounded-2xl transition-all duration-200 active:scale-90 " + (languageOpen ? "text-[#315F35]" : "text-[#81796F]")}>
+              <span className={"flex size-8 items-center justify-center rounded-full " + (languageOpen ? "bg-[#E5F0E1]" : "")}><Globe2 size={18} strokeWidth={2.05}/></span>
+              <span className="text-[10px] font-semibold leading-none">{language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "हिन्दी"}</span>
+            </button>
+            {languageOpen && <LanguageMenu mobile language={language} setLanguage={setLanguage} onClose={() => setLanguageOpen(false)}/>}
+          </div>
         </div>
       </nav>
     </>
