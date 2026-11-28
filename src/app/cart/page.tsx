@@ -297,7 +297,7 @@ export default function CartPage() {
             <form id="cart-checkout" onSubmit={handleWhatsAppEnquiry} className="space-y-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 shadow-sm sm:p-5">
               <div>
                 <h2 className="text-lg font-black text-[#202124]">Send WhatsApp Enquiry</h2>
-                <p className="mt-1 text-xs text-[#686868]">Bas naam aur mobile number bharein.</p>
+                <p className="mt-1 text-xs text-[#686868]">Bas naam aur mobile number bharein.</p>\n                <p className="mt-1 text-[10px] text-[#81796F]"><Link href="/account" className="font-extrabold text-[#168447] underline underline-offset-2">Sign in</Link> to save this order in My Orders.</p>
               </div>
               <label className="block text-xs font-bold text-[#202124]">
                 Your name *
