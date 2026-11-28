@@ -32,6 +32,7 @@ export default function CartPage() {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [specialInstructions, setSpecialInstructions] = useState("");
+  const [paymentPreference, setPaymentPreference] = useState<"cod" | "upi" | "confirm">("cod");
   const [formError, setFormError] = useState("");
 
   // Always use the current catalogue price, not a stale price stored in localStorage.
@@ -107,6 +108,7 @@ export default function CartPage() {
       "Name: " + cleanName,
       "Mobile: " + cleanPhone,
       "Address: " + (cleanAddress || "Will confirm on WhatsApp"),
+      "Payment preference: " + (paymentPreference === "cod" ? "Cash on Delivery" : paymentPreference === "upi" ? "UPI on Delivery" : "Please discuss with the store"),
       "",
       "*Your Items*",
       enquiryDetails,
@@ -237,7 +239,7 @@ export default function CartPage() {
               <Truck size={19} className="mt-0.5 shrink-0 text-[#806000]" />
               <div>
                 <p className="text-sm font-extrabold text-[#202124]">Delivery</p>
-                <p className="mt-1 text-xs leading-5 text-[#686868]">Delivery availability and charges will be confirmed by Rashid Mega Mart on WhatsApp.</p>
+                <p className="mt-1 text-xs leading-5 text-[#686868]">Free delivery is available up to 5 km. Other locations and any applicable charges will be confirmed by Rashid Mega Mart on WhatsApp.</p>
               </div>
             </div>
           </section>
@@ -255,10 +257,10 @@ export default function CartPage() {
               </div>
               <div className="mt-4 border-t border-dashed border-[#D8CBB8] pt-4">
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-sm font-bold text-[#5E574E]">Subtotal</span>
+                  <span className="text-sm font-bold text-[#5E574E]">Kit base subtotal</span>
                   <span aria-live="polite" className="text-2xl font-black tabular-nums text-[#168447]">{formatPrice(subtotal)}</span>
                 </div>
-                <p className="mt-2 text-[11px] leading-5 text-[#686868]">Quantity badalte hi subtotal apne aap update hota hai. Delivery charges WhatsApp par confirm honge.</p>
+                <p className="mt-2 text-[11px] leading-5 text-[#686868]">Quantity badalte hi base subtotal update hota hai. Extra-item rates, final payable amount aur delivery charges store WhatsApp par confirm karega.</p>
               </div>
             </section>
 
@@ -274,6 +276,15 @@ export default function CartPage() {
               <label className="block text-xs font-bold text-[#202124]">
                 Mobile number *
                 <input required type="tel" inputMode="numeric" autoComplete="tel" pattern="[6-9][0-9]{9}" maxLength={10} value={phone} onChange={(event) => setPhone(event.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="10-digit mobile number" className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10" />
+              </label>
+              <label className="block text-xs font-bold text-[#202124]">
+                Payment preference
+                <select value={paymentPreference} onChange={(event) => setPaymentPreference(event.target.value as "cod" | "upi" | "confirm")} className="mt-1.5 min-h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm outline-none focus:border-[#168447] focus:ring-2 focus:ring-[#168447]/10">
+                  <option value="cod">Cash on Delivery (COD)</option>
+                  <option value="upi">UPI on Delivery</option>
+                  <option value="confirm">Discuss with store</option>
+                </select>
+                <span className="mt-1 block text-[10px] font-medium text-[#8A8175]">Payment is arranged on delivery after the store confirms your enquiry.</span>
               </label>
               <label className="block text-xs font-bold text-[#202124]">
                 Delivery address <span className="font-normal text-[#8A8175]">(optional)</span>
