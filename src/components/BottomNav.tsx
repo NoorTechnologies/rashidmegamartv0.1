@@ -7,101 +7,20 @@ import { useEffect, useRef, useState } from "react";
 import {
   Check,
   ChevronDown,
-  FileText,
   House,
-  LifeBuoy,
   Globe2,
   Package,
-  RotateCcw,
-  ShieldCheck,
   ShoppingCart,
   UserRound,
-  X,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useSiteLanguage, useSetSiteLanguage } from "@/components/LanguageProvider";
-
-const WHATSAPP_NUMBER = "918962531603";
-const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rashid Mega Mart! I need help with grocery kits and store information.")}`;
 
 const navItems = [
   { label: "Home", href: "/", icon: House },
   { label: "Kits", href: "/kits", icon: Package },
   { label: "Account", href: "/account", icon: UserRound },
 ];
-
-const helpItems = [
-  { label: "Contact on WhatsApp", href: whatsappHref, external: true, whatsapp: true },
-  { label: "Returns & Refunds", href: "/returns-refunds", icon: RotateCcw },
-  { label: "Privacy Policy", href: "/privacy-policy", icon: ShieldCheck },
-  { label: "Terms & Conditions", href: "/terms-and-conditions", icon: FileText },
-];
-
-function HelpCentreMenu({
-  onClose,
-  mobile = false,
-}: {
-  onClose: () => void;
-  mobile?: boolean;
-}) {
-  const placement = mobile
-    ? "bottom-[calc(100%+10px)] left-1/2 -translate-x-1/2"
-    : "right-0 top-[calc(100%+10px)]";
-
-  return (
-    <div
-      role="menu"
-      aria-label="Help Centre"
-      className={`absolute z-[70] w-[min(270px,calc(100vw-24px))] rounded-2xl border border-white/80 bg-[#FFFEFA]/96 p-2 shadow-[0_18px_55px_rgba(39,31,22,0.18)] backdrop-blur-2xl ${placement}`}
-    >
-      <div className="px-2 pb-2 pt-1">
-        <p className="text-xs font-extrabold text-[#30251F]">How can we help?</p>
-        <p className="mt-0.5 text-[10px] text-[#81796F]">Support and store policies</p>
-      </div>
-      <div className="h-px bg-[#EEE8E1]" />
-      {helpItems.map(({ label, href, icon: Icon, external, whatsapp }) => {
-        const content = (
-          <>
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]">
-              {whatsapp ? (
-                <Image src="/Whatsapp-3d.svg" alt="" width={23} height={23} unoptimized />
-              ) : Icon ? (
-                <Icon size={17} />
-              ) : null}
-            </span>
-            <span className="min-w-0 flex-1 text-left text-[12px] font-bold text-[#30251F]">
-              {label}
-            </span>
-          </>
-        );
-
-        return external ? (
-          <a
-            key={label}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            role="menuitem"
-            onClick={onClose}
-            className="flex min-h-11 items-center gap-3 rounded-xl px-2 transition-colors hover:bg-[#F2F5EE]"
-          >
-            {content}
-          </a>
-        ) : (
-          <Link
-            key={href}
-            href={href}
-            role="menuitem"
-            onClick={onClose}
-            className="flex min-h-11 items-center gap-3 rounded-xl px-2 transition-colors hover:bg-[#F2F5EE]"
-          >
-            {content}
-          </Link>
-        );
-      })}
-    </div>
-  );
-}
 
 function LanguageMenu({
   language,
@@ -233,10 +152,7 @@ export default function BottomNav() {
   const { totalItems } = useCart();
   const language = useSiteLanguage();
   const setLanguage = useSetSiteLanguage();
-  const [helpOpen, setHelpOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
-  const desktopHelpRef = useRef<HTMLDivElement>(null);
-  const mobileHelpRef = useRef<HTMLDivElement>(null);
   const desktopLanguageRef = useRef<HTMLDivElement>(null);
   const mobileLanguageRef = useRef<HTMLDivElement>(null);
 
@@ -245,31 +161,21 @@ export default function BottomNav() {
 
 
   useEffect(() => {
-    if (!helpOpen && !languageOpen) return;
-
+    if (!languageOpen) return;
     const close = (event: PointerEvent) => {
       const target = event.target as Node;
-      if (
-        !desktopHelpRef.current?.contains(target) &&
-        !mobileHelpRef.current?.contains(target)
-      ) {
-        setHelpOpen(false);
-      }
       if (!desktopLanguageRef.current?.contains(target) && !mobileLanguageRef.current?.contains(target)) setLanguageOpen(false);
     };
-
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") { setHelpOpen(false); setLanguageOpen(false); }
+      if (event.key === "Escape") setLanguageOpen(false);
     };
-
     document.addEventListener("pointerdown", close);
     document.addEventListener("keydown", closeOnEscape);
-
     return () => {
       document.removeEventListener("pointerdown", close);
       document.removeEventListener("keydown", closeOnEscape);
     };
-  }, [helpOpen, languageOpen]);
+  }, [languageOpen]);
 
   return (
     <>
@@ -304,23 +210,6 @@ export default function BottomNav() {
           </div>
 
           <div className="flex items-center gap-1">
-            <div ref={desktopHelpRef} className="relative">
-              <button
-                type="button"
-                aria-expanded={helpOpen}
-                aria-haspopup="menu"
-                onClick={() => setHelpOpen((value) => !value)}
-                className={
-                  "inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " +
-                  (helpOpen ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70")
-                }
-              >
-                <LifeBuoy size={16} strokeWidth={2.2} className="text-[#800020]" />
-                Help Centre
-              </button>
-              {helpOpen && <HelpCentreMenu onClose={() => setHelpOpen(false)} />}
-            </div>
-
             <div ref={desktopLanguageRef} className="relative">
               <button type="button" aria-expanded={languageOpen} aria-haspopup="menu" onClick={() => setLanguageOpen((value) => !value)} className={"inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " + (languageOpen ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70")}>
                 <Globe2 size={16} strokeWidth={2.2} className="text-[#800020]" />
@@ -401,26 +290,6 @@ export default function BottomNav() {
               <span className="text-[8px] font-bold leading-none">{language === "en" ? "English" : language === "hinglish" ? "Hinglish" : "हिन्दी"}</span>
             </button>
             {languageOpen && <LanguageMenu mobile language={language} setLanguage={setLanguage} onClose={() => setLanguageOpen(false)} />}
-          </div>
-
-          <div ref={mobileHelpRef} className="relative mx-auto flex h-12 w-full min-w-0 items-center justify-center">
-            <button
-              type="button"
-              aria-label="Open Help Centre"
-              aria-expanded={helpOpen}
-              aria-haspopup="menu"
-              onClick={() => setHelpOpen((value) => !value)}
-              className={
-                "flex h-12 w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl transition active:scale-95 " +
-                (helpOpen ? "text-[#315F35]" : "text-[#625F56]")
-              }
-            >
-              <span className={"flex size-6 items-center justify-center rounded-full " + (helpOpen ? "bg-[#E7F0E2]" : "")}>
-                {helpOpen ? <X size={17} strokeWidth={2.2} className="text-[#800020]" /> : <LifeBuoy size={17} strokeWidth={2.2} className="text-[#800020]" />}
-              </span>
-              <span className="text-[8px] font-semibold leading-none">Help</span>
-            </button>
-            {helpOpen && <HelpCentreMenu mobile onClose={() => setHelpOpen(false)} />}
           </div>
 
         </div>
