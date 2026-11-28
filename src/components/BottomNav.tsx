@@ -321,7 +321,10 @@ export default function BottomNav() {
 
             <div ref={desktopLanguageRef} className="relative">
               <button type="button" aria-expanded={languageOpen} aria-haspopup="menu" onClick={() => setLanguageOpen((value) => !value)} className={"inline-flex min-h-9 items-center gap-1.5 rounded-full px-2.5 text-[12px] font-bold transition-colors " + (languageOpen ? "bg-[#EAF3E6] text-[#315F35]" : "text-[#625F56] hover:bg-white/70")}>
-                <Globe2 size={16} strokeWidth={2.2} className="text-[#800020]" />\n                Language\n                <span className="rounded-full bg-[#800020]/[0.07] px-1.5 py-0.5 text-[9px] font-black tracking-wide text-[#800020]">{language === "en" ? "EN" : language === "hinglish" ? "HI·EN" : "हिंदी"}</span>\n                <ChevronDown size={13} strokeWidth={2.2} className={"text-[#8C7772] transition-transform " + (languageOpen ? "rotate-180" : "")} />
+                <Globe2 size={16} strokeWidth={2.2} className="text-[#800020]" />
+                <span>Language</span>
+                <span className="rounded-full bg-[#800020]/[0.07] px-1.5 py-0.5 text-[9px] font-black tracking-wide text-[#800020]">{language === "en" ? "EN" : language === "hinglish" ? "HI·EN" : "हिंदी"}</span>
+                <ChevronDown size={13} strokeWidth={2.2} className={"text-[#8C7772] transition-transform " + (languageOpen ? "rotate-180" : "")} />
               </button>
               {languageOpen && <LanguageMenu language={language} setLanguage={setLanguage} onClose={() => setLanguageOpen(false)} />}
             </div>
