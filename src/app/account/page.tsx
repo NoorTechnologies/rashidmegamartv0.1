@@ -38,6 +38,8 @@ function statusLabel(status: string) {
 export default function AccountPage() {
   const [session, setSession] = useState<CustomerSession | null>(null);
   const [booting, setBooting] = useState(true);
+  const [authMode, setAuthMode] = useState<"login" | "signup">("login");
+  const [signupName, setSignupName] = useState("");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -188,47 +190,98 @@ export default function AccountPage() {
   if (booting) return <main className="min-h-[70vh] bg-[#FAF7EF] p-6"><div className="mx-auto h-48 max-w-3xl animate-pulse rounded-3xl bg-white" /></main>;
 
   if (!session) return (
-    <main className="min-h-[75vh] w-full min-w-0 bg-[#FAF7EF] px-3 py-6 sm:px-4 sm:py-10">
-      <div className="mx-auto grid w-full min-w-0 max-w-4xl grid-cols-1 overflow-hidden rounded-2xl border border-[#E8DFD1] bg-white shadow-[0_18px_55px_rgba(70,40,30,0.08)] sm:rounded-[28px] lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="flex min-w-0 flex-col justify-between bg-[#315F35] p-4 text-white sm:p-7 lg:p-9">
-          <div>
-            <span className="inline-flex size-12 items-center justify-center rounded-2xl bg-white/12"><UserRound size={24}/></span>
-            <p className="mt-7 text-[10px] font-extrabold uppercase tracking-[.22em] text-white/65">Rashid Mega Mart</p>
-            <h1 className="mt-2 min-w-0 break-words text-3xl font-black leading-tight sm:text-4xl">Your grocery account, all in one place.</h1>
-            <p className="mt-3 max-w-sm text-sm leading-6 text-white/75">Orders dekhein, delivery addresses save karein aur apni profile manage karein.</p>
+    <main className="relative isolate flex min-h-[calc(100svh-5.5rem)] w-full min-w-0 items-center justify-center overflow-hidden bg-[#F8F5EF] px-3 py-7 pb-28 sm:px-6 sm:py-12 lg:min-h-[calc(100svh-76px)] lg:pb-12">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -left-24 top-8 size-64 rounded-full bg-[#DCEBD9]/70 blur-3xl sm:size-80" />
+        <div className="absolute -right-24 bottom-8 size-72 rounded-full bg-[#EAD8D8]/70 blur-3xl sm:size-96" />
+        <div className="absolute left-1/2 top-1/2 size-[min(80vw,620px)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/80" />
+      </div>
+
+      <div className="mx-auto grid w-full max-w-[980px] min-w-0 items-stretch gap-4 sm:gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+        <section className="relative flex min-w-0 flex-col justify-between overflow-hidden rounded-[28px] border border-white/70 bg-[linear-gradient(145deg,rgba(49,95,53,0.96),rgba(28,73,39,0.94))] p-5 text-white shadow-[0_24px_70px_rgba(37,73,42,0.20),inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur-2xl sm:rounded-[34px] sm:p-8 lg:min-h-[560px] lg:p-10">
+          <div aria-hidden="true" className="absolute -right-16 -top-16 size-64 rounded-full border border-white/10 bg-white/[0.04]" />
+          <div aria-hidden="true" className="absolute -bottom-24 -left-16 size-64 rounded-full border border-white/10 bg-white/[0.04]" />
+          <div className="relative">
+            <div className="inline-flex items-center gap-3 rounded-2xl border border-white/20 bg-white/10 p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-xl">
+              <span className="flex size-14 items-center justify-center rounded-xl bg-white/95 p-1.5 shadow-lg sm:size-16">
+                <Image src="/images/logo2.png" alt="Rashid Mega Mart logo" width={64} height={64} priority className="size-full object-contain" />
+              </span>
+              <span className="pr-2">
+                <span className="block text-[9px] font-bold uppercase tracking-[.22em] text-white/65">Welcome to</span>
+                <span className="mt-1 block text-base font-black tracking-tight sm:text-lg">Rashid Mega Mart</span>
+                <span className="mt-0.5 block text-[10px] font-medium text-white/70">Fresh choices. Everyday value.</span>
+              </span>
+            </div>
+            <p className="mt-8 text-[10px] font-extrabold uppercase tracking-[.24em] text-[#E7D69B]">Your grocery, your account</p>
+            <h1 className="mt-3 max-w-md text-[clamp(2rem,6vw,3.35rem)] font-black leading-[1.04] tracking-[-.045em]">Shopping made simpler.</h1>
+            <p className="mt-4 max-w-sm text-sm leading-6 text-white/75">Sign in to track orders, save delivery addresses and keep your grocery details in one place.</p>
           </div>
-          <div className="mt-10 flex items-center gap-2 text-xs font-semibold text-white/75"><ShieldCheck size={16}/> Secure mobile verification</div>
-        </div>
-        <div className="min-w-0 p-4 sm:p-7 lg:p-9">
-          <p className="text-xs font-extrabold uppercase tracking-[.18em] text-[#168447]">Customer sign in</p>
-          <h2 className="mt-2 text-2xl font-black text-[#30251F]">{otpSent ? "Verify your number" : "Continue with mobile"}</h2>
-          <p className="mt-2 text-sm leading-6 text-[#81796F]">{otpSent ? `We sent a one-time code to +91 ${phone}. Enter it below.` : "Password ki zaroorat nahi. Aapke mobile par one-time password aayega."}</p>
-          {!otpSent ? (
-            <form onSubmit={handleSendOtp} className="mt-7 space-y-4">
-              <label className="block text-xs font-bold text-[#30251F]" htmlFor="account-phone">Mobile number</label>
-              <div className="flex h-12 overflow-hidden rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] focus-within:border-[#168447]">
-                <span className="flex items-center border-r border-[#E8DFD1] px-3 text-sm font-bold text-[#625F56]">+91</span>
-                <input id="account-phone" inputMode="numeric" autoComplete="tel-national" value={phone} onChange={(event) => setPhone(event.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="10-digit mobile number" className="min-w-0 flex-1 bg-transparent px-3 text-sm outline-none"/>
+          <div className="relative mt-8 grid grid-cols-2 gap-2 sm:mt-12">
+            <div className="rounded-2xl border border-white/15 bg-white/[0.09] p-3 backdrop-blur-xl">
+              <ShieldCheck size={19} className="text-[#E7D69B]"/>
+              <p className="mt-2 text-xs font-extrabold">Secure OTP</p>
+              <p className="mt-1 text-[10px] leading-4 text-white/65">No password to remember</p>
+            </div>
+            <div className="rounded-2xl border border-white/15 bg-white/[0.09] p-3 backdrop-blur-xl">
+              <Package size={19} className="text-[#E7D69B]"/>
+              <p className="mt-2 text-xs font-extrabold">Order updates</p>
+              <p className="mt-1 text-[10px] leading-4 text-white/65">Your orders in one place</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="relative min-w-0 self-center rounded-[28px] border border-white/90 bg-white/65 p-4 shadow-[0_24px_80px_rgba(65,47,39,0.12),inset_0_1px_0_rgba(255,255,255,0.95)] backdrop-blur-[28px] backdrop-saturate-150 sm:rounded-[34px] sm:p-7 lg:p-9">
+          <div className="mx-auto max-w-md">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-extrabold uppercase tracking-[.2em] text-[#315F35]">Customer account</p>
+                <h2 className="mt-1.5 text-2xl font-black tracking-tight text-[#30251F] sm:text-[28px]">{otpSent ? "Verify your number" : authMode === "login" ? "Welcome back" : "Create your account"}</h2>
               </div>
-              <button disabled={busy || phone.length !== 10} className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#168447] text-sm font-extrabold text-white transition hover:bg-[#106B38] disabled:opacity-50">{busy ? "Please wait..." : "Send OTP"} <ArrowRight size={16}/></button>
-            </form>
-          ) : (
-            <form onSubmit={handleVerifyOtp} className="mt-7 space-y-4">
-              <label className="block text-xs font-bold text-[#30251F]" htmlFor="account-otp">6-digit OTP</label>
-              <input id="account-otp" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={otp} onChange={(event) => setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))} placeholder="••••••" className="h-14 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-4 text-center text-2xl font-black tracking-[.5em] outline-none focus:border-[#168447]"/>
-              <button disabled={busy || otp.length !== 6} className="flex h-12 w-full items-center justify-center rounded-xl bg-[#168447] text-sm font-extrabold text-white hover:bg-[#106B38] disabled:opacity-50">{busy ? "Verifying..." : "Verify & continue"}</button>
-              <button type="button" onClick={() => { setOtpSent(false); setOtp(""); setError(""); }} className="w-full py-2 text-xs font-bold text-[#625F56]">Change mobile number</button>
-            </form>
-          )}
-          {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-3 text-xs font-semibold text-red-700">{error}</p>}
-          {notice && <p role="status" className="mt-4 rounded-xl bg-[#EAF3E6] p-3 text-xs font-semibold text-[#315F35]">{notice}</p>}
-          <p className="mt-6 text-[10px] leading-5 text-[#A0968D]">By continuing, you agree to our <Link className="font-bold underline" href="/terms-and-conditions">Terms</Link> and <Link className="font-bold underline" href="/privacy-policy">Privacy Policy</Link>.</p>
-          <Link href="/" className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-[#625F56]"><ChevronRight className="rotate-180" size={15}/> Back to shopping</Link>
-          <div className="mt-6 rounded-2xl border border-[#E8DFD1] bg-[#FAF7EF] p-4">
-            <div className="flex items-center gap-2 text-sm font-black text-[#30251F]"><LifeBuoy size={17} className="text-[#315F35]"/> Need help?</div>
-            <a href={`https://wa.me/918962531603?text=${encodeURIComponent("Hello Rashid Mega Mart! I need help with my account.")}`} target="_blank" rel="noopener noreferrer" className="mt-3 flex min-h-11 items-center gap-2 rounded-xl bg-white px-3 text-xs font-extrabold text-[#315F35]"><Image src="/Whatsapp-3d.svg" alt="" width={22} height={22} unoptimized/> Contact Rashid Mega Mart on WhatsApp <ArrowRight size={14} className="ml-auto"/></a>
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-white bg-white/75 text-[#315F35] shadow-sm"><UserRound size={21}/></span>
+            </div>
+            <p className="mt-2 text-xs leading-5 text-[#81796F]">{otpSent ? `Enter the 6-digit code sent to +91 ${phone}.` : authMode === "login" ? "Login with your mobile number. We’ll send you a one-time password." : "New here? Add your name and verify your mobile to create your account."}</p>
+
+            {!otpSent && (
+              <div className="mt-6 grid grid-cols-2 rounded-2xl border border-white bg-[#EEECE5]/75 p-1.5 shadow-inner" role="tablist" aria-label="Account access">
+                <button type="button" role="tab" aria-selected={authMode === "login"} onClick={() => { setAuthMode("login"); setError(""); setNotice(""); }} className={`min-h-10 rounded-xl text-xs font-extrabold transition-all ${authMode === "login" ? "bg-white text-[#315F35] shadow-[0_3px_12px_rgba(48,37,31,0.10)]" : "text-[#81796F] hover:text-[#30251F]"}`}>Login</button>
+                <button type="button" role="tab" aria-selected={authMode === "signup"} onClick={() => { setAuthMode("signup"); setError(""); setNotice(""); }} className={`min-h-10 rounded-xl text-xs font-extrabold transition-all ${authMode === "signup" ? "bg-white text-[#315F35] shadow-[0_3px_12px_rgba(48,37,31,0.10)]" : "text-[#81796F] hover:text-[#30251F]"}`}>Sign up</button>
+              </div>
+            )}
+
+            {!otpSent ? (
+              <form onSubmit={handleSendOtp} className="mt-5 space-y-4">
+                {authMode === "signup" && (
+                  <label className="block text-xs font-bold text-[#51483F]" htmlFor="account-name">Your full name
+                    <input id="account-name" autoComplete="name" maxLength={100} required value={signupName} onChange={(event) => setSignupName(event.target.value)} placeholder="Enter your name" className="mt-2 h-12 w-full rounded-2xl border border-white/90 bg-white/75 px-4 text-sm font-medium text-[#30251F] shadow-[inset_0_1px_2px_rgba(48,37,31,0.04)] outline-none transition focus:border-[#315F35]/40 focus:bg-white focus:ring-4 focus:ring-[#315F35]/[0.08]"/>
+                  </label>
+                )}
+                <label className="block text-xs font-bold text-[#51483F]" htmlFor="account-phone">Mobile number
+                  <span className="mt-2 flex h-12 overflow-hidden rounded-2xl border border-white/90 bg-white/75 shadow-[inset_0_1px_2px_rgba(48,37,31,0.04)] transition focus-within:border-[#315F35]/40 focus-within:bg-white focus-within:ring-4 focus-within:ring-[#315F35]/[0.08]">
+                    <span className="flex items-center border-r border-[#E8DFD1] px-4 text-sm font-extrabold text-[#625F56]">+91</span>
+                    <input id="account-phone" inputMode="numeric" autoComplete="tel-national" value={phone} onChange={(event) => setPhone(event.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="10-digit mobile number" className="min-w-0 flex-1 bg-transparent px-3 text-sm outline-none"/>
+                  </span>
+                </label>
+                <button disabled={busy || phone.length !== 10 || (authMode === "signup" && signupName.trim().length < 2)} className="group flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(120deg,#315F35,#1E4D2A)] text-sm font-extrabold text-white shadow-[0_10px_22px_rgba(49,95,53,0.22)] transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_28px_rgba(49,95,53,0.28)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-45">{busy ? "Please wait..." : "Send verification code"} <ArrowRight size={16} className="transition-transform group-hover:translate-x-1"/></button>
+              </form>
+            ) : (
+              <form onSubmit={handleVerifyOtp} className="mt-6 space-y-4">
+                <label className="block text-xs font-bold text-[#51483F]" htmlFor="account-otp">6-digit verification code</label>
+                <input id="account-otp" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={otp} onChange={(event) => setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))} placeholder="••••••" className="h-14 w-full rounded-2xl border border-white bg-white/85 px-4 text-center text-2xl font-black tracking-[.5em] text-[#30251F] shadow-inner outline-none transition focus:border-[#315F35]/40 focus:ring-4 focus:ring-[#315F35]/[0.08]"/>
+                <button disabled={busy || otp.length !== 6} className="flex h-12 w-full items-center justify-center rounded-2xl bg-[#315F35] text-sm font-extrabold text-white shadow-lg shadow-[#315F35]/20 transition hover:bg-[#244D2B] disabled:opacity-50">{busy ? "Verifying..." : authMode === "signup" ? "Verify & create account" : "Verify & login"}</button>
+                <button type="button" onClick={() => { setOtpSent(false); setOtp(""); setError(""); }} className="w-full py-2 text-xs font-bold text-[#625F56] hover:text-[#315F35]">Change mobile number</button>
+              </form>
+            )}
+
+            {error && <p role="alert" className="mt-4 rounded-2xl border border-red-100 bg-red-50/90 p-3 text-xs font-semibold leading-5 text-red-700">{error}</p>}
+            {notice && <p role="status" className="mt-4 rounded-2xl border border-[#D8E8D4] bg-[#EAF3E6]/90 p-3 text-xs font-semibold leading-5 text-[#315F35]">{notice}</p>}
+            <p className="mt-5 text-[10px] leading-5 text-[#A0968D]">By continuing, you agree to our <Link className="font-bold text-[#625F56] underline underline-offset-2" href="/terms-and-conditions">Terms</Link> and <Link className="font-bold text-[#625F56] underline underline-offset-2" href="/privacy-policy">Privacy Policy</Link>.</p>
+            <Link href="/" className="mt-5 inline-flex min-h-10 items-center gap-2 text-xs font-bold text-[#625F56] transition hover:text-[#315F35]"><ChevronRight className="rotate-180" size={15}/> Back to shopping</Link>
+            <div className="mt-4 rounded-2xl border border-white/90 bg-white/55 p-3.5 backdrop-blur-xl">
+              <div className="flex items-center gap-2 text-xs font-black text-[#30251F]"><LifeBuoy size={16} className="text-[#315F35]"/> Need help?</div>
+              <a href={`https://wa.me/918962531603?text=${encodeURIComponent("Hello Rashid Mega Mart! I need help with my account.")}`} target="_blank" rel="noopener noreferrer" className="mt-2 flex min-h-11 items-center gap-2 rounded-xl bg-white/80 px-3 text-[11px] font-extrabold text-[#315F35] transition hover:bg-white"><Image src="/Whatsapp-3d.svg" alt="" width={21} height={21} unoptimized/> Contact us on WhatsApp <ArrowRight size={14} className="ml-auto"/></a>
+            </div>
           </div>
-        </div>
+        </section>
       </div>
     </main>
   );
