@@ -92,7 +92,7 @@ export default function CartPage() {
         ];
         return [
           (index + 1) + ". " + (item.kitGroupName ? item.kitGroupName + " — " : "") + item.name,
-          "   " + item.quantity + " × " + formatPrice(item.unitPrice) + " = " + formatPrice(item.lineTotal),
+          "   " + item.quantity + " × base kit price " + formatPrice(item.unitPrice) + " = " + formatPrice(item.lineTotal),
           contents.length ? "   Kit changes / extra items: " + contents.join(", ") : "",
         ].filter(Boolean).join("\n");
       })
@@ -102,7 +102,7 @@ export default function CartPage() {
     const message = [
       "🛒 *Rashid Mega Mart — Shopping Enquiry*",
       "",
-      "This is an enquiry only. Final availability, weight (where applicable), delivery charges and payable amount will be confirmed by the store.",
+      "This is an enquiry only. The order will be confirmed only after store approval. Final availability, weight (where applicable), delivery charges and payable amount will be confirmed by the store.",
       "",
       "*Customer*",
       "Name: " + cleanName,
@@ -113,7 +113,7 @@ export default function CartPage() {
       "*Your Items*",
       enquiryDetails,
       "",
-      "*Subtotal: " + formatPrice(subtotal) + "*",
+      "*Kit base subtotal: " + formatPrice(subtotal) + "*",
       "Delivery: Confirm on WhatsApp",
       hasExtras ? "Extra item prices: Owner will confirm separately." : "",
       cleanInstructions ? "Note: " + cleanInstructions : "",
@@ -204,7 +204,7 @@ export default function CartPage() {
                     <div className="min-w-0">
                       {item.kitGroupName ? <p className="mb-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#168447]">{item.kitGroupName}</p> : null}
                       <h3 className="break-words text-sm font-extrabold text-[#202124] sm:text-base">{item.name}</h3>
-                      <p className="mt-1 text-xs text-[#686868]">{formatPrice(item.unitPrice)} per kit</p>
+                      <p className="mt-1 text-xs text-[#686868]">Base kit price · {formatPrice(item.unitPrice)}</p>
                     </div>
                     <button type="button" aria-label={"Remove " + item.name} onClick={() => removeFromCart(item.id)} className="flex size-10 shrink-0 items-center justify-center rounded-xl text-[#9B8F80] hover:bg-red-50 hover:text-red-600">
                       <Trash2 size={16} />
@@ -306,7 +306,7 @@ export default function CartPage() {
         <div className="fixed inset-x-0 bottom-[calc(70px+env(safe-area-inset-bottom))] z-40 border-t border-[#E8DFD1] bg-white/98 px-3 py-2 shadow-[0_-8px_24px_rgba(40,30,20,0.08)] backdrop-blur-lg lg:hidden">
           <button type="button" onClick={() => document.querySelector<HTMLFormElement>("#cart-checkout")?.requestSubmit()} className="flex min-h-12 w-full items-center justify-between rounded-xl bg-[#168447] px-4 text-sm font-extrabold text-white shadow-sm active:scale-[.99]">
             <span className="flex items-center gap-2"><Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} unoptimized /> Send Enquiry</span>
-            <span className="tabular-nums">{formatPrice(subtotal)}</span>
+            <span className="tabular-nums">Base {formatPrice(subtotal)}</span>
           </button>
         </div>
       </div>
