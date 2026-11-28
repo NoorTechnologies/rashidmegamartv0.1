@@ -2,14 +2,15 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
+  ArrowLeft,
   Search,
   Package,
   X,
   SlidersHorizontal,
   RotateCcw,
-  ShoppingBag,
 } from "lucide-react";
 import KitCard from "@/components/KitCard";
 import { kits as allKits } from "@/data/kits";
@@ -90,93 +91,39 @@ export default function KitsPage() {
     sortBy !== "featured";
 
   return (
-    <main className="min-h-screen w-full overflow-x-clip bg-[radial-gradient(ellipse_at_8%_8%,rgba(181,18,50,0.08),transparent_30%),radial-gradient(ellipse_at_92%_24%,rgba(212,168,79,0.14),transparent_28%),linear-gradient(180deg,#FAF7EF_0%,#FAF7EF_48%,#FAF7EF_100%)]">
-      {/* COMPACT HOME STYLE BANNER */}
-      <section data-reveal className="relative isolate overflow-hidden border-b border-[#F1EBDD] bg-[linear-gradient(125deg,#106B38_0%,#168447_58%,#800020_100%)] px-3 pb-5 pt-4 text-white shadow-[0_16px_45px_rgba(143,18,53,0.18)] sm:px-5 sm:pb-8 sm:pt-7">
-        <div className="pointer-events-none absolute -left-16 top-5 h-40 w-40 rounded-full bg-white/10 blur-[65px]" />
-        <div className="pointer-events-none absolute -right-16 bottom-0 h-40 w-40 rounded-full bg-[#FAF0C8]/20 blur-[65px]" />
-
-        <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[9px] font-extrabold tracking-wide text-white shadow-lg backdrop-blur-xl sm:text-xs">
-            <ShoppingBag size={12} />
-            YOUR NEIGHBOURHOOD GROCERY STORE
-          </span>
-
-          <div className="mt-2 flex items-center gap-2 sm:mt-3">
-            <Image
-              src="/images/logo.png"
-              alt="Rashid Mega Mart Logo"
-              width={60}
-              height={60}
-              priority
-              className="h-10 w-10 object-contain sm:h-14 sm:w-14"
-            />
-
-            <div className="text-left">
-              <h1 className="text-lg font-black leading-tight sm:text-2xl">
-                Grocery <span className="text-[#F1EBDD]">Kits</span>
-              </h1>
-              <p className="text-[9px] font-medium text-white/80 sm:text-xs">
-                Smart combos for every home
-              </p>
-            </div>
+    <main className="min-h-screen w-full overflow-x-clip bg-[#F8FAF7]">
+      <section data-reveal className="relative isolate overflow-hidden border-b border-[#DDEBE0] bg-[#EAF5ED] px-4 pb-5 pt-5 sm:px-6 sm:pb-8 sm:pt-8 lg:px-8">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full bg-white/60 blur-3xl" />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-4 sm:grid-cols-[1fr_220px] sm:gap-8 lg:grid-cols-[1fr_300px]">
+          <div>
+            <Link href="/" className="inline-flex items-center gap-2 text-[9px] font-extrabold uppercase tracking-[.16em] text-[#52775D] hover:text-[#168447]">
+              <ArrowLeft size={13} /> Back to home
+            </Link>
+            <p className="mt-4 text-[9px] font-extrabold uppercase tracking-[.18em] text-[#A27A2A] sm:text-[10px]">Thoughtfully packed for everyday homes</p>
+            <h1 className="mt-1.5 text-2xl font-black leading-[1.05] tracking-[-.055em] text-[#1C3425] sm:text-4xl">Find your everyday <span className="text-[#168447]">grocery kit.</span></h1>
+            <p className="mt-2 max-w-lg text-[11px] leading-5 text-[#607067] sm:text-sm sm:leading-6">Compare useful grocery combinations, check what’s inside and customise a kit before confirming your order.</p>
           </div>
-
-          <p className="mt-2 max-w-md text-[10px] leading-5 text-white/80 sm:mt-3 sm:text-sm sm:leading-6">
-            Special grocery combos. More essentials, one simple price.
-          </p>
-
-          {/* HERO IMAGE */}
-          <div className="relative mt-3 w-full max-w-[360px] sm:mt-5 sm:max-w-[480px]">
-            <div className="relative mx-auto h-[105px] w-full overflow-hidden rounded-xl sm:h-[190px] sm:rounded-2xl">
-              <Image
-                src="/hero.png"
-                alt="Rashid Mega Mart grocery shopping"
-                fill
-                priority
-                sizes="(max-width: 640px) 100vw, 480px"
-                className="object-contain"
-              />
-            </div>
+          <div className="relative hidden aspect-[1.5/1] overflow-hidden rounded-[24px] border border-white/90 bg-white/70 p-2 shadow-[0_12px_34px_rgba(36,83,48,.08)] sm:block">
+            <Image src="/hero.png" alt="Rashid Mega Mart grocery kits" fill priority sizes="300px" className="object-contain p-2" />
           </div>
-
-          {/* SEARCH */}
-          <div className="relative mt-3 flex h-11 w-full max-w-[520px] items-center gap-2.5 rounded-xl border border-white/70 bg-white px-3 shadow-[0_5px_20px_rgba(60,0,15,0.12)] transition focus-within:border-[#168447] sm:mt-5 sm:h-14 sm:rounded-2xl sm:px-4">
-            <Search size={18} className="shrink-0 text-[#168447]" />
-
-            <input
-              type="search"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search grocery kits..."
-              aria-label="Search grocery kits"
-              className="min-w-0 flex-1 bg-transparent text-xs text-[#202124] outline-none placeholder:text-[#686868] sm:text-sm"
-            />
-
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch("")}
-                aria-label="Clear search"
-                className="shrink-0 rounded-full p-1.5 transition hover:bg-[#EAF3E9]"
-              >
-                <X size={16} className="text-[#686868]" />
-              </button>
-            )}
-          </div>
+        </div>
+        <div className="relative mx-auto mt-4 flex h-11 max-w-7xl items-center gap-2.5 rounded-xl border border-white/90 bg-white px-3 shadow-[0_5px_18px_rgba(36,83,48,.06)] transition focus-within:border-[#168447] sm:mt-6 sm:h-12 sm:max-w-2xl sm:ml-[max(0px,calc((100vw-80rem)/2))]">
+          <Search size={17} className="shrink-0 text-[#168447]" />
+          <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search kits, rice, atta, dal..." aria-label="Search grocery kits" className="min-w-0 flex-1 bg-transparent text-xs text-[#203629] outline-none placeholder:text-[#8B978E] sm:text-sm" />
+          {search && <button type="button" onClick={() => setSearch("")} aria-label="Clear search" className="rounded-full p-1.5 text-[#7A887D] hover:bg-[#EAF5ED]"><X size={15} /></button>}
         </div>
       </section>
 
       {/* KITS SECTION */}
-      <section className="mx-auto w-full max-w-7xl px-3 pb-10 pt-4 sm:px-6 sm:pb-12 sm:pt-7 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl px-3 pb-10 pt-5 sm:px-6 sm:pb-14 sm:pt-8 lg:px-8">
         {/* HEADING */}
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <h2 className="text-lg font-black text-[#202124] sm:text-2xl">
+            <h2 className="text-lg font-black text-[#203629] sm:text-2xl">
               Shop Best-Value Kits
             </h2>
 
-            <p className="mt-1 text-[10px] text-[#686868] sm:text-xs">
+            <p className="mt-1 text-[10px] text-[#748278] sm:text-xs">
               {filteredKits.length} of {kits.length} kits found
             </p>
           </div>
@@ -195,7 +142,7 @@ export default function KitsPage() {
 
         {/* AVAILABILITY FILTERS */}
         <div className="mt-4 sm:mt-6">
-          <p className="mb-2 text-[10px] font-extrabold uppercase tracking-wider text-[#686868] sm:text-xs">
+          <p className="mb-2 text-[10px] font-extrabold uppercase tracking-wider text-[#748278] sm:text-xs">
             Availability
           </p>
 
@@ -214,8 +161,8 @@ export default function KitsPage() {
                 aria-pressed={filter === option.value}
                 className={`min-h-10 shrink-0 rounded-full border px-4 py-2 text-[11px] font-extrabold transition active:scale-95 sm:px-4 sm:text-xs ${
                   filter === option.value
-                    ? "border-[#106B38] bg-gradient-to-r from-[#168447] to-[#106B38] text-white shadow-[0_4px_14px_rgba(143,18,53,0.22)]"
-                    : "border-[#F1EBDD] bg-white text-[#686868] hover:border-[#800020] hover:bg-[#F1EBDD]"
+                    ? "border-[#168447] bg-[#168447] text-white shadow-[0_5px_14px_rgba(22,132,71,.16)]"
+                    : "border-[#E2EDE4] bg-white text-[#748278] hover:border-[#168447] hover:bg-[#F0F7F1]"
                 }`}
               >
                 {option.label}
@@ -225,17 +172,17 @@ export default function KitsPage() {
         </div>
 
         {/* SORT AND RESULT COUNT */}
-        <div className="mt-4 flex items-center justify-between gap-2 border-y border-[#F1EBDD] py-3 sm:mt-5">
+        <div className="mt-4 flex items-center justify-between gap-2 border-y border-[#E2EDE4] py-3 sm:mt-5">
           <div className="min-w-0">
-            <p className="text-[10px] font-bold text-[#686868] sm:text-xs">
+            <p className="text-[10px] font-bold text-[#748278] sm:text-xs">
               {filteredKits.length} Kits Found
             </p>
-            <p className="mt-0.5 text-[9px] text-[#686868] sm:text-[10px]">
+            <p className="mt-0.5 text-[9px] text-[#748278] sm:text-[10px]">
               Choose a kit that fits your family
             </p>
           </div>
 
-          <label className="flex min-h-9 max-w-[190px] shrink-0 items-center gap-1.5 rounded-lg border border-[#F1EBDD] bg-white px-2.5 py-2 text-[10px] font-semibold text-[#686868] focus-within:border-[#168447] sm:max-w-none sm:gap-2 sm:rounded-xl sm:px-3 sm:text-xs">
+          <label className="flex min-h-9 max-w-[190px] shrink-0 items-center gap-1.5 rounded-lg border border-[#E2EDE4] bg-white px-2.5 py-2 text-[10px] font-semibold text-[#748278] focus-within:border-[#168447] sm:max-w-none sm:gap-2 sm:rounded-xl sm:px-3 sm:text-xs">
             <SlidersHorizontal size={14} className="shrink-0 text-[#168447]" />
 
             <span className="shrink-0">Sort:</span>
@@ -264,16 +211,16 @@ export default function KitsPage() {
             ))}
           </div>
         ) : (
-          <div className="mt-6 rounded-2xl border border-[#F1EBDD] bg-white px-4 py-10 text-center shadow-sm sm:px-6 sm:py-12">
-            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-[#EAF3E9] text-[#168447]">
+          <div className="mt-6 rounded-2xl border border-[#E2EDE4] bg-white px-4 py-10 text-center shadow-sm sm:px-6 sm:py-12">
+            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-[#EAF5ED] text-[#168447]">
               <Package size={28} />
             </div>
 
-            <h3 className="mt-4 text-base font-extrabold text-[#202124] sm:text-lg">
+            <h3 className="mt-4 text-base font-extrabold text-[#203629] sm:text-lg">
               No kits found
             </h3>
 
-            <p className="mt-2 text-xs text-[#686868] sm:text-sm">
+            <p className="mt-2 text-xs text-[#748278] sm:text-sm">
               Try another search or change the filters.
             </p>
 
@@ -290,17 +237,17 @@ export default function KitsPage() {
       </section>
 
       <section data-reveal className="mx-auto w-full max-w-7xl px-3 pb-28 sm:px-6 sm:pb-16 lg:px-8" aria-labelledby="kit-suggestion-title">
-        <div className="overflow-hidden rounded-2xl border border-white/80 bg-white/55 p-4 shadow-[0_12px_34px_rgba(70,40,30,0.08)] backdrop-blur-xl sm:rounded-3xl sm:p-6">
+        <div className="overflow-hidden rounded-2xl border border-white/80 bg-white/85 p-4 shadow-[0_12px_34px_rgba(36,83,48,.07)] backdrop-blur-xl sm:rounded-3xl sm:p-6">
           <div className="mx-auto max-w-2xl text-center">
             <span className="inline-flex rounded-full border border-[#168447]/15 bg-white/70 px-3 py-1 text-[10px] font-bold text-[#168447]">Your suggestion matters</span>
-            <h2 id="kit-suggestion-title" className="mt-2 text-lg font-black text-[#202124] sm:text-2xl">Apni Grocery Kit Suggest Karein</h2>
-            <p className="mt-1 text-xs leading-5 text-[#686868] sm:text-sm">Koi item ya kit chahiye jo yahan nahi mili? Humein batayein — hum aapki suggestion dekhenge.</p>
+            <h2 id="kit-suggestion-title" className="mt-2 text-lg font-black text-[#203629] sm:text-2xl">Apni Grocery Kit Suggest Karein</h2>
+            <p className="mt-1 text-xs leading-5 text-[#748278] sm:text-sm">Koi item ya kit chahiye jo yahan nahi mili? Humein batayein — hum aapki suggestion dekhenge.</p>
             <div className="mt-4 grid gap-2 text-left sm:grid-cols-[1fr_1.4fr]">
-              <input value={suggestionName} onChange={(event) => setSuggestionName(event.target.value.slice(0, 60))} placeholder="Aapka naam (optional)" aria-label="Your name" className="min-h-10 rounded-xl border border-[#E8DFD1] bg-white/85 px-3 text-xs outline-none focus:border-[#168447]" />
-              <textarea value={suggestion} onChange={(event) => setSuggestion(event.target.value.slice(0, 500))} placeholder="Kaun si kit ya grocery items chahiye? Quantity bhi likh sakte hain..." aria-label="Kit suggestion" rows={3} className="min-h-20 rounded-xl border border-[#E8DFD1] bg-white/85 px-3 py-2.5 text-xs outline-none focus:border-[#168447] sm:row-span-2" />
+              <input value={suggestionName} onChange={(event) => setSuggestionName(event.target.value.slice(0, 60))} placeholder="Aapka naam (optional)" aria-label="Your name" className="min-h-10 rounded-xl border border-[#E2EDE4] bg-white/85 px-3 text-xs outline-none focus:border-[#168447]" />
+              <textarea value={suggestion} onChange={(event) => setSuggestion(event.target.value.slice(0, 500))} placeholder="Kaun si kit ya grocery items chahiye? Quantity bhi likh sakte hain..." aria-label="Kit suggestion" rows={3} className="min-h-20 rounded-xl border border-[#E2EDE4] bg-white/85 px-3 py-2.5 text-xs outline-none focus:border-[#168447] sm:row-span-2" />
               <button type="button" disabled={!suggestion.trim()} onClick={() => { const message = ["Namaste Rashid Mega Mart, meri grocery kit suggestion:", suggestion.trim(), suggestionName.trim() ? "Name: " + suggestionName.trim() : ""].filter(Boolean).join("\n"); window.location.assign("https://wa.me/918962531603?text=" + encodeURIComponent(message)); }} className="min-h-10 rounded-xl bg-[#168447] px-4 py-2.5 text-xs font-bold text-white transition hover:bg-[#106B38] disabled:cursor-not-allowed disabled:opacity-45">WhatsApp Par Suggest Karein</button>
             </div>
-            <p className="mt-2 text-[10px] text-[#686868]">Suggestion WhatsApp par store ko bheji jayegi. Order ya price confirmation nahi hai.</p>
+            <p className="mt-2 text-[10px] text-[#748278]">Suggestion WhatsApp par store ko bheji jayegi. Order ya price confirmation nahi hai.</p>
           </div>
         </div>
       </section>

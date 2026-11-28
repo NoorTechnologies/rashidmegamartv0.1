@@ -1,20 +1,25 @@
-
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import {
-  Package,
   ArrowUpRight,
-  Tag,
-  ShoppingCart,
   Check,
+  Coffee,
+  CookingPot,
+  Droplets,
+  Leaf,
+  Package,
+  ShoppingCart,
+  Tag,
+  Wheat,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-
 import type { GroceryKit } from "@/data/kits";
-import { useSiteLanguage, toEnglishCatalogue, toHinglishCatalogue } from "@/components/LanguageProvider";
+import {
+  useSiteLanguage,
+  toEnglishCatalogue,
+  toHinglishCatalogue,
+} from "@/components/LanguageProvider";
 
 interface KitCardProps {
   kit: GroceryKit;
@@ -28,192 +33,139 @@ const formatPrice = (price: number) =>
     maximumFractionDigits: 0,
   }).format(price);
 
+const getCategoryVisual = (category: string) => {
+  const value = category.toLowerCase();
+  if (value.includes("breakfast")) return { Icon: Coffee, tint: "from-[#FFF1D8] to-[#F9E4C0]", ink: "text-[#98601D]", label: "Breakfast picks" };
+  if (value.includes("oil") || value.includes("cooking")) return { Icon: Droplets, tint: "from-[#E8F4D9] to-[#D7E9C5]", ink: "text-[#527B32]", label: "Cooking essentials" };
+  if (value.includes("spice")) return { Icon: Leaf, tint: "from-[#F8E9D8] to-[#EFD7BD]", ink: "text-[#9B5B2C]", label: "Spices & masala" };
+  if (value.includes("monthly") || value.includes("mega")) return { Icon: Package, tint: "from-[#E5ECF8] to-[#D5E1F4]", ink: "text-[#4C6797]", label: "Family stock-up" };
+  if (value.includes("family") || value.includes("premium")) return { Icon: CookingPot, tint: "from-[#F3E8F4] to-[#E8D9EC]", ink: "text-[#80518C]", label: "Family essentials" };
+  return { Icon: Wheat, tint: "from-[#EAF5ED] to-[#D5EBDD]", ink: "text-[#287347]", label: "Daily essentials" };
+};
 
-export default function KitCard({ kit, eagerImage = false }: KitCardProps) {
-  const [imageError, setImageError] = useState(false);
+export default function KitCard({ kit }: KitCardProps) {
   const { addToCart, items } = useCart();
   const isInCart = items.some((item) => item.id === kit.id);
   const language = useSiteLanguage();
-  const displayCatalogue = (value: string) => language === "en" ? toEnglishCatalogue(value) : language === "hinglish" ? toHinglishCatalogue(value) : value;
-  const kitImage = kit.image;
+  const displayCatalogue = (value: string) =>
+    language === "en"
+      ? toEnglishCatalogue(value)
+      : language === "hinglish"
+        ? toHinglishCatalogue(value)
+        : value;
 
-  const savings =
-    kit.oldPrice && kit.oldPrice > kit.price
-      ? kit.oldPrice - kit.price
-      : 0;
-
+  const savings = kit.oldPrice && kit.oldPrice > kit.price
+    ? kit.oldPrice - kit.price
+    : 0;
+  const discount = kit.oldPrice && kit.oldPrice > kit.price
+    ? Math.round((savings / kit.oldPrice) * 100)
+    : 0;
   const visibleItems = kit.items.slice(0, 4);
   const remainingItems = Math.max(0, kit.items.length - visibleItems.length);
-
-
+  const visual = getCategoryVisual(kit.category);
+  const CategoryIcon = visual.Icon;
 
   return (
-    <article className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#E8DFD1] bg-white shadow-[0_3px_14px_rgba(74,34,22,0.05)] transition-shadow duration-200 hover:shadow-md sm:rounded-[24px]">
-
-      {/* KIT IMAGE */}
-      <Link
-        href={`/kits/${kit.id}`}
-        aria-label={`View ${kit.name} details`}
-        className="block"
-      >
-        <div className="relative aspect-[16/9] w-full overflow-hidden sm:aspect-[4/3] bg-[radial-gradient(ellipse_at_50%_42%,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.82)_48%,rgba(242,229,211,0.72)_100%)] before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_48%,rgba(212,168,79,0.10))]">
-          <span className="absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/30 bg-[#168447] px-2.5 py-1 text-[9px] font-black tracking-wide text-white shadow-lg shadow-[#800020]/25 sm:left-3 sm:top-3 sm:text-[10px]">
-            <Tag size={11} />
-            {savings > 0 ? `YOU SAVE ${formatPrice(savings)}` : "KIT DEAL"}
+    <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-[22px] border border-[#E2EDE4] bg-white shadow-[0_5px_22px_rgba(27,68,39,.055)] transition duration-300 hover:-translate-y-1 hover:border-[#C8E0CD] hover:shadow-[0_16px_34px_rgba(27,68,39,.11)] sm:rounded-[26px]">
+      <Link href={`/kits/${kit.id}`} aria-label={`View ${kit.name} details`} className="block">
+        <div className={`relative isolate aspect-[1.35/1] overflow-hidden bg-gradient-to-br ${visual.tint}`}>
+          <div aria-hidden="true" className="absolute -right-8 -top-10 size-36 rounded-full border-[18px] border-white/25" />
+          <div aria-hidden="true" className="absolute -bottom-12 -left-8 size-36 rounded-full bg-white/30 blur-xl" />
+          <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full border border-white/80 bg-white/85 px-2.5 py-1 text-[8px] font-black uppercase tracking-[.13em] text-[#365A40] shadow-sm sm:left-4 sm:top-4 sm:text-[9px]">
+            <Package size={11} /> {kit.items.length} items
           </span>
-
-          <span className="absolute right-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full border border-white/70 bg-white/65 px-2.5 py-1 text-[9px] font-bold text-[#202124] shadow-lg backdrop-blur-xl sm:right-3 sm:top-3 sm:text-[10px]">
-            <Package size={12} />
-            {kit.items.length} Items
-          </span>
-
-          {!imageError ? (
-            <Image
-              src={kitImage}
-              alt={kit.name}
-              fill
-              loading={eagerImage ? "eager" : "lazy"}
-              sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 240px"
-              onError={() => setImageError(true)}
-              className="object-contain p-3 transition-transform duration-500 ease-out group-hover:scale-105 sm:p-5"
-            />
-          ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-2 text-[#168447]">
-              <Package size={38} strokeWidth={1.4} />
-              <span className="text-[10px] font-semibold">
-                Grocery Kit
-              </span>
-            </div>
+          {discount > 0 && (
+            <span className="absolute right-3 top-3 z-10 rounded-full bg-[#D94C43] px-2.5 py-1 text-[8px] font-black tracking-wide text-white shadow-sm sm:right-4 sm:top-4 sm:text-[9px]">
+              {discount}% OFF
+            </span>
           )}
-
-          <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1.5 rounded-lg border border-white/30 bg-[#800020]/90 px-2.5 py-1.5 text-[9px] font-extrabold tracking-[0.08em] text-white shadow-md backdrop-blur-md">
-            <Tag size={11} className="text-[#F7C928]" />
-            SPECIAL KIT OFFER
-          </span>
-
-          {!kit.isAvailable && (
-            <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/75 backdrop-blur-[2px]">
-              <span className="rounded-full bg-[#202124] px-4 py-2 text-[10px] font-bold text-white">
-                Out of Stock
-              </span>
-            </div>
-          )}
+          <div className="absolute inset-0 flex flex-col items-center justify-center pt-3">
+            <span className={`grid size-[76px] place-items-center rounded-[26px] border border-white/80 bg-white/70 shadow-[0_12px_30px_rgba(50,80,50,.10)] backdrop-blur-sm transition duration-300 group-hover:scale-105 sm:size-[92px] sm:rounded-[30px] ${visual.ink}`}>
+              <CategoryIcon size={42} strokeWidth={1.35} className="sm:hidden" />
+              <CategoryIcon size={50} strokeWidth={1.35} className="hidden sm:block" />
+            </span>
+            <span className="mt-3 rounded-full border border-white/80 bg-white/70 px-3 py-1 text-[8px] font-extrabold uppercase tracking-[.16em] text-[#4C6552] backdrop-blur-sm sm:text-[9px]">
+              {visual.label}
+            </span>
+          </div>
+          <span className="absolute bottom-3 left-3 text-[9px] font-bold text-[#42614A]/75 sm:bottom-4 sm:left-4">RASHID MEGA MART</span>
         </div>
       </Link>
 
-      {/* KIT DETAILS */}
-      <div className="relative flex min-w-0 flex-1 flex-col p-3 sm:p-4">
-        <Link href={`/kits/${kit.id}`}>
-          <h3 className="line-clamp-2 min-h-9 text-[12px] font-extrabold leading-[18px] text-[#202124] transition-colors group-hover:text-[#800020] sm:min-h-11 sm:text-[15px] sm:leading-5">
-            {kit.name}
-          </h3>
-        </Link>
-
-        <p className="mt-1 line-clamp-1 text-[10px] leading-4 text-[#686868] sm:text-xs">
-          {displayCatalogue(kit.subtitle)}
-        </p>
-
-        {/* INCLUDED ITEMS */}
-        <div className="mt-2 rounded-xl border border-[#E8DFD1] bg-[#FFFEFC] p-2.5 sm:mt-4 sm:rounded-2xl sm:p-3">
-          <div className="mb-2 flex items-center justify-between gap-1">
-            <span className="text-[10px] font-extrabold text-[#202124] sm:text-xs">
-              Products inside
-            </span>
-
-            <span className="shrink-0 rounded-full border border-[#800020]/10 bg-[#800020]/[0.07] px-2 py-0.5 text-[9px] font-bold text-[#168447]">
-              {kit.items.length} Products
-            </span>
+      <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-4">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <Link href={`/kits/${kit.id}`}>
+              <h3 className="line-clamp-2 text-[13px] font-black leading-[1.25] tracking-[-.025em] text-[#203629] transition-colors group-hover:text-[#168447] sm:text-[16px]">{kit.name}</h3>
+            </Link>
+            <p className="mt-1 line-clamp-2 text-[10px] leading-4 text-[#7A887D] sm:text-[11px]">{displayCatalogue(kit.subtitle)}</p>
           </div>
+          {kit.isAvailable ? (
+            <span className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-[#EAF5ED] px-2 py-1 text-[8px] font-extrabold text-[#287347] sm:text-[9px]">
+              <span className="size-1.5 rounded-full bg-[#168447]" /> In stock
+            </span>
+          ) : (
+            <span className="mt-0.5 shrink-0 rounded-full bg-[#FCEBE9] px-2 py-1 text-[8px] font-extrabold text-[#B84B42]">Unavailable</span>
+          )}
+        </div>
 
+        <div className="mt-3 rounded-xl bg-[#F7FAF7] p-2.5 sm:mt-4 sm:p-3">
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <span className="text-[9px] font-extrabold text-[#415847] sm:text-[10px]">Inside this kit</span>
+            <span className="text-[8px] font-bold text-[#849187]">{kit.items.length} essentials</span>
+          </div>
           <div className="grid grid-cols-2 gap-x-2 gap-y-2">
             {visibleItems.map((item, index) => {
               const parts = item.match(/^(.+?)\s*[-–]\s*(.+)$/);
               const name = parts ? parts[1].trim() : item;
               const quantity = parts ? parts[2].trim() : null;
-
               return (
-                <div
-                  key={`${kit.id}-${index}`}
-                  className="flex min-w-0 items-start gap-1.5"
-                >
-                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-white/90 bg-white/80 text-[#168447] shadow-sm sm:h-8 sm:w-8">
-                    <Package size={14} strokeWidth={1.5} />
-                  </div>
-                  <span className="min-w-0 text-[9px] leading-3 text-[#202124] sm:text-[10px]">
+                <div key={`${kit.id}-${index}`} className="flex min-w-0 items-start gap-1.5">
+                  <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-md bg-white text-[#168447] shadow-sm"><Check size={11} strokeWidth={2.5} /></span>
+                  <span className="min-w-0 text-[9px] leading-[1.35] text-[#536358] sm:text-[10px]">
                     <span className="block line-clamp-2 font-semibold">{displayCatalogue(name)}</span>
-                    {quantity && (
-                      <span className="mt-0.5 block font-bold text-[#806000]">
-                        {quantity ? displayCatalogue(quantity) : quantity}
-                      </span>
-                    )}
+                    {quantity && <span className="mt-0.5 block font-bold text-[#8B7544]">{displayCatalogue(quantity)}</span>}
                   </span>
                 </div>
               );
             })}
           </div>
-
           {remainingItems > 0 && (
-            <Link
-              href={`/kits/${kit.id}`}
-              className="mt-2 inline-flex min-h-8 items-center gap-1 text-[10px] font-extrabold text-[#800020] transition hover:text-[#800020] sm:text-[10px]"
-            >
-              + {remainingItems} more items
-              <ArrowUpRight size={11} />
+            <Link href={`/kits/${kit.id}`} className="mt-2 inline-flex items-center gap-1 text-[9px] font-extrabold text-[#168447] hover:underline">
+              + {remainingItems} more items <ArrowUpRight size={11} />
             </Link>
           )}
         </div>
 
-        {/* PRICE AND SAVINGS */}
-        <div className="mt-2 overflow-hidden rounded-xl border border-[#D8CBB8] bg-[linear-gradient(135deg,#F1EBDD_0%,#FAF0C8_100%)] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,.9)] sm:mt-4 sm:rounded-2xl sm:p-3">
-          <div className="flex min-w-0 flex-wrap items-center justify-between gap-1.5">
-            <div className="min-w-0">
-              <p className="text-[8px] font-black uppercase tracking-[0.16em] text-[#800020] sm:text-[9px]">BEST OFFER PRICE</p>
-              <div className="mt-0.5 flex flex-wrap items-baseline gap-x-1.5">
-                <span className="text-xl font-black tracking-tight text-[#800020] sm:text-3xl">{formatPrice(kit.price)}</span>
-                {kit.oldPrice && kit.oldPrice > kit.price && (
-                  <span className="text-[10px] font-bold text-[#686868] line-through sm:text-xs">{formatPrice(kit.oldPrice)}</span>
-                )}
-              </div>
+        <div className="mt-3 flex items-end justify-between gap-2 border-t border-[#EDF2ED] pt-3 sm:mt-4">
+          <div className="min-w-0">
+            <p className="text-[8px] font-extrabold uppercase tracking-[.14em] text-[#849187]">Kit price</p>
+            <div className="mt-0.5 flex flex-wrap items-baseline gap-x-1.5">
+              <span className="text-xl font-black tracking-[-.045em] text-[#176B3C] sm:text-2xl">{formatPrice(kit.price)}</span>
+              {kit.oldPrice && kit.oldPrice > kit.price && <span className="text-[9px] font-semibold text-[#98A198] line-through sm:text-[10px]">{formatPrice(kit.oldPrice)}</span>}
             </div>
-            {savings > 0 && (
-              <span className="inline-flex shrink-0 items-center rounded-lg bg-[#800020] px-2.5 py-1.5 text-[9px] font-black text-white shadow-sm sm:text-[10px]">SAVE {formatPrice(savings)}</span>
-            )}
           </div>
+          {savings > 0 && <span className="mb-1 inline-flex shrink-0 items-center gap-1 rounded-lg bg-[#FFF1EE] px-2 py-1 text-[8px] font-black text-[#C94E43] sm:text-[9px]"><Tag size={10} /> Save {formatPrice(savings)}</span>}
         </div>
 
-        {/* ACTION BUTTONS */}
-        <div className="mt-auto flex gap-1.5 pt-2 sm:gap-2 sm:pt-4">
+        <div className="mt-auto flex gap-2 pt-3">
           {kit.isAvailable ? (
             <>
-              <Link
-                href={`/kits/${kit.id}`}
-                aria-label={`Customize ${kit.name}`}
-                className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl border border-[#168447] bg-white px-2 text-[11px] font-extrabold text-[#168447] transition hover:bg-[#EAF3E9] active:scale-[.99] sm:text-xs"
-              >
-                Customize
-                <ArrowUpRight size={12} />
+              <Link href={`/kits/${kit.id}`} className="inline-flex min-h-10 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl border border-[#C9DFCE] bg-white px-2 text-[10px] font-extrabold text-[#287347] transition hover:bg-[#F0F7F1] sm:min-h-11 sm:text-xs">
+                Customise <ArrowUpRight size={12} />
               </Link>
               {isInCart ? (
-                <Link
-                  href="/cart"
-                  className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl bg-[#800020] px-2 text-[11px] font-extrabold text-white transition hover:bg-[#650019] active:scale-[.99] sm:text-xs"
-                >
-                  <Check size={14} /> In Cart
+                <Link href="/cart" className="inline-flex min-h-10 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl bg-[#EAF5ED] px-2 text-[10px] font-extrabold text-[#176B3C] sm:min-h-11 sm:text-xs">
+                  <Check size={14} /> In cart
                 </Link>
               ) : (
-                <button
-                  type="button"
-                  onClick={() => addToCart({ id: kit.id, name: kit.name, price: kit.price, image: kit.image, brand: "Rashid Mega Mart", packSize: "Grocery Kit" })}
-                  className="inline-flex min-h-11 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl bg-[#800020] px-2 text-[11px] font-extrabold text-white transition hover:bg-[#650019] active:scale-[.99] sm:text-xs"
-                >
-                  <ShoppingCart size={14} /> Add to Cart
+                <button type="button" onClick={() => addToCart({ id: kit.id, name: kit.name, price: kit.price, image: kit.image, brand: "Rashid Mega Mart", packSize: "Grocery Kit" })} className="inline-flex min-h-10 min-w-0 flex-1 items-center justify-center gap-1 rounded-xl bg-[#168447] px-2 text-[10px] font-extrabold text-white shadow-[0_5px_14px_rgba(22,132,71,.16)] transition hover:bg-[#106B38] active:scale-[.98] sm:min-h-11 sm:text-xs">
+                  <ShoppingCart size={13} /> Add to cart
                 </button>
               )}
             </>
           ) : (
-            <span className="inline-flex min-h-8 flex-1 items-center justify-center rounded-lg bg-[#FAF7EF] px-1.5 text-[10px] font-bold text-[#686868] sm:min-h-10 sm:rounded-xl sm:text-xs">
-              Out of Stock
-            </span>
+            <span className="inline-flex min-h-10 flex-1 items-center justify-center rounded-xl bg-[#F3F5F3] text-[10px] font-bold text-[#89948B]">Currently unavailable</span>
           )}
         </div>
       </div>

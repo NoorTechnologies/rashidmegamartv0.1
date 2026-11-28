@@ -67,7 +67,7 @@ export default function KitDetailClient({ kit }: Props) {
       <button
         type="button"
         disabled
-        className="flex min-h-14 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-[#D8CBB8] px-5 py-4 text-sm font-extrabold text-white"
+        className="flex min-h-14 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-[#D8E7DB] px-5 py-4 text-sm font-extrabold text-white"
       >
         Currently Unavailable
       </button>
@@ -76,7 +76,7 @@ export default function KitDetailClient({ kit }: Props) {
 
   if (cartItem) {
     return (
-      <div className="flex min-h-14 w-full items-center justify-between gap-3 rounded-xl border border-[#D5E8D6] bg-[#EAF3E9] p-2">
+      <div className="flex min-h-14 w-full items-center justify-between gap-3 rounded-xl border border-[#D5E8D6] bg-[#EAF5ED] p-2">
         <div className="flex min-w-0 items-center gap-2 pl-2">
           <Check
             size={19}
@@ -98,7 +98,7 @@ export default function KitDetailClient({ kit }: Props) {
             type="button"
             onClick={handleDecrease}
             aria-label={`Decrease ${kit.name} quantity`}
-            className="flex size-9 items-center justify-center rounded-md bg-[#FAF7EF] text-[#168447] transition hover:bg-[#EAF3E9] active:scale-95"
+            className="flex size-9 items-center justify-center rounded-md bg-[#F8FAF7] text-[#168447] transition hover:bg-[#EAF5ED] active:scale-95"
           >
             <Minus size={17} />
           </button>

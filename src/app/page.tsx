@@ -1,9 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Truck, Package, Wallet, ClipboardList } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  MessageCircle,
+  PackageCheck,
+  Truck,
+  Wallet,
+} from "lucide-react";
 import Footer from "@/components/Footer";
 import FeaturedKitsCarousel from "@/components/FeaturedKitsCarousel";
 import { kits } from "@/data/kits";
+
+const assurances = [
+  { icon: Truck, title: "Free delivery", detail: "Up to 5 KM, subject to confirmation" },
+  { icon: Wallet, title: "Pay on delivery", detail: "Cash or UPI when confirmed" },
+  { icon: MessageCircle, title: "Personal support", detail: "Talk directly to the store" },
+];
 
 export default function HomePage() {
   const availableKits = kits.filter((kit) => kit.isAvailable);
@@ -14,120 +27,133 @@ export default function HomePage() {
     : null;
 
   return (
-    <main className="min-h-screen w-full overflow-x-clip bg-[#FAF7EF]">
-      <section data-reveal-group className="relative overflow-hidden bg-gradient-to-b from-[#F1EBDD] via-white to-[#FAF7EF] px-3 pb-7 pt-4 text-[#202124] sm:px-5 sm:pb-12 sm:pt-10">
-        <div className="pointer-events-none absolute -left-24 top-10 h-64 w-64 rounded-full bg-[#F7C928]/15 blur-[90px]" />
-        <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#168447]/[0.07] blur-[90px]" />
-        <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
-          <span data-reveal-item className="inline-flex items-center gap-2 rounded-full border border-[#F7C928]/40 bg-white/90 px-4 py-2 text-[10px] font-bold tracking-wide text-[#168447] shadow-sm sm:text-xs">
-            <Package size={15} /> GROCERY KITS FOR EVERYDAY NEEDS
-          </span>
-          <div className="mt-3 flex flex-col items-center sm:mt-5">
-            <Image data-reveal-item src="/images/logo2.png" alt="Rashid Mega Mart Logo" width={110} height={110} priority className="h-16 w-16 object-contain sm:h-24 sm:w-24" />
-            <h1 data-reveal-item className="mt-2 max-w-2xl text-[25px] font-black leading-[1.08] tracking-tight text-[#202124] sm:mt-3 sm:text-4xl md:text-5xl">
-              Welcome to <span className="mt-1 block text-[#168447]">Rashid Mega Mart</span>
+    <main className="min-h-screen w-full overflow-x-clip bg-[#F8FAF7] text-[#17251D]">
+      <div className="border-b border-[#DDEBE0] bg-[#EAF5ED] px-3 py-2 text-center text-[10px] font-semibold tracking-wide text-[#24623C] sm:text-xs">
+        Fresh essentials for your home <span className="mx-1.5 text-[#91B49A]">·</span> Serving Rewa
+      </div>
+
+      <section className="relative isolate overflow-hidden px-4 pb-8 pt-5 sm:px-6 sm:pb-14 sm:pt-9 lg:px-8">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-28 -z-10 size-[420px] rounded-full bg-[#D8EFDE]/75 blur-3xl" />
+        <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 -left-24 -z-10 size-[340px] rounded-full bg-[#F7EFCF]/65 blur-3xl" />
+
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-5 sm:gap-8 lg:grid-cols-[1.02fr_.98fr] lg:gap-12">
+          <div className="relative z-10 flex flex-col items-start">
+            <Link href="/" aria-label="Rashid Mega Mart home" className="mb-5 inline-flex items-center gap-2.5 sm:mb-7">
+              <Image src="/images/logo.png" alt="" width={52} height={52} priority className="size-10 object-contain sm:size-12" />
+              <span className="text-sm font-black tracking-[-0.04em] text-[#174C30] sm:text-base">RASHID MEGA MART</span>
+            </Link>
+
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#CFE4D4] bg-white/85 px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[.14em] text-[#287347] shadow-sm sm:text-[10px]">
+              <span className="size-1.5 rounded-full bg-[#168447]" />
+              Everyday groceries, made simpler
+            </span>
+
+            <h1 className="mt-4 max-w-[620px] text-[clamp(2.15rem,8vw,4.65rem)] font-black leading-[.98] tracking-[-.075em] text-[#17251D] sm:mt-5">
+              Stock your home.
+              <span className="mt-1 block text-[#168447]">Save your time.</span>
             </h1>
-            <p data-reveal-item className="mt-2 max-w-md text-xs leading-5 text-[#686868] sm:mt-3 sm:text-sm sm:leading-6">
-              Thoughtfully packed grocery kits for your home, at great value.
+            <p className="mt-4 max-w-[470px] text-[13px] leading-6 text-[#607067] sm:mt-5 sm:text-base sm:leading-7">
+              Explore thoughtfully packed grocery kits for everyday kitchens. Choose a ready combo or customise it around your family’s needs.
             </p>
-          </div>
-          <div data-reveal-item className="relative mt-1 w-full max-w-[560px] sm:mt-3">
-            <div className="pointer-events-none absolute inset-x-8 bottom-2 h-10 rounded-full bg-[#F7C928]/20 blur-2xl" />
-            <div className="relative mx-auto h-[148px] w-full overflow-hidden rounded-2xl min-[390px]:h-[164px] sm:h-[340px] sm:rounded-3xl">
-              <Image src="/hero.png" alt="Rashid Mega Mart grocery kits" fill priority sizes="(max-width: 640px) 100vw, 560px" className="object-contain drop-shadow-[0_12px_22px_rgba(0,0,0,0.12)]" />
+
+            <div className="mt-5 flex w-full flex-col gap-2.5 min-[420px]:w-auto min-[420px]:flex-row sm:mt-7">
+              <Link href="/kits" className="rmm-button-primary inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#168447] px-6 text-sm font-extrabold text-white shadow-[0_10px_24px_rgba(22,132,71,.18)] transition hover:-translate-y-0.5 hover:bg-[#106B38]">
+                Explore grocery kits <ArrowRight size={17} />
+              </Link>
+              <a href="https://wa.me/918962531603?text=Namaste%2C%20mujhe%20Rashid%20Mega%20Mart%20ke%20grocery%20kits%20ke%20baare%20mein%20jaankari%20chahiye." target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#CFE0D2] bg-white/90 px-5 text-sm font-bold text-[#24623C] transition hover:border-[#168447] hover:bg-white">
+                <MessageCircle size={17} /> Talk to our store
+              </a>
+            </div>
+
+            <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-[10px] font-semibold text-[#607067] sm:mt-7 sm:text-xs">
+              <span className="inline-flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#168447]" /> Customisable kits</span>
+              <span className="inline-flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#168447]" /> Store-confirmed orders</span>
             </div>
           </div>
-          <Link data-reveal-item href="/kits" className="rmm-button-primary mt-3 inline-flex min-h-12 w-full max-w-[320px] items-center justify-center gap-2 rounded-xl px-7 py-3 text-sm shadow-sm sm:mt-5 sm:w-auto">
-            Explore Grocery Kits <ArrowRight size={18} />
-          </Link>
-          <div data-reveal-item className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[10px] font-semibold text-[#686868] sm:mt-5 sm:gap-x-5 sm:text-xs">
-            <span className="flex items-center gap-2"><ShieldCheck size={16} className="text-[#168447]" /> Value-packed combos</span>
-            <span className="flex items-center gap-2"><Truck size={16} className="text-[#168447]" /> Delivery on confirmation</span>
+
+          <div className="relative mx-auto w-full max-w-[620px] lg:max-w-none">
+            <div className="absolute inset-x-8 bottom-2 h-8 rounded-full bg-[#A7D8B3]/45 blur-2xl" />
+            <div className="relative overflow-hidden rounded-[26px] border border-white/90 bg-white/70 p-2 shadow-[0_22px_70px_rgba(37,91,54,.12)] sm:rounded-[34px] sm:p-3">
+              <div className="relative aspect-[1.3/1] overflow-hidden rounded-[20px] bg-[#EAF5ED] sm:rounded-[27px]">
+                <Image src="/hero.png" alt="Grocery kits and everyday essentials from Rashid Mega Mart" fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-contain p-2 sm:p-5" />
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-3 rounded-2xl border border-white/80 bg-white/90 px-3 py-2.5 shadow-lg backdrop-blur-xl sm:bottom-5 sm:left-5 sm:right-5 sm:px-4 sm:py-3">
+                  <div className="min-w-0">
+                    <p className="text-[8px] font-extrabold uppercase tracking-[.16em] text-[#7A8D7F] sm:text-[9px]">Made for everyday kitchens</p>
+                    <p className="mt-0.5 truncate text-xs font-black text-[#1E5635] sm:text-sm">Your grocery list, a little easier.</p>
+                  </div>
+                  <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#EAF5ED] text-[#168447] sm:size-10"><PackageCheck size={20} /></span>
+                </div>
+              </div>
+            </div>
+            {startingPrice !== null && (
+              <div className="absolute -left-1 top-4 rounded-2xl border border-white bg-white px-3 py-2.5 shadow-[0_12px_30px_rgba(32,71,42,.14)] sm:-left-5 sm:top-10 sm:px-4 sm:py-3">
+                <p className="text-[8px] font-extrabold uppercase tracking-[.13em] text-[#809086] sm:text-[9px]">Kits starting at</p>
+                <p className="mt-0.5 text-lg font-black tracking-tight text-[#168447] sm:text-2xl">₹{startingPrice.toLocaleString("en-IN")}</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
 
+      <section aria-label="Store benefits" className="mx-auto grid max-w-7xl grid-cols-1 gap-2.5 px-4 pb-8 sm:grid-cols-3 sm:gap-3 sm:px-6 sm:pb-12 lg:px-8">
+        {assurances.map(({ icon: Icon, title, detail }) => (
+          <div key={title} className="flex items-center gap-3 rounded-2xl border border-[#E2ECE4] bg-white px-3.5 py-3 shadow-[0_4px_18px_rgba(29,72,42,.035)] sm:px-4 sm:py-4">
+            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#EAF5ED] text-[#168447]"><Icon size={19} /></span>
+            <span className="min-w-0"><span className="block text-xs font-extrabold text-[#20382A] sm:text-sm">{title}</span><span className="mt-0.5 block text-[10px] leading-4 text-[#77847A] sm:text-[11px]">{detail}</span></span>
+          </div>
+        ))}
+      </section>
 
-      {startingPrice !== null && (
-        <section data-reveal className="mx-auto w-full max-w-7xl px-3 pt-3 min-[480px]:px-5 sm:pt-4 md:px-6 lg:px-8" aria-label="Grocery kit starting price">
-          <Link
-            href="/kits"
-            className="group flex min-h-12 items-center justify-between gap-3 rounded-xl border border-[#D8CBB8] bg-white px-3.5 py-2.5 shadow-sm transition hover:border-[#800020] hover:shadow-md sm:px-4"
-          >
-            <span className="flex min-w-0 items-center gap-2.5">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#F1EBDD] text-[#168447]">
-                <Package size={16} />
-              </span>
-              <span className="min-w-0">
-                <span className="block truncate text-[10px] font-black uppercase tracking-wide text-[#106B38] sm:text-xs">GROCERY KITS STARTING AT</span>
-                <span className="block text-lg font-black leading-tight text-[#800020] sm:text-2xl">₹{startingPrice.toLocaleString("en-IN")} <span className="text-[10px] font-bold text-[#686868] sm:text-xs">· {availableKits.length} kits to explore</span></span>
-              </span>
-            </span>
-            <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-bold text-[#168447] sm:text-xs">
-              View kits <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-            </span>
-          </Link>
-        </section>
-      )}
-
-      <section data-reveal className="mx-auto w-full max-w-7xl px-3 pb-10 pt-7 min-[480px]:px-5 sm:pb-14 sm:pt-10 md:px-6 lg:px-8">
-        <div className="mb-5 flex items-end justify-between gap-3 sm:mb-6">
+      <section data-reveal className="mx-auto w-full max-w-7xl px-4 pb-10 sm:px-6 sm:pb-14 lg:px-8">
+        <div className="mb-4 flex items-end justify-between gap-3 sm:mb-6">
           <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-wider text-[#806000] sm:text-xs">Smart shopping combos</p>
-            <h2 className="mt-1 text-xl font-extrabold text-[#168447] sm:text-2xl">Our Grocery Kits</h2>
+            <p className="text-[9px] font-extrabold uppercase tracking-[.18em] text-[#A27A2A] sm:text-[10px]">Picked for your pantry</p>
+            <h2 className="mt-1 text-xl font-black tracking-[-.045em] text-[#1C3425] sm:text-3xl">Explore grocery kits</h2>
+            <p className="mt-1 text-[11px] text-[#718076] sm:text-sm">Useful combinations for everyday shopping.</p>
           </div>
-          <Link href="/kits" className="inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#168447] transition hover:text-[#106B38] sm:text-xs">View All <ArrowRight size={15} /></Link>
+          <Link href="/kits" className="inline-flex shrink-0 items-center gap-1 text-[10px] font-extrabold text-[#168447] sm:text-xs">View all <ArrowRight size={14} /></Link>
         </div>
-        {displayKits.length ? (
-          <FeaturedKitsCarousel kits={displayKits} />
-        ) : (
-          <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6 text-center sm:p-8">
-            <Package className="mx-auto text-[#F7C928]" size={30} />
-            <p className="mt-2 text-sm font-semibold text-[#686868]">Grocery kits will be available soon.</p>
-          </div>
+        {displayKits.length ? <FeaturedKitsCarousel kits={displayKits} /> : (
+          <div className="rounded-2xl border border-[#E2ECE4] bg-white p-7 text-center text-sm text-[#718076]">Grocery kits will be available soon.</div>
         )}
       </section>
 
-      <section data-reveal className="mx-auto w-full max-w-7xl px-3 py-8 min-[480px]:px-5 sm:py-12 md:px-6 lg:px-8">
-        <div className="mx-auto mb-6 max-w-2xl text-center sm:mb-8">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#806000] sm:text-xs">Grocery Shopping, Made Easier</p>
-          <h2 className="mt-2 text-2xl font-black tracking-tight text-[#168447] sm:text-3xl">Why Choose Us?</h2>
-          <p className="mx-auto mt-2 max-w-lg text-xs leading-5 text-[#686868] sm:text-sm">Market ke chakkar aur fixed grocery combos ki tension chhodiye. Apni zaroorat batayein, humse ghar baithe baat karein.</p>
-        </div>
-
-        <div data-reveal-group className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-          {[
-            { icon: Truck, problem: "Market Jaane Ka Time Nahi?", solution: "Ghar baithe WhatsApp par apni grocery list bhej dijiye.", tint: "bg-[#FAF0C8]", ink: "text-[#806000]" },
-            { icon: Package, problem: "Ready Kit Ke Baare Mein Jankari Chahiye?", solution: "Available grocery kits ke products aur details WhatsApp par poochhein.", tint: "bg-[#F1EBDD]", ink: "text-[#168447]" },
-            { icon: Wallet, problem: "Budget Ka Rakhna Hai Dhyan?", solution: "Apne budget ke hisaab se available ready-made kits dekhein.", tint: "bg-[#EAF3E9]", ink: "text-[#168447]" },
-            { icon: ClipboardList, problem: "Monthly Grocery Manage Karna Mushkil?", solution: "Monthly needs ke liye available kits dekhein aur order details confirm karein.", tint: "bg-[#F1EBDD]", ink: "text-[#202124]" },
-          ].map((item) => {
-            const Icon = item.icon;
-            return (
-              <article data-reveal-item key={item.problem} className="flex gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md sm:gap-4 sm:p-5">
-                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.tint} sm:h-12 sm:w-12`}>
-                  <Icon size={21} className={item.ink} />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-sm font-extrabold text-[#202124] sm:text-base">{item.problem}</h3>
-                  <p className="mt-1.5 text-xs leading-5 text-[#686868] sm:text-sm">{item.solution}</p>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-
-        <div className="mt-4 rounded-xl border border-[#E8DFD1] bg-white px-3 py-3 text-center sm:mt-7 sm:rounded-2xl sm:px-6 sm:py-6">
-          <p className="text-base font-black text-[#202124] sm:text-lg">Apni Zaroorat Ki Kit Khud Banayein</p>
-          <p className="mx-auto mt-1.5 max-w-lg text-xs leading-5 text-[#686868] sm:text-sm">Ready-made kit ke items badlein, quantity set karein aur apni pasand ke grocery items add karein.</p>
-          <div className="mt-4 flex flex-col justify-center gap-2 min-[420px]:flex-row">
-            <a href="https://wa.me/918962531603?text=Namaste%2C%20mujhe%20apni%20grocery%20kit%20customize%20karni%20hai." target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#106B38] sm:text-sm">
-              <Image src="/Whatsapp-3d.svg" alt="" width={20} height={20} className="h-5 w-5 object-contain" /> WhatsApp Par Poochhein
-            </a>
-            <Link href="/kits" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[#D8CBB8] bg-white px-5 py-3 text-xs font-bold text-[#168447] transition hover:border-[#168447] sm:text-sm">
-              Ready Kits Dekhein <ArrowRight size={16} />
-            </Link>
+      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 sm:pb-14 lg:px-8">
+        <div className="overflow-hidden rounded-[26px] bg-[#EAF5ED] p-4 sm:rounded-[32px] sm:p-8 lg:p-10">
+          <div className="grid gap-6 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
+            <div>
+              <p className="text-[9px] font-extrabold uppercase tracking-[.18em] text-[#A27A2A] sm:text-[10px]">Simple from start to finish</p>
+              <h2 className="mt-2 max-w-md text-2xl font-black leading-[1.05] tracking-[-.055em] text-[#1C3425] sm:text-4xl">A smoother way to stock your kitchen.</h2>
+              <p className="mt-3 max-w-md text-xs leading-5 text-[#607067] sm:text-sm sm:leading-6">Choose a kit, make it yours, then confirm the details directly with our store.</p>
+              <Link href="/kits" className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 text-xs font-extrabold text-white transition hover:bg-[#106B38] sm:text-sm">Find your kit <ArrowRight size={16} /></Link>
+            </div>
+            <div className="grid gap-2.5 sm:grid-cols-3">
+              {[
+                { number: "01", title: "Choose", text: "Pick a ready-made grocery kit." },
+                { number: "02", title: "Customise", text: "Adjust products and quantities." },
+                { number: "03", title: "Confirm", text: "Send your enquiry on WhatsApp." },
+              ].map((step) => (
+                <article key={step.number} className="rounded-2xl border border-white/90 bg-white/85 p-4 shadow-sm">
+                  <span className="text-[10px] font-black tracking-[.16em] text-[#168447]">{step.number}</span>
+                  <h3 className="mt-4 text-base font-black text-[#1C3425]">{step.title}</h3>
+                  <p className="mt-1 text-[11px] leading-5 text-[#718076]">{step.text}</p>
+                </article>
+              ))}
+            </div>
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 sm:pb-14 lg:px-8">
+        <div className="flex flex-col gap-4 rounded-[24px] border border-[#DDEBE0] bg-white p-4 shadow-[0_8px_28px_rgba(29,72,42,.045)] sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div>
+            <p className="text-[9px] font-extrabold uppercase tracking-[.16em] text-[#A27A2A]">Need something different?</p>
+            <h2 className="mt-1 text-lg font-black tracking-tight text-[#1C3425] sm:text-2xl">Build a grocery kit around your needs.</h2>
+            <p className="mt-1 text-[11px] text-[#718076] sm:text-sm">Tell us what your home needs. We’ll help confirm the options.</p>
+          </div>
+          <a href="https://wa.me/918962531603?text=Namaste%2C%20mujhe%20apni%20grocery%20kit%20customise%20karni%20hai." target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#168447] px-5 text-xs font-extrabold text-white transition hover:bg-[#106B38] sm:text-sm">
+            <MessageCircle size={16} /> Customise on WhatsApp
+          </a>
         </div>
       </section>
       <Footer />

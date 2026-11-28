@@ -20,7 +20,7 @@ export const kits: GroceryKit[] = [
     name: "Ghar Bhar Rashan Combo",
     subtitle: "Har roz ke ghar ke rashan ka smart family pack",
     category: "Family Packs",
-    image: "/kits/1149.png",
+    image: "/hero.png",
     price: 1149,
     oldPrice: 1299,
     discount: "12% OFF",
