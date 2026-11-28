@@ -5,32 +5,12 @@ import {
   CheckCircle2,
   MessageCircle,
   PackageCheck,
-  ShieldCheck,
-  Sparkles,
   Truck,
   Wallet,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import FeaturedKitsCarousel from "@/components/FeaturedKitsCarousel";
 import { kits } from "@/data/kits";
-
-const benefits = [
-  {
-    icon: PackageCheck,
-    title: "Ready-made grocery kits",
-    description: "Everyday essentials grouped into practical family-friendly combos.",
-  },
-  {
-    icon: Sparkles,
-    title: "Make it your own",
-    description: "Open a kit, adjust quantities and add the items your home needs.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Confirm before ordering",
-    description: "We confirm availability, final pricing and delivery with you on WhatsApp.",
-  },
-];
 
 const assurances = [
   { icon: Truck, title: "Free delivery", detail: "Up to 5 KM, subject to confirmation" },
