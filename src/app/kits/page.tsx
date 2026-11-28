@@ -20,6 +20,7 @@ export default function KitsPage() {
   const kits = allKits;
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "available" | "unavailable">("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortBy, setSortBy] = useState<SortOption>("featured");
   const [suggestion, setSuggestion] = useState("");
   const [suggestionName, setSuggestionName] = useState("");
@@ -45,8 +46,9 @@ export default function KitsPage() {
         filter === "all" ||
         (filter === "available" && kit.isAvailable) ||
         (filter === "unavailable" && !kit.isAvailable);
+      const matchesCategory = categoryFilter === "all" || kit.category === categoryFilter;
 
-      return matchesSearch && matchesAvailability;
+      return matchesSearch && matchesAvailability && matchesCategory;
     });
 
     return [...result].sort((a, b) => {
@@ -76,17 +78,19 @@ export default function KitsPage() {
         }
       }
     });
-  }, [kits, search, filter, sortBy]);
+  }, [kits, search, filter, categoryFilter, sortBy]);
 
   const clearFilters = () => {
     setSearch("");
     setFilter("all");
+    setCategoryFilter("all");
     setSortBy("featured");
   };
 
   const hasActiveFilters =
     search.trim() !== "" ||
     filter !== "all" ||
+    categoryFilter !== "all" ||
     sortBy !== "featured";
 
   return (
@@ -191,6 +195,18 @@ export default function KitsPage() {
               Reset
             </button>
           )}
+        </div>
+
+        {/* CATEGORY FILTERS */}
+        <div className="mt-4 sm:mt-5">
+          <p className="mb-2 text-[10px] font-extrabold uppercase tracking-wider text-[#686868] sm:text-xs">Shop by category</p>
+          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label="Filter kits by category">
+            {[...new Set(kits.map((kit) => kit.category))].sort((a, b) => a.localeCompare(b)).map((category) => (
+              <button key={category} type="button" onClick={() => setCategoryFilter(categoryFilter === category ? "all" : category)} aria-pressed={categoryFilter === category} className={"min-h-9 shrink-0 rounded-full border px-3.5 py-2 text-[10px] font-extrabold transition active:scale-95 sm:text-xs " + (categoryFilter === category ? "border-[#106B38] bg-[#168447] text-white shadow-sm" : "border-[#E8DFD1] bg-white text-[#686868] hover:border-[#168447] hover:text-[#168447]")}>
+                {category}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* AVAILABILITY FILTERS */}
