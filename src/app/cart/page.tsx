@@ -7,6 +7,7 @@ import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2, Truck, ShieldCheck, Chevro
 
 import { useCart } from "@/context/CartContext";
 import { kits } from "@/data/kits";
+import { createCustomerOrder, getValidCustomerSession } from "@/lib/customer-account";
 
 const WHATSAPP_NUMBER = "918962531603";
 
@@ -58,7 +59,7 @@ export default function CartPage() {
     [pricedItems]
   );
 
-  const handleWhatsAppEnquiry = (event: FormEvent<HTMLFormElement>) => {
+  const handleWhatsAppEnquiry = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError("");
 
@@ -99,6 +100,7 @@ export default function CartPage() {
       .join("\n\n");
 
     const hasExtras = items.some((item) => (item.requestedItems?.length ?? 0) > 0);
+    let orderReference = "";
     const message = [
       "🛒 *Rashid Mega Mart — Shopping Enquiry*",
       "",
@@ -126,8 +128,36 @@ export default function CartPage() {
       return;
     }
 
+    const session = await getValidCustomerSession().catch(() => null);
+    if (session) {
+      try {
+        const saved = await createCustomerOrder({
+          user_id: session.user.id,
+          customer_name: cleanName,
+          phone: cleanPhone,
+          delivery_address: { address: cleanAddress },
+          items: pricedItems.map((item) => ({
+            name: item.kitGroupName ? item.kitGroupName + " — " + item.name : item.name,
+            quantity: item.quantity,
+            unit_price: item.unitPrice,
+            line_total: item.lineTotal,
+          })),
+          subtotal,
+          payment_preference: paymentPreference,
+        });
+        orderReference = saved.id;
+      } catch (reason) {
+        setFormError(reason instanceof Error ? reason.message : "Your order could not be saved. Please try again.");
+        return;
+      }
+    }
+
+    const finalMessage = orderReference
+      ? message.replace("*Your Items*", "*Order reference: " + orderReference.slice(0, 8).toUpperCase() + "*\\n\\n*Your Items*")
+      : message;
+
     window.location.assign(
-      "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message)
+      "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(finalMessage)
     );
   };
 
