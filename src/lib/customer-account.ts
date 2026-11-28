@@ -189,6 +189,20 @@ export async function saveCustomerAddress(userId: string, value: Omit<CustomerAd
   });
 }
 
+
+export async function updateCustomerAddress(userId: string, addressId: string, value: Omit<CustomerAddress, "id">) {
+  if (value.is_default) {
+    await customerRequest(
+      `customer_addresses?user_id=eq.${encodeURIComponent(userId)}`,
+      { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ is_default: false }) }
+    );
+  }
+  return customerRequest<CustomerAddress[]>(
+    `customer_addresses?id=eq.${encodeURIComponent(addressId)}&user_id=eq.${encodeURIComponent(userId)}`,
+    { method: "PATCH", headers: { Prefer: "return=representation" }, body: JSON.stringify(value) }
+  );
+}
+
 export async function deleteCustomerAddress(userId: string, addressId: string) {
   return customerRequest(
     `customer_addresses?id=eq.${encodeURIComponent(addressId)}&user_id=eq.${encodeURIComponent(userId)}`,
