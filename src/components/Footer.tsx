@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Phone, Clock, ArrowUpRight, ShoppingBag, ShieldCheck, FileText } from "lucide-react";
+import { MapPin, Phone, Truck, ArrowUpRight, ShoppingBag, ShieldCheck, FileText } from "lucide-react";
 
 const WHATSAPP_NUMBER = "918962531603";
 const WHATSAPP_URL = "https://wa.me/" + WHATSAPP_NUMBER;
@@ -92,7 +92,7 @@ export default function Footer() {
               </div>
             </div>
             <div className="mt-3 flex flex-col items-center gap-1.5">
-              <Clock size={17} className="text-[#168447]" />
+              <Truck size={17} className="text-[#168447]" />
               <div>
                 <p className="text-xs font-bold text-[#202124]">Opening Hours</p>
                 <p className="mt-1 text-[11px] text-[#748278]">9:00 AM – 9:00 PM</p>
