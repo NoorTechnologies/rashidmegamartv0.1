@@ -9,7 +9,7 @@ import {
 import {
   type CustomerAddress, type CustomerOrder, type CustomerSession,
   deleteCustomerAddress, getCustomerSession, loadCustomerAccount,
-  saveCustomerAddress, saveCustomerProfile, sendPhoneOtp, signOutCustomer,
+  saveCustomerAddress, saveCustomerProfile, sendPhoneOtp, signOutCustomer, updateCustomerAddress,
   verifyPhoneOtp,
 } from "@/lib/customer-account";
 
@@ -48,6 +48,7 @@ export default function AccountPage() {
   const [addresses, setAddresses] = useState<CustomerAddress[]>([]);
   const [orders, setOrders] = useState<CustomerOrder[]>([]);
   const [addressFormOpen, setAddressFormOpen] = useState(false);
+  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
   const [addressDraft, setAddressDraft] = useState(blankAddress);
   const [activeSection, setActiveSection] = useState<"overview" | "orders" | "addresses">("overview");
 
@@ -135,11 +136,22 @@ export default function AccountPage() {
     }
     setBusy(true);
     try {
-      const rows = await saveCustomerAddress(session.user.id, { ...addressDraft, recipient_name: addressDraft.recipient_name.trim(), address_line1: addressDraft.address_line1.trim() });
-      setAddresses((current) => [...(addressDraft.is_default ? current.map((entry) => ({ ...entry, is_default: false })) : current), ...rows]);
+      const payload = { ...addressDraft, recipient_name: addressDraft.recipient_name.trim(), address_line1: addressDraft.address_line1.trim() };
+      if (editingAddressId) {
+        const rows = await updateCustomerAddress(session.user.id, editingAddressId, payload);
+        setAddresses((current) => current.map((entry) => {
+          if (entry.id === editingAddressId) return rows[0] ?? entry;
+          return addressDraft.is_default ? { ...entry, is_default: false } : entry;
+        }));
+        setNotice("Delivery address update ho gaya.");
+      } else {
+        const rows = await saveCustomerAddress(session.user.id, payload);
+        setAddresses((current) => [...(addressDraft.is_default ? current.map((entry) => ({ ...entry, is_default: false })) : current), ...rows]);
+        setNotice("Delivery address save ho gaya.");
+      }
       setAddressDraft(blankAddress);
+      setEditingAddressId(null);
       setAddressFormOpen(false);
-      setNotice("Delivery address save ho gaya.");
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Address save nahi ho paya.");
     } finally { setBusy(false); }
@@ -246,8 +258,8 @@ export default function AccountPage() {
         </section>}
 
         {activeSection === "addresses" && <section className="mt-4 space-y-3">
-          <div className="flex items-center justify-between gap-2"><div><h2 className="text-base font-black text-[#30251F]">Delivery addresses</h2><p className="mt-1 text-xs text-[#81796F]">Save places you often order to.</p></div><button onClick={() => setAddressFormOpen((value) => !value)} className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-[#168447] px-3 text-xs font-extrabold text-white"><Plus size={15}/> Add address</button></div>
-          {addressFormOpen && <form onSubmit={handleAddressSave} className="grid gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 sm:grid-cols-2 sm:p-5">
+          <div className="flex items-center justify-between gap-2"><div><h2 className="text-base font-black text-[#30251F]">Delivery addresses</h2><p className="mt-1 text-xs text-[#81796F]">Save places you often order to.</p></div><button onClick={() => { setAddressDraft(blankAddress); setEditingAddressId(null); setAddressFormOpen((value) => !value); }} className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-[#168447] px-3 text-xs font-extrabold text-white"><Plus size={15}/> Add address</button></div>
+          {addressFormOpen && <form onSubmit={handleAddressSave} className="grid gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-4 sm:grid-cols-2 sm:p-5"><h3 className="text-sm font-black text-[#30251F] sm:col-span-2">{editingAddressId ? "Edit delivery address" : "Add delivery address"}</h3>
             <label className="text-xs font-bold text-[#625F56]">Address label<select value={addressDraft.label} onChange={(event) => setAddressDraft({ ...addressDraft, label: event.target.value })} className="mt-2 h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm"><option>Home</option><option>Work</option><option>Other</option></select></label>
             <label className="text-xs font-bold text-[#625F56]">Recipient name<input required value={addressDraft.recipient_name} onChange={(event) => setAddressDraft({ ...addressDraft, recipient_name: event.target.value })} className="mt-2 h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm"/></label>
             <label className="text-xs font-bold text-[#625F56]">Mobile number<input required inputMode="numeric" maxLength={10} value={addressDraft.phone} onChange={(event) => setAddressDraft({ ...addressDraft, phone: event.target.value.replace(/\D/g, "").slice(0,10) })} className="mt-2 h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm"/></label>
@@ -258,10 +270,10 @@ export default function AccountPage() {
             <label className="text-xs font-bold text-[#625F56]">State<input required value={addressDraft.state} onChange={(event) => setAddressDraft({ ...addressDraft, state: event.target.value })} className="mt-2 h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm"/></label>
             <label className="text-xs font-bold text-[#625F56]">PIN code<input required inputMode="numeric" maxLength={6} value={addressDraft.postal_code} onChange={(event) => setAddressDraft({ ...addressDraft, postal_code: event.target.value.replace(/\D/g, "").slice(0,6) })} className="mt-2 h-11 w-full rounded-xl border border-[#E8DFD1] bg-[#FAF7EF] px-3 text-sm"/></label>
             <label className="flex items-center gap-2 text-xs font-semibold text-[#625F56] sm:col-span-2"><input type="checkbox" checked={addressDraft.is_default} onChange={(event) => setAddressDraft({ ...addressDraft, is_default: event.target.checked })}/> Set as default delivery address</label>
-            <div className="flex gap-2 sm:col-span-2"><button disabled={busy} className="h-11 rounded-xl bg-[#168447] px-5 text-xs font-extrabold text-white disabled:opacity-50">Save address</button><button type="button" onClick={() => setAddressFormOpen(false)} className="h-11 rounded-xl border border-[#E8DFD1] px-4 text-xs font-bold text-[#625F56]">Cancel</button></div>
+            <div className="flex gap-2 sm:col-span-2"><button disabled={busy} className="h-11 rounded-xl bg-[#168447] px-5 text-xs font-extrabold text-white disabled:opacity-50">Save address</button><button type="button" onClick={() => { setAddressFormOpen(false); setEditingAddressId(null); setAddressDraft(blankAddress); }} className="h-11 rounded-xl border border-[#E8DFD1] px-4 text-xs font-bold text-[#625F56]">Cancel</button></div>
           </form>}
           {addresses.length === 0 && !addressFormOpen && <div className="rounded-2xl border border-dashed border-[#D8CBB8] bg-white px-4 py-10 text-center"><MapPin className="mx-auto text-[#168447]" size={26}/><p className="mt-3 text-sm font-extrabold text-[#30251F]">No saved addresses yet</p><p className="mt-1 text-xs text-[#81796F]">Add your home or work delivery address.</p></div>}
-          {addresses.map((address) => <article key={address.id} className="flex items-start gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-4"><span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]"><MapPin size={18}/></span><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><p className="text-sm font-extrabold text-[#30251F]">{address.label}</p>{address.is_default && <span className="rounded-full bg-[#EAF3E6] px-2 py-1 text-[9px] font-extrabold text-[#315F35]">DEFAULT</span>}</div><p className="mt-1 text-xs font-semibold text-[#625F56]">{address.recipient_name} · {address.phone}</p><p className="mt-1 text-xs leading-5 text-[#81796F]">{[address.address_line1,address.address_line2,address.landmark,address.city,address.state,address.postal_code].filter(Boolean).join(", ")}</p></div><button onClick={() => removeAddress(address.id)} aria-label="Delete address" className="flex size-9 items-center justify-center rounded-lg text-[#9B3B42] hover:bg-red-50"><X size={16}/></button></article>)}
+          {addresses.map((address) => <article key={address.id} className="flex items-start gap-3 rounded-2xl border border-[#E8DFD1] bg-white p-4"><span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#EAF3E6] text-[#315F35]"><MapPin size={18}/></span><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><p className="text-sm font-extrabold text-[#30251F]">{address.label}</p>{address.is_default && <span className="rounded-full bg-[#EAF3E6] px-2 py-1 text-[9px] font-extrabold text-[#315F35]">DEFAULT</span>}</div><p className="mt-1 text-xs font-semibold text-[#625F56]">{address.recipient_name} · {address.phone}</p><p className="mt-1 text-xs leading-5 text-[#81796F]">{[address.address_line1,address.address_line2,address.landmark,address.city,address.state,address.postal_code].filter(Boolean).join(", ")}</p></div><div className="flex shrink-0 flex-col gap-1"><button onClick={() => { setAddressDraft({ label: address.label, recipient_name: address.recipient_name, phone: address.phone, address_line1: address.address_line1, address_line2: address.address_line2 ?? "", landmark: address.landmark ?? "", city: address.city, state: address.state, postal_code: address.postal_code, is_default: address.is_default }); setEditingAddressId(address.id); setAddressFormOpen(true); }} className="rounded-lg px-2 py-1.5 text-[10px] font-bold text-[#315F35] hover:bg-[#EAF3E6]">Edit</button><button onClick={() => removeAddress(address.id)} aria-label="Delete address" className="flex size-8 items-center justify-center rounded-lg text-[#9B3B42] hover:bg-red-50"><X size={15}/></button></div></article>)}
         </section>}
 
         {activeSection === "orders" && <section className="mt-4 space-y-3">
