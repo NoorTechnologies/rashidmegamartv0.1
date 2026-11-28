@@ -27,7 +27,7 @@ export default function FeaturedKitsCarousel({ kits }: FeaturedKitsCarouselProps
           type="button"
           onClick={() => move("prev")}
           aria-label="Previous grocery kits"
-          className="flex size-8 items-center justify-center rounded-full border border-[#800020]/15 bg-white text-[#800020] transition hover:bg-[#800020] hover:text-white"
+          className="flex size-8 items-center justify-center rounded-full border border-[#168447]/15 bg-white text-[#168447] transition hover:bg-[#168447] hover:text-white"
         >
           <ArrowLeft size={15} />
         </button>
@@ -35,7 +35,7 @@ export default function FeaturedKitsCarousel({ kits }: FeaturedKitsCarouselProps
           type="button"
           onClick={() => move("next")}
           aria-label="Next grocery kits"
-          className="flex size-8 items-center justify-center rounded-full border border-[#800020]/15 bg-white text-[#800020] transition hover:bg-[#800020] hover:text-white"
+          className="flex size-8 items-center justify-center rounded-full border border-[#168447]/15 bg-white text-[#168447] transition hover:bg-[#168447] hover:text-white"
         >
           <ArrowRight size={15} />
         </button>
