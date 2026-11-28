@@ -115,8 +115,13 @@ export default function AccountPage() {
     setBusy(true);
     try {
       const next = await verifyPhoneOtp(phone, otp);
+      if (authMode === "signup") {
+        await saveCustomerProfile(next.user.id, signupName.trim(), phone);
+        setProfileName(signupName.trim());
+        setProfilePhone(phone);
+      }
       setSession(next);
-      setNotice("Mobile number verify ho gaya.");
+      setNotice(authMode === "signup" ? "Account create ho gaya. Welcome to Rashid Mega Mart!" : "Mobile number verify ho gaya.");
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "OTP verify nahi ho paya.");
     } finally { setBusy(false); }
